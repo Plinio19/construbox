@@ -6,6 +6,7 @@
     "endereco": "Nova Mutum - MT",
     "status": "ativa",
     "valorContrato": 85000,
+    "valorMaoDeObra": 65000,
     "dataInicio": null,
     "previsaoConclusao": null,
     "obs": "",
