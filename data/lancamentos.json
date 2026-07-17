@@ -1737,5 +1737,27 @@
     "obs": "Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a33ec1c"
+  },
+  {
+    "id": "mrpbr00dtuh5n",
+    "obraId": "obra_sinop",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-06-18",
+    "valor": 3000,
+    "status": "pago",
+    "beneficiario": "GEOVANE ALVES",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb82fzwc2dk",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-18",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a344d3e"
   }
 ]
