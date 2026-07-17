@@ -166,5 +166,26 @@
     "obs": "Transferência enviada pelo Pix - UBER DO BRASIL TECNOLOGIA LTDA",
     "criadoEm": "2026-07-17",
     "ofxId": "69fd366d"
+  },
+  {
+    "id": "mroz3jm785umt",
+    "obraId": "obra_novamutum",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "Transportadora - Ferramentas",
+    "data": "2026-05-11",
+    "valor": 411,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-11",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a01d137"
   }
 ]
