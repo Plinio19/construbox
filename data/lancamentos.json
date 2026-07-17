@@ -417,5 +417,27 @@
     "obs": "[Divisão] Transferência enviada pelo Pix - MARLI APARECIDA DOS SANTOS - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "69f518a3"
+  },
+  {
+    "id": "mrp6121yi1vjn",
+    "obraId": "obra_novamutum",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-05-02",
+    "valor": 300,
+    "status": "pago",
+    "beneficiario": "Edilson Dominfos dos Santos",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrp5y98vqx64u",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-02",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS",
+    "criadoEm": "2026-07-17",
+    "ofxId": "69f615e3"
   }
 ]
