@@ -1429,5 +1429,27 @@
     "obs": "Transferência enviada pelo Pix - CONVENIENCIA 9 DE JULHO - ITAÚ",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2ce516"
+  },
+  {
+    "id": "mrpbk2j91d8xo",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "CAMERA ITU",
+    "data": "2026-06-13",
+    "valor": 100,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-13",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - DIPCOM",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2d615c"
   }
 ]
