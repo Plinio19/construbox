@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Contas a Pagar</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Contas a Pagar</div>
+      <div class="topbar-sub" id="header-sub">Despesas pendentes</div>
+    </div>
+    <div class="topbar-acoes">
+      <a href="../lancamentos/" class="btn btn-primary btn-sm">+ Novo Lançamento</a>
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <div class="stats-grid">
+      <div class="stat vermelho"><div class="valor" id="st-total">R$ 0</div><div class="rotulo">Total a Pagar</div></div>
+      <div class="stat laranja"><div class="valor" id="st-venc">R$ 0</div><div class="rotulo">Vencido</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-hoje">R$ 0</div><div class="rotulo">Vence Hoje / Esta Semana</div></div>
+      <div class="stat azul"><div class="valor" id="st-mao">R$ 0</div><div class="rotulo">Mão de Obra Pendente</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="f-obra" class="form-control" style="width:180px;" onchange="renderLista()">
+          <option value="">Todas as obras</option>
+        </select>
+        <select id="f-cat" class="form-control" style="width:180px;" onchange="renderLista()">
+          <option value="">Todas as categorias</option>
+        </select>
+        <select id="f-venc-f" class="form-control" style="width:160px;" onchange="renderLista()">
+          <option value="">Qualquer vencimento</option>
+          <option value="vencido">Vencido</option>
+          <option value="hoje">Vence hoje</option>
+          <option value="semana">Esta semana</option>
+          <option value="mes">Este mês</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>💸 Despesas Pendentes</h2><span id="contador" style="font-size:0.78rem;color:var(--texto-leve);"></span></div>
+      <div class="card-body">
+        <div id="lista-container"><div style="text-align:center;padding:48px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('contas-pagar');
+let lista=[]; let sha=null; let obras=[];
+
+async function init() {
+  obras = carregarLocal('cbx_obras') || [];
+  lista = carregarLocal('cbx_lanc')  || [];
+  preencherFiltros(); atualizarStats(); renderLista();
+  if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  try {
+    const [rL,rO] = await Promise.all([carregarDados('data/lancamentos.json'),carregarDados('data/obras.json')]);
+    lista=rL.lista; sha=rL.sha; obras=rO.lista;
+    salvarLocal('cbx_lanc',lista); salvarLocal('cbx_obras',obras);
+    preencherFiltros(); atualizarStats(); renderLista();
+    setSyncStatus('verde','Conectado');
+  } catch(e){ setSyncStatus('vermelho','Erro'); toast('Erro ao carregar.','erro'); }
+}
+
+function preencherFiltros() {
+  const selO = document.getElementById('f-obra');
+  selO.innerHTML = '<option value="">Todas as obras</option>' + obras.map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+  const selC = document.getElementById('f-cat');
+  selC.innerHTML = '<option value="">Todas as categorias</option>' + CATEGORIAS.despesa.map(c=>`<option value="${c.value}">${c.label}</option>`).join('');
+}
+
+function atualizarStats() {
+  const pend = lista.filter(l=>l.tipo==='despesa'&&l.status==='pendente');
+  const total= pend.reduce((s,l)=>s+(l.valor||0),0);
+  const hj   = hoje();
+  const semana = new Date(); semana.setDate(semana.getDate()+7);
+  const semStr = semana.toISOString().slice(0,10);
+  const vencido= pend.filter(l=>l.dataVencimento&&l.dataVencimento<hj).reduce((s,l)=>s+(l.valor||0),0);
+  const semanaV= pend.filter(l=>l.dataVencimento&&l.dataVencimento>=hj&&l.dataVencimento<=semStr).reduce((s,l)=>s+(l.valor||0),0);
+  const mao    = pend.filter(l=>l.categoria==='mao-de-obra').reduce((s,l)=>s+(l.valor||0),0);
+  document.getElementById('st-total').textContent = formatarMoeda(total);
+  document.getElementById('st-venc').textContent  = formatarMoeda(vencido);
+  document.getElementById('st-hoje').textContent  = formatarMoeda(semanaV);
+  document.getElementById('st-mao').textContent   = formatarMoeda(mao);
+}
+
+function renderLista() {
+  const fObra = document.getElementById('f-obra').value;
+  const fCat  = document.getElementById('f-cat').value;
+  const fVenc = document.getElementById('f-venc-f').value;
+  const hj    = hoje();
+  const semana= new Date(); semana.setDate(semana.getDate()+7);
+  const semStr= semana.toISOString().slice(0,10);
+  const mesStr= hj.slice(0,7);
+
+  let f = lista.filter(l=>{
+    if (l.tipo!=='despesa'||l.status!=='pendente') return false;
+    if (fObra && l.obraId!==fObra) return false;
+    if (fCat  && l.categoria!==fCat) return false;
+    if (fVenc==='vencido' && !(l.dataVencimento&&l.dataVencimento<hj)) return false;
+    if (fVenc==='hoje' && l.dataVencimento!==hj) return false;
+    if (fVenc==='semana' && !(l.dataVencimento&&l.dataVencimento>=hj&&l.dataVencimento<=semStr)) return false;
+    if (fVenc==='mes' && !(l.dataVencimento||'').startsWith(mesStr)) return false;
+    return true;
+  }).sort((a,b)=>(a.dataVencimento||'9').localeCompare(b.dataVencimento||'9'));
+
+  document.getElementById('contador').textContent = `${f.length} item(ns) — ${formatarMoeda(f.reduce((s,l)=>s+(l.valor||0),0))}`;
+  const cont = document.getElementById('lista-container');
+  if (!f.length) { cont.innerHTML=`<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhuma despesa pendente encontrada.</div>`; return; }
+
+  cont.innerHTML=`<table class="tabela" style="width:100%;"><thead><tr>
+    <th>Vencimento</th><th>Obra</th><th>Categoria</th><th>Descrição</th><th>Beneficiário</th>
+    <th style="text-align:right;">Valor</th><th>Ações</th>
+  </tr></thead><tbody>${f.map(l=>{
+    const obra=obras.find(o=>o.id===l.obraId);
+    const atrasado=l.dataVencimento&&l.dataVencimento<hj;
+    return `<tr style="border-left:3px solid var(--vermelho);">
+      <td style="white-space:nowrap;${atrasado?'color:var(--vermelho);font-weight:700;':''}">${l.dataVencimento?formatarData(l.dataVencimento):'—'}${atrasado?' ⚠️':''}</td>
+      <td style="font-size:0.82rem;">${obra?esc(obra.nome):'—'}</td>
+      <td><span class="badge laranja" style="font-size:0.7rem;">${labelCategoria('despesa',l.categoria)}</span>${l.isReembolso?'<span class="badge cinza" style="font-size:0.68rem;margin-left:2px;">Reimb.</span>':''}</td>
+      <td>${esc(l.descricao||'—')}</td>
+      <td style="font-size:0.8rem;color:var(--texto-leve);">${esc(l.beneficiario||'—')}</td>
+      <td style="text-align:right;font-weight:700;color:var(--vermelho);">-${formatarMoeda(l.valor)}</td>
+      <td><div style="display:flex;gap:4px;">
+        <button class="btn btn-success btn-sm" onclick='pagar(${JSON.stringify(l.id)})'>✓ Pagar</button>
+        <a href="../lancamentos/" class="btn btn-outline btn-sm" onclick='localStorage.setItem("cbx_edit","${l.id}")'>✏️</a>
+      </div></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+async function pagar(id) {
+  const l=lista.find(x=>x.id===id); if(!l) return;
+  l.status='pago'; l.dataPagamento=hoje();
+  lista=lista.map(x=>x.id===id?l:x);
+  salvarLocal('cbx_lanc',lista); atualizarStats(); renderLista();
+  toast('Marcado como pago!','sucesso');
+  if(configurado()){ try{ sha=await salvarDados('data/lancamentos.json',lista,sha,`Pago: ${l.descricao||formatarMoeda(l.valor)}`); }catch(e){ toast('Erro sync','aviso'); } }
+}
+
+init();
+</script>
+</body>
+</html>

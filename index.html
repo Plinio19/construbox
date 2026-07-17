@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Dashboard</title>
+  <link rel="stylesheet" href="assets/core.css"/>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Dashboard</div>
+      <div class="topbar-sub" id="header-sub">Carregando...</div>
+    </div>
+    <div class="topbar-acoes">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+
+    <div id="alert-setup" style="display:none;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:14px 18px;margin-bottom:18px;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <p style="font-size:0.87rem;color:#92400e;">⚠️ <strong>Configure o GitHub</strong> para ativar a sincronização.</p>
+      <button class="btn btn-primary btn-sm" onclick="abrirConfig()">Configurar agora →</button>
+    </div>
+
+    <!-- STATS FINANCEIROS -->
+    <div class="stats-grid">
+      <div class="stat verde">
+        <div class="valor" id="st-recebido">R$ 0</div>
+        <div class="rotulo">Total Recebido (mês)</div>
+      </div>
+      <div class="stat vermelho">
+        <div class="valor" id="st-pago">R$ 0</div>
+        <div class="rotulo">Total Pago (mês)</div>
+      </div>
+      <div class="stat amarelo">
+        <div class="valor" id="st-a-receber">R$ 0</div>
+        <div class="rotulo">A Receber</div>
+      </div>
+      <div class="stat laranja">
+        <div class="valor" id="st-a-pagar">R$ 0</div>
+        <div class="rotulo">A Pagar</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+      <!-- OBRAS EM ANDAMENTO -->
+      <div class="card">
+        <div class="card-header">
+          <h2>🏗️ Obras Ativas</h2>
+          <a href="obras/" class="btn btn-outline btn-sm">Ver todas</a>
+        </div>
+        <div class="card-body">
+          <div id="obras-lista">
+            <div style="color:var(--texto-leve);font-size:0.85rem;">Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENDÊNCIAS -->
+      <div class="card">
+        <div class="card-header">
+          <h2>⚠️ Próximos Vencimentos</h2>
+          <a href="contas-pagar/" class="btn btn-outline btn-sm">Ver tudo</a>
+        </div>
+        <div class="card-body">
+          <div id="vencimentos-lista">
+            <div style="color:var(--texto-leve);font-size:0.85rem;">Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACESSO RÁPIDO -->
+      <div class="card">
+        <div class="card-header"><h2>⚡ Acesso Rápido</h2></div>
+        <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <a href="lancamentos/" class="btn btn-primary" style="justify-content:center;">📝 Novo Lançamento</a>
+          <a href="relatorios/" class="btn btn-outline" style="justify-content:center;">📈 Relatórios</a>
+          <a href="contas-pagar/" class="btn btn-outline" style="justify-content:center;">💸 Contas a Pagar</a>
+          <a href="contas-receber/" class="btn btn-outline" style="justify-content:center;">💰 Contas a Receber</a>
+          <a href="conciliacao/" class="btn btn-outline" style="justify-content:center;">🏦 Conciliação</a>
+          <a href="obras/" class="btn btn-outline" style="justify-content:center;">🏗️ Obras</a>
+        </div>
+      </div>
+
+      <!-- ÚLTIMOS LANÇAMENTOS -->
+      <div class="card">
+        <div class="card-header">
+          <h2>🕐 Últimos Lançamentos</h2>
+          <a href="lancamentos/" class="btn btn-outline btn-sm">Ver todos</a>
+        </div>
+        <div class="card-body">
+          <div id="ultimos-lista">
+            <div style="color:var(--texto-leve);font-size:0.85rem;">Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script src="assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('dashboard');
+
+async function init() {
+  if (!configurado()) {
+    document.getElementById('alert-setup').style.display = 'flex';
+    setSyncStatus('vermelho', 'Não configurado');
+    document.getElementById('header-sub').textContent = 'Configure o GitHub para começar';
+    carregarLocal_dash();
+    return;
+  }
+  const cfg = getConfig();
+  document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
+  setSyncStatus('amarelo', 'Carregando...');
+  try {
+    const [ro, rl] = await Promise.all([carregarDados('data/obras.json'), carregarDados('data/lancamentos.json')]);
+    salvarLocal('cbx_obras', ro.lista);
+    salvarLocal('cbx_lanc', rl.lista);
+    renderDash(ro.lista, rl.lista);
+    setSyncStatus('verde', 'Conectado');
+  } catch(e) {
+    setSyncStatus('vermelho', 'Erro'); toast('Erro ao carregar.', 'erro');
+    carregarLocal_dash();
+  }
+}
+
+function carregarLocal_dash() {
+  const obras = carregarLocal('cbx_obras') || [];
+  const lanc  = carregarLocal('cbx_lanc')  || [];
+  renderDash(obras, lanc);
+}
+
+function renderDash(obras, lanc) {
+  const mesAtual = hoje().slice(0, 7);
+  const doMes    = lanc.filter(l => (l.data || '').startsWith(mesAtual));
+
+  const recebidoMes  = doMes.filter(l => l.tipo === 'receita' && l.status === 'pago').reduce((s, l) => s + (l.valor || 0), 0);
+  const pagoMes      = doMes.filter(l => l.tipo === 'despesa' && l.status === 'pago').reduce((s, l) => s + (l.valor || 0), 0);
+  const aReceber     = lanc.filter(l => l.tipo === 'receita' && l.status === 'pendente').reduce((s, l) => s + (l.valor || 0), 0);
+  const aPagar       = lanc.filter(l => l.tipo === 'despesa' && l.status === 'pendente').reduce((s, l) => s + (l.valor || 0), 0);
+
+  document.getElementById('st-recebido').textContent  = formatarMoeda(recebidoMes);
+  document.getElementById('st-pago').textContent      = formatarMoeda(pagoMes);
+  document.getElementById('st-a-receber').textContent = formatarMoeda(aReceber);
+  document.getElementById('st-a-pagar').textContent   = formatarMoeda(aPagar);
+
+  // Obras ativas
+  const ativas = obras.filter(o => o.status === 'ativa');
+  document.getElementById('obras-lista').innerHTML = ativas.length
+    ? ativas.map(o => {
+        const recObra  = lanc.filter(l => l.obraId === o.id && l.tipo === 'receita' && l.status === 'pago').reduce((s,l)=>s+l.valor,0);
+        const pagObra  = lanc.filter(l => l.obraId === o.id && l.tipo === 'despesa' && l.status === 'pago').reduce((s,l)=>s+l.valor,0);
+        const saldo    = recObra - pagObra;
+        return `<div style="padding:10px 0;border-bottom:1px solid var(--cinza);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-weight:700;font-size:0.88rem;">${esc(o.nome)}</div>
+            <div style="font-size:0.75rem;color:var(--texto-leve);">${esc(o.cliente||'')}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.85rem;font-weight:700;color:${saldo>=0?'var(--verde)':'var(--vermelho)'};">${formatarMoeda(saldo)}</div>
+            <div style="font-size:0.72rem;color:var(--texto-leve);">saldo</div>
+          </div>
+        </div>`;
+      }).join('')
+    : `<p style="color:var(--texto-leve);font-size:0.85rem;">Nenhuma obra ativa. <a href="obras/">Cadastrar obras →</a></p>`;
+
+  // Próximos vencimentos (pendentes nos próximos 30 dias)
+  const limite = new Date(); limite.setDate(limite.getDate() + 30);
+  const limiteStr = limite.toISOString().slice(0, 10);
+  const venc = lanc
+    .filter(l => l.status === 'pendente' && l.dataVencimento && l.dataVencimento <= limiteStr)
+    .sort((a, b) => a.dataVencimento.localeCompare(b.dataVencimento))
+    .slice(0, 6);
+  document.getElementById('vencimentos-lista').innerHTML = venc.length
+    ? venc.map(l => {
+        const obraNome = obras.find(o => o.id === l.obraId)?.nome || '—';
+        const atrasado = l.dataVencimento < hoje();
+        return `<div style="padding:8px 0;border-bottom:1px solid var(--cinza);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:0.85rem;font-weight:600;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</div>
+            <div style="font-size:0.73rem;color:var(--texto-leve);">${esc(obraNome)} · Vence ${formatarData(l.dataVencimento)}</div>
+          </div>
+          <div style="font-size:0.88rem;font-weight:700;color:${atrasado?'var(--vermelho)':l.tipo==='receita'?'var(--verde)':'var(--laranja)'};">
+            ${l.tipo==='receita'?'+':'-'}${formatarMoeda(l.valor)}
+          </div>
+        </div>`;
+      }).join('')
+    : `<p style="color:var(--texto-leve);font-size:0.85rem;">Nenhum vencimento nos próximos 30 dias.</p>`;
+
+  // Últimos lançamentos
+  const ultimos = [...lanc].reverse().slice(0, 6);
+  document.getElementById('ultimos-lista').innerHTML = ultimos.length
+    ? ultimos.map(l => {
+        const obraNome = obras.find(o => o.id === l.obraId)?.nome || '—';
+        return `<div style="padding:8px 0;border-bottom:1px solid var(--cinza);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:0.85rem;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</div>
+            <div style="font-size:0.73rem;color:var(--texto-leve);">${esc(obraNome)} · ${formatarData(l.data)}</div>
+          </div>
+          <div style="font-size:0.88rem;font-weight:700;color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">
+            ${l.tipo==='receita'?'+':'-'}${formatarMoeda(l.valor)}
+          </div>
+        </div>`;
+      }).join('')
+    : `<p style="color:var(--texto-leve);font-size:0.85rem;">Nenhum lançamento ainda. <a href="lancamentos/">Adicionar →</a></p>`;
+}
+
+init();
+</script>
+</body>
+</html>

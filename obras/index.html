@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Obras</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Obras</div>
+      <div class="topbar-sub" id="header-sub">Carregando...</div>
+    </div>
+    <div class="topbar-acoes">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <div class="stats-grid">
+      <div class="stat"><div class="valor" id="st-total">0</div><div class="rotulo">Total de Obras</div></div>
+      <div class="stat verde"><div class="valor" id="st-ativas">0</div><div class="rotulo">Ativas</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-contrato">R$ 0</div><div class="rotulo">Valor Total Contratos</div></div>
+      <div class="stat azul"><div class="valor" id="st-concluidas">0</div><div class="rotulo">Concluídas</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-body" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <input type="text" id="busca" placeholder="🔍 Buscar obra..." class="form-control" style="flex:1;min-width:200px;" oninput="renderLista()"/>
+        <select id="filtro-status" class="form-control" style="width:140px;" onchange="renderLista()">
+          <option value="">Todos os status</option>
+          <option value="ativa">Ativa</option>
+          <option value="concluida">Concluída</option>
+          <option value="paralisada">Paralisada</option>
+        </select>
+        <button class="btn btn-primary" onclick="abrirModal()">+ Nova Obra</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>🏗️ Lista de Obras</h2></div>
+      <div class="card-body">
+        <div id="lista-container"><div style="text-align:center;padding:48px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL OBRA -->
+<div class="overlay" id="modal-obra">
+  <div class="modal" style="max-width:580px;">
+    <div class="modal-header">
+      <h2 id="modal-titulo">Nova Obra</h2>
+      <button class="btn-fechar" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <div style="display:grid;grid-template-columns:1fr 140px;gap:12px;">
+        <div class="form-campo"><label>Nome da Obra *</label><input type="text" id="f-nome" placeholder="Ex: Residência Rua das Flores"/></div>
+        <div class="form-campo"><label>Status</label>
+          <select id="f-status">
+            <option value="ativa">Ativa</option>
+            <option value="paralisada">Paralisada</option>
+            <option value="concluida">Concluída</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Cliente *</label><input type="text" id="f-cliente" placeholder="Nome do cliente"/></div>
+        <div class="form-campo"><label>Valor do Contrato (R$)</label><input type="number" id="f-contrato" placeholder="0,00" step="0.01"/></div>
+      </div>
+      <div class="form-campo"><label>Endereço da Obra</label><input type="text" id="f-endereco" placeholder="Rua, número, bairro, cidade"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Data de Início</label><input type="date" id="f-inicio"/></div>
+        <div class="form-campo"><label>Previsão de Conclusão</label><input type="date" id="f-previsao"/></div>
+      </div>
+      <div class="form-campo"><label>Observações</label><textarea id="f-obs" rows="3" placeholder="Informações adicionais sobre a obra..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvar()">✓ Salvar Obra</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+const DATA_PATH = 'data/obras.json';
+const LS_KEY    = 'cbx_obras';
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('obras');
+
+let lista = []; let sha = null; let idEditando = null;
+
+async function init() {
+  const cfg = getConfig();
+  if (!configurado()) {
+    setSyncStatus('vermelho', 'Não configurado');
+    const l = carregarLocal(LS_KEY); if (l) { lista = l; atualizarStats(); renderLista(); }
+    return;
+  }
+  setSyncStatus('amarelo', 'Carregando...');
+  document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
+  try {
+    const res = await carregarDados(DATA_PATH);
+    lista = res.lista; sha = res.sha;
+    salvarLocal(LS_KEY, lista);
+    atualizarStats(); renderLista();
+    setSyncStatus('verde', 'Conectado');
+  } catch(e) {
+    setSyncStatus('vermelho', 'Erro');
+    const l = carregarLocal(LS_KEY); if (l) { lista = l; atualizarStats(); renderLista(); toast('Cache local.', 'aviso'); }
+    else toast('Erro ao carregar.', 'erro');
+  }
+}
+
+function atualizarStats() {
+  document.getElementById('st-total').textContent     = lista.length;
+  document.getElementById('st-ativas').textContent    = lista.filter(o => o.status === 'ativa').length;
+  document.getElementById('st-concluidas').textContent= lista.filter(o => o.status === 'concluida').length;
+  const total = lista.reduce((s, o) => s + (o.valorContrato || 0), 0);
+  document.getElementById('st-contrato').textContent  = formatarMoeda(total);
+}
+
+function renderLista() {
+  const busca = document.getElementById('busca').value.toLowerCase();
+  const fSt   = document.getElementById('filtro-status').value;
+  let f = lista.filter(o => {
+    if (fSt && o.status !== fSt) return false;
+    if (busca && !(`${o.nome} ${o.cliente} ${o.endereco||''}`).toLowerCase().includes(busca)) return false;
+    return true;
+  });
+  const cont = document.getElementById('lista-container');
+  if (!f.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">${lista.length?'Nenhuma obra encontrada.':'Nenhuma obra cadastrada. Clique em "+ Nova Obra" para começar.'}</div>`;
+    return;
+  }
+  const stMap = { ativa:'verde', concluida:'azul', paralisada:'amarelo' };
+  const stLbl = { ativa:'Ativa', concluida:'Concluída', paralisada:'Paralisada' };
+  cont.innerHTML = `<table class="tabela" style="width:100%;">
+    <thead><tr><th>Nome da Obra</th><th>Cliente</th><th>Valor Contrato</th><th>Início</th><th>Previsão</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>${f.map(o => `<tr>
+      <td><strong>${hl(o.nome,busca)}</strong>${o.endereco?`<div style="font-size:0.73rem;color:var(--texto-leve);">${esc(o.endereco)}</div>`:''}</td>
+      <td>${hl(o.cliente||'—',busca)}</td>
+      <td>${o.valorContrato?formatarMoeda(o.valorContrato):'—'}</td>
+      <td>${o.dataInicio?formatarData(o.dataInicio):'—'}</td>
+      <td>${o.previsaoConclusao?formatarData(o.previsaoConclusao):'—'}</td>
+      <td><span class="badge ${stMap[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span></td>
+      <td><div style="display:flex;gap:4px;">
+        <button class="btn btn-outline btn-sm" onclick='editar(${JSON.stringify(o.id)})'>✏️</button>
+        <a href="../relatorios/?obra=${o.id}" class="btn btn-primary btn-sm" title="Relatório">📈</a>
+        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluir(${JSON.stringify(o.id)})'>🗑</button>
+      </div></td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function abrirModal() {
+  idEditando = null;
+  document.getElementById('modal-titulo').textContent = 'Nova Obra';
+  ['f-nome','f-cliente','f-endereco','f-obs'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('f-status').value   = 'ativa';
+  document.getElementById('f-contrato').value = '';
+  document.getElementById('f-inicio').value   = '';
+  document.getElementById('f-previsao').value = '';
+  document.getElementById('modal-obra').classList.add('aberto');
+  setTimeout(()=>document.getElementById('f-nome').focus(),80);
+}
+
+function editar(id) {
+  const o = lista.find(x=>x.id===id); if(!o) return;
+  idEditando = id;
+  document.getElementById('modal-titulo').textContent = 'Editar Obra';
+  document.getElementById('f-nome').value      = o.nome||'';
+  document.getElementById('f-cliente').value   = o.cliente||'';
+  document.getElementById('f-endereco').value  = o.endereco||'';
+  document.getElementById('f-status').value    = o.status||'ativa';
+  document.getElementById('f-contrato').value  = o.valorContrato||'';
+  document.getElementById('f-inicio').value    = o.dataInicio||'';
+  document.getElementById('f-previsao').value  = o.previsaoConclusao||'';
+  document.getElementById('f-obs').value       = o.obs||'';
+  document.getElementById('modal-obra').classList.add('aberto');
+}
+
+function fecharModal() { document.getElementById('modal-obra').classList.remove('aberto'); }
+
+async function salvar() {
+  const nome = document.getElementById('f-nome').value.trim();
+  if (!nome) { toast('Nome da obra é obrigatório.','erro'); return; }
+  const obra = {
+    id:               idEditando || uid(),
+    nome,
+    cliente:          document.getElementById('f-cliente').value.trim(),
+    endereco:         document.getElementById('f-endereco').value.trim(),
+    status:           document.getElementById('f-status').value,
+    valorContrato:    parseFloat(document.getElementById('f-contrato').value)||0,
+    dataInicio:       document.getElementById('f-inicio').value||null,
+    previsaoConclusao:document.getElementById('f-previsao').value||null,
+    obs:              document.getElementById('f-obs').value.trim(),
+    criadoEm:         idEditando?(lista.find(x=>x.id===idEditando)?.criadoEm||hoje()):hoje(),
+  };
+  lista = idEditando ? lista.map(x=>x.id===idEditando?obra:x) : [...lista,obra];
+  salvarLocal(LS_KEY, lista);
+  fecharModal(); atualizarStats(); renderLista();
+  toast('Obra salva!','sucesso');
+  if(configurado()){
+    setSyncStatus('amarelo','Sincronizando...');
+    try{ sha = await salvarDados(DATA_PATH,lista,sha,`Obra: ${obra.nome}`); setSyncStatus('verde','Sincronizado'); }
+    catch(e){ setSyncStatus('vermelho','Erro sync'); toast('Erro sync: '+e.message,'aviso'); }
+  }
+}
+
+async function excluir(id) {
+  const o = lista.find(x=>x.id===id); if(!o) return;
+  if(!confirm(`Excluir a obra "${o.nome}"?`)) return;
+  lista = lista.filter(x=>x.id!==id);
+  salvarLocal(LS_KEY, lista); atualizarStats(); renderLista();
+  toast('Obra excluída.','sucesso');
+  if(configurado()){ try{ sha=await salvarDados(DATA_PATH,lista,sha,`Excluir obra: ${o.nome}`); }catch(e){toast('Erro sync','aviso');} }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Conciliação Bancária</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .ext-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 120px 130px auto;
+      gap: 8px; align-items: center; padding: 10px 12px;
+      border: 1px solid var(--cinza); border-radius: 8px; margin-bottom: 6px;
+      background: var(--branco);
+    }
+    .ext-row.conciliado { opacity: .55; background: var(--fundo2); }
+    .ext-row.credito { border-left: 3px solid var(--verde); }
+    .ext-row.debito  { border-left: 3px solid var(--vermelho); }
+    .ext-val-c { color: var(--verde);    font-weight: 700; }
+    .ext-val-d { color: var(--vermelho); font-weight: 700; }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Conciliação Bancária</div>
+      <div class="topbar-sub">Bata o extrato com os lançamentos</div>
+    </div>
+    <div class="topbar-acoes">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+
+    <div class="stats-grid">
+      <div class="stat verde"><div class="valor" id="st-rec-ext">R$ 0</div><div class="rotulo">Créditos no Extrato</div></div>
+      <div class="stat vermelho"><div class="valor" id="st-des-ext">R$ 0</div><div class="rotulo">Débitos no Extrato</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-nao-conc">0</div><div class="rotulo">Não Conciliados</div></div>
+      <div class="stat azul"><div class="valor" id="st-conc">0</div><div class="rotulo">Conciliados</div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+      <!-- IMPORTAR EXTRATO -->
+      <div class="card">
+        <div class="card-header"><h2>📥 Importar Extrato</h2></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+          <p style="font-size:0.85rem;color:var(--texto-leve);">
+            Cole as linhas do extrato bancário abaixo. Formato esperado por linha:<br>
+            <code style="font-size:0.8rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;">DD/MM/AAAA | Descrição | +R$1.000,00 ou -R$1.000,00</code>
+          </p>
+          <textarea id="extrato-input" rows="8" placeholder="Ex:&#10;15/07/2026 | PIX João Silva | -R$1.500,00&#10;15/07/2026 | Medição Obra Rua das Flores | +R$8.000,00&#10;16/07/2026 | Combustível posto | -R$200,00"></textarea>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" onclick="importarExtrato()">📥 Importar Linhas</button>
+            <button class="btn btn-outline" onclick="limparExtrato()">✕ Limpar</button>
+          </div>
+          <p style="font-size:0.78rem;color:var(--texto-leve);">O extrato fica salvo localmente enquanto você trabalha.</p>
+        </div>
+      </div>
+
+      <!-- SALDO -->
+      <div class="card">
+        <div class="card-header"><h2>📊 Resumo da Conciliação</h2></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.88rem;padding:6px 0;border-bottom:1px solid var(--cinza);">
+            <span>Lançamentos não conciliados</span>
+            <strong id="res-lanc-nc" style="color:var(--amarelo);">0</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.88rem;padding:6px 0;border-bottom:1px solid var(--cinza);">
+            <span>Itens de extrato não conciliados</span>
+            <strong id="res-ext-nc" style="color:var(--vermelho);">0</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.88rem;padding:6px 0;border-bottom:1px solid var(--cinza);">
+            <span>Total conciliado (lançamentos)</span>
+            <strong id="res-conc-val" style="color:var(--verde);">R$ 0</strong>
+          </div>
+          <div style="margin-top:8px;">
+            <button class="btn btn-outline btn-sm" onclick="marcarTodosConc()">✓ Marcar todos lançamentos como conciliados</button>
+          </div>
+          <p style="font-size:0.76rem;color:var(--texto-leve);">Ao marcar um item do extrato como conciliado, você confirma que ele corresponde a um lançamento já cadastrado.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXTRATO IMPORTADO -->
+    <div class="card" id="card-extrato" style="display:none;">
+      <div class="card-header">
+        <h2>🏦 Linhas do Extrato</h2>
+        <span id="ext-contador" style="font-size:0.78rem;color:var(--texto-leve);"></span>
+      </div>
+      <div class="card-body" id="extrato-lista"></div>
+    </div>
+
+    <!-- LANÇAMENTOS NÃO CONCILIADOS -->
+    <div class="card">
+      <div class="card-header">
+        <h2>📝 Lançamentos Não Conciliados</h2>
+        <span id="lanc-contador" style="font-size:0.78rem;color:var(--texto-leve);"></span>
+      </div>
+      <div class="card-body">
+        <div id="lanc-nc-lista"><div style="text-align:center;padding:32px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('conciliacao');
+const LS_EXT = 'cbx_extrato';
+let lancamentos=[]; let sha=null; let obras=[];
+let extratoLinhas = carregarLocal(LS_EXT) || [];
+
+async function init() {
+  obras=carregarLocal('cbx_obras')||[]; lancamentos=carregarLocal('cbx_lanc')||[];
+  renderExtrato(); renderLancNC(); atualizarStats();
+  if(!configurado()){ setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  try {
+    const [rL,rO]=await Promise.all([carregarDados('data/lancamentos.json'),carregarDados('data/obras.json')]);
+    lancamentos=rL.lista; sha=rL.sha; obras=rO.lista;
+    salvarLocal('cbx_lanc',lancamentos); salvarLocal('cbx_obras',obras);
+    renderExtrato(); renderLancNC(); atualizarStats();
+    setSyncStatus('verde','Conectado');
+  } catch(e){ setSyncStatus('vermelho','Erro'); }
+}
+
+function atualizarStats() {
+  const recExt = extratoLinhas.filter(l=>l.tipo==='credito').reduce((s,l)=>s+(l.valor||0),0);
+  const desExt = extratoLinhas.filter(l=>l.tipo==='debito').reduce((s,l)=>s+(l.valor||0),0);
+  const nc     = extratoLinhas.filter(l=>!l.conciliado).length;
+  const conc   = extratoLinhas.filter(l=>l.conciliado).length;
+  const lancNC = lancamentos.filter(l=>!l.conciliado).length;
+  const concVal= lancamentos.filter(l=>l.conciliado).reduce((s,l)=>s+(l.valor||0),0);
+  document.getElementById('st-rec-ext').textContent = formatarMoeda(recExt);
+  document.getElementById('st-des-ext').textContent = formatarMoeda(desExt);
+  document.getElementById('st-nao-conc').textContent= nc;
+  document.getElementById('st-conc').textContent    = conc;
+  document.getElementById('res-lanc-nc').textContent= lancNC;
+  document.getElementById('res-ext-nc').textContent = nc;
+  document.getElementById('res-conc-val').textContent= formatarMoeda(concVal);
+}
+
+// ── EXTRATO ──
+function importarExtrato() {
+  const texto = document.getElementById('extrato-input').value.trim();
+  if(!texto){ toast('Cole o extrato acima.','aviso'); return; }
+  const linhas = texto.split('\n').filter(l=>l.trim());
+  let novas=0;
+  linhas.forEach(linha=>{
+    const parts = linha.split('|').map(p=>p.trim());
+    if(parts.length<3) return;
+    const [dataStr, descricao, valorStr] = parts;
+    const isCredito = valorStr.includes('+');
+    const valor = parseFloat(valorStr.replace(/[R$+\-\s.]/g,'').replace(',','.')) || 0;
+    if(!valor) return;
+    const [d,m,a] = dataStr.split('/');
+    const data = a&&m&&d ? `${a}-${m}-${d}` : hoje();
+    extratoLinhas.push({ id:uid(), data, descricao, valor, tipo: isCredito?'credito':'debito', conciliado:false });
+    novas++;
+  });
+  salvarLocal(LS_EXT, extratoLinhas);
+  document.getElementById('extrato-input').value='';
+  renderExtrato(); atualizarStats();
+  toast(`${novas} linha(s) importada(s).`,'sucesso');
+}
+
+function limparExtrato() {
+  if(!confirm('Limpar todas as linhas do extrato?')) return;
+  extratoLinhas=[];
+  salvarLocal(LS_EXT,[]);
+  renderExtrato(); atualizarStats();
+}
+
+function renderExtrato() {
+  const card = document.getElementById('card-extrato');
+  if(!extratoLinhas.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  document.getElementById('ext-contador').textContent = `${extratoLinhas.length} linha(s) — ${extratoLinhas.filter(l=>!l.conciliado).length} pendente(s)`;
+  document.getElementById('extrato-lista').innerHTML = extratoLinhas.map(l=>`
+    <div class="ext-row ${l.tipo} ${l.conciliado?'conciliado':''}">
+      <div style="font-size:0.82rem;">${formatarData(l.data)}</div>
+      <div style="font-size:0.85rem;">${esc(l.descricao)}</div>
+      <div class="${l.tipo==='credito'?'ext-val-c':'ext-val-d'}">${l.tipo==='credito'?'+':'-'}${formatarMoeda(l.valor)}</div>
+      <div>${l.conciliado?'<span class="badge verde">Conciliado</span>':'<span class="badge amarelo">Pendente</span>'}</div>
+      <div style="display:flex;gap:4px;">
+        ${!l.conciliado?`<button class="btn btn-success btn-sm" onclick='conciliarExt("${l.id}")'>✓</button>`:''}
+        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerExt("${l.id}")'>🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function conciliarExt(id) {
+  const l=extratoLinhas.find(x=>x.id===id); if(!l) return;
+  l.conciliado=true;
+  salvarLocal(LS_EXT,extratoLinhas);
+  renderExtrato(); atualizarStats();
+  toast('Linha conciliada.','sucesso');
+}
+
+function removerExt(id) {
+  extratoLinhas=extratoLinhas.filter(x=>x.id!==id);
+  salvarLocal(LS_EXT,extratoLinhas);
+  renderExtrato(); atualizarStats();
+}
+
+// ── LANÇAMENTOS NÃO CONCILIADOS ──
+function renderLancNC() {
+  const nc = lancamentos.filter(l=>!l.conciliado).slice(0,30);
+  document.getElementById('lanc-contador').textContent = `${lancamentos.filter(l=>!l.conciliado).length} pendente(s)`;
+  const cont=document.getElementById('lanc-nc-lista');
+  if(!nc.length){ cont.innerHTML=`<div style="text-align:center;padding:24px;color:var(--verde);font-weight:600;">✓ Todos os lançamentos estão conciliados!</div>`; return; }
+  cont.innerHTML=`<table class="tabela" style="width:100%;"><thead><tr>
+    <th>Data</th><th>Obra</th><th>Descrição</th><th>Valor</th><th>Status</th><th>Ação</th>
+  </tr></thead><tbody>${nc.map(l=>{
+    const obra=obras.find(o=>o.id===l.obraId);
+    const isRec=l.tipo==='receita';
+    return `<tr>
+      <td>${formatarData(l.data)}</td>
+      <td style="font-size:0.8rem;">${obra?esc(obra.nome):'—'}</td>
+      <td>${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</td>
+      <td style="font-weight:700;color:${isRec?'var(--verde)':'var(--vermelho)'};">${isRec?'+':'-'}${formatarMoeda(l.valor)}</td>
+      <td>${badgeStatus(l.status)}</td>
+      <td><button class="btn btn-success btn-sm" onclick='conciliarLanc("${l.id}")'>✓ Conciliar</button></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+async function conciliarLanc(id) {
+  const l=lancamentos.find(x=>x.id===id); if(!l) return;
+  l.conciliado=true;
+  lancamentos=lancamentos.map(x=>x.id===id?l:x);
+  salvarLocal('cbx_lanc',lancamentos);
+  renderLancNC(); atualizarStats();
+  toast('Lançamento conciliado!','sucesso');
+  if(configurado()){ try{ sha=await salvarDados('data/lancamentos.json',lancamentos,sha,`Conciliar: ${l.descricao||id}`); }catch(e){ toast('Erro sync','aviso'); } }
+}
+
+async function marcarTodosConc() {
+  const nc=lancamentos.filter(l=>!l.conciliado);
+  if(!nc.length){ toast('Todos já estão conciliados.','aviso'); return; }
+  if(!confirm(`Marcar ${nc.length} lançamento(s) como conciliados?`)) return;
+  lancamentos=lancamentos.map(l=>({...l,conciliado:true}));
+  salvarLocal('cbx_lanc',lancamentos);
+  renderLancNC(); atualizarStats();
+  toast('Todos conciliados!','sucesso');
+  if(configurado()){ try{ sha=await salvarDados('data/lancamentos.json',lancamentos,sha,'Conciliação em lote'); }catch(e){ toast('Erro sync','aviso'); } }
+}
+
+init();
+</script>
+</body>
+</html>

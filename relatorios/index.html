@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Relatórios por Obra</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .obra-card {
+      border: 1px solid var(--cinza); border-radius: 12px;
+      padding: 0; margin-bottom: 20px; background: var(--branco);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .obra-header {
+      padding: 14px 20px; background: #1c1917; color: #fff;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .obra-header h3 { font-size: 1rem; font-weight: 700; }
+    .obra-header .cliente { font-size: 0.78rem; color: rgba(255,255,255,.6); margin-top: 2px; }
+    .obra-kpis {
+      display: grid; grid-template-columns: repeat(5,1fr);
+      gap: 0; border-bottom: 1px solid var(--cinza);
+    }
+    .kpi-box {
+      padding: 14px 16px; text-align: center;
+      border-right: 1px solid var(--cinza);
+    }
+    .kpi-box:last-child { border-right: none; }
+    .kpi-val { font-size: 1.15rem; font-weight: 800; }
+    .kpi-rot { font-size: 0.7rem; color: var(--texto-leve); margin-top: 3px; text-transform: uppercase; letter-spacing: .04em; }
+    .detalhe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .detalhe-col { padding: 14px 18px; }
+    .detalhe-col:first-child { border-right: 1px solid var(--cinza); }
+    .detalhe-titulo { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--texto-leve); margin-bottom: 10px; }
+    .detalhe-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--cinza); font-size: 0.85rem; }
+    .detalhe-row:last-child { border-bottom: none; }
+    .prog-bar { height: 6px; background: var(--cinza); border-radius: 999px; margin-top: 8px; overflow: hidden; }
+    .prog-fill { height: 100%; border-radius: 999px; background: var(--verde); transition: width .5s; }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Relatório por Obra</div>
+      <div class="topbar-sub" id="header-sub">Visão financeira por obra</div>
+    </div>
+    <div class="topbar-acoes">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-body" style="display:flex;gap:8px;align-items:center;">
+        <select id="f-obra" class="form-control" style="width:250px;" onchange="renderRelatorios()">
+          <option value="">Todas as obras</option>
+        </select>
+        <select id="f-status" class="form-control" style="width:140px;" onchange="renderRelatorios()">
+          <option value="ativa">Apenas ativas</option>
+          <option value="">Todas</option>
+          <option value="concluida">Concluídas</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="relatorios-container">
+      <div style="text-align:center;padding:48px;color:var(--texto-leve);">Carregando...</div>
+    </div>
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('relatorios');
+let obras=[]; let lancamentos=[];
+
+async function init() {
+  obras=carregarLocal('cbx_obras')||[]; lancamentos=carregarLocal('cbx_lanc')||[];
+  preencherFiltros(); renderRelatorios();
+
+  // Verificar param ?obra=
+  const params=new URLSearchParams(window.location.search);
+  const obraId=params.get('obra');
+  if(obraId){ document.getElementById('f-obra').value=obraId; document.getElementById('f-status').value=''; renderRelatorios(); history.replaceState({},'','relatorios/'); }
+
+  if(!configurado()){ setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  try {
+    const [rL,rO]=await Promise.all([carregarDados('data/lancamentos.json'),carregarDados('data/obras.json')]);
+    lancamentos=rL.lista; obras=rO.lista;
+    salvarLocal('cbx_lanc',lancamentos); salvarLocal('cbx_obras',obras);
+    preencherFiltros(); renderRelatorios();
+    setSyncStatus('verde','Conectado');
+  } catch(e){ setSyncStatus('vermelho','Erro'); }
+}
+
+function preencherFiltros() {
+  const sel=document.getElementById('f-obra');
+  sel.innerHTML='<option value="">Todas as obras</option>'+obras.map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+}
+
+function renderRelatorios() {
+  const fObra  = document.getElementById('f-obra').value;
+  const fStatus= document.getElementById('f-status').value;
+
+  let obrasFilt = fObra ? obras.filter(o=>o.id===fObra) :
+                  fStatus ? obras.filter(o=>o.status===fStatus) : obras;
+
+  const cont = document.getElementById('relatorios-container');
+  if(!obrasFilt.length){
+    cont.innerHTML=`<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhuma obra encontrada. <a href="../obras/">Cadastrar obras →</a></div>`;
+    return;
+  }
+
+  cont.innerHTML = obrasFilt.map(o => renderObra(o)).join('');
+}
+
+function renderObra(o) {
+  const lanc = lancamentos.filter(l=>l.obraId===o.id);
+  const rec  = { pago: lanc.filter(l=>l.tipo==='receita'&&l.status==='pago').reduce((s,l)=>s+(l.valor||0),0),
+                  pend: lanc.filter(l=>l.tipo==='receita'&&l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0) };
+  const des  = { pago: lanc.filter(l=>l.tipo==='despesa'&&l.status==='pago').reduce((s,l)=>s+(l.valor||0),0),
+                  pend: lanc.filter(l=>l.tipo==='despesa'&&l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0) };
+  const saldo = rec.pago - des.pago;
+  const contrato = o.valorContrato || 0;
+  const percRec = contrato > 0 ? Math.min(100, Math.round(rec.pago/contrato*100)) : null;
+
+  // Por categoria - despesas pagas
+  const catDes = {};
+  lanc.filter(l=>l.tipo==='despesa').forEach(l=>{
+    const k=l.categoria||'outros';
+    if(!catDes[k]) catDes[k]={pago:0,pend:0};
+    if(l.status==='pago') catDes[k].pago+=l.valor||0;
+    else if(l.status==='pendente') catDes[k].pend+=l.valor||0;
+  });
+
+  // Receitas por categoria
+  const catRec = {};
+  lanc.filter(l=>l.tipo==='receita').forEach(l=>{
+    const k=l.categoria||'outros-rec';
+    if(!catRec[k]) catRec[k]={pago:0,pend:0};
+    if(l.status==='pago') catRec[k].pago+=l.valor||0;
+    else if(l.status==='pendente') catRec[k].pend+=l.valor||0;
+  });
+
+  const stLbl={ativa:'Ativa',concluida:'Concluída',paralisada:'Paralisada'};
+  const stCor={ativa:'verde',concluida:'azul',paralisada:'amarelo'};
+
+  return `<div class="obra-card">
+    <div class="obra-header">
+      <div>
+        <h3>🏗️ ${esc(o.nome)}</h3>
+        <div class="cliente">${o.cliente?'Cliente: '+esc(o.cliente):''}${o.dataInicio?' · Início: '+formatarData(o.dataInicio):''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${contrato?`<div style="text-align:right;"><div style="font-size:0.75rem;color:rgba(255,255,255,.5);">Contrato</div><div style="font-weight:700;color:var(--brand);">${formatarMoeda(contrato)}</div></div>`:''}
+        <span class="badge ${stCor[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="obra-kpis">
+      <div class="kpi-box">
+        <div class="kpi-val" style="color:var(--verde);">${formatarMoeda(rec.pago)}</div>
+        <div class="kpi-rot">Recebido</div>
+        ${percRec!==null?`<div class="prog-bar"><div class="prog-fill" style="width:${percRec}%;"></div></div><div style="font-size:0.7rem;color:var(--texto-leve);margin-top:4px;">${percRec}% do contrato</div>`:''}
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-val" style="color:var(--azul);">${formatarMoeda(rec.pend)}</div>
+        <div class="kpi-rot">A Receber</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-val" style="color:var(--vermelho);">${formatarMoeda(des.pago)}</div>
+        <div class="kpi-rot">Total Pago</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-val" style="color:var(--laranja);">${formatarMoeda(des.pend)}</div>
+        <div class="kpi-rot">A Pagar</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-val" style="color:${saldo>=0?'var(--verde)':'var(--vermelho)'};">${formatarMoeda(saldo)}</div>
+        <div class="kpi-rot">Saldo Líquido</div>
+      </div>
+    </div>
+
+    <!-- DETALHAMENTO -->
+    <div class="detalhe-grid">
+      <!-- Despesas por categoria -->
+      <div class="detalhe-col">
+        <div class="detalhe-titulo">💸 Despesas por Categoria</div>
+        ${Object.keys(catDes).length ? Object.entries(catDes).sort((a,b)=>(b[1].pago+b[1].pend)-(a[1].pago+a[1].pend)).map(([k,v])=>`
+          <div class="detalhe-row">
+            <span>${labelCategoria('despesa',k)}</span>
+            <span>
+              <span style="color:var(--vermelho);font-weight:700;">${formatarMoeda(v.pago)}</span>
+              ${v.pend?`<span style="font-size:0.75rem;color:var(--texto-leve);margin-left:6px;">+${formatarMoeda(v.pend)} pend.</span>`:''}
+            </span>
+          </div>`).join('')
+        : '<div style="color:var(--texto-leve);font-size:0.84rem;">Sem despesas registradas.</div>'}
+      </div>
+      <!-- Receitas por categoria -->
+      <div class="detalhe-col">
+        <div class="detalhe-titulo">💰 Receitas por Categoria</div>
+        ${Object.keys(catRec).length ? Object.entries(catRec).sort((a,b)=>(b[1].pago+b[1].pend)-(a[1].pago+a[1].pend)).map(([k,v])=>`
+          <div class="detalhe-row">
+            <span>${labelCategoria('receita',k)}</span>
+            <span>
+              <span style="color:var(--verde);font-weight:700;">${formatarMoeda(v.pago)}</span>
+              ${v.pend?`<span style="font-size:0.75rem;color:var(--texto-leve);margin-left:6px;">+${formatarMoeda(v.pend)} pend.</span>`:''}
+            </span>
+          </div>`).join('')
+        : '<div style="color:var(--texto-leve);font-size:0.84rem;">Sem receitas registradas.</div>'}
+      </div>
+    </div>
+
+    <!-- ÚLTIMOS LANÇAMENTOS DA OBRA -->
+    <div style="padding:12px 18px;border-top:1px solid var(--cinza);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--texto-leve);">Últimos Lançamentos</span>
+        <a href="../lancamentos/?obra=${o.id}" style="font-size:0.78rem;color:var(--brand);">Ver todos →</a>
+      </div>
+      ${lanc.length ? [...lanc].reverse().slice(0,4).map(l=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--cinza);font-size:0.82rem;">
+          <div>
+            <span style="color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">●</span>
+            <span style="margin-left:6px;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</span>
+            <span style="color:var(--texto-leve);margin-left:8px;font-size:0.75rem;">${formatarData(l.data)}</span>
+          </div>
+          <div style="font-weight:700;color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">
+            ${l.tipo==='receita'?'+':'-'}${formatarMoeda(l.valor)}
+            ${badgeStatus(l.status).replace('<span','<span style="margin-left:6px;"')}
+          </div>
+        </div>`).join('')
+      : '<div style="color:var(--texto-leve);font-size:0.83rem;">Nenhum lançamento nesta obra.</div>'}
+    </div>
+  </div>`;
+}
+
+init();
+</script>
+</body>
+</html>

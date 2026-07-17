@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Contas a Receber</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Contas a Receber</div>
+      <div class="topbar-sub" id="header-sub">Receitas pendentes</div>
+    </div>
+    <div class="topbar-acoes">
+      <a href="../lancamentos/" class="btn btn-primary btn-sm">+ Novo Lançamento</a>
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <div class="stats-grid">
+      <div class="stat verde"><div class="valor" id="st-total">R$ 0</div><div class="rotulo">Total a Receber</div></div>
+      <div class="stat vermelho"><div class="valor" id="st-venc">R$ 0</div><div class="rotulo">Vencido (atrasado)</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-semana">R$ 0</div><div class="rotulo">Vence Esta Semana</div></div>
+      <div class="stat azul"><div class="valor" id="st-mед">R$ 0</div><div class="rotulo">Medições Pendentes</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="f-obra" class="form-control" style="width:180px;" onchange="renderLista()">
+          <option value="">Todas as obras</option>
+        </select>
+        <select id="f-cat" class="form-control" style="width:180px;" onchange="renderLista()">
+          <option value="">Todas as categorias</option>
+        </select>
+        <select id="f-venc-f" class="form-control" style="width:160px;" onchange="renderLista()">
+          <option value="">Qualquer vencimento</option>
+          <option value="vencido">Vencido</option>
+          <option value="semana">Esta semana</option>
+          <option value="mes">Este mês</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>💰 Receitas Pendentes</h2><span id="contador" style="font-size:0.78rem;color:var(--texto-leve);"></span></div>
+      <div class="card-body">
+        <div id="lista-container"><div style="text-align:center;padding:48px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('contas-receber');
+let lista=[]; let sha=null; let obras=[];
+
+async function init() {
+  obras=carregarLocal('cbx_obras')||[]; lista=carregarLocal('cbx_lanc')||[];
+  preencherFiltros(); atualizarStats(); renderLista();
+  if(!configurado()){ setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  try {
+    const [rL,rO]=await Promise.all([carregarDados('data/lancamentos.json'),carregarDados('data/obras.json')]);
+    lista=rL.lista; sha=rL.sha; obras=rO.lista;
+    salvarLocal('cbx_lanc',lista); salvarLocal('cbx_obras',obras);
+    preencherFiltros(); atualizarStats(); renderLista();
+    setSyncStatus('verde','Conectado');
+  } catch(e){ setSyncStatus('vermelho','Erro'); toast('Erro.','erro'); }
+}
+
+function preencherFiltros() {
+  document.getElementById('f-obra').innerHTML='<option value="">Todas as obras</option>'+obras.map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+  document.getElementById('f-cat').innerHTML='<option value="">Todas as categorias</option>'+CATEGORIAS.receita.map(c=>`<option value="${c.value}">${c.label}</option>`).join('');
+}
+
+function atualizarStats() {
+  const pend=lista.filter(l=>l.tipo==='receita'&&l.status==='pendente');
+  const hj=hoje();
+  const semana=new Date(); semana.setDate(semana.getDate()+7); const semStr=semana.toISOString().slice(0,10);
+  document.getElementById('st-total').textContent = formatarMoeda(pend.reduce((s,l)=>s+(l.valor||0),0));
+  document.getElementById('st-venc').textContent  = formatarMoeda(pend.filter(l=>l.dataVencimento&&l.dataVencimento<hj).reduce((s,l)=>s+(l.valor||0),0));
+  document.getElementById('st-semana').textContent= formatarMoeda(pend.filter(l=>l.dataVencimento&&l.dataVencimento>=hj&&l.dataVencimento<=semStr).reduce((s,l)=>s+(l.valor||0),0));
+  document.getElementById('st-mед').textContent   = formatarMoeda(pend.filter(l=>l.categoria==='medicao').reduce((s,l)=>s+(l.valor||0),0));
+}
+
+function renderLista() {
+  const fObra=document.getElementById('f-obra').value;
+  const fCat=document.getElementById('f-cat').value;
+  const fVenc=document.getElementById('f-venc-f').value;
+  const hj=hoje();
+  const semana=new Date(); semana.setDate(semana.getDate()+7); const semStr=semana.toISOString().slice(0,10);
+  const mesStr=hj.slice(0,7);
+
+  let f=lista.filter(l=>{
+    if(l.tipo!=='receita'||l.status!=='pendente') return false;
+    if(fObra&&l.obraId!==fObra) return false;
+    if(fCat&&l.categoria!==fCat) return false;
+    if(fVenc==='vencido'&&!(l.dataVencimento&&l.dataVencimento<hj)) return false;
+    if(fVenc==='semana'&&!(l.dataVencimento&&l.dataVencimento>=hj&&l.dataVencimento<=semStr)) return false;
+    if(fVenc==='mes'&&!(l.dataVencimento||'').startsWith(mesStr)) return false;
+    return true;
+  }).sort((a,b)=>(a.dataVencimento||'9').localeCompare(b.dataVencimento||'9'));
+
+  document.getElementById('contador').textContent=`${f.length} item(ns) — ${formatarMoeda(f.reduce((s,l)=>s+(l.valor||0),0))}`;
+  const cont=document.getElementById('lista-container');
+  if(!f.length){ cont.innerHTML=`<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhuma receita pendente.</div>`; return; }
+
+  cont.innerHTML=`<table class="tabela" style="width:100%;"><thead><tr>
+    <th>Vencimento</th><th>Obra</th><th>Categoria</th><th>Descrição</th><th>Pagador</th>
+    <th style="text-align:right;">Valor</th><th>Ações</th>
+  </tr></thead><tbody>${f.map(l=>{
+    const obra=obras.find(o=>o.id===l.obraId);
+    const atrasado=l.dataVencimento&&l.dataVencimento<hj;
+    return `<tr style="border-left:3px solid var(--verde);">
+      <td style="white-space:nowrap;${atrasado?'color:var(--vermelho);font-weight:700;':''}">${l.dataVencimento?formatarData(l.dataVencimento):'—'}${atrasado?' ⚠️':''}</td>
+      <td style="font-size:0.82rem;">${obra?esc(obra.nome):'—'}</td>
+      <td><span class="badge verde" style="font-size:0.7rem;">${labelCategoria('receita',l.categoria)}</span></td>
+      <td>${esc(l.descricao||'—')}</td>
+      <td style="font-size:0.8rem;color:var(--texto-leve);">${esc(l.beneficiario||'—')}</td>
+      <td style="text-align:right;font-weight:700;color:var(--verde);">+${formatarMoeda(l.valor)}</td>
+      <td><button class="btn btn-success btn-sm" onclick='receber(${JSON.stringify(l.id)})'>✓ Recebido</button></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+async function receber(id) {
+  const l=lista.find(x=>x.id===id); if(!l) return;
+  l.status='pago'; l.dataPagamento=hoje();
+  lista=lista.map(x=>x.id===id?l:x);
+  salvarLocal('cbx_lanc',lista); atualizarStats(); renderLista();
+  toast('Marcado como recebido!','sucesso');
+  if(configurado()){ try{ sha=await salvarDados('data/lancamentos.json',lista,sha,`Recebido: ${l.descricao||formatarMoeda(l.valor)}`); }catch(e){ toast('Erro sync','aviso'); } }
+}
+
+init();
+</script>
+</body>
+</html>

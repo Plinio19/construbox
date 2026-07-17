@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Lançamentos</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .val-rec { color: var(--verde);    font-weight: 700; }
+    .val-des { color: var(--vermelho); font-weight: 700; }
+    .row-rec td:first-child { border-left: 3px solid var(--verde); }
+    .row-des td:first-child { border-left: 3px solid var(--vermelho); }
+    .concil-check { width: 16px; height: 16px; cursor: pointer; accent-color: var(--brand); }
+    .quick-form {
+      display: grid;
+      grid-template-columns: 100px 80px 1fr 130px 130px 120px 110px auto;
+      gap: 6px; align-items: end; margin-bottom: 12px;
+    }
+    .tipo-toggle { display: flex; gap: 0; border-radius: 7px; overflow: hidden; border: 1px solid var(--cinza2); }
+    .tipo-btn-t {
+      flex: 1; padding: 8px 6px; border: none; cursor: pointer;
+      font-size: 0.78rem; font-weight: 700; text-align: center;
+      background: var(--fundo2); color: var(--texto-leve); transition: all .15s;
+    }
+    .tipo-btn-t.ativo-r { background: var(--verde-bg); color: var(--verde); }
+    .tipo-btn-t.ativo-d { background: var(--vermelho-bg); color: var(--vermelho); }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Lançamentos</div>
+      <div class="topbar-sub" id="header-sub">Carregando...</div>
+    </div>
+    <div class="topbar-acoes">
+      <button class="btn btn-primary" onclick="abrirModalNovo()">+ Novo Lançamento</button>
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="stats-grid">
+      <div class="stat verde"><div class="valor" id="st-rec">R$ 0</div><div class="rotulo">Receitas (período)</div></div>
+      <div class="stat vermelho"><div class="valor" id="st-des">R$ 0</div><div class="rotulo">Despesas (período)</div></div>
+      <div class="stat azul"><div class="valor" id="st-saldo">R$ 0</div><div class="rotulo">Saldo do Período</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-pend">R$ 0</div><div class="rotulo">Pendente Total</div></div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <input type="text" id="busca" placeholder="🔍 Buscar..." class="form-control" style="flex:1;min-width:160px;" oninput="renderLista()"/>
+        <select id="f-obra" class="form-control" style="width:170px;" onchange="renderLista()">
+          <option value="">Todas as obras</option>
+        </select>
+        <select id="f-tipo" class="form-control" style="width:130px;" onchange="onFiltroTipo()">
+          <option value="">Rec. + Desp.</option>
+          <option value="receita">Receitas</option>
+          <option value="despesa">Despesas</option>
+        </select>
+        <select id="f-cat" class="form-control" style="width:160px;" onchange="renderLista()">
+          <option value="">Todas as categorias</option>
+        </select>
+        <select id="f-status" class="form-control" style="width:130px;" onchange="renderLista()">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendente</option>
+          <option value="pago">Pago</option>
+          <option value="agendado">Agendado</option>
+        </select>
+        <input type="month" id="f-mes" class="form-control" style="width:140px;" onchange="renderLista()"/>
+        <button class="btn btn-outline btn-sm" onclick="limparFiltros()">✕ Limpar</button>
+        <button class="btn btn-outline btn-sm" onclick="exportarCSV()">⬇ CSV</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📝 Lançamentos</h2>
+        <span id="contador" style="font-size:0.78rem;color:var(--texto-leve);"></span>
+      </div>
+      <div class="card-body">
+        <div id="lista-container"><div style="text-align:center;padding:48px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL LANÇAMENTO ═══ -->
+<div class="overlay" id="modal-lanc">
+  <div class="modal" style="max-width:680px;max-height:92vh;display:flex;flex-direction:column;">
+    <div class="modal-header" style="flex-shrink:0;">
+      <h2 id="modal-titulo">Novo Lançamento</h2>
+      <button class="btn-fechar" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+
+      <!-- TIPO TOGGLE -->
+      <div>
+        <label style="font-size:0.78rem;font-weight:600;color:var(--texto-leve);display:block;margin-bottom:6px;">Tipo *</label>
+        <div class="tipo-toggle">
+          <button class="tipo-btn-t" id="btn-receita" onclick="setTipo('receita')">💰 RECEITA</button>
+          <button class="tipo-btn-t" id="btn-despesa" onclick="setTipo('despesa')">💸 DESPESA</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo">
+          <label>Data *</label>
+          <input type="date" id="f-data"/>
+        </div>
+        <div class="form-campo">
+          <label>Categoria *</label>
+          <select id="f-cat"></select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo">
+          <label>Obra *</label>
+          <select id="f-obra-m">
+            <option value="">— Selecione a obra —</option>
+          </select>
+        </div>
+        <div class="form-campo">
+          <label>Valor (R$) *</label>
+          <input type="number" id="f-valor" min="0" step="0.01" placeholder="0,00"/>
+        </div>
+      </div>
+
+      <div class="form-campo">
+        <label>Descrição</label>
+        <input type="text" id="f-desc" placeholder="Ex: Pagamento João semana 28, Medição #3..."/>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo">
+          <label>Beneficiário / Pagador</label>
+          <input type="text" id="f-benef" placeholder="Nome de quem recebe ou paga"/>
+        </div>
+        <div class="form-campo">
+          <label>Forma de Pagamento</label>
+          <select id="f-forma">
+            <option value="pix">PIX</option>
+            <option value="ted">TED / Transferência</option>
+            <option value="boleto">Boleto</option>
+            <option value="dinheiro">Dinheiro</option>
+            <option value="cheque">Cheque</option>
+            <option value="outros">Outros</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div class="form-campo">
+          <label>Status</label>
+          <select id="f-status-m" onchange="onStatusChange()">
+            <option value="pendente">Pendente</option>
+            <option value="pago">Pago</option>
+            <option value="agendado">Agendado</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        <div class="form-campo">
+          <label>Data Vencimento</label>
+          <input type="date" id="f-venc"/>
+        </div>
+        <div class="form-campo" id="campo-pgto" style="display:none;">
+          <label>Data Pagamento</label>
+          <input type="date" id="f-pgto"/>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;">
+          <input type="checkbox" id="f-reembolso" style="width:auto;accent-color:var(--brand);"/>
+          É reembolso de funcionário
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;">
+          <input type="checkbox" id="f-conciliado" style="width:auto;accent-color:var(--brand);"/>
+          Conciliado com extrato
+        </label>
+      </div>
+
+      <div class="form-campo">
+        <label>Observações</label>
+        <textarea id="f-obs" rows="2" placeholder="Informações adicionais..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer" style="flex-shrink:0;">
+      <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvar()">✓ Salvar Lançamento</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+const DATA_PATH  = 'data/lancamentos.json';
+const OBRAS_PATH = 'data/obras.json';
+const LS_KEY     = 'cbx_lanc';
+const LS_OBRAS   = 'cbx_obras';
+
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('lancamentos');
+document.getElementById('f-mes').value = hoje().slice(0,7);
+
+let lista = []; let sha = null;
+let obras = []; let idEditando = null;
+let tipoAtual = 'despesa';
+
+// ── INIT ──
+async function init() {
+  const cfg = getConfig();
+  obras = carregarLocal(LS_OBRAS) || [];
+  const localL = carregarLocal(LS_KEY) || [];
+  lista = localL;
+  preencherDropdownObras();
+
+  // Verificar param de pre-filtro (vindo de CP/CR)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('tipo')) document.getElementById('f-tipo').value = params.get('tipo');
+  if (params.get('status')) document.getElementById('f-status').value = params.get('status');
+
+  atualizarStats(); renderLista();
+
+  if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
+  try {
+    const [rL, rO] = await Promise.all([carregarDados(DATA_PATH), carregarDados(OBRAS_PATH)]);
+    lista = rL.lista; sha = rL.sha;
+    obras = rO.lista;
+    salvarLocal(LS_KEY, lista);
+    salvarLocal(LS_OBRAS, obras);
+    preencherDropdownObras();
+    atualizarStats(); renderLista();
+    setSyncStatus('verde','Conectado');
+  } catch(e) {
+    setSyncStatus('vermelho','Erro'); toast('Erro ao carregar.','erro');
+  }
+}
+
+function preencherDropdownObras() {
+  const selF = document.getElementById('f-obra');
+  const selM = document.getElementById('f-obra-m');
+  const curr = selF.value;
+  selF.innerHTML = '<option value="">Todas as obras</option>' + obras.map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+  selM.innerHTML = '<option value="">— Selecione a obra —</option>' + obras.map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+  if (curr) selF.value = curr;
+}
+
+// ── STATS ──
+function atualizarStats() {
+  const mes = document.getElementById('f-mes')?.value || hoje().slice(0,7);
+  const doMes = lista.filter(l => (l.data||'').startsWith(mes));
+  const rec   = doMes.filter(l=>l.tipo==='receita').reduce((s,l)=>s+(l.valor||0),0);
+  const des   = doMes.filter(l=>l.tipo==='despesa').reduce((s,l)=>s+(l.valor||0),0);
+  const pend  = lista.filter(l=>l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0);
+  document.getElementById('st-rec').textContent   = formatarMoeda(rec);
+  document.getElementById('st-des').textContent   = formatarMoeda(des);
+  document.getElementById('st-saldo').textContent = formatarMoeda(rec-des);
+  document.getElementById('st-pend').textContent  = formatarMoeda(pend);
+}
+
+// ── FILTROS ──
+function onFiltroTipo() {
+  const tipo = document.getElementById('f-tipo').value;
+  const sel  = document.getElementById('f-cat');
+  const curr = sel.value;
+  if (!tipo) {
+    sel.innerHTML = '<option value="">Todas as categorias</option>' +
+      [...CATEGORIAS.receita,...CATEGORIAS.despesa].map(c=>`<option value="${c.value}">${c.label}</option>`).join('');
+  } else {
+    sel.innerHTML = '<option value="">Todas as categorias</option>' +
+      CATEGORIAS[tipo].map(c=>`<option value="${c.value}">${c.label}</option>`).join('');
+  }
+  if ([...sel.options].some(o=>o.value===curr)) sel.value = curr;
+  renderLista();
+}
+
+function limparFiltros() {
+  document.getElementById('busca').value = '';
+  document.getElementById('f-obra').value = '';
+  document.getElementById('f-tipo').value = '';
+  document.getElementById('f-cat').value  = '';
+  document.getElementById('f-status').value = '';
+  document.getElementById('f-mes').value  = hoje().slice(0,7);
+  atualizarStats(); renderLista();
+}
+
+function renderLista() {
+  atualizarStats();
+  const busca  = document.getElementById('busca').value.toLowerCase();
+  const fObra  = document.getElementById('f-obra').value;
+  const fTipo  = document.getElementById('f-tipo').value;
+  const fCat   = document.getElementById('f-cat').value;
+  const fSt    = document.getElementById('f-status').value;
+  const fMes   = document.getElementById('f-mes').value;
+
+  let f = [...lista].reverse().filter(l => {
+    if (fObra && l.obraId !== fObra) return false;
+    if (fTipo && l.tipo   !== fTipo) return false;
+    if (fCat  && l.categoria !== fCat) return false;
+    if (fSt   && l.status !== fSt) return false;
+    if (fMes  && !(l.data||'').startsWith(fMes)) return false;
+    if (busca && !(`${l.descricao||''} ${l.beneficiario||''} ${l.obs||''}`).toLowerCase().includes(busca)) return false;
+    return true;
+  });
+
+  document.getElementById('contador').textContent = `${f.length} lançamento(s)`;
+  const cont = document.getElementById('lista-container');
+  if (!f.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">${lista.length?'Nenhum lançamento encontrado para os filtros.':'Nenhum lançamento. Clique em "+ Novo Lançamento".'}</div>`;
+    return;
+  }
+
+  cont.innerHTML = `<table class="tabela" style="width:100%;">
+    <thead><tr>
+      <th>Data</th><th>Obra</th><th>Categoria</th><th>Descrição</th>
+      <th>Beneficiário</th><th style="text-align:right;">Valor</th>
+      <th>Vencimento</th><th>Status</th><th title="Conciliado">✓</th><th>Ações</th>
+    </tr></thead>
+    <tbody>${f.map(l => {
+      const obra     = obras.find(o=>o.id===l.obraId);
+      const isRec    = l.tipo === 'receita';
+      const valStr   = `${isRec?'+':'-'}${formatarMoeda(l.valor)}`;
+      const vencAtras = l.dataVencimento && l.dataVencimento < hoje() && l.status !== 'pago';
+      return `<tr class="${isRec?'row-rec':'row-des'}">
+        <td style="white-space:nowrap;">${formatarData(l.data)}</td>
+        <td style="font-size:0.8rem;">${obra?esc(obra.nome):'<span style="color:var(--texto-leve);">—</span>'}</td>
+        <td>
+          <span class="badge ${isRec?'verde':'laranja'}" style="font-size:0.7rem;">${labelCategoria(l.tipo,l.categoria)}</span>
+          ${l.isReembolso?'<span class="badge cinza" style="font-size:0.68rem;margin-left:2px;">Reimb.</span>':''}
+        </td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${hl(l.descricao||'—',busca)}</td>
+        <td style="font-size:0.8rem;color:var(--texto-leve);">${hl(l.beneficiario||'—',busca)}</td>
+        <td style="text-align:right;" class="${isRec?'val-rec':'val-des'}">${valStr}</td>
+        <td style="font-size:0.8rem;white-space:nowrap;${vencAtras?'color:var(--vermelho);font-weight:700;':''}">${l.dataVencimento?formatarData(l.dataVencimento):'—'}</td>
+        <td>${badgeStatus(l.status)}</td>
+        <td><input type="checkbox" class="concil-check" ${l.conciliado?'checked':''} onchange="toggleConciliado('${l.id}',this.checked)" title="Conciliado"/></td>
+        <td>
+          <div style="display:flex;gap:3px;">
+            <button class="btn btn-outline btn-sm" onclick='editar(${JSON.stringify(l.id)})' title="Editar">✏️</button>
+            ${l.status==='pendente'?`<button class="btn btn-success btn-sm" onclick='marcarPago(${JSON.stringify(l.id)})' title="Marcar como pago">✓</button>`:''}
+            <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluir(${JSON.stringify(l.id)})' title="Excluir">🗑</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+// ── MODAL ──
+function setTipo(tipo) {
+  tipoAtual = tipo;
+  document.getElementById('btn-receita').className = `tipo-btn-t${tipo==='receita'?' ativo-r':''}`;
+  document.getElementById('btn-despesa').className = `tipo-btn-t${tipo==='despesa'?' ativo-d':''}`;
+  document.getElementById('f-cat').innerHTML = opcoesCategoria(tipo);
+}
+
+function onStatusChange() {
+  const s = document.getElementById('f-status-m').value;
+  document.getElementById('campo-pgto').style.display = s==='pago' ? 'flex' : 'none';
+  if (s==='pago' && !document.getElementById('f-pgto').value) {
+    document.getElementById('f-pgto').value = hoje();
+  }
+}
+
+function abrirModalNovo(tipo, obraId) {
+  idEditando = null;
+  document.getElementById('modal-titulo').textContent = 'Novo Lançamento';
+  document.getElementById('f-data').value    = hoje();
+  document.getElementById('f-valor').value   = '';
+  document.getElementById('f-desc').value    = '';
+  document.getElementById('f-benef').value   = '';
+  document.getElementById('f-obs').value     = '';
+  document.getElementById('f-venc').value    = '';
+  document.getElementById('f-pgto').value    = '';
+  document.getElementById('f-status-m').value = 'pendente';
+  document.getElementById('f-forma').value   = 'pix';
+  document.getElementById('f-reembolso').checked  = false;
+  document.getElementById('f-conciliado').checked = false;
+  document.getElementById('campo-pgto').style.display = 'none';
+  if (obraId) document.getElementById('f-obra-m').value = obraId;
+  else document.getElementById('f-obra-m').value = '';
+  setTipo(tipo || 'despesa');
+  document.getElementById('modal-lanc').classList.add('aberto');
+  setTimeout(()=>document.getElementById('f-valor').focus(),80);
+}
+
+function editar(id) {
+  const l = lista.find(x=>x.id===id); if(!l) return;
+  idEditando = id;
+  document.getElementById('modal-titulo').textContent = 'Editar Lançamento';
+  setTipo(l.tipo||'despesa');
+  document.getElementById('f-data').value    = l.data||'';
+  document.getElementById('f-cat').value     = l.categoria||'';
+  document.getElementById('f-obra-m').value  = l.obraId||'';
+  document.getElementById('f-valor').value   = l.valor||'';
+  document.getElementById('f-desc').value    = l.descricao||'';
+  document.getElementById('f-benef').value   = l.beneficiario||'';
+  document.getElementById('f-status-m').value = l.status||'pendente';
+  document.getElementById('f-forma').value   = l.formaPagamento||'pix';
+  document.getElementById('f-venc').value    = l.dataVencimento||'';
+  document.getElementById('f-pgto').value    = l.dataPagamento||'';
+  document.getElementById('f-reembolso').checked  = !!l.isReembolso;
+  document.getElementById('f-conciliado').checked = !!l.conciliado;
+  document.getElementById('f-obs').value     = l.obs||'';
+  onStatusChange();
+  document.getElementById('modal-lanc').classList.add('aberto');
+}
+
+function fecharModal() { document.getElementById('modal-lanc').classList.remove('aberto'); }
+
+// ── SALVAR ──
+async function salvar() {
+  const valor = parseFloat(document.getElementById('f-valor').value);
+  if (!valor || valor <= 0) { toast('Informe o valor.','erro'); document.getElementById('f-valor').focus(); return; }
+  const data = document.getElementById('f-data').value;
+  if (!data) { toast('Informe a data.','erro'); return; }
+
+  const status = document.getElementById('f-status-m').value;
+  const lanc = {
+    id:            idEditando || uid(),
+    tipo:          tipoAtual,
+    data,
+    categoria:     document.getElementById('f-cat').value,
+    obraId:        document.getElementById('f-obra-m').value || null,
+    valor,
+    descricao:     document.getElementById('f-desc').value.trim(),
+    beneficiario:  document.getElementById('f-benef').value.trim(),
+    status,
+    formaPagamento:document.getElementById('f-forma').value,
+    dataVencimento:document.getElementById('f-venc').value || null,
+    dataPagamento: status==='pago' ? (document.getElementById('f-pgto').value || hoje()) : null,
+    isReembolso:   document.getElementById('f-reembolso').checked,
+    conciliado:    document.getElementById('f-conciliado').checked,
+    obs:           document.getElementById('f-obs').value.trim(),
+    criadoEm:      idEditando?(lista.find(x=>x.id===idEditando)?.criadoEm||hoje()):hoje(),
+  };
+
+  lista = idEditando ? lista.map(x=>x.id===idEditando?lanc:x) : [...lista,lanc];
+  salvarLocal(LS_KEY, lista);
+  fecharModal(); atualizarStats(); renderLista();
+  toast('Lançamento salvo!','sucesso');
+  await sync(`Lançamento: ${lanc.tipo} ${formatarMoeda(lanc.valor)}`);
+}
+
+// ── AÇÕES RÁPIDAS ──
+async function marcarPago(id) {
+  const l = lista.find(x=>x.id===id); if(!l) return;
+  l.status = 'pago'; l.dataPagamento = hoje();
+  lista = lista.map(x=>x.id===id?l:x);
+  salvarLocal(LS_KEY,lista); atualizarStats(); renderLista();
+  toast('Marcado como pago!','sucesso');
+  await sync(`Pago: ${l.descricao||formatarMoeda(l.valor)}`);
+}
+
+async function toggleConciliado(id, val) {
+  const l = lista.find(x=>x.id===id); if(!l) return;
+  l.conciliado = val;
+  lista = lista.map(x=>x.id===id?l:x);
+  salvarLocal(LS_KEY,lista);
+  await sync(`Conciliação: ${l.descricao||id}`);
+}
+
+async function excluir(id) {
+  const l = lista.find(x=>x.id===id); if(!l) return;
+  if(!confirm(`Excluir este lançamento?\n${l.descricao||''} — ${formatarMoeda(l.valor)}`)) return;
+  lista = lista.filter(x=>x.id!==id);
+  salvarLocal(LS_KEY,lista); atualizarStats(); renderLista();
+  toast('Excluído.','sucesso');
+  await sync(`Excluir lançamento: ${l.descricao||id}`);
+}
+
+async function sync(msg) {
+  if(!configurado()) return;
+  setSyncStatus('amarelo','Sincronizando...');
+  try { sha = await salvarDados(DATA_PATH,lista,sha,msg); setSyncStatus('verde','Sincronizado'); }
+  catch(e) { setSyncStatus('vermelho','Erro sync'); toast('Erro sync: '+e.message,'aviso'); }
+}
+
+// ── EXPORT CSV ──
+function exportarCSV() {
+  const linhas = [['Data','Tipo','Categoria','Obra','Descrição','Beneficiário','Valor','Status','Vencimento','Conciliado']];
+  lista.forEach(l => {
+    const obra = obras.find(o=>o.id===l.obraId)?.nome||'';
+    linhas.push([l.data,l.tipo,labelCategoria(l.tipo,l.categoria),obra,l.descricao||'',l.beneficiario||'',l.valor,l.status,l.dataVencimento||'',l.conciliado?'Sim':'Não']);
+  });
+  const csv = linhas.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent('﻿'+csv);
+  a.download = `lancamentos_${hoje()}.csv`;
+  a.click();
+}
+
+// Inicializar filtro categorias
+onFiltroTipo();
+init();
+</script>
+</body>
+</html>
