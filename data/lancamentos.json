@@ -725,5 +725,27 @@
     "obs": "Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS",
     "criadoEm": "2026-07-17",
     "ofxId": "6a4edb2a"
+  },
+  {
+    "id": "mrpat1mtfthaf",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "HOTEL IN BOX LTDA - STONE IP S.A.",
+    "data": "2026-05-12",
+    "valor": 566,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-12",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a034c8d"
   }
 ]
