@@ -967,5 +967,27 @@
     "obs": "Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a142b9f"
+  },
+  {
+    "id": "mrpb9kglhguev",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "LUCAS REGHINI MAGALHAES - ITAÚ UNIBANCO S.A.",
+    "data": "2026-05-26",
+    "valor": 13630,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-26",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - LUCAS REGHINI MAGALHAES - ITAÚ UNIBANCO S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a15d9c4"
   }
 ]
