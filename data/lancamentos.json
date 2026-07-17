@@ -229,5 +229,26 @@
     "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a0da02e"
+  },
+  {
+    "id": "mroz96dzaet1i",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "Pdn Holding Patrimonial Ltda - BANCO INTER",
+    "data": "2026-05-20",
+    "valor": 5500,
+    "status": "pago",
+    "beneficiario": "Plínio de Paula",
+    "clienteId": null,
+    "socioId": "soc_plinio",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a0da058"
   }
 ]
