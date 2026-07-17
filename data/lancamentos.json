@@ -2155,5 +2155,27 @@
     "obs": "Transferência enviada pelo Pix - Marcos de Andrade Xavier - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a3d1240"
+  },
+  {
+    "id": "mrpc50f0ex9qh",
+    "obraId": "obra_rionegro",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-07-02",
+    "valor": 2500,
+    "status": "pago",
+    "beneficiario": "Marcos Xavier",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb19v1kv9q8",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-02",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marcos de Andrade Xavier - BANCO INTER",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a46e236"
   }
 ]
