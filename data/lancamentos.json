@@ -989,5 +989,27 @@
     "obs": "Transferência recebida pelo Pix - LUCAS REGHINI MAGALHAES - ITAÚ UNIBANCO S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a15d9c4"
+  },
+  {
+    "id": "mrpb9ufptzkmh",
+    "obraId": "obra_sinop",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-05-29",
+    "valor": 6000,
+    "status": "pago",
+    "beneficiario": "GEOVANE ALVES",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb82fzwc2dk",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-29",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a198fcb"
   }
 ]
