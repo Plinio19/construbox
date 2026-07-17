@@ -40,5 +40,26 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "69f5143a"
+  },
+  {
+    "id": "mroywan4dkkbq",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA DE PAULA",
+    "data": "2026-05-01",
+    "valor": 1000,
+    "status": "pago",
+    "beneficiario": "De Paula",
+    "clienteId": null,
+    "socioId": "mroyg6vqy8jfx",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-01",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "69f517a3"
   }
 ]
