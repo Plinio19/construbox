@@ -1033,5 +1033,27 @@
     "obs": "Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a202b75"
+  },
+  {
+    "id": "mrpbcpxhygsj9",
+    "obraId": "obra_rionegro",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "COMISSÃO",
+    "data": "2026-06-03",
+    "valor": 1500,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-03",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a202c47"
   }
 ]
