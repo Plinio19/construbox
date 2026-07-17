@@ -1297,5 +1297,27 @@
     "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2c6404"
+  },
+  {
+    "id": "mrpbi4hjbf9vw",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "HOSPEDAGEM ITU",
+    "data": "2026-06-12",
+    "valor": 162,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-12",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - BOOKING.COM BRASIL",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2c943d"
   }
 ]
