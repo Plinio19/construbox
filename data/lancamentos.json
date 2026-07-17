@@ -1231,5 +1231,27 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2c431d"
+  },
+  {
+    "id": "mrpbh2il9yyq7",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "Café da Manhã ITU",
+    "data": "2026-06-12",
+    "valor": 107,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-12",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - PANIFICADORA DELICIAS DA VOVO",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2c0da8"
   }
 ]
