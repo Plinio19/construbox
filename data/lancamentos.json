@@ -2177,5 +2177,27 @@
     "obs": "Transferência enviada pelo Pix - Marcos de Andrade Xavier - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a46e236"
+  },
+  {
+    "id": "mrpc5if9tzrra",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "data": "2026-07-13",
+    "valor": 10350,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-13",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a550bed"
   }
 ]
