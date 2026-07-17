@@ -505,5 +505,27 @@
     "obs": "Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS",
     "criadoEm": "2026-07-17",
     "ofxId": "6a031371"
+  },
+  {
+    "id": "mrp61yy6taj4r",
+    "obraId": "obra_novamutum",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "Reembolso Edinilson - De Paula",
+    "data": "2026-05-12",
+    "valor": 626,
+    "status": "pago",
+    "beneficiario": "Edilson Dominfos dos Santos",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrp5y98vqx64u",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-12",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a031386"
   }
 ]
