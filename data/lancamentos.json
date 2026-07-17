@@ -2001,5 +2001,27 @@
     "obs": "[Divisão] Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2d7c41"
+  },
+  {
+    "id": "mrpc02almx07k",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-06-16",
+    "valor": 1725,
+    "status": "pago",
+    "beneficiario": "VITOR NONATO",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpbw8xy9hhvi",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-16",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - VITOR SIQUEIRA NONATO - SICREDI",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a31ad14"
   }
 ]
