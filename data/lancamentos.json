@@ -1583,5 +1583,27 @@
     "obs": "[Divisão] Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a31ac44"
+  },
+  {
+    "id": "mrpboezpo7al4",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "data": "2026-06-19",
+    "valor": 1124.6,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-19",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a35a251"
   }
 ]
