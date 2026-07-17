@@ -5,6 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Construbox — Dashboard</title>
   <link rel="stylesheet" href="assets/core.css"/>
+  <style>
+    .obra-card {
+      background: var(--branco); border-radius: 12px; border: 1px solid var(--cinza);
+      padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .obra-card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .obra-nome { font-size: .95rem; font-weight: 800; }
+    .obra-cliente { font-size: .76rem; color: var(--texto-leve); }
+    .obra-row { display: flex; justify-content: space-between; align-items: center; font-size: .83rem; padding: 4px 0; border-bottom: 1px solid var(--cinza); }
+    .obra-row:last-child { border-bottom: none; }
+    .obra-row-label { color: var(--texto-leve); }
+    .obra-row-val { font-weight: 700; }
+    .obra-resultado { margin-top: 4px; padding: 10px 14px; border-radius: 8px; font-size: 1rem; font-weight: 800; text-align: center; }
+    .resultado-positivo { background: #d1fae5; color: #065f46; }
+    .resultado-negativo { background: #fee2e2; color: #991b1b; }
+    .resultado-zero     { background: var(--fundo2); color: var(--texto-leve); }
+    .progress-bar { height: 6px; background: var(--cinza); border-radius: 4px; overflow: hidden; margin-top: 3px; }
+    .progress-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+    .dist-panel { background: var(--branco); border: 2px solid var(--brand); border-radius: 12px; padding: 20px 24px; }
+    .dist-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: .88rem; border-bottom: 1px solid var(--cinza); }
+    .dist-row:last-child { border-bottom: none; }
+    .dist-total { font-size: 1.1rem; font-weight: 800; padding: 12px 0 4px; }
+    .dist-sub { font-size: .75rem; color: var(--texto-leve); }
+    .tag-positivo { background: #d1fae5; color: #065f46; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .tag-negativo { background: #fee2e2; color: #991b1b; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .consolidado-table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+    .consolidado-table th { padding: 8px 10px; background: var(--fundo2); font-weight: 700; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-leve); text-align: right; border-bottom: 2px solid var(--cinza); }
+    .consolidado-table th:first-child { text-align: left; }
+    .consolidado-table td { padding: 9px 10px; text-align: right; border-bottom: 1px solid var(--cinza); }
+    .consolidado-table td:first-child { text-align: left; font-weight: 600; }
+    .consolidado-table tr.total-row td { font-weight: 800; background: var(--fundo2); font-size: .88rem; }
+  </style>
 </head>
 <body>
 <div id="sidebar-placeholder"></div>
@@ -28,81 +60,58 @@
       <button class="btn btn-primary btn-sm" onclick="abrirConfig()">Configurar agora →</button>
     </div>
 
-    <!-- STATS FINANCEIROS -->
-    <div class="stats-grid">
-      <div class="stat verde">
-        <div class="valor" id="st-recebido">R$ 0</div>
-        <div class="rotulo">Total Recebido (mês)</div>
-      </div>
-      <div class="stat vermelho">
-        <div class="valor" id="st-pago">R$ 0</div>
-        <div class="rotulo">Total Pago (mês)</div>
-      </div>
-      <div class="stat amarelo">
-        <div class="valor" id="st-a-receber">R$ 0</div>
-        <div class="rotulo">A Receber</div>
-      </div>
-      <div class="stat laranja">
-        <div class="valor" id="st-a-pagar">R$ 0</div>
-        <div class="rotulo">A Pagar</div>
+    <!-- KPIs GERAIS -->
+    <div class="stats-grid" id="kpis-gerais">
+      <div class="stat verde"><div class="valor" id="kpi-recebido">—</div><div class="rotulo">Total Recebido</div></div>
+      <div class="stat amarelo"><div class="valor" id="kpi-a-receber">—</div><div class="rotulo">A Receber</div></div>
+      <div class="stat vermelho"><div class="valor" id="kpi-despesas">—</div><div class="rotulo">Despesas Pagas</div></div>
+      <div class="stat" id="kpi-resultado-card"><div class="valor" id="kpi-resultado">—</div><div class="rotulo">Resultado Consolidado</div></div>
+    </div>
+
+    <!-- RESULTADO POR OBRA -->
+    <div style="margin:20px 0 8px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--texto-leve);">Resultado por Obra</div>
+    <div id="obras-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:20px;"></div>
+
+    <!-- CONSOLIDADO (tabela) -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><h2>📊 Consolidado — Todas as Obras</h2></div>
+      <div class="card-body" style="padding:0;overflow-x:auto;">
+        <table class="consolidado-table" id="tabela-consolidado">
+          <thead>
+            <tr>
+              <th>Obra</th>
+              <th>Contratado</th>
+              <th>Recebido</th>
+              <th>A Receber</th>
+              <th>MO Paga</th>
+              <th>Outros Custos</th>
+              <th>Resultado</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-consolidado"></tbody>
+        </table>
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-
-      <!-- OBRAS EM ANDAMENTO -->
-      <div class="card">
-        <div class="card-header">
-          <h2>🏗️ Obras Ativas</h2>
-          <a href="obras/" class="btn btn-outline btn-sm">Ver todas</a>
-        </div>
-        <div class="card-body">
-          <div id="obras-lista">
-            <div style="color:var(--texto-leve);font-size:0.85rem;">Carregando...</div>
-          </div>
-        </div>
+    <!-- DISTRIBUIÇÃO DE LUCRO -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div class="dist-panel">
+        <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--texto-leve);margin-bottom:12px;">💸 Cálculo de Distribuição de Lucro</div>
+        <div id="dist-calc"></div>
       </div>
-
-      <!-- PENDÊNCIAS -->
-      <div class="card">
-        <div class="card-header">
-          <h2>⚠️ Próximos Vencimentos</h2>
-          <a href="contas-pagar/" class="btn btn-outline btn-sm">Ver tudo</a>
-        </div>
-        <div class="card-body">
-          <div id="vencimentos-lista">
-            <div style="color:var(--texto-leve);font-size:0.85rem;">Carregando...</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ACESSO RÁPIDO -->
       <div class="card">
         <div class="card-header"><h2>⚡ Acesso Rápido</h2></div>
         <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <a href="lancamentos/" class="btn btn-primary" style="justify-content:center;">📝 Novo Lançamento</a>
-          <a href="relatorios/" class="btn btn-outline" style="justify-content:center;">📈 Relatórios</a>
-          <a href="contas-pagar/" class="btn btn-outline" style="justify-content:center;">💸 Contas a Pagar</a>
-          <a href="contas-receber/" class="btn btn-outline" style="justify-content:center;">💰 Contas a Receber</a>
-          <a href="conciliacao/" class="btn btn-outline" style="justify-content:center;">🏦 Conciliação</a>
+          <a href="lancamentos/" class="btn btn-primary" style="justify-content:center;">📝 Lançamento</a>
+          <a href="extrato/" class="btn btn-outline" style="justify-content:center;">🏦 Extrato</a>
           <a href="obras/" class="btn btn-outline" style="justify-content:center;">🏗️ Obras</a>
+          <a href="cadastros/" class="btn btn-outline" style="justify-content:center;">👥 Cadastros</a>
+          <a href="contas-pagar/" class="btn btn-outline" style="justify-content:center;">💸 A Pagar</a>
+          <a href="contas-receber/" class="btn btn-outline" style="justify-content:center;">💰 A Receber</a>
         </div>
       </div>
-
-      <!-- ÚLTIMOS LANÇAMENTOS -->
-      <div class="card">
-        <div class="card-header">
-          <h2>🕐 Últimos Lançamentos</h2>
-          <a href="lancamentos/" class="btn btn-outline btn-sm">Ver todos</a>
-        </div>
-        <div class="card-body">
-          <div id="ultimos-lista">
-            <div style="color:var(--texto-leve);font-size:0.85rem;">Carregando...</div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
   </div>
 </div>
 <div class="toast-container" id="toasts"></div>
@@ -115,103 +124,185 @@ async function init() {
     document.getElementById('alert-setup').style.display = 'flex';
     setSyncStatus('vermelho', 'Não configurado');
     document.getElementById('header-sub').textContent = 'Configure o GitHub para começar';
-    carregarLocal_dash();
+    renderDash(carregarLocal('cbx_obras')||[], carregarLocal('cbx_lanc')||[]);
     return;
   }
-  const cfg = getConfig();
-  document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
   setSyncStatus('amarelo', 'Carregando...');
   try {
     const [ro, rl] = await Promise.all([carregarDados('data/obras.json'), carregarDados('data/lancamentos.json')]);
     salvarLocal('cbx_obras', ro.lista);
-    salvarLocal('cbx_lanc', rl.lista);
+    salvarLocal('cbx_lanc',  rl.lista);
     renderDash(ro.lista, rl.lista);
     setSyncStatus('verde', 'Conectado');
+    document.getElementById('header-sub').textContent = `${getConfig().owner}/${getConfig().repo}`;
   } catch(e) {
-    setSyncStatus('vermelho', 'Erro'); toast('Erro ao carregar.', 'erro');
-    carregarLocal_dash();
+    setSyncStatus('vermelho', 'Erro');
+    renderDash(carregarLocal('cbx_obras')||[], carregarLocal('cbx_lanc')||[]);
   }
 }
 
-function carregarLocal_dash() {
-  const obras = carregarLocal('cbx_obras') || [];
-  const lanc  = carregarLocal('cbx_lanc')  || [];
-  renderDash(obras, lanc);
-}
-
 function renderDash(obras, lanc) {
-  const mesAtual = hoje().slice(0, 7);
-  const doMes    = lanc.filter(l => (l.data || '').startsWith(mesAtual));
+  // Filtrar reembolsos das métricas financeiras
+  const lancFin = lanc.filter(l => l.tipo !== 'reembolso' && l.categoria !== 'reembolso');
 
-  const recebidoMes  = doMes.filter(l => l.tipo === 'receita' && l.status === 'pago').reduce((s, l) => s + (l.valor || 0), 0);
-  const pagoMes      = doMes.filter(l => l.tipo === 'despesa' && l.status === 'pago').reduce((s, l) => s + (l.valor || 0), 0);
-  const aReceber     = lanc.filter(l => l.tipo === 'receita' && l.status === 'pendente').reduce((s, l) => s + (l.valor || 0), 0);
-  const aPagar       = lanc.filter(l => l.tipo === 'despesa' && l.status === 'pendente').reduce((s, l) => s + (l.valor || 0), 0);
+  // Receitas pagas (excl. reembolso)
+  const receitasPagas   = lancFin.filter(l => l.tipo==='receita' && l.status==='pago');
+  const receitasPend    = lancFin.filter(l => l.tipo==='receita' && l.status==='pendente');
+  // Despesas pagas de obra (excl. distribuições de lucro)
+  const despesasObra    = lancFin.filter(l => l.tipo==='despesa' && l.status==='pago' && !l.socioId);
+  const despesasPend    = lancFin.filter(l => l.tipo==='despesa' && l.status==='pendente' && !l.socioId);
+  // Distribuições de lucro já pagas
+  const distribuicoes   = lancFin.filter(l => l.tipo==='despesa' && l.status==='pago' && l.socioId);
 
-  document.getElementById('st-recebido').textContent  = formatarMoeda(recebidoMes);
-  document.getElementById('st-pago').textContent      = formatarMoeda(pagoMes);
-  document.getElementById('st-a-receber').textContent = formatarMoeda(aReceber);
-  document.getElementById('st-a-pagar').textContent   = formatarMoeda(aPagar);
+  const totalRecebido   = receitasPagas.reduce((s,l)=>s+l.valor,0);
+  const totalAReceber   = receitasPend.reduce((s,l)=>s+l.valor,0);
+  const totalDespesas   = despesasObra.reduce((s,l)=>s+l.valor,0);
+  const totalDist       = distribuicoes.reduce((s,l)=>s+l.valor,0);
+  const totalAPagar     = despesasPend.reduce((s,l)=>s+l.valor,0);
+  const resultadoBruto  = totalRecebido - totalDespesas;
+  const resultadoLiq    = resultadoBruto - totalDist;
 
-  // Obras ativas
-  const ativas = obras.filter(o => o.status === 'ativa');
-  document.getElementById('obras-lista').innerHTML = ativas.length
-    ? ativas.map(o => {
-        const recObra  = lanc.filter(l => l.obraId === o.id && l.tipo === 'receita' && l.status === 'pago').reduce((s,l)=>s+l.valor,0);
-        const pagObra  = lanc.filter(l => l.obraId === o.id && l.tipo === 'despesa' && l.status === 'pago').reduce((s,l)=>s+l.valor,0);
-        const saldo    = recObra - pagObra;
-        return `<div style="padding:10px 0;border-bottom:1px solid var(--cinza);display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-weight:700;font-size:0.88rem;">${esc(o.nome)}</div>
-            <div style="font-size:0.75rem;color:var(--texto-leve);">${esc(o.cliente||'')}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:0.85rem;font-weight:700;color:${saldo>=0?'var(--verde)':'var(--vermelho)'};">${formatarMoeda(saldo)}</div>
-            <div style="font-size:0.72rem;color:var(--texto-leve);">saldo</div>
-          </div>
-        </div>`;
-      }).join('')
-    : `<p style="color:var(--texto-leve);font-size:0.85rem;">Nenhuma obra ativa. <a href="obras/">Cadastrar obras →</a></p>`;
+  // KPIs
+  document.getElementById('kpi-recebido').textContent   = formatarMoeda(totalRecebido);
+  document.getElementById('kpi-a-receber').textContent  = formatarMoeda(totalAReceber);
+  document.getElementById('kpi-despesas').textContent   = formatarMoeda(totalDespesas + totalDist);
 
-  // Próximos vencimentos (pendentes nos próximos 30 dias)
-  const limite = new Date(); limite.setDate(limite.getDate() + 30);
-  const limiteStr = limite.toISOString().slice(0, 10);
-  const venc = lanc
-    .filter(l => l.status === 'pendente' && l.dataVencimento && l.dataVencimento <= limiteStr)
-    .sort((a, b) => a.dataVencimento.localeCompare(b.dataVencimento))
-    .slice(0, 6);
-  document.getElementById('vencimentos-lista').innerHTML = venc.length
-    ? venc.map(l => {
-        const obraNome = obras.find(o => o.id === l.obraId)?.nome || '—';
-        const atrasado = l.dataVencimento < hoje();
-        return `<div style="padding:8px 0;border-bottom:1px solid var(--cinza);display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:0.85rem;font-weight:600;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</div>
-            <div style="font-size:0.73rem;color:var(--texto-leve);">${esc(obraNome)} · Vence ${formatarData(l.dataVencimento)}</div>
-          </div>
-          <div style="font-size:0.88rem;font-weight:700;color:${atrasado?'var(--vermelho)':l.tipo==='receita'?'var(--verde)':'var(--laranja)'};">
-            ${l.tipo==='receita'?'+':'-'}${formatarMoeda(l.valor)}
-          </div>
-        </div>`;
-      }).join('')
-    : `<p style="color:var(--texto-leve);font-size:0.85rem;">Nenhum vencimento nos próximos 30 dias.</p>`;
+  const kpiCard = document.getElementById('kpi-resultado-card');
+  document.getElementById('kpi-resultado').textContent  = formatarMoeda(resultadoLiq);
+  kpiCard.className = 'stat ' + (resultadoLiq > 0 ? 'verde' : resultadoLiq < 0 ? 'vermelho' : 'cinza');
 
-  // Últimos lançamentos
-  const ultimos = [...lanc].reverse().slice(0, 6);
-  document.getElementById('ultimos-lista').innerHTML = ultimos.length
-    ? ultimos.map(l => {
-        const obraNome = obras.find(o => o.id === l.obraId)?.nome || '—';
-        return `<div style="padding:8px 0;border-bottom:1px solid var(--cinza);display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-size:0.85rem;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</div>
-            <div style="font-size:0.73rem;color:var(--texto-leve);">${esc(obraNome)} · ${formatarData(l.data)}</div>
+  // ── POR OBRA ──
+  const obraMetrics = obras.map(o => {
+    const rec  = receitasPagas.filter(l=>l.obraId===o.id).reduce((s,l)=>s+l.valor,0);
+    const aRec = receitasPend.filter(l=>l.obraId===o.id).reduce((s,l)=>s+l.valor,0);
+    const mo   = despesasObra.filter(l=>l.obraId===o.id&&l.categoria==='mao-de-obra').reduce((s,l)=>s+l.valor,0);
+    const out  = despesasObra.filter(l=>l.obraId===o.id&&l.categoria!=='mao-de-obra').reduce((s,l)=>s+l.valor,0);
+    const res  = rec - mo - out;
+    const cont = o.valorContrato || 0;
+    const aRecContr = cont > 0 ? Math.max(0, cont - rec) : aRec;
+    return { obra: o, rec, aRec: aRecContr, mo, out, res, cont };
+  });
+
+  document.getElementById('obras-grid').innerHTML = obraMetrics.map(m => {
+    const { obra: o, rec, aRec, mo, out, res, cont } = m;
+    const pct = cont > 0 ? Math.min(100, (rec/cont)*100) : 0;
+    const resClass = res > 0 ? 'resultado-positivo' : res < 0 ? 'resultado-negativo' : 'resultado-zero';
+    return `<div class="obra-card">
+      <div class="obra-card-header">
+        <div>
+          <div class="obra-nome">${esc(o.nome)}</div>
+          <div class="obra-cliente">${esc(o.cliente||'')}</div>
+        </div>
+        <span class="badge ${o.status==='ativa'?'verde':'cinza'}">${o.status||'ativa'}</span>
+      </div>
+      ${cont > 0 ? `
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:.76rem;color:var(--texto-leve);">
+            <span>Contratado: ${formatarMoeda(cont)}</span>
+            <span>${pct.toFixed(0)}%</span>
           </div>
-          <div style="font-size:0.88rem;font-weight:700;color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">
-            ${l.tipo==='receita'?'+':'-'}${formatarMoeda(l.valor)}
-          </div>
-        </div>`;
-      }).join('')
-    : `<p style="color:var(--texto-leve);font-size:0.85rem;">Nenhum lançamento ainda. <a href="lancamentos/">Adicionar →</a></p>`;
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--verde);"></div></div>
+        </div>` : `<div style="font-size:.75rem;color:var(--texto-leve);font-style:italic;">Contrato: a informar — edite a obra</div>`}
+      <div>
+        <div class="obra-row">
+          <span class="obra-row-label">💰 Recebido</span>
+          <span class="obra-row-val" style="color:var(--verde);">${formatarMoeda(rec)}</span>
+        </div>
+        <div class="obra-row">
+          <span class="obra-row-label">⏳ A Receber</span>
+          <span class="obra-row-val">${formatarMoeda(aRec)}</span>
+        </div>
+        <div class="obra-row">
+          <span class="obra-row-label">🔨 Mão de Obra Paga</span>
+          <span class="obra-row-val" style="color:var(--vermelho);">${formatarMoeda(mo)}</span>
+        </div>
+        <div class="obra-row">
+          <span class="obra-row-label">📦 Outros Custos</span>
+          <span class="obra-row-val" style="color:var(--vermelho);">${formatarMoeda(out)}</span>
+        </div>
+      </div>
+      <div class="obra-resultado ${resClass}">
+        Resultado: ${formatarMoeda(res)}
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── TABELA CONSOLIDADO ──
+  const totRec  = obraMetrics.reduce((s,m)=>s+m.rec,0);
+  const totAR   = obraMetrics.reduce((s,m)=>s+m.aRec,0);
+  const totMO   = obraMetrics.reduce((s,m)=>s+m.mo,0);
+  const totOut  = obraMetrics.reduce((s,m)=>s+m.out,0);
+  const totRes  = obraMetrics.reduce((s,m)=>s+m.res,0);
+  const totCont = obraMetrics.reduce((s,m)=>s+m.cont,0);
+
+  const fV = (v, cor) => `<span style="color:${cor||'inherit'};font-weight:700;">${formatarMoeda(v)}</span>`;
+  const resColor = (v) => v > 0 ? 'var(--verde)' : v < 0 ? 'var(--vermelho)' : 'inherit';
+
+  document.getElementById('tbody-consolidado').innerHTML = obraMetrics.map(m => {
+    const { obra: o, rec, aRec, mo, out, res, cont } = m;
+    return `<tr>
+      <td>${esc(o.nome)}</td>
+      <td>${cont>0 ? formatarMoeda(cont) : '<span style="color:var(--texto-leve)">—</span>'}</td>
+      <td style="color:var(--verde);">${formatarMoeda(rec)}</td>
+      <td>${formatarMoeda(aRec)}</td>
+      <td style="color:var(--vermelho);">${formatarMoeda(mo)}</td>
+      <td style="color:var(--vermelho);">${formatarMoeda(out)}</td>
+      <td style="color:${resColor(res)};font-weight:800;">${formatarMoeda(res)}</td>
+    </tr>`;
+  }).join('') + `<tr class="total-row">
+    <td>TOTAL</td>
+    <td>${totCont>0?formatarMoeda(totCont):'—'}</td>
+    <td style="color:var(--verde);">${formatarMoeda(totRec)}</td>
+    <td>${formatarMoeda(totAR)}</td>
+    <td style="color:var(--vermelho);">${formatarMoeda(totMO)}</td>
+    <td style="color:var(--vermelho);">${formatarMoeda(totOut)}</td>
+    <td style="color:${resColor(totRes)};">${formatarMoeda(totRes)}</td>
+  </tr>`;
+
+  // ── DISTRIBUIÇÃO DISPONÍVEL ──
+  const disponivel = resultadoBruto - totalDist;
+  const projecao   = disponivel + totalAReceber - totalAPagar;
+  const dispColor  = disponivel >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+  const projColor  = projecao   >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+
+  document.getElementById('dist-calc').innerHTML = `
+    <div class="dist-row">
+      <span>Total Recebido (obras)</span>
+      <span style="color:var(--verde);font-weight:700;">+ ${formatarMoeda(totalRecebido)}</span>
+    </div>
+    <div class="dist-row">
+      <span>Despesas de Obra Pagas</span>
+      <span style="color:var(--vermelho);font-weight:700;">− ${formatarMoeda(totalDespesas)}</span>
+    </div>
+    <div class="dist-row" style="font-weight:700;">
+      <span>= Resultado Bruto</span>
+      <span style="color:${resColor(resultadoBruto)};">${formatarMoeda(resultadoBruto)}</span>
+    </div>
+    <div class="dist-row">
+      <span>Distribuições Já Realizadas</span>
+      <span style="color:var(--vermelho);font-weight:700;">− ${formatarMoeda(totalDist)}</span>
+    </div>
+    <div class="dist-row dist-total">
+      <span>✓ Disponível para Distribuição</span>
+      <span style="color:${dispColor};">${formatarMoeda(disponivel)}</span>
+    </div>
+    <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--cinza);">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-leve);margin-bottom:6px;">Projeção incluindo pendências</div>
+      <div class="dist-row" style="font-size:.8rem;">
+        <span>+ A Receber (contratos)</span>
+        <span style="color:var(--verde);">+ ${formatarMoeda(totalAReceber)}</span>
+      </div>
+      <div class="dist-row" style="font-size:.8rem;">
+        <span>− A Pagar (pendentes)</span>
+        <span style="color:var(--vermelho);">− ${formatarMoeda(totalAPagar)}</span>
+      </div>
+      <div class="dist-row" style="font-weight:800;font-size:.95rem;">
+        <span>= Saldo Projetado</span>
+        <span style="color:${projColor};">${formatarMoeda(projecao)}</span>
+      </div>
+    </div>
+    ${totalAReceber===0&&totalAPagar===0?`<div class="dist-sub" style="margin-top:8px;">ℹ️ Adicione contas a receber/pagar ou informe o valor de contrato nas obras para ver a projeção completa.</div>`:''}
+  `;
 }
 
 init();
