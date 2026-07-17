@@ -355,5 +355,26 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a202a02"
+  },
+  {
+    "id": "mroziq7ctao4d",
+    "obraId": "obra_sinop",
+    "tipo": "receita",
+    "categoria": "adiantamento",
+    "descricao": "RECEBIMENTO HIB (30%)",
+    "data": "2026-06-18",
+    "valor": 25500,
+    "status": "pago",
+    "beneficiario": "HOTEL IN BOX LTDA",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-18",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - CAIXA ECONOMICA FEDERAL",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a344941"
   }
 ]
