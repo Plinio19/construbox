@@ -2023,5 +2023,27 @@
     "obs": "Transferência enviada pelo Pix - VITOR SIQUEIRA NONATO - SICREDI",
     "criadoEm": "2026-07-17",
     "ofxId": "6a31ad14"
+  },
+  {
+    "id": "mrpc1aqk99ts7",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "Lais Cristina Mendes Dos Santos - PICPAY",
+    "data": "2026-06-19",
+    "valor": 200,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-19",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Lais Cristina Mendes Dos Santos - PICPAY",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a359a62"
   }
 ]
