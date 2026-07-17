@@ -2045,5 +2045,27 @@
     "obs": "Transferência enviada pelo Pix - Lais Cristina Mendes Dos Santos - PICPAY",
     "criadoEm": "2026-07-17",
     "ofxId": "6a359a62"
+  },
+  {
+    "id": "mrpc1n4tzcyrp",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "ABASTECIMENTO",
+    "data": "2026-06-19",
+    "valor": 82.4,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-19",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - RAIZEN SOLUCOES DE PAGAMENTOS S A - BRADESCO",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a355fd4"
   }
 ]
