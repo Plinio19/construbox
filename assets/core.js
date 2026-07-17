@@ -145,7 +145,8 @@ function _basePath() {
 // ── SIDEBAR ──
 const MODULOS = [
   { id: 'dashboard',        label: 'Dashboard',          icone: '📊', href: '/index.html' },
-  { grupo: 'Obras' },
+  { grupo: 'Cadastros' },
+  { id: 'cadastros',        label: 'Sócios & Clientes',  icone: '👥', href: '/cadastros/' },
   { id: 'obras',            label: 'Obras',              icone: '🏗️', href: '/obras/' },
   { grupo: 'Financeiro' },
   { id: 'lancamentos',      label: 'Lançamentos',        icone: '📝', href: '/lancamentos/' },

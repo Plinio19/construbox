@@ -8,7 +8,7 @@
   <style>
     .linha-ext {
       display: grid;
-      grid-template-columns: 90px 54px 110px 1fr 160px 200px 180px 90px;
+      grid-template-columns: 90px 54px 110px 1fr 155px 150px 150px 170px 80px;
       gap: 8px; align-items: center;
       padding: 9px 14px; border-bottom: 1px solid var(--cinza);
       transition: background .15s;
@@ -25,7 +25,7 @@
     .memo-txt { font-size: .78rem; color: var(--texto-leve); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .thead-ext {
       display: grid;
-      grid-template-columns: 90px 54px 110px 1fr 160px 200px 180px 90px;
+      grid-template-columns: 90px 54px 110px 1fr 155px 150px 150px 170px 80px;
       gap: 8px; padding: 8px 14px;
       background: var(--fundo2); border-bottom: 2px solid var(--cinza);
       font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-leve);
@@ -93,7 +93,7 @@
       <div class="thead-ext">
         <div>Data</div><div>Tipo</div><div>Valor</div>
         <div>Descrição original</div>
-        <div>Categoria</div><div>Obra</div><div>Sua descrição</div><div>Ação</div>
+        <div>Categoria</div><div>Obra</div><div>Cliente / Sócio</div><div>Sua descrição</div><div>Ação</div>
       </div>
       <div id="lista-ext"></div>
     </div>
@@ -317,6 +317,8 @@ let estado = carregarLocal(LS_EST) || {};
 let lancamentos = carregarLocal(LS_LANC) || [];
 let shaLanc = null;
 let obras = [];
+let socios = [];
+let clientes = [];
 let filtro = 'pendentes';
 
 function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '' }; }
@@ -324,7 +326,9 @@ function setEstado(id, patch) { estado[id] = { ...getEstado(id), ...patch }; sal
 
 // ── INIT ──
 async function init() {
-  obras = carregarLocal('cbx_obras') || [];
+  obras    = carregarLocal('cbx_obras')    || [];
+  socios   = carregarLocal('cbx_socios')   || [];
+  clientes = carregarLocal('cbx_clientes') || [];
   lancamentos = carregarLocal(LS_LANC) || [];
 
   // Auto-sugerir para os ainda pendentes
@@ -335,6 +339,11 @@ async function init() {
       const atual = getEstado(t.id);
       if (!atual.cat && s.cat) setEstado(t.id, { cat: s.cat, tipo: s.tipo, obra: atual.obra || o });
       else if (!atual.obra && o) setEstado(t.id, { obra: o });
+      // Auto-sugerir cliente Hotel Inbox para recebimentos
+      if ((s.cat === 'recebimento') && !atual.clienteId) {
+        const hib = clientes.find(c => c.cnpj && c.cnpj.replace(/\D/g,'') === '51798185000162');
+        if (hib) setEstado(t.id, { clienteId: hib.id });
+      }
     }
   });
 
@@ -344,9 +353,31 @@ async function init() {
   if (!configurado()) { setSyncStatus('vermelho', 'Não configurado'); return; }
   setSyncStatus('amarelo', 'Carregando...');
   try {
-    const [rL, rO] = await Promise.all([carregarDados('data/lancamentos.json'), carregarDados('data/obras.json')]);
-    lancamentos = rL.lista; shaLanc = rL.sha; obras = rO.lista;
-    salvarLocal(LS_LANC, lancamentos); salvarLocal('cbx_obras', obras);
+    const [rL, rO, rS, rC] = await Promise.all([
+      carregarDados('data/lancamentos.json'),
+      carregarDados('data/obras.json'),
+      carregarDados('data/socios.json'),
+      carregarDados('data/clientes.json'),
+    ]);
+    lancamentos = rL.lista; shaLanc = rL.sha;
+    obras    = rO.lista;
+    socios   = rS.lista;
+    clientes = rC.lista;
+    salvarLocal(LS_LANC,         lancamentos);
+    salvarLocal('cbx_obras',     obras);
+    salvarLocal('cbx_socios',    socios);
+    salvarLocal('cbx_clientes',  clientes);
+
+    // Re-aplicar sugestão de cliente após carregar
+    OFX_TRANSACOES.forEach(t => {
+      const est = getEstado(t.id);
+      if (est.cat === 'recebimento' && !est.clienteId) {
+        const hib = clientes.find(c => c.cnpj && c.cnpj.replace(/\D/g,'') === '51798185000162');
+        if (hib) setEstado(t.id, { clienteId: hib.id });
+      }
+    });
+
+    renderLista();
     setSyncStatus('verde', 'Conectado');
   } catch(e) { setSyncStatus('vermelho', 'Erro ao conectar'); }
 }
@@ -387,7 +418,9 @@ function renderLista() {
                  ignorado ? `<span class="status-pill pill-ign">Ignorado</span>` :
                             `<span class="status-pill pill-pend">Pendente</span>`;
 
-    const catSel = `<select class="form-control sel-cat" id="cat-${t.id}" onchange="onCatChange('${t.id}')" ${lancado||ignorado?'disabled':''}>
+    const dis = lancado || ignorado ? 'disabled' : '';
+
+    const catSel = `<select class="form-control sel-cat" id="cat-${t.id}" onchange="onCatChange('${t.id}')" ${dis}>
       <option value="">— Categoria —</option>
       <option value="recebimento"  ${est.cat==='recebimento'?'selected':''}>💰 Recebimento</option>
       <option value="mao-de-obra"  ${est.cat==='mao-de-obra'?'selected':''}>🔨 Mão de Obra</option>
@@ -396,15 +429,35 @@ function renderLista() {
       <option value="ignorar"      ${est.cat==='ignorar'?'selected':''}>— Ignorar</option>
     </select>`;
 
-    const obraSel = `<select class="form-control sel-obra" id="obra-${t.id}" onchange="setEstado('${t.id}',{obra:this.value})" ${lancado||ignorado?'disabled':''}>
-      <option value="">— Obra —</option>
-      ${obraOpts.replace(`value="${est.obra}"`, `value="${est.obra}" selected`)}
-    </select>`;
+    // Obra — oculta para distribuição de lucro
+    const obraSel = est.cat === 'distribuicao' ? `<div style="font-size:.73rem;color:var(--texto-leve);padding:4px 0;">—</div>` :
+      `<select class="form-control sel-obra" id="obra-${t.id}" onchange="setEstado('${t.id}',{obra:this.value})" ${dis}>
+        <option value="">— Obra —</option>
+        ${obraOpts.replace(`value="${est.obra}"`, `value="${est.obra}" selected`)}
+      </select>`;
+
+    // Coluna extra: Cliente (recebimento) ou Sócio (distribuição)
+    let extraSel = `<div style="font-size:.73rem;color:var(--texto-leve);padding:4px 0;">—</div>`;
+    if (est.cat === 'recebimento') {
+      const cliOpts = clientes.map(c =>
+        `<option value="${c.id}" ${est.clienteId===c.id?'selected':''}>${esc(c.nome)}${c.cnpj?' ('+c.cnpj+')':''}</option>`
+      ).join('');
+      extraSel = `<select class="form-control sel-obra" id="cli-${t.id}" onchange="setEstado('${t.id}',{clienteId:this.value})" ${dis}>
+        <option value="">— Cliente —</option>${cliOpts}
+      </select>`;
+    } else if (est.cat === 'distribuicao') {
+      const socOpts = socios.map(s =>
+        `<option value="${s.id}" ${est.socioId===s.id?'selected':''}>${esc(s.nome)}</option>`
+      ).join('');
+      extraSel = `<select class="form-control sel-obra" id="soc-${t.id}" onchange="setEstado('${t.id}',{socioId:this.value})" ${dis}>
+        <option value="">— Sócio —</option>${socOpts}
+      </select>`;
+    }
 
     const descInp = `<input class="form-control inp-desc" id="desc-${t.id}" type="text"
       value="${esc(est.descricao||'')}" placeholder="Descrição..."
       onchange="setEstado('${t.id}',{descricao:this.value})"
-      ${lancado||ignorado?'disabled':''}>`;
+      ${dis}>`;
 
     const btn = lancado || ignorado ? '' :
       est.cat === 'ignorar' ?
@@ -418,6 +471,7 @@ function renderLista() {
       <div class="memo-txt" title="${esc(t.memo)}">${esc(t.memo)}</div>
       <div>${catSel}</div>
       <div>${obraSel}</div>
+      <div>${extraSel}</div>
       <div>${descInp}</div>
       <div>${btn}</div>
     </div>`;
@@ -457,6 +511,16 @@ async function lancar(id) {
   };
   const mapeado = catMap[est.cat] || { tipo: 'despesa', cat: 'outros' };
 
+  // Resolver nome do sócio ou cliente para o campo beneficiario
+  let beneficiario = '';
+  if (est.cat === 'distribuicao' && est.socioId) {
+    const s = socios.find(x => x.id === est.socioId);
+    if (s) beneficiario = s.nome;
+  } else if (est.cat === 'recebimento' && est.clienteId) {
+    const c = clientes.find(x => x.id === est.clienteId);
+    if (c) beneficiario = c.nome;
+  }
+
   const lanc = {
     id: uid(),
     obraId: est.obra || null,
@@ -466,7 +530,9 @@ async function lancar(id) {
     data: t.data,
     valor: t.valor,
     status: 'pago',
-    beneficiario: '',
+    beneficiario,
+    clienteId: est.clienteId || null,
+    socioId:   est.socioId   || null,
     formaPagamento: 'PIX',
     dataPagamento: t.data,
     dataVencimento: null,
