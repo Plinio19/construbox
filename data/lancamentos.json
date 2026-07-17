@@ -813,5 +813,27 @@
     "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a0c40eb"
+  },
+  {
+    "id": "mrpauhollwnja",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "Pdn Holding Patrimonial Ltda - BANCO INTER",
+    "data": "2026-05-26",
+    "valor": 13630,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-26",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a15dcbc"
   }
 ]
