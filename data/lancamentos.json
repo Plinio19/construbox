@@ -82,5 +82,26 @@
     "obs": "Transferência enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "69f51966"
+  },
+  {
+    "id": "mroyymd4xyl46",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA PLINIO NETO",
+    "data": "2026-05-02",
+    "valor": 1000,
+    "status": "pago",
+    "beneficiario": "Plínio de Paula",
+    "clienteId": null,
+    "socioId": "soc_plinio",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-02",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - JULIA SILVA VILA NOVA - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "69f62c20"
   }
 ]
