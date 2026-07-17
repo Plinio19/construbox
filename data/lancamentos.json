@@ -1099,5 +1099,27 @@
     "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a202d22"
+  },
+  {
+    "id": "mrpbdm8dwnld7",
+    "obraId": "obra_sinop",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-06-05",
+    "valor": 6000,
+    "status": "pago",
+    "beneficiario": "GEOVANE ALVES",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb82fzwc2dk",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-05",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a23377a"
   }
 ]
