@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "id": "obra_novamutum",
+    "nome": "NOVA MUTUM",
+    "cliente": "HOTEL INBOX",
+    "endereco": "Nova Mutum - MT",
+    "status": "ativa",
+    "valorContrato": 0,
+    "dataInicio": null,
+    "previsaoConclusao": null,
+    "obs": "",
+    "criadoEm": "2026-07-17"
+  },
+  {
+    "id": "obra_sinop",
+    "nome": "SINOP",
+    "cliente": "HOTEL INBOX",
+    "endereco": "Sinop - MT",
+    "status": "ativa",
+    "valorContrato": 0,
+    "dataInicio": null,
+    "previsaoConclusao": null,
+    "obs": "",
+    "criadoEm": "2026-07-17"
+  },
+  {
+    "id": "obra_itu",
+    "nome": "ITU",
+    "cliente": "HOTEL INBOX",
+    "endereco": "Itu - SP",
+    "status": "ativa",
+    "valorContrato": 0,
+    "dataInicio": null,
+    "previsaoConclusao": null,
+    "obs": "",
+    "criadoEm": "2026-07-17"
+  },
+  {
+    "id": "obra_rionegro",
+    "nome": "RIO NEGRO",
+    "cliente": "HOTEL INBOX",
+    "endereco": "Rio Negro - PR",
+    "status": "ativa",
+    "valorContrato": 0,
+    "dataInicio": null,
+    "previsaoConclusao": null,
+    "obs": "",
+    "criadoEm": "2026-07-17"
+  }
+]
