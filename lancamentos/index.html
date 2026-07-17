@@ -72,7 +72,16 @@
           <option value="pago">Pago</option>
           <option value="agendado">Agendado</option>
         </select>
+        <select id="f-periodo" class="form-control" style="width:145px;" onchange="onPeriodoChange()">
+          <option value="mes">Mensal</option>
+          <option value="3m">Últimos 3 meses</option>
+          <option value="6m">Últimos 6 meses</option>
+          <option value="custom">Personalizado</option>
+        </select>
         <input type="month" id="f-mes" class="form-control" style="width:140px;" onchange="renderLista()"/>
+        <input type="date" id="f-de" class="form-control" style="width:135px;display:none;" onchange="renderLista()"/>
+        <span id="f-range-sep" style="display:none;font-size:.8rem;color:var(--texto-leve);white-space:nowrap;">até</span>
+        <input type="date" id="f-ate" class="form-control" style="width:135px;display:none;" onchange="renderLista()"/>
         <button class="btn btn-outline btn-sm" onclick="limparFiltros()">✕ Limpar</button>
         <button class="btn btn-outline btn-sm" onclick="exportarCSV()">⬇ CSV</button>
       </div>
@@ -256,8 +265,14 @@ function preencherDropdownObras() {
 
 // ── STATS ──
 function atualizarStats() {
-  const mes = document.getElementById('f-mes')?.value || hoje().slice(0,7);
-  const doMes = lista.filter(l => (l.data||'').startsWith(mes));
+  const rng = getPeriodoRange();
+  const doMes = lista.filter(l => {
+    const d = l.data || '';
+    if (rng.prefix && !d.startsWith(rng.prefix)) return false;
+    if (rng.de && d < rng.de) return false;
+    if (rng.ate && d > rng.ate) return false;
+    return true;
+  });
   const rec   = doMes.filter(l=>l.tipo==='receita').reduce((s,l)=>s+(l.valor||0),0);
   const des   = doMes.filter(l=>l.tipo==='despesa').reduce((s,l)=>s+(l.valor||0),0);
   const pend  = lista.filter(l=>l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0);
@@ -265,6 +280,34 @@ function atualizarStats() {
   document.getElementById('st-des').textContent   = formatarMoeda(des);
   document.getElementById('st-saldo').textContent = formatarMoeda(rec-des);
   document.getElementById('st-pend').textContent  = formatarMoeda(pend);
+}
+
+// ── PERÍODO ──
+function subMonths(dateStr, n) {
+  const d = new Date(dateStr + 'T12:00:00');
+  d.setMonth(d.getMonth() - n);
+  return d.toISOString().slice(0, 10);
+}
+
+function getPeriodoRange() {
+  const p = document.getElementById('f-periodo').value;
+  const h = hoje();
+  if (p === 'mes')    return { prefix: document.getElementById('f-mes').value };
+  if (p === '3m')     return { de: subMonths(h, 3), ate: h };
+  if (p === '6m')     return { de: subMonths(h, 6), ate: h };
+  if (p === 'custom') return { de: document.getElementById('f-de').value, ate: document.getElementById('f-ate').value };
+  return {};
+}
+
+function onPeriodoChange() {
+  const p = document.getElementById('f-periodo').value;
+  const isMes    = p === 'mes';
+  const isCustom = p === 'custom';
+  document.getElementById('f-mes').style.display      = isMes    ? '' : 'none';
+  document.getElementById('f-de').style.display       = isCustom ? '' : 'none';
+  document.getElementById('f-range-sep').style.display= isCustom ? '' : 'none';
+  document.getElementById('f-ate').style.display      = isCustom ? '' : 'none';
+  renderLista();
 }
 
 // ── FILTROS ──
@@ -284,13 +327,16 @@ function onFiltroTipo() {
 }
 
 function limparFiltros() {
-  document.getElementById('busca').value = '';
-  document.getElementById('f-obra').value = '';
-  document.getElementById('f-tipo').value = '';
-  document.getElementById('f-cat').value  = '';
+  document.getElementById('busca').value    = '';
+  document.getElementById('f-obra').value   = '';
+  document.getElementById('f-tipo').value   = '';
+  document.getElementById('f-cat').value    = '';
   document.getElementById('f-status').value = '';
-  document.getElementById('f-mes').value  = hoje().slice(0,7);
-  atualizarStats(); renderLista();
+  document.getElementById('f-periodo').value = 'mes';
+  document.getElementById('f-mes').value    = hoje().slice(0,7);
+  document.getElementById('f-de').value     = '';
+  document.getElementById('f-ate').value    = '';
+  onPeriodoChange();
 }
 
 function renderLista() {
@@ -300,14 +346,17 @@ function renderLista() {
   const fTipo  = document.getElementById('f-tipo').value;
   const fCat   = document.getElementById('f-cat').value;
   const fSt    = document.getElementById('f-status').value;
-  const fMes   = document.getElementById('f-mes').value;
+  const rng    = getPeriodoRange();
 
   let f = [...lista].reverse().filter(l => {
     if (fObra && l.obraId !== fObra) return false;
     if (fTipo && l.tipo   !== fTipo) return false;
     if (fCat  && l.categoria !== fCat) return false;
     if (fSt   && l.status !== fSt) return false;
-    if (fMes  && !(l.data||'').startsWith(fMes)) return false;
+    const d = l.data || '';
+    if (rng.prefix && !d.startsWith(rng.prefix)) return false;
+    if (rng.de && d < rng.de) return false;
+    if (rng.ate && d > rng.ate) return false;
     if (busca && !(`${l.descricao||''} ${l.beneficiario||''} ${l.obs||''}`).toLowerCase().includes(busca)) return false;
     return true;
   });
