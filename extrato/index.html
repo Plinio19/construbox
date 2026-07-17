@@ -459,10 +459,13 @@ function renderLista() {
       onchange="setEstado('${t.id}',{descricao:this.value})"
       ${dis}>`;
 
-    const btn = lancado || ignorado ? '' :
-      est.cat === 'ignorar' ?
-        `<button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="ignorar('${t.id}')">Ignorar</button>` :
-        `<button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="lancar('${t.id}')">✓ Lançar</button>`;
+    const btn = lancado
+      ? `<button class="btn btn-outline btn-sm" style="color:var(--vermelho);white-space:nowrap;" onclick="desfazer('${t.id}')">↩ Desfazer</button>`
+      : ignorado
+      ? `<button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="desfazerIgnorar('${t.id}')">↩</button>`
+      : est.cat === 'ignorar'
+      ? `<button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="ignorar('${t.id}')">Ignorar</button>`
+      : `<button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="lancar('${t.id}')">✓ Lançar</button>`;
 
     return `<div class="${cls}" id="row-${t.id}">
       <div style="font-size:.82rem;">${formatarData(t.data)}</div>
@@ -555,6 +558,30 @@ async function lancar(id) {
         `Extrato: ${lanc.descricao.slice(0,50)}`);
     } catch(e) { toast('Salvo local. Erro sync GitHub: ' + e.message, 'aviso'); }
   }
+}
+
+// ── DESFAZER LANÇAMENTO ──
+async function desfazer(ofxId) {
+  if (!confirm('Desfazer este lançamento? Ele voltará para "Pendente" para você reclassificar.')) return;
+  // Remove o lançamento que tem este ofxId
+  lancamentos = lancamentos.filter(l => l.ofxId !== ofxId);
+  salvarLocal(LS_LANC, lancamentos);
+  // Volta o estado para pendente
+  const est = getEstado(ofxId);
+  setEstado(ofxId, { ...est, status: 'pendente' });
+  renderLista();
+  toast('Lançamento desfeito — reclassifique.', 'aviso');
+  if (configurado()) {
+    try { shaLanc = await salvarDados('data/lancamentos.json', lancamentos, shaLanc, 'Desfazer lançamento OFX'); }
+    catch(e) { toast('Erro ao sincronizar: ' + e.message, 'aviso'); }
+  }
+}
+
+function desfazerIgnorar(ofxId) {
+  const est = getEstado(ofxId);
+  setEstado(ofxId, { ...est, status: 'pendente' });
+  renderLista();
+  toast('Item voltou para pendente.', '');
 }
 
 // ── STATS ──
