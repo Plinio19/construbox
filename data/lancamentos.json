@@ -2221,5 +2221,27 @@
     "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a551c41"
+  },
+  {
+    "id": "mrpc600c5aiql",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-07-14",
+    "valor": 1000,
+    "status": "pago",
+    "beneficiario": "VITOR NONATO",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpbw8xy9hhvi",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-14",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a56d6a3"
   }
 ]
