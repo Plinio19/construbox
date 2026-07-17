@@ -250,5 +250,26 @@
     "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a0da058"
+  },
+  {
+    "id": "mroz9w7kry101",
+    "obraId": "obra_sinop",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "COMISSÃO",
+    "data": "2026-05-20",
+    "valor": 1500,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - NU PAGAMENTOS",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a0da4c7"
   }
 ]
