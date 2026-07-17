@@ -1341,5 +1341,27 @@
     "obs": "Transferência enviada pelo Pix - Josefa Batista De Oliveira Ribeiro - STONE IP",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2cb422"
+  },
+  {
+    "id": "mrpbjm714pioe",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "GASTOS ITU",
+    "data": "2026-06-12",
+    "valor": 70,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-12",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - 43.863.728 EMERSON CARLOS DA SILVA LIMA - PAGSEGURO",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2cb5ad"
   }
 ]
