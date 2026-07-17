@@ -1,24 +1,5 @@
 [
   {
-    "id": "mroxzqi9x60pp",
-    "obraId": "obra_novamutum",
-    "tipo": "receita",
-    "categoria": "adiantamento",
-    "descricao": "RECEBIMENTO HIB",
-    "data": "2026-05-01",
-    "valor": 50000,
-    "status": "pago",
-    "beneficiario": "",
-    "formaPagamento": "PIX",
-    "dataPagamento": "2026-05-01",
-    "dataVencimento": null,
-    "isReembolso": false,
-    "conciliado": true,
-    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A.",
-    "criadoEm": "2026-07-17",
-    "ofxId": "69f5143a"
-  },
-  {
     "id": "mroyfdntkdarw",
     "obraId": null,
     "tipo": "despesa",
