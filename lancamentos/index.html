@@ -66,6 +66,9 @@
         <select id="f-cat" class="form-control" style="width:160px;" onchange="renderLista()">
           <option value="">Todas as categorias</option>
         </select>
+        <select id="f-prestador" class="form-control" style="width:170px;" onchange="renderLista()">
+          <option value="">Todos os prestadores</option>
+        </select>
         <select id="f-status" class="form-control" style="width:130px;" onchange="renderLista()">
           <option value="">Todos os status</option>
           <option value="pendente">Pendente</option>
@@ -212,23 +215,28 @@
 <script>
 const DATA_PATH  = 'data/lancamentos.json';
 const OBRAS_PATH = 'data/obras.json';
+const PREST_PATH = 'data/prestadores.json';
 const LS_KEY     = 'cbx_lanc';
 const LS_OBRAS   = 'cbx_obras';
+const LS_PREST   = 'cbx_prestadores';
 
 document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('lancamentos');
 document.getElementById('f-mes').value = hoje().slice(0,7);
 
 let lista = []; let sha = null;
 let obras = []; let idEditando = null;
+let prestadores = [];
 let tipoAtual = 'despesa';
 
 // ── INIT ──
 async function init() {
   const cfg = getConfig();
-  obras = carregarLocal(LS_OBRAS) || [];
+  obras       = carregarLocal(LS_OBRAS) || [];
+  prestadores = carregarLocal(LS_PREST) || [];
   const localL = carregarLocal(LS_KEY) || [];
   lista = localL;
   preencherDropdownObras();
+  preencherDropdownPrestadores();
 
   // Verificar param de pre-filtro (vindo de CP/CR)
   const params = new URLSearchParams(window.location.search);
@@ -241,17 +249,28 @@ async function init() {
   setSyncStatus('amarelo','Carregando...');
   document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
   try {
-    const [rL, rO] = await Promise.all([carregarDados(DATA_PATH), carregarDados(OBRAS_PATH)]);
+    const [rL, rO, rP] = await Promise.all([carregarDados(DATA_PATH), carregarDados(OBRAS_PATH), carregarDados(PREST_PATH)]);
     lista = rL.lista; sha = rL.sha;
     obras = rO.lista;
+    prestadores = rP.lista;
     salvarLocal(LS_KEY, lista);
     salvarLocal(LS_OBRAS, obras);
+    salvarLocal(LS_PREST, prestadores);
     preencherDropdownObras();
+    preencherDropdownPrestadores();
     atualizarStats(); renderLista();
     setSyncStatus('verde','Conectado');
   } catch(e) {
     setSyncStatus('vermelho','Erro'); toast('Erro ao carregar.','erro');
   }
+}
+
+function preencherDropdownPrestadores() {
+  const sel = document.getElementById('f-prestador');
+  const curr = sel.value;
+  sel.innerHTML = '<option value="">Todos os prestadores</option>' +
+    prestadores.map(p => `<option value="${p.id}">${esc(p.nome)}${p.funcao?' — '+p.funcao:''}</option>`).join('');
+  if (curr) sel.value = curr;
 }
 
 function preencherDropdownObras() {
@@ -332,6 +351,7 @@ function limparFiltros() {
   document.getElementById('f-tipo').value   = '';
   document.getElementById('f-cat').value    = '';
   document.getElementById('f-status').value = '';
+  document.getElementById('f-prestador').value = '';
   document.getElementById('f-periodo').value = 'mes';
   document.getElementById('f-mes').value    = hoje().slice(0,7);
   document.getElementById('f-de').value     = '';
@@ -345,14 +365,16 @@ function renderLista() {
   const fObra  = document.getElementById('f-obra').value;
   const fTipo  = document.getElementById('f-tipo').value;
   const fCat   = document.getElementById('f-cat').value;
+  const fPrest = document.getElementById('f-prestador').value;
   const fSt    = document.getElementById('f-status').value;
   const rng    = getPeriodoRange();
 
   let f = [...lista].reverse().filter(l => {
-    if (fObra && l.obraId !== fObra) return false;
-    if (fTipo && l.tipo   !== fTipo) return false;
-    if (fCat  && l.categoria !== fCat) return false;
-    if (fSt   && l.status !== fSt) return false;
+    if (fObra  && l.obraId     !== fObra)  return false;
+    if (fTipo  && l.tipo       !== fTipo)  return false;
+    if (fCat   && l.categoria  !== fCat)   return false;
+    if (fPrest && l.prestadorId !== fPrest) return false;
+    if (fSt    && l.status     !== fSt)    return false;
     const d = l.data || '';
     if (rng.prefix && !d.startsWith(rng.prefix)) return false;
     if (rng.de && d < rng.de) return false;
@@ -402,6 +424,20 @@ function renderLista() {
       </tr>`;
     }).join('')}</tbody>
   </table>`;
+
+  // ── BARRA DE TOTAIS ──
+  const totRec   = f.filter(l=>l.tipo==='receita').reduce((s,l)=>s+(l.valor||0),0);
+  const totDes   = f.filter(l=>l.tipo==='despesa').reduce((s,l)=>s+(l.valor||0),0);
+  const temAmbos = totRec > 0 && totDes > 0;
+  const totLabel = temAmbos ? 'Saldo' : totRec > 0 ? 'Total Receitas' : 'Total Despesas';
+  const totVal   = temAmbos ? (totRec - totDes) : (totRec || totDes);
+  const totColor = temAmbos ? (totVal >= 0 ? 'var(--verde)' : 'var(--vermelho)') : totRec > 0 ? 'var(--verde)' : 'var(--vermelho)';
+  cont.innerHTML += `<div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;padding:10px 14px;background:var(--fundo2);border-top:2px solid var(--cinza);font-size:.83rem;">
+    <span style="color:var(--texto-leve);">${f.length} lançamento(s)</span>
+    ${totRec>0?`<span>Receitas: <strong style="color:var(--verde);">+${formatarMoeda(totRec)}</strong></span>`:''}
+    ${totDes>0?`<span>Despesas: <strong style="color:var(--vermelho);">−${formatarMoeda(totDes)}</strong></span>`:''}
+    <span style="margin-left:auto;font-size:.9rem;">${totLabel}: <strong style="color:${totColor};font-size:1rem;">${formatarMoeda(totVal)}</strong></span>
+  </div>`;
 }
 
 // ── MODAL ──
