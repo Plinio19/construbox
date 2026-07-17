@@ -8,7 +8,7 @@
   <style>
     .linha-ext {
       display: grid;
-      grid-template-columns: 90px 54px 110px 1fr 155px 150px 150px 170px 80px;
+      grid-template-columns: 90px 54px 110px 1fr 155px 150px 150px 170px 120px;
       gap: 8px; align-items: center;
       padding: 9px 14px; border-bottom: 1px solid var(--cinza);
       transition: background .15s;
@@ -28,12 +28,22 @@
     .memo-txt { font-size: .78rem; color: var(--texto-leve); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .thead-ext {
       display: grid;
-      grid-template-columns: 90px 54px 110px 1fr 155px 150px 150px 170px 80px;
+      grid-template-columns: 90px 54px 110px 1fr 155px 150px 150px 170px 120px;
       gap: 8px; padding: 8px 14px;
       background: var(--fundo2); border-bottom: 2px solid var(--cinza);
       font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-leve);
       position: sticky; top: 0; z-index: 5;
     }
+    /* Split modal */
+    .split-row {
+      display: grid;
+      grid-template-columns: 110px 160px 150px 140px 1fr 32px;
+      gap: 8px; align-items: center; padding: 8px 0;
+      border-bottom: 1px solid var(--cinza);
+    }
+    .split-row input, .split-row select { font-size: .82rem; padding: 5px 7px; }
+    .split-saldo-bar { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: .9rem; font-weight: 700; background: var(--fundo2); }
+    .split-header { display: grid; grid-template-columns: 110px 160px 150px 140px 1fr 32px; gap: 8px; padding: 4px 0 8px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-leve); }
     .status-pill {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;
@@ -103,6 +113,29 @@
 
   </div>
 </div>
+<!-- MODAL DIVIDIR -->
+<div class="overlay" id="modal-split">
+  <div class="modal" style="max-width:780px;max-height:90vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h2>⚡ Dividir Pagamento</h2>
+      <button class="btn-fechar" onclick="fecharModalSplit()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0 20px 8px;">
+      <div id="split-info" style="padding:12px 0 10px;font-size:.85rem;color:var(--texto-leve);border-bottom:1px solid var(--cinza);margin-bottom:12px;"></div>
+      <div class="split-header">
+        <div>Valor (R$)</div><div>Categoria</div><div>Obra</div><div>Beneficiário / Extra</div><div>Descrição</div><div></div>
+      </div>
+      <div id="split-linhas"></div>
+      <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="addSplitLinha()">+ Adicionar linha</button>
+      <div class="split-saldo-bar" id="split-saldo"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModalSplit()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-confirmar-split" onclick="confirmarSplit()">✓ Confirmar divisão</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toasts"></div>
 <script src="../assets/core.js"></script>
 <script>
@@ -324,7 +357,7 @@ let socios = [];
 let clientes = [];
 let filtro = 'pendentes';
 
-function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '' }; }
+function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '', beneficiario: '', clienteId: '', socioId: '' }; }
 function setEstado(id, patch) { estado[id] = { ...getEstado(id), ...patch }; salvarLocal(LS_EST, estado); }
 
 // ── INIT ──
@@ -428,6 +461,7 @@ function renderLista() {
       <option value="recebimento"  ${est.cat==='recebimento'?'selected':''}>💰 Recebimento</option>
       <option value="mao-de-obra"  ${est.cat==='mao-de-obra'?'selected':''}>🔨 Mão de Obra</option>
       <option value="distribuicao" ${est.cat==='distribuicao'?'selected':''}>💸 Dist. de Lucro</option>
+      <option value="reembolso"    ${est.cat==='reembolso'?'selected':''}>↩ Reembolso</option>
       <option value="outros"       ${est.cat==='outros'?'selected':''}>📦 Outros</option>
       <option value="ignorar"      ${est.cat==='ignorar'?'selected':''}>— Ignorar</option>
     </select>`;
@@ -439,7 +473,7 @@ function renderLista() {
         ${obraOpts.replace(`value="${est.obra}"`, `value="${est.obra}" selected`)}
       </select>`;
 
-    // Coluna extra: Cliente (recebimento) ou Sócio (distribuição)
+    // Coluna extra: Cliente (recebimento), Sócio (distribuição), Beneficiário (mão de obra)
     let extraSel = `<div style="font-size:.73rem;color:var(--texto-leve);padding:4px 0;">—</div>`;
     if (est.cat === 'recebimento') {
       const cliOpts = clientes.map(c =>
@@ -455,6 +489,10 @@ function renderLista() {
       extraSel = `<select class="form-control sel-obra" id="soc-${t.id}" onchange="setEstado('${t.id}',{socioId:this.value})" ${dis}>
         <option value="">— Sócio —</option>${socOpts}
       </select>`;
+    } else if (est.cat === 'mao-de-obra') {
+      extraSel = `<input class="form-control sel-obra" id="benef-${t.id}" type="text"
+        value="${esc(est.beneficiario||'')}" placeholder="Quem recebeu..."
+        onchange="setEstado('${t.id}',{beneficiario:this.value})" ${dis}>`;
     }
 
     const descInp = `<input class="form-control inp-desc" id="desc-${t.id}" type="text"
@@ -463,12 +501,15 @@ function renderLista() {
       ${dis}>`;
 
     const btn = lancado
-      ? `<button class="btn btn-outline btn-sm" style="color:var(--vermelho);white-space:nowrap;" onclick="desfazer('${t.id}')">↩ Desfazer</button>`
+      ? `<button class="btn btn-outline btn-sm" style="color:var(--vermelho);white-space:nowrap;width:100%;" onclick="desfazer('${t.id}')">↩ Desfazer</button>`
       : ignorado
-      ? `<button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="desfazerIgnorar('${t.id}')">↩</button>`
+      ? `<button class="btn btn-outline btn-sm" style="white-space:nowrap;width:100%;" onclick="desfazerIgnorar('${t.id}')">↩ Voltar</button>`
       : est.cat === 'ignorar'
-      ? `<button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="ignorar('${t.id}')">Ignorar</button>`
-      : `<button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="lancar('${t.id}')">✓ Lançar</button>`;
+      ? `<button class="btn btn-outline btn-sm" style="white-space:nowrap;width:100%;" onclick="ignorar('${t.id}')">Ignorar</button>`
+      : `<div style="display:flex;gap:4px;">
+           <button class="btn btn-primary btn-sm" style="white-space:nowrap;flex:1;" onclick="lancar('${t.id}')">✓ Lançar</button>
+           <button class="btn btn-outline btn-sm" style="white-space:nowrap;padding:0 7px;font-size:1rem;" onclick="abrirSplit('${t.id}')" title="Dividir em múltiplas categorias">÷</button>
+         </div>`;
 
     return `<div class="${cls}" id="row-${t.id}">
       <div style="font-size:.82rem;">${formatarData(t.data)}</div>
@@ -488,7 +529,7 @@ function renderLista() {
 
 function onCatChange(id) {
   const cat = document.getElementById('cat-'+id)?.value;
-  const tipo = cat === 'recebimento' ? 'receita' : cat === 'ignorar' ? 'ignorar' : 'despesa';
+  const tipo = cat === 'recebimento' ? 'receita' : cat === 'ignorar' ? 'ignorar' : cat === 'reembolso' ? 'reembolso' : 'despesa';
   setEstado(id, { cat, tipo });
   renderLista();
 }
@@ -510,15 +551,16 @@ async function lancar(id) {
   }
 
   const catMap = {
-    'recebimento': { tipo: 'receita',  cat: 'adiantamento' },
-    'mao-de-obra': { tipo: 'despesa',  cat: 'mao-de-obra'  },
-    'distribuicao':{ tipo: 'despesa',  cat: 'outros'        },
-    'outros':      { tipo: 'despesa',  cat: 'outros'        },
+    'recebimento': { tipo: 'receita',   cat: 'adiantamento' },
+    'mao-de-obra': { tipo: 'despesa',   cat: 'mao-de-obra'  },
+    'distribuicao':{ tipo: 'despesa',   cat: 'outros'        },
+    'reembolso':   { tipo: 'reembolso', cat: 'reembolso'     },
+    'outros':      { tipo: 'despesa',   cat: 'outros'        },
   };
   const mapeado = catMap[est.cat] || { tipo: 'despesa', cat: 'outros' };
 
-  // Resolver nome do sócio ou cliente para o campo beneficiario
-  let beneficiario = '';
+  // Resolver beneficiário: sócio, cliente ou texto livre
+  let beneficiario = est.beneficiario || '';
   if (est.cat === 'distribuicao' && est.socioId) {
     const s = socios.find(x => x.id === est.socioId);
     if (s) beneficiario = s.nome;
@@ -587,6 +629,164 @@ function desfazerIgnorar(ofxId) {
   toast('Item voltou para pendente.', '');
 }
 
+// ── SPLIT MODAL ──
+let splitCtx = null;
+let splitLinhas = [];
+
+function abrirSplit(ofxId) {
+  const t = OFX_TRANSACOES.find(x => x.id === ofxId);
+  if (!t) return;
+  splitCtx = { id: ofxId, transacao: t };
+  splitLinhas = [
+    { valor: t.valor, cat: '', obra: '', descricao: '', clienteId: '', socioId: '', beneficiario: '' }
+  ];
+  renderSplitModal();
+  document.getElementById('modal-split').classList.add('aberto');
+}
+
+function fecharModalSplit() {
+  document.getElementById('modal-split').classList.remove('aberto');
+  splitCtx = null; splitLinhas = [];
+}
+
+function addSplitLinha() {
+  splitLinhas.push({ valor: 0, cat: '', obra: '', descricao: '', clienteId: '', socioId: '', beneficiario: '' });
+  renderSplitModal();
+}
+
+function removeSplitLinha(i) {
+  if (splitLinhas.length <= 1) return;
+  splitLinhas.splice(i, 1);
+  renderSplitModal();
+}
+
+function setSplitLinha(i, campo, valor) {
+  splitLinhas[i][campo] = valor;
+  if (campo === 'cat') renderSplitModal(); else atualizarSaldoSplit();
+}
+
+function atualizarSaldoSplit() {
+  if (!splitCtx) return;
+  const total = splitCtx.transacao.valor;
+  const usado = splitLinhas.reduce((s, l) => s + (parseFloat(l.valor) || 0), 0);
+  const saldo = Math.round((total - usado) * 100) / 100;
+  const el = document.getElementById('split-saldo');
+  if (!el) return;
+  const ok = Math.abs(saldo) < 0.01;
+  el.innerHTML = ok
+    ? `✓ Valor distribuído corretamente — Total: <strong>${formatarMoeda(total)}</strong>`
+    : `Saldo restante: <strong style="color:var(--vermelho)">${formatarMoeda(saldo)}</strong> de ${formatarMoeda(total)}`;
+  el.style.color = ok ? 'var(--verde)' : 'inherit';
+  document.getElementById('btn-confirmar-split').disabled = !ok;
+}
+
+function renderSplitModal() {
+  if (!splitCtx) return;
+  const t = splitCtx.transacao;
+  document.getElementById('split-info').innerHTML =
+    `<strong>${t.tipo === 'credito' ? '+' : '-'}${formatarMoeda(t.valor)}</strong> · ${formatarData(t.data)}<br>
+     <span>${esc(t.memo.slice(0, 100))}</span>`;
+
+  const obraOpts = obras.map(o => `<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+  const cliOpts  = clientes.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+  const socOpts  = socios.map(s => `<option value="${s.id}">${esc(s.nome)}</option>`).join('');
+
+  document.getElementById('split-linhas').innerHTML = splitLinhas.map((l, i) => {
+    const showObra = l.cat !== 'distribuicao';
+    const obraCell = showObra
+      ? `<select class="form-control" onchange="setSplitLinha(${i},'obra',this.value)">
+           <option value="">— Obra —</option>
+           ${obras.map(o => `<option value="${o.id}" ${l.obra===o.id?'selected':''}>${esc(o.nome)}</option>`).join('')}
+         </select>`
+      : `<div style="font-size:.78rem;color:var(--texto-leve);padding:4px 0;text-align:center;">—</div>`;
+
+    let extraCell = `<div style="font-size:.78rem;color:var(--texto-leve);padding:4px 0;text-align:center;">—</div>`;
+    if (l.cat === 'recebimento') {
+      extraCell = `<select class="form-control" onchange="setSplitLinha(${i},'clienteId',this.value)">
+        <option value="">— Cliente —</option>
+        ${clientes.map(c => `<option value="${c.id}" ${l.clienteId===c.id?'selected':''}>${esc(c.nome)}</option>`).join('')}
+      </select>`;
+    } else if (l.cat === 'distribuicao') {
+      extraCell = `<select class="form-control" onchange="setSplitLinha(${i},'socioId',this.value)">
+        <option value="">— Sócio —</option>
+        ${socios.map(s => `<option value="${s.id}" ${l.socioId===s.id?'selected':''}>${esc(s.nome)}</option>`).join('')}
+      </select>`;
+    } else if (l.cat === 'mao-de-obra') {
+      extraCell = `<input class="form-control" type="text" value="${esc(l.beneficiario||'')}"
+        placeholder="Quem recebeu..." onchange="setSplitLinha(${i},'beneficiario',this.value)">`;
+    }
+
+    return `<div class="split-row">
+      <input class="form-control" type="number" step="0.01" min="0" value="${l.valor||''}"
+        placeholder="0,00" onchange="setSplitLinha(${i},'valor',parseFloat(this.value)||0)"
+        oninput="setSplitLinha(${i},'valor',parseFloat(this.value)||0)">
+      <select class="form-control" onchange="setSplitLinha(${i},'cat',this.value)">
+        <option value="">— Categoria —</option>
+        <option value="recebimento"  ${l.cat==='recebimento'?'selected':''}>💰 Recebimento</option>
+        <option value="mao-de-obra"  ${l.cat==='mao-de-obra'?'selected':''}>🔨 Mão de Obra</option>
+        <option value="distribuicao" ${l.cat==='distribuicao'?'selected':''}>💸 Dist. Lucro</option>
+        <option value="reembolso"    ${l.cat==='reembolso'?'selected':''}>↩ Reembolso</option>
+        <option value="outros"       ${l.cat==='outros'?'selected':''}>📦 Outros</option>
+      </select>
+      ${obraCell}
+      ${extraCell}
+      <input class="form-control" type="text" value="${esc(l.descricao||'')}"
+        placeholder="Descrição..." onchange="setSplitLinha(${i},'descricao',this.value)">
+      <button class="btn btn-outline btn-sm" style="padding:0 8px;color:var(--vermelho);"
+        onclick="removeSplitLinha(${i})" ${splitLinhas.length<=1?'disabled':''} title="Remover">🗑</button>
+    </div>`;
+  }).join('');
+
+  atualizarSaldoSplit();
+}
+
+async function confirmarSplit() {
+  if (!splitCtx) return;
+  const t = splitCtx.transacao;
+  const total = t.valor;
+  const usado = splitLinhas.reduce((s, l) => s + (parseFloat(l.valor) || 0), 0);
+  if (Math.abs(total - usado) >= 0.01) { toast('Os valores não somam o total.', 'aviso'); return; }
+
+  const catMap = {
+    'recebimento': { tipo: 'receita',   cat: 'adiantamento' },
+    'mao-de-obra': { tipo: 'despesa',   cat: 'mao-de-obra'  },
+    'distribuicao':{ tipo: 'despesa',   cat: 'outros'        },
+    'reembolso':   { tipo: 'reembolso', cat: 'reembolso'     },
+    'outros':      { tipo: 'despesa',   cat: 'outros'        },
+  };
+
+  for (const l of splitLinhas) {
+    if (!l.cat) { toast('Selecione a categoria em todas as linhas.', 'aviso'); return; }
+    const mapeado = catMap[l.cat] || { tipo: 'despesa', cat: 'outros' };
+    let beneficiario = l.beneficiario || '';
+    if (l.cat === 'distribuicao' && l.socioId) {
+      const s = socios.find(x => x.id === l.socioId); if (s) beneficiario = s.nome;
+    } else if (l.cat === 'recebimento' && l.clienteId) {
+      const c = clientes.find(x => x.id === l.clienteId); if (c) beneficiario = c.nome;
+    }
+    lancamentos.push({
+      id: uid(), obraId: l.obra || null, tipo: mapeado.tipo, categoria: mapeado.cat,
+      descricao: l.descricao || t.memo.replace(/Transferência (recebida|enviada) pelo Pix - /i,'').slice(0,80),
+      data: t.data, valor: parseFloat(l.valor), status: 'pago',
+      beneficiario, clienteId: l.clienteId || null, socioId: l.socioId || null,
+      formaPagamento: 'PIX', dataPagamento: t.data, dataVencimento: null,
+      isReembolso: l.cat === 'reembolso', conciliado: true,
+      obs: `[Divisão] ${t.memo}`, criadoEm: hoje(), ofxId: t.id,
+    });
+  }
+
+  salvarLocal(LS_LANC, lancamentos);
+  setEstado(t.id, { status: 'lancado' });
+  fecharModalSplit();
+  renderLista();
+  toast(`Dividido em ${splitLinhas.length} lançamentos — ${formatarMoeda(total)}`, 'sucesso');
+
+  if (configurado()) {
+    try { shaLanc = await salvarDados('data/lancamentos.json', lancamentos, shaLanc, `Split OFX: ${t.memo.slice(0,40)}`); }
+    catch(e) { toast('Salvo local. Erro sync: ' + e.message, 'aviso'); }
+  }
+}
+
 // ── STATS ──
 function atualizarStats() {
   const total   = OFX_TRANSACOES.length;
@@ -608,6 +808,10 @@ function atualizarStats() {
     `<span class="res-item"><span class="res-dot" style="background:var(--verde)"></span>Entradas lançadas: <strong>${formatarMoeda(totalRec)}</strong></span>
      <span class="res-item"><span class="res-dot" style="background:var(--vermelho)"></span>Saídas lançadas: <strong>${formatarMoeda(totalDes)}</strong></span>`;
 }
+
+document.getElementById('modal-split').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-split')) fecharModalSplit();
+});
 
 init();
 </script>
