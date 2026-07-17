@@ -1451,5 +1451,27 @@
     "obs": "Transferência enviada pelo Pix - DIPCOM",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2d615c"
+  },
+  {
+    "id": "mrpbkts5tvw1e",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "ALMOÇO FINAL ITU",
+    "data": "2026-06-13",
+    "valor": 115,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-13",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - JFC NETO LANCHONETE LTDA - CAIXA FEDERAL",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2d8145"
   }
 ]
