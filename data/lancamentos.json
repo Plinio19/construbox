@@ -1011,5 +1011,27 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a1b009a"
+  },
+  {
+    "id": "mrpbcdd9lzfi2",
+    "obraId": "obra_rionegro",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-06-03",
+    "valor": 6500,
+    "status": "pago",
+    "beneficiario": "Marcos Xavier",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb19v1kv9q8",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-03",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - BANCO INTER",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a202b75"
   }
 ]
