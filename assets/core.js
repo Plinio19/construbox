@@ -152,7 +152,8 @@ const MODULOS = [
   { id: 'contas-pagar',     label: 'Contas a Pagar',     icone: '💸', href: '/contas-pagar/' },
   { id: 'contas-receber',   label: 'Contas a Receber',   icone: '💰', href: '/contas-receber/' },
   { grupo: 'Análise' },
-  { id: 'conciliacao',      label: 'Conciliação Banc.',  icone: '🏦', href: '/conciliacao/' },
+  { id: 'extrato',          label: 'Classificar Extrato',icone: '🏦', href: '/extrato/' },
+  { id: 'conciliacao',      label: 'Conciliação Banc.',  icone: '⚖️', href: '/conciliacao/' },
   { id: 'relatorios',       label: 'Relatório por Obra', icone: '📈', href: '/relatorios/' },
 ];
 

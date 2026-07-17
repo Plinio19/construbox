@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Classificar Extrato</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .linha-ext {
+      display: grid;
+      grid-template-columns: 90px 54px 110px 1fr 160px 200px 180px 90px;
+      gap: 8px; align-items: center;
+      padding: 9px 14px; border-bottom: 1px solid var(--cinza);
+      transition: background .15s;
+    }
+    .linha-ext:hover { background: var(--fundo2); }
+    .linha-ext.lancada { opacity: .45; background: var(--fundo2); }
+    .linha-ext.ignorada { opacity: .3; }
+    .linha-ext.credito { border-left: 3px solid var(--verde); }
+    .linha-ext.debito  { border-left: 3px solid var(--vermelho); }
+    .linha-ext.lancada.credito,
+    .linha-ext.lancada.debito { border-left-color: var(--cinza); }
+    .val-c { color: var(--verde);    font-weight: 700; font-size:.9rem; }
+    .val-d { color: var(--vermelho); font-weight: 700; font-size:.9rem; }
+    .memo-txt { font-size: .78rem; color: var(--texto-leve); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .thead-ext {
+      display: grid;
+      grid-template-columns: 90px 54px 110px 1fr 160px 200px 180px 90px;
+      gap: 8px; padding: 8px 14px;
+      background: var(--fundo2); border-bottom: 2px solid var(--cinza);
+      font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-leve);
+      position: sticky; top: 0; z-index: 5;
+    }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    }
+    .pill-ok  { background: #d1fae5; color: #065f46; }
+    .pill-ign { background: var(--fundo2); color: var(--texto-leve); border: 1px solid var(--cinza); }
+    .pill-pend{ background: #fef3c7; color: #92400e; }
+    select.sel-cat, select.sel-obra { font-size: .8rem; padding: 4px 6px; }
+    input.inp-desc { font-size: .8rem; padding: 4px 6px; }
+    .filtros-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .chip {
+      padding: 4px 14px; border-radius: 999px; font-size: .8rem; cursor: pointer;
+      border: 1px solid var(--cinza); background: var(--branco); font-weight: 600;
+      transition: all .15s;
+    }
+    .chip.ativo { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .resumo-bar { display: flex; gap: 16px; flex-wrap: wrap; font-size: .83rem; padding: 6px 0; }
+    .res-item { display: flex; gap: 6px; align-items: center; }
+    .res-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Classificar Extrato</div>
+      <div class="topbar-sub">Nubank — 929833485-8 · 01/05/2026 a 17/07/2026</div>
+    </div>
+    <div class="topbar-acoes">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+
+    <div class="stats-grid">
+      <div class="stat verde"><div class="valor" id="st-lanc">0</div><div class="rotulo">Lançados</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-pend">0</div><div class="rotulo">Pendentes</div></div>
+      <div class="stat cinza"><div class="valor" id="st-ign">0</div><div class="rotulo">Ignorados</div></div>
+      <div class="stat azul"><div class="valor" id="st-total">0</div><div class="rotulo">Total linhas</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-body" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
+        <div class="filtros-bar">
+          <span style="font-size:.8rem;font-weight:700;color:var(--texto-leve);">Mostrar:</span>
+          <button class="chip ativo" id="chip-pend" onclick="setFiltro('pendentes')">Pendentes</button>
+          <button class="chip"       id="chip-all"  onclick="setFiltro('todos')">Todos</button>
+          <button class="chip"       id="chip-lanc" onclick="setFiltro('lancados')">Lançados</button>
+          <button class="chip"       id="chip-ign"  onclick="setFiltro('ignorados')">Ignorados</button>
+        </div>
+        <div class="resumo-bar" id="resumo-bar"></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div class="thead-ext">
+        <div>Data</div><div>Tipo</div><div>Valor</div>
+        <div>Descrição original</div>
+        <div>Categoria</div><div>Obra</div><div>Sua descrição</div><div>Ação</div>
+      </div>
+      <div id="lista-ext"></div>
+    </div>
+
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('extrato');
+
+// ── DADOS OFX EMBARCADOS ──
+const OFX_TRANSACOES = [
+  {id:'69f5143a',data:'2026-05-01',tipo:'credito',valor:50000.00,memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A.'},
+  {id:'69f517a3',data:'2026-05-01',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'69f518a3',data:'2026-05-01',tipo:'debito', valor:11000.00,memo:'Transferência enviada pelo Pix - MARLI APARECIDA DOS SANTOS - BCO C6 S.A.'},
+  {id:'69f51966',data:'2026-05-01',tipo:'debito', valor:5000.00, memo:'Transferência enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - BANCO INTER'},
+  {id:'69f615e3',data:'2026-05-02',tipo:'debito', valor:300.00,  memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'69f62c20',data:'2026-05-02',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - JULIA SILVA VILA NOVA - BCO C6 S.A.'},
+  {id:'69f654f8',data:'2026-05-02',tipo:'debito', valor:100.00,  memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'69f7705d',data:'2026-05-03',tipo:'debito', valor:695.53, memo:'Transferência enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - MERCADO PAGO'},
+  {id:'69f7c74e',data:'2026-05-03',tipo:'debito', valor:18900.00,memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'69f89caf',data:'2026-05-04',tipo:'debito', valor:4000.00, memo:'Transferência enviada pelo Pix - M A XAVIER EMPREENDEDOR LTDA - BCO C6 S.A.'},
+  {id:'69fd366d',data:'2026-05-07',tipo:'debito', valor:58.95,   memo:'Transferência enviada pelo Pix - UBER DO BRASIL TECNOLOGIA LTDA'},
+  {id:'6a01d137',data:'2026-05-11',tipo:'debito', valor:411.00,  memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a031371',data:'2026-05-12',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a031386',data:'2026-05-12',tipo:'debito', valor:626.00,  memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a034c8d',data:'2026-05-12',tipo:'credito',valor:566.00,  memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.'},
+  {id:'6a035528',data:'2026-05-12',tipo:'debito', valor:566.00,  memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a035ddd',data:'2026-05-12',tipo:'debito', valor:15.00,   memo:'Transferência enviada pelo Pix - ANTONIO CARLOS CAVALCANTI DOS SANTOS - PAGSEGURO'},
+  {id:'6a061818',data:'2026-05-14',tipo:'debito', valor:996.48,  memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a0b2d17',data:'2026-05-18',tipo:'debito', valor:723.75,  memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a0b821d',data:'2026-05-18',tipo:'credito',valor:398.00,  memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.'},
+  {id:'6a0c40eb',data:'2026-05-19',tipo:'debito', valor:398.00,  memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a0d9824',data:'2026-05-20',tipo:'debito', valor:2500.00, memo:'Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - BANCO INTER'},
+  {id:'6a0d989e',data:'2026-05-20',tipo:'debito', valor:1173.29, memo:'Aplicação RDB'},
+  {id:'6a0d9c6a',data:'2026-05-20',tipo:'credito',valor:15000.00,memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a0d9cdb',data:'2026-05-20',tipo:'debito', valor:2500.00, memo:'Aplicação RDB'},
+  {id:'6a0da02e',data:'2026-05-20',tipo:'debito', valor:5500.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a0da058',data:'2026-05-20',tipo:'debito', valor:5500.00, memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a0da4c7',data:'2026-05-20',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - NU PAGAMENTOS'},
+  {id:'6a0e0f28',data:'2026-05-20',tipo:'credito',valor:443.60,  memo:'Resgate RDB'},
+  {id:'6a0e0f3d',data:'2026-05-20',tipo:'debito', valor:443.60,  memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a0f0881',data:'2026-05-21',tipo:'credito',valor:1000.00, memo:'Resgate RDB'},
+  {id:'6a0f08bb',data:'2026-05-21',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a0f8ff4',data:'2026-05-21',tipo:'credito',valor:20000.00,memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.'},
+  {id:'6a0f9067',data:'2026-05-21',tipo:'debito', valor:1443.60, memo:'Aplicação RDB'},
+  {id:'6a0f9283',data:'2026-05-21',tipo:'debito', valor:18556.40,memo:'Aplicação RDB'},
+  {id:'6a142b6e',data:'2026-05-25',tipo:'credito',valor:5000.00, memo:'Resgate RDB'},
+  {id:'6a142b9f',data:'2026-05-25',tipo:'debito', valor:5000.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a143a02',data:'2026-05-25',tipo:'credito',valor:2429.00, memo:'Resgate RDB'},
+  {id:'6a143a15',data:'2026-05-25',tipo:'debito', valor:2429.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a15d9c4',data:'2026-05-26',tipo:'credito',valor:13630.00,memo:'Transferência recebida pelo Pix - LUCAS REGHINI MAGALHAES - ITAÚ UNIBANCO S.A.'},
+  {id:'6a15dcbc',data:'2026-05-26',tipo:'debito', valor:13630.00,memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a198db1',data:'2026-05-29',tipo:'credito',valor:660.00,  memo:'Resgate RDB'},
+  {id:'6a198e63',data:'2026-05-29',tipo:'debito', valor:360.00,  memo:'Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.'},
+  {id:'6a198e89',data:'2026-05-29',tipo:'debito', valor:300.00,  memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a198f6e',data:'2026-05-29',tipo:'credito',valor:6000.00, memo:'Resgate RDB'},
+  {id:'6a198fcb',data:'2026-05-29',tipo:'debito', valor:6000.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a19f5eb',data:'2026-05-29',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a19f791',data:'2026-05-29',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - NOVOCEL VGP LTDA - CLOUDWALK IP'},
+  {id:'6a1b009a',data:'2026-05-30',tipo:'credito',valor:200.00,  memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.'},
+  {id:'6a1b1ce3',data:'2026-05-30',tipo:'credito',valor:800.00,  memo:'Resgate RDB'},
+  {id:'6a1b1d2d',data:'2026-05-30',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.'},
+  {id:'6a1dbeff',data:'2026-06-01',tipo:'credito',valor:584.29,  memo:'Resgate RDB'},
+  {id:'6a1dbf0c',data:'2026-06-01',tipo:'debito', valor:584.29,  memo:'Aplicação RDB'},
+  {id:'6a1ddba1',data:'2026-06-01',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a1ddbb0',data:'2026-06-01',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.'},
+  {id:'6a202a02',data:'2026-06-03',tipo:'credito',valor:22500.00,memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a202b75',data:'2026-06-03',tipo:'debito', valor:6500.00, memo:'Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - BANCO INTER'},
+  {id:'6a202ba1',data:'2026-06-03',tipo:'debito', valor:3000.00, memo:'Aplicação RDB'},
+  {id:'6a202be3',data:'2026-06-03',tipo:'debito', valor:6500.00, memo:'Aplicação RDB'},
+  {id:'6a202c47',data:'2026-06-03',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.'},
+  {id:'6a202d08',data:'2026-06-03',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.'},
+  {id:'6a202d22',data:'2026-06-03',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a202f24',data:'2026-06-03',tipo:'debito', valor:3000.00, memo:'Aplicação RDB'},
+  {id:'6a23367e',data:'2026-06-05',tipo:'credito',valor:2000.00, memo:'Resgate RDB'},
+  {id:'6a233689',data:'2026-06-05',tipo:'credito',valor:4000.00, memo:'Resgate RDB'},
+  {id:'6a23377a',data:'2026-06-05',tipo:'debito', valor:6000.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a26d2ad',data:'2026-06-08',tipo:'credito',valor:4964.77, memo:'Resgate RDB'},
+  {id:'6a26d2e7',data:'2026-06-08',tipo:'debito', valor:64.77,   memo:'Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.'},
+  {id:'6a26d301',data:'2026-06-08',tipo:'debito', valor:4900.00, memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a27d810',data:'2026-06-09',tipo:'credito',valor:7695.60, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a27dc98',data:'2026-06-09',tipo:'debito', valor:452.00,  memo:'Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.'},
+  {id:'6a27dcc0',data:'2026-06-09',tipo:'debito', valor:2000.00, memo:'Aplicação RDB'},
+  {id:'6a27dcf8',data:'2026-06-09',tipo:'debito', valor:5243.60, memo:'Aplicação RDB'},
+  {id:'6a280286',data:'2026-06-09',tipo:'credito',valor:1500.00, memo:'Resgate RDB'},
+  {id:'6a280290',data:'2026-06-09',tipo:'debito', valor:1500.00, memo:'Aplicação RDB'},
+  {id:'6a2a9f95',data:'2026-06-11',tipo:'credito',valor:150.00,  memo:'Resgate RDB'},
+  {id:'6a2a9fa8',data:'2026-06-11',tipo:'debito', valor:150.00,  memo:'Transferência enviada pelo Pix - Julia Silva Vila Nova - NU PAGAMENTOS'},
+  {id:'6a2aed01',data:'2026-06-11',tipo:'credito',valor:1500.00, memo:'Resgate RDB'},
+  {id:'6a2aed16',data:'2026-06-11',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - ANDRE LUIZ SILVA DOS SANTOS - ITAÚ'},
+  {id:'6a2c0d98',data:'2026-06-12',tipo:'credito',valor:150.00,  memo:'Resgate RDB'},
+  {id:'6a2c0da8',data:'2026-06-12',tipo:'debito', valor:107.00,  memo:'Transferência enviada pelo Pix - PANIFICADORA DELICIAS DA VOVO'},
+  {id:'6a2c431d',data:'2026-06-12',tipo:'credito',valor:1890.98, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a2c45b6',data:'2026-06-12',tipo:'debito', valor:390.98,  memo:'Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.'},
+  {id:'6a2c45c8',data:'2026-06-12',tipo:'debito', valor:1500.00, memo:'Aplicação RDB'},
+  {id:'6a2c4f33',data:'2026-06-12',tipo:'credito',valor:35.23,   memo:'Resgate RDB'},
+  {id:'6a2c4f46',data:'2026-06-12',tipo:'debito', valor:69.00,   memo:'Transferência enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA'},
+  {id:'6a2c6371',data:'2026-06-12',tipo:'credito',valor:518.00,  memo:'Resgate RDB'},
+  {id:'6a2c6404',data:'2026-06-12',tipo:'debito', valor:520.00,  memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a2c931f',data:'2026-06-12',tipo:'credito',valor:180.00,  memo:'Resgate RDB'},
+  {id:'6a2c943d',data:'2026-06-12',tipo:'debito', valor:162.00,  memo:'Transferência enviada pelo Pix - BOOKING.COM BRASIL'},
+  {id:'6a2cb413',data:'2026-06-12',tipo:'credito',valor:200.00,  memo:'Resgate RDB'},
+  {id:'6a2cb422',data:'2026-06-12',tipo:'debito', valor:27.00,   memo:'Transferência enviada pelo Pix - Josefa Batista De Oliveira Ribeiro - STONE IP'},
+  {id:'6a2cb446',data:'2026-06-12',tipo:'credito',valor:215.23,  memo:'Resgate RDB'},
+  {id:'6a2cb452',data:'2026-06-12',tipo:'debito', valor:215.23,  memo:'Aplicação RDB'},
+  {id:'6a2cb5ad',data:'2026-06-12',tipo:'debito', valor:70.00,   memo:'Transferência enviada pelo Pix - 43.863.728 EMERSON CARLOS DA SILVA LIMA - PAGSEGURO'},
+  {id:'6a2cd178',data:'2026-06-13',tipo:'debito', valor:47.00,   memo:'Transferência enviada pelo Pix - 43.863.728 EMERSON CARLOS DA SILVA LIMA - PAGSEGURO'},
+  {id:'6a2cdcaf',data:'2026-06-13',tipo:'debito', valor:36.00,   memo:'Transferência enviada pelo Pix - Matheus Alex Sandro Carvalho de Souza - MERCADO PAGO'},
+  {id:'6a2ce516',data:'2026-06-13',tipo:'debito', valor:9.99,    memo:'Transferência enviada pelo Pix - CONVENIENCIA 9 DE JULHO - ITAÚ'},
+  {id:'6a2d4d04',data:'2026-06-13',tipo:'credito',valor:2000.00, memo:'Resgate RDB'},
+  {id:'6a2d4d19',data:'2026-06-13',tipo:'debito', valor:2000.00, memo:'Transferência enviada pelo Pix - Marcos de Andrade Xavier - BANCO INTER'},
+  {id:'6a2d60c0',data:'2026-06-13',tipo:'credito',valor:60.00,   memo:'Resgate RDB'},
+  {id:'6a2d613f',data:'2026-06-13',tipo:'credito',valor:5.00,    memo:'Resgate RDB'},
+  {id:'6a2d615c',data:'2026-06-13',tipo:'debito', valor:100.00,  memo:'Transferência enviada pelo Pix - DIPCOM'},
+  {id:'6a2d784a',data:'2026-06-13',tipo:'credito',valor:6692.60, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a2d7c41',data:'2026-06-13',tipo:'debito', valor:6056.72, memo:'Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO'},
+  {id:'6a2d80ba',data:'2026-06-13',tipo:'credito',valor:2500.00, memo:'Resgate RDB'},
+  {id:'6a2d80d6',data:'2026-06-13',tipo:'debito', valor:2500.00, memo:'Transferência enviada pelo Pix - JFC NETO LANCHONETE LTDA - CAIXA FEDERAL'},
+  {id:'6a2d8145',data:'2026-06-13',tipo:'debito', valor:115.00,  memo:'Transferência enviada pelo Pix - JFC NETO LANCHONETE LTDA - CAIXA FEDERAL'},
+  {id:'6a2ef7cf',data:'2026-06-14',tipo:'debito', valor:521.12,  memo:'Aplicação RDB'},
+  {id:'6a319581',data:'2026-06-16',tipo:'credito',valor:150.00,  memo:'Resgate RDB'},
+  {id:'6a319596',data:'2026-06-16',tipo:'debito', valor:150.00,  memo:'Transferência enviada pelo Pix - Ricardo Monteiro Menino - NU PAGAMENTOS'},
+  {id:'6a31ac44',data:'2026-06-16',tipo:'credito',valor:5000.00, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a31ad14',data:'2026-06-16',tipo:'debito', valor:1725.00, memo:'Transferência enviada pelo Pix - VITOR SIQUEIRA NONATO - SICREDI'},
+  {id:'6a33e806',data:'2026-06-18',tipo:'debito', valor:2500.00, memo:'Aplicação RDB'},
+  {id:'6a33e8b1',data:'2026-06-18',tipo:'debito', valor:775.00,  memo:'Aplicação RDB'},
+  {id:'6a33ea13',data:'2026-06-18',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a33ec1c',data:'2026-06-18',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a344941',data:'2026-06-18',tipo:'credito',valor:25500.00,memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - CAIXA ECONOMICA FEDERAL'},
+  {id:'6a344971',data:'2026-06-18',tipo:'credito',valor:1978.00, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a344d3e',data:'2026-06-18',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.'},
+  {id:'6a344d7e',data:'2026-06-18',tipo:'debito', valor:1978.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a344dec',data:'2026-06-18',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a344e4a',data:'2026-06-18',tipo:'debito', valor:17500.00,memo:'Aplicação RDB'},
+  {id:'6a344e5b',data:'2026-06-18',tipo:'debito', valor:2000.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a344e6f',data:'2026-06-18',tipo:'debito', valor:2000.00, memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a352491',data:'2026-06-19',tipo:'credito',valor:1200.00, memo:'Resgate RDB'},
+  {id:'6a3524d1',data:'2026-06-19',tipo:'debito', valor:1200.00, memo:'Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.'},
+  {id:'6a355fc7',data:'2026-06-19',tipo:'credito',valor:85.00,   memo:'Resgate RDB'},
+  {id:'6a355fd4',data:'2026-06-19',tipo:'debito', valor:82.40,   memo:'Transferência enviada pelo Pix - RAIZEN SOLUCOES DE PAGAMENTOS S A - BRADESCO'},
+  {id:'6a357f4e',data:'2026-06-19',tipo:'credito',valor:16.00,   memo:'Resgate RDB'},
+  {id:'6a357f5c',data:'2026-06-19',tipo:'debito', valor:16.00,   memo:'Transferência enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA'},
+  {id:'6a359a4e',data:'2026-06-19',tipo:'credito',valor:200.00,  memo:'Resgate RDB'},
+  {id:'6a359a62',data:'2026-06-19',tipo:'debito', valor:200.00,  memo:'Transferência enviada pelo Pix - Lais Cristina Mendes Dos Santos - PICPAY'},
+  {id:'6a35a251',data:'2026-06-19',tipo:'credito',valor:1124.60, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a35a510',data:'2026-06-19',tipo:'debito', valor:990.00,  memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a3914f8',data:'2026-06-22',tipo:'debito', valor:137.20,  memo:'Aplicação RDB'},
+  {id:'6a3a7c6d',data:'2026-06-23',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a3a7c92',data:'2026-06-23',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a3d0e80',data:'2026-06-25',tipo:'credito',valor:4250.00, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a3d0f4b',data:'2026-06-25',tipo:'debito', valor:271.99,  memo:'Transferência enviada pelo Pix - VITOR SIQUEIRA NONATO - SICREDI'},
+  {id:'6a3d109e',data:'2026-06-25',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a3d10ad',data:'2026-06-25',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER'},
+  {id:'6a3d10c3',data:'2026-06-25',tipo:'debito', valor:978.01,  memo:'Aplicação RDB'},
+  {id:'6a3d122d',data:'2026-06-25',tipo:'credito',valor:2000.00, memo:'Resgate RDB'},
+  {id:'6a3d1240',data:'2026-06-25',tipo:'debito', valor:2000.00, memo:'Transferência enviada pelo Pix - Marcos de Andrade Xavier - BANCO INTER'},
+  {id:'6a3ed0a1',data:'2026-06-26',tipo:'credito',valor:70.00,   memo:'Resgate RDB'},
+  {id:'6a3ed0b5',data:'2026-06-26',tipo:'debito', valor:70.00,   memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a43e5b4',data:'2026-06-30',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a43e5cd',data:'2026-06-30',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.'},
+  {id:'6a46e1c8',data:'2026-07-02',tipo:'credito',valor:2000.00, memo:'Resgate RDB'},
+  {id:'6a46e1d6',data:'2026-07-02',tipo:'credito',valor:500.00,  memo:'Resgate RDB'},
+  {id:'6a46e236',data:'2026-07-02',tipo:'debito', valor:2500.00, memo:'Transferência enviada pelo Pix - Marcos de Andrade Xavier - BANCO INTER'},
+  {id:'6a4817a8',data:'2026-07-03',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a4817be',data:'2026-07-03',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.'},
+  {id:'6a498580',data:'2026-07-04',tipo:'credito',valor:1417.07, memo:'Resgate RDB'},
+  {id:'6a498594',data:'2026-07-04',tipo:'debito', valor:1417.07, memo:'Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO'},
+  {id:'6a4c01e8',data:'2026-07-06',tipo:'credito',valor:1407.07, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a4ce46a',data:'2026-07-07',tipo:'debito', valor:7.07,    memo:'Aplicação RDB'},
+  {id:'6a4ce47a',data:'2026-07-07',tipo:'credito',valor:1500.00, memo:'Resgate RDB'},
+  {id:'6a4ce487',data:'2026-07-07',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a4ce498',data:'2026-07-07',tipo:'debito', valor:1400.00, memo:'Aplicação RDB'},
+  {id:'6a4edaf8',data:'2026-07-08',tipo:'credito',valor:3000.00, memo:'Resgate RDB'},
+  {id:'6a4edb2a',data:'2026-07-08',tipo:'debito', valor:3000.00, memo:'Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS'},
+  {id:'6a4f9575',data:'2026-07-09',tipo:'credito',valor:1500.00, memo:'Resgate RDB'},
+  {id:'6a4f95ab',data:'2026-07-09',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - NU PAGAMENTOS'},
+  {id:'6a52b2f3',data:'2026-07-11',tipo:'credito',valor:1500.00, memo:'Resgate RDB'},
+  {id:'6a52b305',data:'2026-07-11',tipo:'debito', valor:1500.00, memo:'Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.'},
+  {id:'6a550bb2',data:'2026-07-13',tipo:'credito',valor:1150.00, memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a550bed',data:'2026-07-13',tipo:'credito',valor:10350.00,memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.'},
+  {id:'6a551c41',data:'2026-07-13',tipo:'debito', valor:4000.00, memo:'Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.'},
+  {id:'6a551c62',data:'2026-07-13',tipo:'credito',valor:908.01,  memo:'Resgate RDB'},
+  {id:'6a551c6d',data:'2026-07-13',tipo:'credito',valor:58.38,   memo:'Resgate RDB'},
+  {id:'6a551c78',data:'2026-07-13',tipo:'credito',valor:35.23,   memo:'Resgate RDB'},
+  {id:'6a56d6a3',data:'2026-07-14',tipo:'debito', valor:1000.00, memo:'Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO'},
+  {id:'6a5766d4',data:'2026-07-15',tipo:'credito',valor:270.00,  memo:'Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.'},
+  {id:'6a577fd4',data:'2026-07-15',tipo:'debito', valor:270.00,  memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+  {id:'6a595bee',data:'2026-07-16',tipo:'debito', valor:3500.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
+];
+
+// ── SUGESTÃO AUTOMÁTICA ──
+function sugerirCategoria(t) {
+  const m = t.memo.toUpperCase();
+  if (t.tipo === 'credito') {
+    if (m.includes('HOTEL IN BOX') || m.includes('HOTEL INBOX')) return { cat: 'recebimento', tipo: 'receita' };
+    if (m.includes('LUCAS REGHINI')) return { cat: 'outros-rec', tipo: 'receita' };
+    if (m.includes('RDB')) return { cat: 'ignorar', tipo: 'ignorar' };
+    return { cat: '', tipo: 'receita' };
+  }
+  if (m.includes('RDB')) return { cat: 'ignorar', tipo: 'ignorar' };
+  if (m.includes('EDILSON') || m.includes('GEOVANE') || m.includes('MARCOS DE ANDRADE') || m.includes('M A XAVIER') || m.includes('VITOR SIQUEIRA') || m.includes('BERNARDO AGUILERA') || m.includes('JONATAN') || m.includes('ANDRE LUIZ SILVA') || m.includes('MARCOS XA')) return { cat: 'mao-de-obra', tipo: 'despesa' };
+  if (m.includes('PLINIO DE PAULA') || m.includes('PDN HOLDING') || m.includes('MARLI APARECIDA')) return { cat: 'distribuicao', tipo: 'despesa' };
+  return { cat: '', tipo: 'despesa' };
+}
+
+function sugerirObra(t) {
+  const m = t.memo.toUpperCase();
+  if (m.includes('EDILSON') || m.includes('UBER') || m.includes('QUERO PASSAGEM')) return 'obra_novamutum';
+  if (m.includes('GEOVANE') || m.includes('BERNARDO AGUILERA')) return 'obra_sinop';
+  if (m.includes('VITOR SIQUEIRA')) return 'obra_itu';
+  if (m.includes('MARCOS DE ANDRADE') || m.includes('M A XAVIER') || m.includes('MARCOS XA')) return 'obra_rionegro';
+  return '';
+}
+
+// ── STATE ──
+const LS_EST = 'cbx_extrato_estado_v2';
+const LS_LANC = 'cbx_lanc';
+let estado = carregarLocal(LS_EST) || {};
+let lancamentos = carregarLocal(LS_LANC) || [];
+let shaLanc = null;
+let obras = [];
+let filtro = 'pendentes';
+
+function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '' }; }
+function setEstado(id, patch) { estado[id] = { ...getEstado(id), ...patch }; salvarLocal(LS_EST, estado); }
+
+// ── INIT ──
+async function init() {
+  obras = carregarLocal('cbx_obras') || [];
+  lancamentos = carregarLocal(LS_LANC) || [];
+
+  // Auto-sugerir para os ainda pendentes
+  OFX_TRANSACOES.forEach(t => {
+    if (!estado[t.id] || estado[t.id].status === 'pendente') {
+      const s = sugerirCategoria(t);
+      const o = sugerirObra(t);
+      const atual = getEstado(t.id);
+      if (!atual.cat && s.cat) setEstado(t.id, { cat: s.cat, tipo: s.tipo, obra: atual.obra || o });
+      else if (!atual.obra && o) setEstado(t.id, { obra: o });
+    }
+  });
+
+  renderLista();
+  atualizarStats();
+
+  if (!configurado()) { setSyncStatus('vermelho', 'Não configurado'); return; }
+  setSyncStatus('amarelo', 'Carregando...');
+  try {
+    const [rL, rO] = await Promise.all([carregarDados('data/lancamentos.json'), carregarDados('data/obras.json')]);
+    lancamentos = rL.lista; shaLanc = rL.sha; obras = rO.lista;
+    salvarLocal(LS_LANC, lancamentos); salvarLocal('cbx_obras', obras);
+    setSyncStatus('verde', 'Conectado');
+  } catch(e) { setSyncStatus('vermelho', 'Erro ao conectar'); }
+}
+
+// ── FILTRO ──
+function setFiltro(f) {
+  filtro = f;
+  ['pend','all','lanc','ign'].forEach(k => document.getElementById('chip-'+k)?.classList.remove('ativo'));
+  const mapa = { pendentes:'pend', todos:'all', lancados:'lanc', ignorados:'ign' };
+  document.getElementById('chip-'+mapa[f])?.classList.add('ativo');
+  renderLista();
+}
+
+// ── RENDER ──
+function renderLista() {
+  const obraOpts = obras.map(o => `<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+
+  const lista = OFX_TRANSACOES.filter(t => {
+    const s = getEstado(t.id).status;
+    if (filtro === 'pendentes') return s === 'pendente';
+    if (filtro === 'lancados')  return s === 'lancado';
+    if (filtro === 'ignorados') return s === 'ignorado';
+    return true;
+  });
+
+  const cont = document.getElementById('lista-ext');
+  if (!lista.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhum item nesta visualização.</div>`;
+    atualizarStats(); return;
+  }
+
+  cont.innerHTML = lista.map(t => {
+    const est = getEstado(t.id);
+    const lancado  = est.status === 'lancado';
+    const ignorado = est.status === 'ignorado';
+    const cls = `linha-ext ${t.tipo} ${lancado?'lancada':''} ${ignorado?'ignorada':''}`;
+    const pill = lancado  ? `<span class="status-pill pill-ok">✓ Lançado</span>` :
+                 ignorado ? `<span class="status-pill pill-ign">Ignorado</span>` :
+                            `<span class="status-pill pill-pend">Pendente</span>`;
+
+    const catSel = `<select class="form-control sel-cat" id="cat-${t.id}" onchange="onCatChange('${t.id}')" ${lancado||ignorado?'disabled':''}>
+      <option value="">— Categoria —</option>
+      <option value="recebimento"  ${est.cat==='recebimento'?'selected':''}>💰 Recebimento</option>
+      <option value="mao-de-obra"  ${est.cat==='mao-de-obra'?'selected':''}>🔨 Mão de Obra</option>
+      <option value="distribuicao" ${est.cat==='distribuicao'?'selected':''}>💸 Dist. de Lucro</option>
+      <option value="outros"       ${est.cat==='outros'?'selected':''}>📦 Outros</option>
+      <option value="ignorar"      ${est.cat==='ignorar'?'selected':''}>— Ignorar</option>
+    </select>`;
+
+    const obraSel = `<select class="form-control sel-obra" id="obra-${t.id}" onchange="setEstado('${t.id}',{obra:this.value})" ${lancado||ignorado?'disabled':''}>
+      <option value="">— Obra —</option>
+      ${obraOpts.replace(`value="${est.obra}"`, `value="${est.obra}" selected`)}
+    </select>`;
+
+    const descInp = `<input class="form-control inp-desc" id="desc-${t.id}" type="text"
+      value="${esc(est.descricao||'')}" placeholder="Descrição..."
+      onchange="setEstado('${t.id}',{descricao:this.value})"
+      ${lancado||ignorado?'disabled':''}>`;
+
+    const btn = lancado || ignorado ? '' :
+      est.cat === 'ignorar' ?
+        `<button class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="ignorar('${t.id}')">Ignorar</button>` :
+        `<button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="lancar('${t.id}')">✓ Lançar</button>`;
+
+    return `<div class="${cls}" id="row-${t.id}">
+      <div style="font-size:.82rem;">${formatarData(t.data)}</div>
+      <div>${pill}</div>
+      <div class="${t.tipo==='credito'?'val-c':'val-d'}">${t.tipo==='credito'?'+':'-'}${formatarMoeda(t.valor)}</div>
+      <div class="memo-txt" title="${esc(t.memo)}">${esc(t.memo)}</div>
+      <div>${catSel}</div>
+      <div>${obraSel}</div>
+      <div>${descInp}</div>
+      <div>${btn}</div>
+    </div>`;
+  }).join('');
+
+  atualizarStats();
+}
+
+function onCatChange(id) {
+  const cat = document.getElementById('cat-'+id)?.value;
+  const tipo = cat === 'recebimento' ? 'receita' : cat === 'ignorar' ? 'ignorar' : 'despesa';
+  setEstado(id, { cat, tipo });
+  renderLista();
+}
+
+// ── IGNORAR ──
+function ignorar(id) {
+  setEstado(id, { status: 'ignorado' });
+  renderLista();
+  toast('Ignorado.', '');
+}
+
+// ── LANÇAR ──
+async function lancar(id) {
+  const t   = OFX_TRANSACOES.find(x => x.id === id);
+  const est = getEstado(id);
+  if (!est.cat || est.cat === 'ignorar') { toast('Selecione uma categoria.', 'aviso'); return; }
+  if (!est.obra && est.cat !== 'distribuicao' && est.cat !== 'recebimento') {
+    // Allow sem obra only for dist lucro and others
+  }
+
+  const catMap = {
+    'recebimento': { tipo: 'receita',  cat: 'adiantamento' },
+    'mao-de-obra': { tipo: 'despesa',  cat: 'mao-de-obra'  },
+    'distribuicao':{ tipo: 'despesa',  cat: 'outros'        },
+    'outros':      { tipo: 'despesa',  cat: 'outros'        },
+  };
+  const mapeado = catMap[est.cat] || { tipo: 'despesa', cat: 'outros' };
+
+  const lanc = {
+    id: uid(),
+    obraId: est.obra || null,
+    tipo: mapeado.tipo,
+    categoria: mapeado.cat,
+    descricao: est.descricao || t.memo.replace(/Transferência (recebida|enviada) pelo Pix - /i, '').slice(0, 80),
+    data: t.data,
+    valor: t.valor,
+    status: 'pago',
+    beneficiario: '',
+    formaPagamento: 'PIX',
+    dataPagamento: t.data,
+    dataVencimento: null,
+    isReembolso: false,
+    conciliado: true,
+    obs: t.memo,
+    criadoEm: hoje(),
+    ofxId: t.id,
+  };
+
+  lancamentos.push(lanc);
+  salvarLocal(LS_LANC, lancamentos);
+  setEstado(id, { status: 'lancado' });
+  renderLista();
+  toast(`Lançado: ${formatarMoeda(t.valor)}`, 'sucesso');
+
+  if (configurado()) {
+    try {
+      shaLanc = await salvarDados('data/lancamentos.json', lancamentos, shaLanc,
+        `Extrato: ${lanc.descricao.slice(0,50)}`);
+    } catch(e) { toast('Salvo local. Erro sync GitHub: ' + e.message, 'aviso'); }
+  }
+}
+
+// ── STATS ──
+function atualizarStats() {
+  const total   = OFX_TRANSACOES.length;
+  const lancados  = OFX_TRANSACOES.filter(t => getEstado(t.id).status === 'lancado').length;
+  const ignorados = OFX_TRANSACOES.filter(t => getEstado(t.id).status === 'ignorado').length;
+  const pend = total - lancados - ignorados;
+  document.getElementById('st-total').textContent = total;
+  document.getElementById('st-lanc').textContent  = lancados;
+  document.getElementById('st-pend').textContent  = pend;
+  document.getElementById('st-ign').textContent   = ignorados;
+
+  const totalRec = OFX_TRANSACOES
+    .filter(t => t.tipo==='credito' && getEstado(t.id).status==='lancado')
+    .reduce((s,t)=>s+t.valor,0);
+  const totalDes = OFX_TRANSACOES
+    .filter(t => t.tipo==='debito' && getEstado(t.id).status==='lancado')
+    .reduce((s,t)=>s+t.valor,0);
+  document.getElementById('resumo-bar').innerHTML =
+    `<span class="res-item"><span class="res-dot" style="background:var(--verde)"></span>Entradas lançadas: <strong>${formatarMoeda(totalRec)}</strong></span>
+     <span class="res-item"><span class="res-dot" style="background:var(--vermelho)"></span>Saídas lançadas: <strong>${formatarMoeda(totalDes)}</strong></span>`;
+}
+
+init();
+</script>
+</body>
+</html>
