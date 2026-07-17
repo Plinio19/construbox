@@ -1605,5 +1605,27 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a35a251"
+  },
+  {
+    "id": "mrpbosfxw4ipu",
+    "obraId": "obra_itu",
+    "tipo": "receita",
+    "categoria": "adiantamento",
+    "descricao": "RECEBIMENTO INBOX",
+    "data": "2026-06-25",
+    "valor": 4250,
+    "status": "pago",
+    "beneficiario": "HOTEL IN BOX LTDA",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-25",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a3d0e80"
   }
 ]
