@@ -145,5 +145,26 @@
     "obs": "Transferência enviada pelo Pix - M A XAVIER EMPREENDEDOR LTDA - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "69f89caf"
+  },
+  {
+    "id": "mroz342faaj7d",
+    "obraId": "obra_novamutum",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "Uber - Transporte Ferramentas",
+    "data": "2026-05-07",
+    "valor": 58.95,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-07",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - UBER DO BRASIL TECNOLOGIA LTDA",
+    "criadoEm": "2026-07-17",
+    "ofxId": "69fd366d"
   }
 ]
