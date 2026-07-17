@@ -271,5 +271,26 @@
     "obs": "Transferência enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - NU PAGAMENTOS",
     "criadoEm": "2026-07-17",
     "ofxId": "6a0da4c7"
+  },
+  {
+    "id": "mrozapi7xli0b",
+    "obraId": "obra_sinop",
+    "tipo": "receita",
+    "categoria": "adiantamento",
+    "descricao": "RECEBIMENTO HIB",
+    "data": "2026-05-21",
+    "valor": 20000,
+    "status": "pago",
+    "beneficiario": "HOTEL IN BOX LTDA",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-21",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a0f8ff4"
   }
 ]
