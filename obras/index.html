@@ -69,9 +69,10 @@
           </select>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 140px 150px;gap:12px;">
         <div class="form-campo"><label>Cliente *</label><input type="text" id="f-cliente" placeholder="Nome do cliente"/></div>
         <div class="form-campo"><label>Valor do Contrato (R$)</label><input type="number" id="f-contrato" placeholder="0,00" step="0.01"/></div>
+        <div class="form-campo"><label>Orçamento MO (R$)</label><input type="number" id="f-mo" placeholder="0,00" step="0.01" title="Valor total de mão de obra previsto para esta obra"/></div>
       </div>
       <div class="form-campo"><label>Endereço da Obra</label><input type="text" id="f-endereco" placeholder="Rua, número, bairro, cidade"/></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -164,6 +165,7 @@ function abrirModal() {
   ['f-nome','f-cliente','f-endereco','f-obs'].forEach(id => document.getElementById(id).value='');
   document.getElementById('f-status').value   = 'ativa';
   document.getElementById('f-contrato').value = '';
+  document.getElementById('f-mo').value       = '';
   document.getElementById('f-inicio').value   = '';
   document.getElementById('f-previsao').value = '';
   document.getElementById('modal-obra').classList.add('aberto');
@@ -179,6 +181,7 @@ function editar(id) {
   document.getElementById('f-endereco').value  = o.endereco||'';
   document.getElementById('f-status').value    = o.status||'ativa';
   document.getElementById('f-contrato').value  = o.valorContrato||'';
+  document.getElementById('f-mo').value        = o.valorMaoDeObra||'';
   document.getElementById('f-inicio').value    = o.dataInicio||'';
   document.getElementById('f-previsao').value  = o.previsaoConclusao||'';
   document.getElementById('f-obs').value       = o.obs||'';
@@ -197,6 +200,7 @@ async function salvar() {
     endereco:         document.getElementById('f-endereco').value.trim(),
     status:           document.getElementById('f-status').value,
     valorContrato:    parseFloat(document.getElementById('f-contrato').value)||0,
+    valorMaoDeObra:   parseFloat(document.getElementById('f-mo').value)||0,
     dataInicio:       document.getElementById('f-inicio').value||null,
     previsaoConclusao:document.getElementById('f-previsao').value||null,
     obs:              document.getElementById('f-obs').value.trim(),

@@ -83,8 +83,10 @@
               <th>Contratado</th>
               <th>Recebido</th>
               <th>A Receber</th>
+              <th>MO Orçada</th>
               <th>MO Paga</th>
-              <th>Outros Custos</th>
+              <th>MO a Pagar</th>
+              <th>Outros</th>
               <th>Resultado</th>
             </tr>
           </thead>
@@ -175,18 +177,23 @@ function renderDash(obras, lanc) {
   const obraMetrics = obras.map(o => {
     const rec  = receitasPagas.filter(l=>l.obraId===o.id).reduce((s,l)=>s+l.valor,0);
     const aRec = receitasPend.filter(l=>l.obraId===o.id).reduce((s,l)=>s+l.valor,0);
-    const mo   = despesasObra.filter(l=>l.obraId===o.id&&l.categoria==='mao-de-obra').reduce((s,l)=>s+l.valor,0);
-    const out  = despesasObra.filter(l=>l.obraId===o.id&&l.categoria!=='mao-de-obra').reduce((s,l)=>s+l.valor,0);
-    const res  = rec - mo - out;
-    const cont = o.valorContrato || 0;
+    const mo      = despesasObra.filter(l=>l.obraId===o.id&&l.categoria==='mao-de-obra').reduce((s,l)=>s+l.valor,0);
+    const out     = despesasObra.filter(l=>l.obraId===o.id&&l.categoria!=='mao-de-obra').reduce((s,l)=>s+l.valor,0);
+    const res     = rec - mo - out;
+    const cont    = o.valorContrato    || 0;
+    const moOrcada= o.valorMaoDeObra   || 0;
+    const moSaldo = moOrcada > 0 ? Math.max(0, moOrcada - mo) : 0;
     const aRecContr = cont > 0 ? Math.max(0, cont - rec) : aRec;
-    return { obra: o, rec, aRec: aRecContr, mo, out, res, cont };
+    return { obra: o, rec, aRec: aRecContr, mo, out, res, cont, moOrcada, moSaldo };
   });
 
   document.getElementById('obras-grid').innerHTML = obraMetrics.map(m => {
-    const { obra: o, rec, aRec, mo, out, res, cont } = m;
-    const pct = cont > 0 ? Math.min(100, (rec/cont)*100) : 0;
+    const { obra: o, rec, aRec, mo, out, res, cont, moOrcada, moSaldo } = m;
+    const pct   = cont     > 0 ? Math.min(100, (rec/cont)*100)     : 0;
+    const moPct = moOrcada > 0 ? Math.min(100, (mo/moOrcada)*100)  : 0;
     const resClass = res > 0 ? 'resultado-positivo' : res < 0 ? 'resultado-negativo' : 'resultado-zero';
+    const moSaldoColor = moSaldo > 0 ? 'var(--amarelo)' : 'inherit';
+    const moBarColor   = mo > moOrcada ? 'var(--vermelho)' : 'var(--brand)';
     return `<div class="obra-card">
       <div class="obra-card-header">
         <div>
@@ -212,10 +219,28 @@ function renderDash(obras, lanc) {
           <span class="obra-row-label">⏳ A Receber</span>
           <span class="obra-row-val">${formatarMoeda(aRec)}</span>
         </div>
+        ${moOrcada > 0 ? `
+        <div style="padding:4px 0 2px;">
+          <div class="obra-row" style="border-bottom:none;padding-bottom:1px;">
+            <span class="obra-row-label">🔨 MO — Orçamento</span>
+            <span class="obra-row-val">${formatarMoeda(moOrcada)}</span>
+          </div>
+          <div class="obra-row" style="padding-left:10px;border-bottom:none;padding-top:1px;padding-bottom:1px;">
+            <span class="obra-row-label" style="font-size:.78rem;">✓ Pago</span>
+            <span class="obra-row-val" style="color:var(--vermelho);font-size:.82rem;">${formatarMoeda(mo)}</span>
+          </div>
+          <div class="progress-bar" style="height:4px;margin:1px 0 3px;">
+            <div class="progress-fill" style="width:${moPct}%;background:${moBarColor};"></div>
+          </div>
+          <div class="obra-row" style="padding-left:10px;padding-top:1px;">
+            <span class="obra-row-label" style="font-size:.78rem;">⏳ A Pagar</span>
+            <span class="obra-row-val" style="color:${moSaldoColor};font-size:.82rem;">${formatarMoeda(moSaldo)}</span>
+          </div>
+        </div>` : `
         <div class="obra-row">
           <span class="obra-row-label">🔨 Mão de Obra Paga</span>
           <span class="obra-row-val" style="color:var(--vermelho);">${formatarMoeda(mo)}</span>
-        </div>
+        </div>`}
         <div class="obra-row">
           <span class="obra-row-label">📦 Outros Custos</span>
           <span class="obra-row-val" style="color:var(--vermelho);">${formatarMoeda(out)}</span>
@@ -228,24 +253,27 @@ function renderDash(obras, lanc) {
   }).join('');
 
   // ── TABELA CONSOLIDADO ──
-  const totRec  = obraMetrics.reduce((s,m)=>s+m.rec,0);
-  const totAR   = obraMetrics.reduce((s,m)=>s+m.aRec,0);
-  const totMO   = obraMetrics.reduce((s,m)=>s+m.mo,0);
-  const totOut  = obraMetrics.reduce((s,m)=>s+m.out,0);
-  const totRes  = obraMetrics.reduce((s,m)=>s+m.res,0);
-  const totCont = obraMetrics.reduce((s,m)=>s+m.cont,0);
+  const totRec    = obraMetrics.reduce((s,m)=>s+m.rec,0);
+  const totAR     = obraMetrics.reduce((s,m)=>s+m.aRec,0);
+  const totMO     = obraMetrics.reduce((s,m)=>s+m.mo,0);
+  const totMOOrc  = obraMetrics.reduce((s,m)=>s+m.moOrcada,0);
+  const totMOSald = obraMetrics.reduce((s,m)=>s+m.moSaldo,0);
+  const totOut    = obraMetrics.reduce((s,m)=>s+m.out,0);
+  const totRes    = obraMetrics.reduce((s,m)=>s+m.res,0);
+  const totCont   = obraMetrics.reduce((s,m)=>s+m.cont,0);
 
-  const fV = (v, cor) => `<span style="color:${cor||'inherit'};font-weight:700;">${formatarMoeda(v)}</span>`;
   const resColor = (v) => v > 0 ? 'var(--verde)' : v < 0 ? 'var(--vermelho)' : 'inherit';
 
   document.getElementById('tbody-consolidado').innerHTML = obraMetrics.map(m => {
-    const { obra: o, rec, aRec, mo, out, res, cont } = m;
+    const { obra: o, rec, aRec, mo, out, res, cont, moOrcada, moSaldo } = m;
     return `<tr>
       <td>${esc(o.nome)}</td>
       <td>${cont>0 ? formatarMoeda(cont) : '<span style="color:var(--texto-leve)">—</span>'}</td>
       <td style="color:var(--verde);">${formatarMoeda(rec)}</td>
       <td>${formatarMoeda(aRec)}</td>
+      <td>${moOrcada>0 ? formatarMoeda(moOrcada) : '<span style="color:var(--texto-leve)">—</span>'}</td>
       <td style="color:var(--vermelho);">${formatarMoeda(mo)}</td>
+      <td style="color:${moSaldo>0?'var(--amarelo)':'inherit'};">${moOrcada>0 ? formatarMoeda(moSaldo) : '<span style="color:var(--texto-leve)">—</span>'}</td>
       <td style="color:var(--vermelho);">${formatarMoeda(out)}</td>
       <td style="color:${resColor(res)};font-weight:800;">${formatarMoeda(res)}</td>
     </tr>`;
@@ -254,7 +282,9 @@ function renderDash(obras, lanc) {
     <td>${totCont>0?formatarMoeda(totCont):'—'}</td>
     <td style="color:var(--verde);">${formatarMoeda(totRec)}</td>
     <td>${formatarMoeda(totAR)}</td>
+    <td>${totMOOrc>0?formatarMoeda(totMOOrc):'—'}</td>
     <td style="color:var(--vermelho);">${formatarMoeda(totMO)}</td>
+    <td style="color:${totMOSald>0?'var(--amarelo)':'inherit'};">${totMOOrc>0?formatarMoeda(totMOSald):'—'}</td>
     <td style="color:var(--vermelho);">${formatarMoeda(totOut)}</td>
     <td style="color:${resColor(totRes)};">${formatarMoeda(totRes)}</td>
   </tr>`;
