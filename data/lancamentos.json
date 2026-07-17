@@ -187,5 +187,26 @@
     "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - BANCO INTER",
     "criadoEm": "2026-07-17",
     "ofxId": "6a01d137"
+  },
+  {
+    "id": "mroz704pp2w3s",
+    "obraId": "obra_sinop",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "CREDITOS DE I.A",
+    "data": "2026-05-12",
+    "valor": 15,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-12",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - ANTONIO CARLOS CAVALCANTI DOS SANTOS - PAGSEGURO",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a035ddd"
   }
 ]
