@@ -1671,5 +1671,27 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a4c01e8"
+  },
+  {
+    "id": "mrpbpk1guuq27",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "COMISSÃO",
+    "data": "2026-07-09",
+    "valor": 1500,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-09",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - NU PAGAMENTOS",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a4f95ab"
   }
 ]
