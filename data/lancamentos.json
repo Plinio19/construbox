@@ -292,5 +292,26 @@
     "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a0f8ff4"
+  },
+  {
+    "id": "mrozbw4ijhekn",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA PLINIO NETO",
+    "data": "2026-05-29",
+    "valor": 3000,
+    "status": "pago",
+    "beneficiario": "Plínio de Paula",
+    "clienteId": null,
+    "socioId": "soc_plinio",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-29",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - NOVOCEL VGP LTDA - CLOUDWALK IP",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a19f791"
   }
 ]
