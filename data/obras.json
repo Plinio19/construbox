@@ -5,10 +5,10 @@
     "cliente": "HOTEL INBOX",
     "endereco": "Nova Mutum - MT",
     "status": "ativa",
-    "valorContrato": 0,
-    "dataInicio": null,
+    "valorContrato": 86000,
+    "dataInicio": "2026-05-01",
     "previsaoConclusao": null,
-    "obs": "",
+    "obs": "MO: Edilson Domingos (contrato R$63.000). Pedreiro: Edinilson.",
     "criadoEm": "2026-07-17"
   },
   {
@@ -17,10 +17,10 @@
     "cliente": "HOTEL INBOX",
     "endereco": "Sinop - MT",
     "status": "ativa",
-    "valorContrato": 0,
-    "dataInicio": null,
+    "valorContrato": 85000,
+    "dataInicio": "2026-05-21",
     "previsaoConclusao": null,
-    "obs": "",
+    "obs": "MO: Geovane (contrato R$60.000). Ajudante: Bernardo.",
     "criadoEm": "2026-07-17"
   },
   {
@@ -29,10 +29,10 @@
     "cliente": "HOTEL INBOX",
     "endereco": "Itu - SP",
     "status": "ativa",
-    "valorContrato": 0,
-    "dataInicio": null,
+    "valorContrato": 42500,
+    "dataInicio": "2026-06-13",
     "previsaoConclusao": null,
-    "obs": "",
+    "obs": "5 Boxes. MO: Vitor Nonato.",
     "criadoEm": "2026-07-17"
   },
   {
@@ -41,10 +41,10 @@
     "cliente": "HOTEL INBOX",
     "endereco": "Rio Negro - PR",
     "status": "ativa",
-    "valorContrato": 0,
-    "dataInicio": null,
+    "valorContrato": 45000,
+    "dataInicio": "2026-06-03",
     "previsaoConclusao": null,
-    "obs": "",
+    "obs": "5 Boxes × R$9.000. MO: Marcos Xavier. Ajudantes: Miqueias, Marcão.",
     "criadoEm": "2026-07-17"
   }
 ]
