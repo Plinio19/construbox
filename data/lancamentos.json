@@ -103,5 +103,26 @@
     "obs": "Transferência enviada pelo Pix - JULIA SILVA VILA NOVA - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "69f62c20"
+  },
+  {
+    "id": "mroz15vkka8q1",
+    "obraId": "obra_novamutum",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "Passagem Onibus - Edinilson",
+    "data": "2026-05-03",
+    "valor": 695.53,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-03",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - MERCADO PAGO",
+    "criadoEm": "2026-07-17",
+    "ofxId": "69f7705d"
   }
 ]
