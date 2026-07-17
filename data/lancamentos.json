@@ -334,5 +334,26 @@
     "obs": "Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a1ddbb0"
+  },
+  {
+    "id": "mrozddgwabl1h",
+    "obraId": "obra_rionegro",
+    "tipo": "receita",
+    "categoria": "adiantamento",
+    "descricao": "RECEBIMENTO HIB",
+    "data": "2026-06-03",
+    "valor": 22500,
+    "status": "pago",
+    "beneficiario": "HOTEL IN BOX LTDA",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-03",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a202a02"
   }
 ]
