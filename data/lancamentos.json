@@ -1407,5 +1407,27 @@
     "obs": "Transferência enviada pelo Pix - Matheus Alex Sandro Carvalho de Souza - MERCADO PAGO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2cdcaf"
+  },
+  {
+    "id": "mrpbjut1mbrjv",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "GASTOS ITU",
+    "data": "2026-06-13",
+    "valor": 9.99,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-13",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - CONVENIENCIA 9 DE JULHO - ITAÚ",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2ce516"
   }
 ]
