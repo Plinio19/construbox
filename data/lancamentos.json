@@ -1253,5 +1253,27 @@
     "obs": "Transferência enviada pelo Pix - PANIFICADORA DELICIAS DA VOVO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a2c0da8"
+  },
+  {
+    "id": "mrpbhksdqb9l9",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "ALMOÇO ITU",
+    "data": "2026-06-12",
+    "valor": 69,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-12",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2c4f46"
   }
 ]
