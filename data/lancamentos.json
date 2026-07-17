@@ -61,5 +61,26 @@
     "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "69f517a3"
+  },
+  {
+    "id": "mroywk7kodcj0",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA PLINIO NETO",
+    "data": "2026-05-01",
+    "valor": 5000,
+    "status": "pago",
+    "beneficiario": "Plínio de Paula",
+    "clienteId": null,
+    "socioId": "soc_plinio",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-01",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - BANCO INTER",
+    "criadoEm": "2026-07-17",
+    "ofxId": "69f51966"
   }
 ]
