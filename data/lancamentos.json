@@ -2067,5 +2067,27 @@
     "obs": "Transferência enviada pelo Pix - RAIZEN SOLUCOES DE PAGAMENTOS S A - BRADESCO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a355fd4"
+  },
+  {
+    "id": "mrpc21vpjlwci",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "VITOR SIQUEIRA NONATO - SICREDI",
+    "data": "2026-06-25",
+    "valor": 271.99,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-25",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - VITOR SIQUEIRA NONATO - SICREDI",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a3d0f4b"
   }
 ]
