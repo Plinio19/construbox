@@ -29,7 +29,7 @@
     "cliente": "HOTEL INBOX",
     "endereco": "Itu - SP",
     "status": "ativa",
-    "valorContrato": 0,
+    "valorContrato": 42500,
     "dataInicio": null,
     "previsaoConclusao": null,
     "obs": "",
