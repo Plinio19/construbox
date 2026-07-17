@@ -14,7 +14,10 @@
       transition: background .15s;
     }
     .linha-ext:hover { background: var(--fundo2); }
-    .linha-ext.lancada { opacity: .45; background: var(--fundo2); }
+    .linha-ext.lancada { background: var(--fundo2); }
+    .linha-ext.lancada .memo-txt,
+    .linha-ext.lancada .val-c,
+    .linha-ext.lancada .val-d { opacity: .5; }
     .linha-ext.ignorada { opacity: .3; }
     .linha-ext.credito { border-left: 3px solid var(--verde); }
     .linha-ext.debito  { border-left: 3px solid var(--vermelho); }
@@ -550,7 +553,7 @@ async function lancar(id) {
   salvarLocal(LS_LANC, lancamentos);
   setEstado(id, { status: 'lancado' });
   renderLista();
-  toast(`Lançado: ${formatarMoeda(t.valor)}`, 'sucesso');
+  toast(`Lançado: ${formatarMoeda(t.valor)} — vá em "Lançados" para desfazer`, 'sucesso');
 
   if (configurado()) {
     try {
