@@ -49,6 +49,19 @@
       </div>
     </div>
 
+    <!-- ── PRESTADORES / FUNCIONÁRIOS ── -->
+    <div style="grid-column:1/-1;">
+      <div class="card">
+        <div class="card-header">
+          <h2>🔨 Prestadores & Funcionários</h2>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalPrestador()">+ Novo Prestador</button>
+        </div>
+        <div class="card-body" id="lista-prestadores">
+          <div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -69,6 +82,29 @@
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="fecharModal('modal-socio')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarSocio()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRESTADOR -->
+<div class="overlay" id="modal-prestador">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h2 id="mprest-titulo">Novo Prestador</h2>
+      <button class="btn-fechar" onclick="fecharModal('modal-prestador')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mprest-id"/>
+      <div class="form-campo"><label>Nome *</label><input id="mprest-nome" type="text" placeholder="Nome completo"/></div>
+      <div class="form-campo"><label>CPF / CNPJ</label><input id="mprest-doc" type="text" placeholder="000.000.000-00"/></div>
+      <div class="form-campo"><label>Função / Serviço</label><input id="mprest-funcao" type="text" placeholder="Ex: Pedreiro, Eletricista, Pintor..."/></div>
+      <div class="form-campo"><label>Telefone</label><input id="mprest-tel" type="text" placeholder="(00) 00000-0000"/></div>
+      <div class="form-campo"><label>Chave PIX</label><input id="mprest-pix" type="text" placeholder="CPF, e-mail, telefone ou chave aleatória"/></div>
+      <div class="form-campo"><label>Observações</label><textarea id="mprest-obs" rows="2"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModal('modal-prestador')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarPrestador()">✓ Salvar</button>
     </div>
   </div>
 </div>
@@ -108,26 +144,31 @@
 <script>
 document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('cadastros');
 
-let socios   = []; let shaS = null;
-let clientes = []; let shaC = null;
+let socios      = []; let shaS = null;
+let clientes    = []; let shaC = null;
+let prestadores = []; let shaP = null;
 
 async function init() {
-  socios   = carregarLocal('cbx_socios')  || [];
-  clientes = carregarLocal('cbx_clientes')|| [];
-  renderSocios(); renderClientes();
+  socios      = carregarLocal('cbx_socios')      || [];
+  clientes    = carregarLocal('cbx_clientes')    || [];
+  prestadores = carregarLocal('cbx_prestadores') || [];
+  renderSocios(); renderClientes(); renderPrestadores();
 
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
   try {
-    const [rS, rC] = await Promise.all([
+    const [rS, rC, rP] = await Promise.all([
       carregarDados('data/socios.json'),
       carregarDados('data/clientes.json'),
+      carregarDados('data/prestadores.json'),
     ]);
-    socios   = rS.lista; shaS = rS.sha;
-    clientes = rC.lista; shaC = rC.sha;
-    salvarLocal('cbx_socios',  socios);
-    salvarLocal('cbx_clientes', clientes);
-    renderSocios(); renderClientes();
+    socios      = rS.lista; shaS = rS.sha;
+    clientes    = rC.lista; shaC = rC.sha;
+    prestadores = rP.lista; shaP = rP.sha;
+    salvarLocal('cbx_socios',      socios);
+    salvarLocal('cbx_clientes',    clientes);
+    salvarLocal('cbx_prestadores', prestadores);
+    renderSocios(); renderClientes(); renderPrestadores();
     setSyncStatus('verde','Conectado');
   } catch(e) { setSyncStatus('vermelho','Erro'); }
 }
@@ -256,6 +297,71 @@ async function excluirCliente(id) {
   clientes = clientes.filter(x=>x.id!==id);
   salvarLocal('cbx_clientes', clientes); renderClientes();
   if (configurado()) try { shaC = await salvarDados('data/clientes.json', clientes, shaC, 'Excluir cliente'); } catch(e) {}
+}
+
+// ── RENDER PRESTADORES ──
+function renderPrestadores() {
+  const cont = document.getElementById('lista-prestadores');
+  if (!prestadores.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:24px;color:var(--texto-leve);">Nenhum prestador cadastrado.</div>`;
+    return;
+  }
+  cont.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0;">` +
+    prestadores.map(p => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 8px;border-bottom:1px solid var(--cinza);">
+        <div>
+          <div style="font-weight:700;">${esc(p.nome)}</div>
+          <div style="font-size:.78rem;color:var(--texto-leve);">
+            ${p.funcao ? `${esc(p.funcao)}` : ''}
+            ${p.doc ? ` · ${esc(p.doc)}` : ''}
+            ${p.pix ? ` · PIX: ${esc(p.pix)}` : ''}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="btn btn-outline btn-sm" onclick='editarPrestador("${p.id}")'>✏️</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirPrestador("${p.id}")'>🗑</button>
+        </div>
+      </div>`).join('') + `</div>`;
+}
+
+function abrirModalPrestador(p) {
+  document.getElementById('mprest-titulo').textContent = p ? 'Editar Prestador' : 'Novo Prestador';
+  document.getElementById('mprest-id').value     = p?.id     || '';
+  document.getElementById('mprest-nome').value   = p?.nome   || '';
+  document.getElementById('mprest-doc').value    = p?.doc    || '';
+  document.getElementById('mprest-funcao').value = p?.funcao || '';
+  document.getElementById('mprest-tel').value    = p?.telefone || '';
+  document.getElementById('mprest-pix').value    = p?.pix    || '';
+  document.getElementById('mprest-obs').value    = p?.obs    || '';
+  document.getElementById('modal-prestador').classList.add('aberto');
+}
+
+function editarPrestador(id) { abrirModalPrestador(prestadores.find(x=>x.id===id)); }
+
+async function salvarPrestador() {
+  const nome = document.getElementById('mprest-nome').value.trim();
+  if (!nome) { toast('Informe o nome.','aviso'); return; }
+  const id = document.getElementById('mprest-id').value || uid();
+  const obj = {
+    id, nome,
+    doc:      document.getElementById('mprest-doc').value.trim(),
+    funcao:   document.getElementById('mprest-funcao').value.trim(),
+    telefone: document.getElementById('mprest-tel').value.trim(),
+    pix:      document.getElementById('mprest-pix').value.trim(),
+    obs:      document.getElementById('mprest-obs').value.trim(),
+    criadoEm: hoje(),
+  };
+  prestadores = prestadores.filter(x=>x.id!==id); prestadores.push(obj);
+  salvarLocal('cbx_prestadores', prestadores); renderPrestadores(); fecharModal('modal-prestador');
+  toast('Prestador salvo!','sucesso');
+  if (configurado()) try { shaP = await salvarDados('data/prestadores.json', prestadores, shaP, `Prestador: ${nome}`); } catch(e) { toast('Erro sync','aviso'); }
+}
+
+async function excluirPrestador(id) {
+  if (!confirm('Excluir prestador?')) return;
+  prestadores = prestadores.filter(x=>x.id!==id);
+  salvarLocal('cbx_prestadores', prestadores); renderPrestadores();
+  if (configurado()) try { shaP = await salvarDados('data/prestadores.json', prestadores, shaP, 'Excluir prestador'); } catch(e) {}
 }
 
 document.querySelectorAll('.overlay').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('aberto'); }));

@@ -355,16 +355,18 @@ let shaLanc = null;
 let obras = [];
 let socios = [];
 let clientes = [];
+let prestadores = [];
 let filtro = 'pendentes';
 
-function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '', beneficiario: '', clienteId: '', socioId: '' }; }
+function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '', beneficiario: '', clienteId: '', socioId: '', prestadorId: '' }; }
 function setEstado(id, patch) { estado[id] = { ...getEstado(id), ...patch }; salvarLocal(LS_EST, estado); }
 
 // ── INIT ──
 async function init() {
-  obras    = carregarLocal('cbx_obras')    || [];
-  socios   = carregarLocal('cbx_socios')   || [];
-  clientes = carregarLocal('cbx_clientes') || [];
+  obras       = carregarLocal('cbx_obras')       || [];
+  socios      = carregarLocal('cbx_socios')      || [];
+  clientes    = carregarLocal('cbx_clientes')    || [];
+  prestadores = carregarLocal('cbx_prestadores') || [];
   lancamentos = carregarLocal(LS_LANC) || [];
 
   // Auto-sugerir para os ainda pendentes
@@ -389,20 +391,23 @@ async function init() {
   if (!configurado()) { setSyncStatus('vermelho', 'Não configurado'); return; }
   setSyncStatus('amarelo', 'Carregando...');
   try {
-    const [rL, rO, rS, rC] = await Promise.all([
+    const [rL, rO, rS, rC, rP] = await Promise.all([
       carregarDados('data/lancamentos.json'),
       carregarDados('data/obras.json'),
       carregarDados('data/socios.json'),
       carregarDados('data/clientes.json'),
+      carregarDados('data/prestadores.json'),
     ]);
     lancamentos = rL.lista; shaLanc = rL.sha;
-    obras    = rO.lista;
-    socios   = rS.lista;
-    clientes = rC.lista;
-    salvarLocal(LS_LANC,         lancamentos);
-    salvarLocal('cbx_obras',     obras);
-    salvarLocal('cbx_socios',    socios);
-    salvarLocal('cbx_clientes',  clientes);
+    obras       = rO.lista;
+    socios      = rS.lista;
+    clientes    = rC.lista;
+    prestadores = rP.lista;
+    salvarLocal(LS_LANC,            lancamentos);
+    salvarLocal('cbx_obras',        obras);
+    salvarLocal('cbx_socios',       socios);
+    salvarLocal('cbx_clientes',     clientes);
+    salvarLocal('cbx_prestadores',  prestadores);
 
     // Re-aplicar sugestão de cliente após carregar
     OFX_TRANSACOES.forEach(t => {
@@ -490,9 +495,12 @@ function renderLista() {
         <option value="">— Sócio —</option>${socOpts}
       </select>`;
     } else if (est.cat === 'mao-de-obra') {
-      extraSel = `<input class="form-control sel-obra" id="benef-${t.id}" type="text"
-        value="${esc(est.beneficiario||'')}" placeholder="Quem recebeu..."
-        onchange="setEstado('${t.id}',{beneficiario:this.value})" ${dis}>`;
+      const prestOpts = prestadores.map(p =>
+        `<option value="${p.id}" ${est.prestadorId===p.id?'selected':''}>${esc(p.nome)}${p.funcao?' — '+p.funcao:''}</option>`
+      ).join('');
+      extraSel = `<select class="form-control sel-obra" id="prest-${t.id}" onchange="setEstado('${t.id}',{prestadorId:this.value})" ${dis}>
+        <option value="">— Quem recebeu —</option>${prestOpts}
+      </select>`;
     }
 
     const descInp = `<input class="form-control inp-desc" id="desc-${t.id}" type="text"
@@ -559,7 +567,7 @@ async function lancar(id) {
   };
   const mapeado = catMap[est.cat] || { tipo: 'despesa', cat: 'outros' };
 
-  // Resolver beneficiário: sócio, cliente ou texto livre
+  // Resolver beneficiário: sócio, cliente, prestador
   let beneficiario = est.beneficiario || '';
   if (est.cat === 'distribuicao' && est.socioId) {
     const s = socios.find(x => x.id === est.socioId);
@@ -567,6 +575,9 @@ async function lancar(id) {
   } else if (est.cat === 'recebimento' && est.clienteId) {
     const c = clientes.find(x => x.id === est.clienteId);
     if (c) beneficiario = c.nome;
+  } else if (est.cat === 'mao-de-obra' && est.prestadorId) {
+    const p = prestadores.find(x => x.id === est.prestadorId);
+    if (p) beneficiario = p.nome;
   }
 
   const lanc = {
@@ -579,12 +590,13 @@ async function lancar(id) {
     valor: t.valor,
     status: 'pago',
     beneficiario,
-    clienteId: est.clienteId || null,
-    socioId:   est.socioId   || null,
+    clienteId:    est.clienteId    || null,
+    socioId:      est.socioId      || null,
+    prestadorId:  est.prestadorId  || null,
     formaPagamento: 'PIX',
     dataPagamento: t.data,
     dataVencimento: null,
-    isReembolso: false,
+    isReembolso: est.cat === 'reembolso',
     conciliado: true,
     obs: t.memo,
     criadoEm: hoje(),
@@ -638,7 +650,7 @@ function abrirSplit(ofxId) {
   if (!t) return;
   splitCtx = { id: ofxId, transacao: t };
   splitLinhas = [
-    { valor: t.valor, cat: '', obra: '', descricao: '', clienteId: '', socioId: '', beneficiario: '' }
+    { valor: t.valor, cat: '', obra: '', descricao: '', clienteId: '', socioId: '', prestadorId: '', beneficiario: '' }
   ];
   renderSplitModal();
   document.getElementById('modal-split').classList.add('aberto');
@@ -650,7 +662,7 @@ function fecharModalSplit() {
 }
 
 function addSplitLinha() {
-  splitLinhas.push({ valor: 0, cat: '', obra: '', descricao: '', clienteId: '', socioId: '', beneficiario: '' });
+  splitLinhas.push({ valor: 0, cat: '', obra: '', descricao: '', clienteId: '', socioId: '', prestadorId: '', beneficiario: '' });
   renderSplitModal();
 }
 
@@ -712,8 +724,10 @@ function renderSplitModal() {
         ${socios.map(s => `<option value="${s.id}" ${l.socioId===s.id?'selected':''}>${esc(s.nome)}</option>`).join('')}
       </select>`;
     } else if (l.cat === 'mao-de-obra') {
-      extraCell = `<input class="form-control" type="text" value="${esc(l.beneficiario||'')}"
-        placeholder="Quem recebeu..." onchange="setSplitLinha(${i},'beneficiario',this.value)">`;
+      extraCell = `<select class="form-control" onchange="setSplitLinha(${i},'prestadorId',this.value)">
+        <option value="">— Quem recebeu —</option>
+        ${prestadores.map(p => `<option value="${p.id}" ${l.prestadorId===p.id?'selected':''}>${esc(p.nome)}${p.funcao?' — '+p.funcao:''}</option>`).join('')}
+      </select>`;
     }
 
     return `<div class="split-row">
@@ -763,12 +777,14 @@ async function confirmarSplit() {
       const s = socios.find(x => x.id === l.socioId); if (s) beneficiario = s.nome;
     } else if (l.cat === 'recebimento' && l.clienteId) {
       const c = clientes.find(x => x.id === l.clienteId); if (c) beneficiario = c.nome;
+    } else if (l.cat === 'mao-de-obra' && l.prestadorId) {
+      const p = prestadores.find(x => x.id === l.prestadorId); if (p) beneficiario = p.nome;
     }
     lancamentos.push({
       id: uid(), obraId: l.obra || null, tipo: mapeado.tipo, categoria: mapeado.cat,
       descricao: l.descricao || t.memo.replace(/Transferência (recebida|enviada) pelo Pix - /i,'').slice(0,80),
       data: t.data, valor: parseFloat(l.valor), status: 'pago',
-      beneficiario, clienteId: l.clienteId || null, socioId: l.socioId || null,
+      beneficiario, clienteId: l.clienteId || null, socioId: l.socioId || null, prestadorId: l.prestadorId || null,
       formaPagamento: 'PIX', dataPagamento: t.data, dataVencimento: null,
       isReembolso: l.cat === 'reembolso', conciliado: true,
       obs: `[Divisão] ${t.memo}`, criadoEm: hoje(), ofxId: t.id,
