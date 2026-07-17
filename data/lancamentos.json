@@ -2089,5 +2089,27 @@
     "obs": "Transferência enviada pelo Pix - VITOR SIQUEIRA NONATO - SICREDI",
     "criadoEm": "2026-07-17",
     "ofxId": "6a3d0f4b"
+  },
+  {
+    "id": "mrpc4k6curmjf",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA DE PAULA",
+    "data": "2026-06-25",
+    "valor": 1500,
+    "status": "pago",
+    "beneficiario": "De Paula",
+    "clienteId": null,
+    "socioId": "mroyg6vqy8jfx",
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-25",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a3d109e"
   }
 ]
