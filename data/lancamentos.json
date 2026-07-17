@@ -1055,5 +1055,27 @@
     "obs": "Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a202c47"
+  },
+  {
+    "id": "mrpbd6bpczpr7",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA DE PAULA",
+    "data": "2026-06-03",
+    "valor": 1000,
+    "status": "pago",
+    "beneficiario": "De Paula",
+    "clienteId": null,
+    "socioId": "mroyg6vqy8jfx",
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-03",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a202d08"
   }
 ]
