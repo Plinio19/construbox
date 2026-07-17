@@ -769,5 +769,27 @@
     "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a035528"
+  },
+  {
+    "id": "mrpat6stojs7u",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "HOTEL IN BOX LTDA - STONE IP S.A.",
+    "data": "2026-05-18",
+    "valor": 398,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-18",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a0b821d"
   }
 ]
