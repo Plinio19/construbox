@@ -19,6 +19,7 @@
     "endereco": "Sinop - MT",
     "status": "ativa",
     "valorContrato": 85000,
+    "valorMaoDeObra": 60000,
     "dataInicio": null,
     "previsaoConclusao": null,
     "obs": "",
