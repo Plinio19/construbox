@@ -1693,5 +1693,27 @@
     "obs": "Transferência enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - NU PAGAMENTOS",
     "criadoEm": "2026-07-17",
     "ofxId": "6a4f95ab"
+  },
+  {
+    "id": "mrpbqk0e34eb5",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA PLINIO NETO",
+    "data": "2026-06-11",
+    "valor": 150,
+    "status": "pago",
+    "beneficiario": "Plínio de Paula",
+    "clienteId": null,
+    "socioId": "soc_plinio",
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-11",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Julia Silva Vila Nova - NU PAGAMENTOS",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a2a9fa8"
   }
 ]
