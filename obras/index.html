@@ -143,11 +143,12 @@ function renderLista() {
   const stMap = { ativa:'verde', concluida:'azul', paralisada:'amarelo' };
   const stLbl = { ativa:'Ativa', concluida:'Concluída', paralisada:'Paralisada' };
   cont.innerHTML = `<table class="tabela" style="width:100%;">
-    <thead><tr><th>Nome da Obra</th><th>Cliente</th><th>Valor Contrato</th><th>Início</th><th>Previsão</th><th>Status</th><th>Ações</th></tr></thead>
+    <thead><tr><th>Nome da Obra</th><th>Cliente</th><th>Valor Contrato</th><th>Orçamento MO</th><th>Início</th><th>Previsão</th><th>Status</th><th>Ações</th></tr></thead>
     <tbody>${f.map(o => `<tr>
       <td><strong>${hl(o.nome,busca)}</strong>${o.endereco?`<div style="font-size:0.73rem;color:var(--texto-leve);">${esc(o.endereco)}</div>`:''}</td>
       <td>${hl(o.cliente||'—',busca)}</td>
       <td>${o.valorContrato?formatarMoeda(o.valorContrato):'—'}</td>
+      <td>${o.valorMaoDeObra?formatarMoeda(o.valorMaoDeObra):'—'}</td>
       <td>${o.dataInicio?formatarData(o.dataInicio):'—'}</td>
       <td>${o.previsaoConclusao?formatarData(o.previsaoConclusao):'—'}</td>
       <td><span class="badge ${stMap[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span></td>
