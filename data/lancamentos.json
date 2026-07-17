@@ -208,5 +208,26 @@
     "obs": "Transferência enviada pelo Pix - ANTONIO CARLOS CAVALCANTI DOS SANTOS - PAGSEGURO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a035ddd"
+  },
+  {
+    "id": "mroz95bw016pu",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "Marli Aparecida dos Santos - BCO C6 S.A.",
+    "data": "2026-05-20",
+    "valor": 5500,
+    "status": "pago",
+    "beneficiario": "De Paula",
+    "clienteId": null,
+    "socioId": "mroyg6vqy8jfx",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a0da02e"
   }
 ]
