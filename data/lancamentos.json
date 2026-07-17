@@ -703,5 +703,27 @@
     "obs": "Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS",
     "criadoEm": "2026-07-17",
     "ofxId": "6a4ce487"
+  },
+  {
+    "id": "mrp65iztkf3je",
+    "obraId": "obra_novamutum",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "MAO DE OBRA",
+    "data": "2026-07-08",
+    "valor": 3000,
+    "status": "pago",
+    "beneficiario": "Edilson Dominfos dos Santos",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrp5y98vqx64u",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-08",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Edilson Domingos dos Santos - NU PAGAMENTOS",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a4edb2a"
   }
 ]
