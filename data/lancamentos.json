@@ -1649,5 +1649,27 @@
     "obs": "Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a498594"
+  },
+  {
+    "id": "mrpbpa45it8wi",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "data": "2026-07-06",
+    "valor": 1407.07,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-06",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a4c01e8"
   }
 ]
