@@ -2243,5 +2243,27 @@
     "obs": "Transferência enviada pelo Pix - Jonatan Conceicao da Silva - MERCADO PAGO",
     "criadoEm": "2026-07-17",
     "ofxId": "6a56d6a3"
+  },
+  {
+    "id": "mrpc6f10n0d12",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "LANCHE PLINIO E DE PAULA",
+    "data": "2026-06-19",
+    "valor": 16,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-19",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a357f5c"
   }
 ]
