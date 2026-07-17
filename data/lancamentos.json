@@ -1869,5 +1869,27 @@
     "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a52b305"
+  },
+  {
+    "id": "mrpbsjk506xer",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "HOTEL IN BOX LTDA - STONE IP S.A.",
+    "data": "2026-07-15",
+    "valor": 270,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-15",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - STONE IP S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a5766d4"
   }
 ]
