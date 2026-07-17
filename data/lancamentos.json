@@ -2332,5 +2332,27 @@
     "obs": "Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a1ddbb0"
+  },
+  {
+    "id": "mrpcbcd93i2sk",
+    "obraId": "obra_rionegro",
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "COMISSÃO",
+    "data": "2026-06-19",
+    "valor": 1200,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-19",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a3524d1"
   }
 ]
