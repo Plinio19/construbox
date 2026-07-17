@@ -1759,5 +1759,27 @@
     "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes - BCO C6 S.A.",
     "criadoEm": "2026-07-17",
     "ofxId": "6a344d3e"
+  },
+  {
+    "id": "mrpbriqlcj8mr",
+    "obraId": null,
+    "tipo": "despesa",
+    "categoria": "outros",
+    "descricao": "RETIRADA DE PAULA",
+    "data": "2026-06-18",
+    "valor": 2000,
+    "status": "pago",
+    "beneficiario": "De Paula",
+    "clienteId": null,
+    "socioId": "mroyg6vqy8jfx",
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-18",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
+    "criadoEm": "2026-07-17",
+    "ofxId": "6a344e5b"
   }
 ]
