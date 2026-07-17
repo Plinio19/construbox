@@ -315,27 +315,6 @@
     "ofxId": "6a19f791"
   },
   {
-    "id": "mrozco14tpqny",
-    "obraId": "obra_sinop",
-    "tipo": "despesa",
-    "categoria": "outros",
-    "descricao": "COMISSÃO",
-    "data": "2026-06-01",
-    "valor": 3000,
-    "status": "pago",
-    "beneficiario": "",
-    "clienteId": null,
-    "socioId": null,
-    "formaPagamento": "PIX",
-    "dataPagamento": "2026-06-01",
-    "dataVencimento": null,
-    "isReembolso": false,
-    "conciliado": true,
-    "obs": "Transferência enviada pelo Pix - M A Xavier Empreendedor Ltda - BCO C6 S.A.",
-    "criadoEm": "2026-07-17",
-    "ofxId": "6a1ddbb0"
-  },
-  {
     "id": "mrozddgwabl1h",
     "tipo": "receita",
     "data": "2026-06-03",
