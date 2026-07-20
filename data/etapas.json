@@ -19,5 +19,28 @@
     "dependencias": [],
     "checklist": [],
     "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtpvs8oocia2",
+    "obraId": "mrtpspr8nhfhn",
+    "nome": "RADIER",
+    "codigo": "",
+    "ordem": 2,
+    "categoria": "estrutura",
+    "responsavel": "EQUIPE GORDÃO",
+    "descricao": "FAZER O RADIER",
+    "observacoes": "",
+    "status": "planejada",
+    "peso": 10,
+    "percentualExecutado": 0,
+    "dataPrevistoInicio": "2026-07-23",
+    "dataPrevistoFim": "2026-07-24",
+    "dataRealInicio": null,
+    "dataRealFim": null,
+    "dependencias": [
+      "mrtpu2rkpc73m"
+    ],
+    "checklist": [],
+    "criadoEm": "2026-07-20"
   }
 ]
