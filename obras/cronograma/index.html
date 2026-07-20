@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Cronograma</title>
+  <link rel="stylesheet" href="../../assets/core.css"/>
+  <style>
+    .etapa-card { background:var(--branco); border:1px solid var(--cinza); border-radius:10px; margin-bottom:8px; overflow:hidden; transition:box-shadow .15s; }
+    .etapa-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.09); }
+    .etapa-header { display:grid; grid-template-columns:52px 1fr auto; gap:12px; align-items:center; padding:12px 16px; cursor:pointer; }
+    .etapa-ordem { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.95rem; flex-shrink:0; }
+    .etapa-body { padding:0 16px 14px 78px; display:none; border-top:1px solid var(--cinza); margin-top:4px; padding-top:12px; }
+    .etapa-body.aberto { display:block; }
+    .prog-bar { height:6px; background:var(--cinza); border-radius:3px; overflow:hidden; margin:6px 0 2px; }
+    .prog-fill { height:100%; border-radius:3px; transition:width .4s; }
+    .dep-tag { display:inline-flex; align-items:center; gap:5px; background:var(--fundo2); border:1px solid var(--cinza); border-radius:6px; padding:3px 9px; font-size:.73rem; margin:2px; }
+    .cl-item { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid var(--cinza); }
+    .cl-item:last-child { border-bottom:none; }
+    .chip { padding:4px 14px; border-radius:999px; font-size:.8rem; cursor:pointer; border:1px solid var(--cinza); background:var(--branco); font-weight:600; transition:all .15s; }
+    .chip.ativo { background:var(--brand); color:#fff; border-color:var(--brand); }
+    @keyframes pulsar { 0%,100%{opacity:1} 50%{opacity:.55} }
+    .pulsing { animation:pulsar 2s ease-in-out infinite; }
+
+    .sp { display:inline-flex; align-items:center; padding:2px 10px; border-radius:999px; font-size:.72rem; font-weight:700; }
+    .sp-planejada             { background:#f3f4f6; color:#374151; }
+    .sp-aguardando_etapa      { background:#fef3c7; color:#92400e; }
+    .sp-aguardando_material   { background:#fef3c7; color:#92400e; }
+    .sp-aguardando_equipe     { background:#fef3c7; color:#92400e; }
+    .sp-aguardando_equipamento{ background:#fef3c7; color:#92400e; }
+    .sp-aguardando_aprovacao  { background:#fef3c7; color:#92400e; }
+    .sp-liberada   { background:#dbeafe; color:#1e40af; }
+    .sp-em_execucao{ background:#d1fae5; color:#065f46; }
+    .sp-pausada    { background:#fef3c7; color:#92400e; }
+    .sp-bloqueada  { background:#fee2e2; color:#991b1b; }
+    .sp-concluida  { background:#d1fae5; color:#065f46; }
+    .sp-cancelada  { background:#f3f4f6; color:#6b7280; }
+
+    .ord-planejada             { background:#f3f4f6; color:#374151; }
+    .ord-aguardando_etapa      { background:#fef3c7; color:#92400e; }
+    .ord-aguardando_material   { background:#fef3c7; color:#92400e; }
+    .ord-aguardando_equipe     { background:#fef3c7; color:#92400e; }
+    .ord-aguardando_equipamento{ background:#fef3c7; color:#92400e; }
+    .ord-aguardando_aprovacao  { background:#fef3c7; color:#92400e; }
+    .ord-liberada   { background:#dbeafe; color:#1e40af; }
+    .ord-em_execucao{ background:#d1fae5; color:#065f46; }
+    .ord-pausada    { background:#fef3c7; color:#92400e; }
+    .ord-bloqueada  { background:#fee2e2; color:#991b1b; }
+    .ord-concluida  { background:#d1fae5; color:#065f46; }
+    .ord-cancelada  { background:#f3f4f6; color:#6b7280; }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo" id="tb-titulo">Cronograma</div>
+      <div class="topbar-sub"   id="tb-sub">Carregando...</div>
+    </div>
+    <div class="topbar-acoes" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+      <a href="../" class="btn btn-outline btn-sm">← Obras</a>
+      <button class="btn btn-primary" onclick="abrirModalEtapa()">+ Nova Etapa</button>
+    </div>
+  </div>
+  <div class="page">
+
+    <div class="stats-grid">
+      <div class="stat azul">   <div class="valor" id="st-fis">0%</div>   <div class="rotulo">% Físico</div></div>
+      <div class="stat">        <div class="valor" id="st-tot">0</div>    <div class="rotulo">Total Etapas</div></div>
+      <div class="stat verde">  <div class="valor" id="st-exec">0</div>   <div class="rotulo">Em Execução</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-conc">0</div>   <div class="rotulo">Concluídas</div></div>
+      <div class="stat vermelho"><div class="valor" id="st-bloc">0</div>  <div class="rotulo">Aguardando / Bloq.</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-body" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <span style="font-size:.8rem;font-weight:700;color:var(--texto-leve);">Mostrar:</span>
+        <button class="chip ativo" id="chip-todas"  onclick="setFiltro('')">Todas</button>
+        <button class="chip" id="chip-exec"  onclick="setFiltro('em_execucao')">Em Execução</button>
+        <button class="chip" id="chip-lib"   onclick="setFiltro('liberada')">Liberadas</button>
+        <button class="chip" id="chip-plan"  onclick="setFiltro('planejada')">Planejadas</button>
+        <button class="chip" id="chip-ag"    onclick="setFiltro('aguardando')">Aguardando</button>
+        <button class="chip" id="chip-bloc"  onclick="setFiltro('bloqueada')">Bloqueadas</button>
+        <button class="chip" id="chip-conc"  onclick="setFiltro('concluida')">Concluídas</button>
+      </div>
+    </div>
+
+    <div id="lista-etapas"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL ETAPA ══ -->
+<div class="overlay" id="modal-etapa">
+  <div class="modal" style="max-width:700px;max-height:92vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h2 id="me-titulo">Nova Etapa</h2>
+      <button class="btn-fechar" onclick="fecharModalEtapa()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+
+      <div style="display:grid;grid-template-columns:1fr 100px 90px;gap:12px;">
+        <div class="form-campo"><label>Nome da Etapa *</label><input type="text" id="e-nome" placeholder="Ex: Fundação"/></div>
+        <div class="form-campo"><label>Código</label><input type="text" id="e-cod" placeholder="01"/></div>
+        <div class="form-campo"><label>Ordem</label><input type="number" id="e-ord" min="1"/></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Categoria</label>
+          <select id="e-cat">
+            <option value="fundacao">Fundação</option>
+            <option value="estrutura">Estrutura</option>
+            <option value="alvenaria">Alvenaria</option>
+            <option value="cobertura">Cobertura</option>
+            <option value="instalacoes">Instalações</option>
+            <option value="acabamento">Acabamento</option>
+            <option value="externo">Externo / Urbanização</option>
+            <option value="outros" selected>Outros</option>
+          </select>
+        </div>
+        <div class="form-campo"><label>Responsável</label><input type="text" id="e-resp" placeholder="Nome do responsável"/></div>
+      </div>
+
+      <div class="form-campo"><label>Descrição</label><textarea id="e-desc" rows="2" placeholder="Descreva a etapa..."></textarea></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Data Prevista Início</label><input type="date" id="e-pi"/></div>
+        <div class="form-campo"><label>Data Prevista Término</label><input type="date" id="e-pf"/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Data Real Início</label><input type="date" id="e-ri"/></div>
+        <div class="form-campo"><label>Data Real Término</label><input type="date" id="e-rf"/></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Peso da Etapa (%)</label><input type="number" id="e-peso" placeholder="0" min="0" max="100" step="0.1"/></div>
+        <div class="form-campo"><label>% Executado</label><input type="number" id="e-perc" placeholder="0" min="0" max="100"/></div>
+        <div class="form-campo"><label>Status</label>
+          <select id="e-status">
+            <option value="planejada">Planejada</option>
+            <option value="aguardando_etapa">Aguard. Etapa Anterior</option>
+            <option value="aguardando_material">Aguard. Material</option>
+            <option value="aguardando_equipe">Aguard. Equipe</option>
+            <option value="aguardando_equipamento">Aguard. Equipamento</option>
+            <option value="aguardando_aprovacao">Aguard. Aprovação</option>
+            <option value="liberada">Liberada</option>
+            <option value="em_execucao">Em Execução</option>
+            <option value="pausada">Pausada</option>
+            <option value="bloqueada">Bloqueada</option>
+            <option value="concluida">Concluída</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-campo">
+        <label>Depende de (etapas que devem estar concluídas antes)</label>
+        <div id="deps-wrap" style="padding:10px;border:1px solid var(--cinza);border-radius:8px;min-height:40px;background:var(--fundo2);display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+      <div class="form-campo"><label>Observações</label><textarea id="e-obs" rows="2" placeholder="Observações adicionais..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModalEtapa()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarEtapa()">✓ Salvar Etapa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL CHECKLIST ══ -->
+<div class="overlay" id="modal-cl">
+  <div class="modal" style="max-width:600px;max-height:92vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h2 id="cl-titulo">Checklist</h2>
+      <button class="btn-fechar" onclick="fecharChecklist()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0 20px 8px;">
+      <div id="cl-body"></div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--cinza);">
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;color:var(--texto-leve);">ADICIONAR TAREFA</div>
+        <div style="display:grid;grid-template-columns:1fr auto 130px auto;gap:8px;align-items:end;">
+          <div class="form-campo" style="margin:0"><input type="text" id="cl-nd" placeholder="Descrição da tarefa..."/></div>
+          <div class="form-campo" style="margin:0">
+            <select id="cl-no" style="font-size:.82rem;padding:6px 8px;">
+              <option value="true">Obrigatória</option>
+              <option value="false">Opcional</option>
+            </select>
+          </div>
+          <div class="form-campo" style="margin:0"><input type="text" id="cl-nr" placeholder="Responsável"/></div>
+          <button class="btn btn-primary btn-sm" onclick="addClItem()">+ Adicionar</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharChecklist()">Fechar</button>
+      <button class="btn btn-success" onclick="salvarChecklist()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+<script src="../../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('obras');
+
+const params  = new URLSearchParams(location.search);
+const OBRA_ID = params.get('obra');
+const PATH_ET = 'data/etapas.json';
+const LS_ET   = 'cbx_etapas';
+const LS_OB   = 'cbx_obras';
+
+let etapas = [], shaEt = null, obra = null;
+let filtro = '', idEdit = null, clId = null;
+
+const SLbl = {
+  planejada:'Planejada', aguardando_etapa:'Aguard. Etapa',
+  aguardando_material:'Aguard. Material', aguardando_equipe:'Aguard. Equipe',
+  aguardando_equipamento:'Aguard. Equipamento', aguardando_aprovacao:'Aguard. Aprovação',
+  liberada:'Liberada', em_execucao:'Em Execução', pausada:'Pausada',
+  bloqueada:'Bloqueada', concluida:'Concluída', cancelada:'Cancelada'
+};
+const CLbl = {
+  fundacao:'Fundação', estrutura:'Estrutura', alvenaria:'Alvenaria',
+  cobertura:'Cobertura', instalacoes:'Instalações', acabamento:'Acabamento',
+  externo:'Externo', outros:'Outros'
+};
+const AGUARDANDO = ['aguardando_etapa','aguardando_material','aguardando_equipe','aguardando_equipamento','aguardando_aprovacao','bloqueada'];
+
+// ── INIT ──
+async function init() {
+  if (!OBRA_ID) { document.getElementById('lista-etapas').innerHTML = '<div style="text-align:center;padding:48px;color:var(--vermelho);">Obra não especificada.</div>'; return; }
+
+  const cache = carregarLocal(LS_ET) || [];
+  etapas = cache.filter(e => e.obraId === OBRA_ID);
+  obra   = (carregarLocal(LS_OB) || []).find(o => o.id === OBRA_ID);
+  atualizarHeader(); renderEtapas(); atualizarStats();
+
+  if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  try {
+    const [rE, rO] = await Promise.all([carregarDados(PATH_ET), carregarDados('data/obras.json')]);
+    const todas = rE.lista; shaEt = rE.sha;
+    salvarLocal(LS_ET, todas);
+    etapas = todas.filter(e => e.obraId === OBRA_ID);
+    salvarLocal(LS_OB, rO.lista);
+    obra = rO.lista.find(o => o.id === OBRA_ID);
+    atualizarHeader(); renderEtapas(); atualizarStats();
+    setSyncStatus('verde','Conectado');
+  } catch(err) {
+    setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso');
+  }
+}
+
+function atualizarHeader() {
+  if (!obra) return;
+  document.getElementById('tb-titulo').textContent = `Cronograma — ${obra.nome}`;
+  const dias = obra.previsaoConclusao
+    ? Math.ceil((new Date(obra.previsaoConclusao) - new Date()) / 86400000) : null;
+  document.getElementById('tb-sub').textContent = [
+    obra.cliente,
+    obra.dataInicio ? `Início: ${formatarData(obra.dataInicio)}` : null,
+    obra.previsaoConclusao ? `Prazo: ${formatarData(obra.previsaoConclusao)}` : null,
+    dias !== null ? (dias >= 0 ? `${dias} dias restantes` : `⚠️ ${Math.abs(dias)} dias em atraso`) : null,
+  ].filter(Boolean).join(' · ');
+  document.title = `Cronograma — ${obra.nome}`;
+}
+
+function atualizarStats() {
+  const pesoTot = etapas.reduce((s,e) => s+(e.peso||0), 0);
+  const fis = pesoTot > 0
+    ? etapas.reduce((s,e) => s+((e.peso||0)*(e.percentualExecutado||0)/100),0)/pesoTot*100 : 0;
+  document.getElementById('st-fis').textContent  = fis.toFixed(1)+'%';
+  document.getElementById('st-tot').textContent  = etapas.length;
+  document.getElementById('st-exec').textContent = etapas.filter(e=>e.status==='em_execucao').length;
+  document.getElementById('st-conc').textContent = etapas.filter(e=>e.status==='concluida').length;
+  document.getElementById('st-bloc').textContent = etapas.filter(e=>AGUARDANDO.includes(statusEf(e))).length;
+}
+
+// Status efetivo: se tem deps não concluídas, força aguardando_etapa visualmente
+function statusEf(e) {
+  if (['em_execucao','pausada','concluida','cancelada','bloqueada'].includes(e.status)) return e.status;
+  if ((e.dependencias||[]).some(id => { const d=etapas.find(x=>x.id===id); return !d||d.status!=='concluida'; }))
+    return 'aguardando_etapa';
+  return e.status;
+}
+
+// ── FILTRO ──
+function setFiltro(f) {
+  filtro = f;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('ativo'));
+  const map={'':'chip-todas',em_execucao:'chip-exec',liberada:'chip-lib',planejada:'chip-plan',aguardando:'chip-ag',bloqueada:'chip-bloc',concluida:'chip-conc'};
+  document.getElementById(map[f]||'chip-todas')?.classList.add('ativo');
+  renderEtapas();
+}
+
+// ── RENDER ──
+function renderEtapas() {
+  const cont = document.getElementById('lista-etapas');
+  let lista = [...etapas].sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+
+  if (filtro) {
+    lista = lista.filter(e => {
+      const se = statusEf(e);
+      if (filtro==='aguardando') return AGUARDANDO.includes(se);
+      if (filtro==='bloqueada')  return se==='bloqueada';
+      return se===filtro;
+    });
+  }
+
+  if (!lista.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">${etapas.length?'Nenhuma etapa neste filtro.':'Nenhuma etapa cadastrada. Clique em "+ Nova Etapa" para começar.'}</div>`;
+    return;
+  }
+  cont.innerHTML = lista.map(e=>cardEtapa(e)).join('');
+}
+
+function cardEtapa(e) {
+  const se   = statusEf(e);
+  const perc = Math.min(100,Math.max(0,e.percentualExecutado||0));
+  const cl   = e.checklist||[];
+  const clFt = cl.filter(i=>i.concluida).length;
+  const clOp = cl.filter(i=>i.obrigatoria&&!i.concluida).length;
+
+  const depsBlock = (e.dependencias||[])
+    .map(id=>etapas.find(x=>x.id===id))
+    .filter(d=>d&&d.status!=='concluida');
+
+  // Botões de ação rápida
+  const btns = [];
+  if (!['concluida','cancelada'].includes(se)) {
+    if (['planejada','liberada'].includes(se))
+      btns.push(`<button class="btn btn-success btn-sm" onclick='mudarStatus("${e.id}","em_execucao")'>▶ Iniciar</button>`);
+    if (se==='em_execucao') {
+      btns.push(`<button class="btn btn-outline btn-sm" onclick='mudarStatus("${e.id}","pausada")'>⏸ Pausar</button>`);
+      btns.push(`<button class="btn btn-success btn-sm" onclick='mudarStatus("${e.id}","concluida")'>✓ Concluir</button>`);
+    }
+    if (se==='pausada')
+      btns.push(`<button class="btn btn-success btn-sm" onclick='mudarStatus("${e.id}","em_execucao")'>▶ Retomar</button>`);
+  }
+  btns.push(`<button class="btn btn-outline btn-sm" onclick='abrirChecklist("${e.id}")' title="Checklist">📋${cl.length?` ${clFt}/${cl.length}`:''}</button>`);
+  btns.push(`<button class="btn btn-outline btn-sm" onclick='editarEtapa("${e.id}")'>✏️</button>`);
+  if (!['em_execucao','concluida'].includes(se))
+    btns.push(`<button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirEtapa("${e.id}")'>🗑</button>`);
+
+  const progColor = se==='concluida'?'#059669':se==='em_execucao'?'#2563eb':'#6b7280';
+
+  return `
+  <div class="etapa-card">
+    <div class="etapa-header" onclick="toggleCard('${e.id}')">
+      <div class="etapa-ordem ord-${se}">${e.ordem||'—'}</div>
+      <div style="min-width:0;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <strong style="font-size:.95rem;">${esc(e.nome)}</strong>
+          ${e.codigo?`<span style="font-size:.72rem;color:var(--texto-leve);background:var(--fundo2);padding:1px 6px;border-radius:4px;">${esc(e.codigo)}</span>`:''}
+          <span class="sp sp-${se} ${se==='em_execucao'?'pulsing':''}">${SLbl[se]||se}</span>
+          ${clOp>0?`<span style="font-size:.7rem;color:#991b1b;font-weight:700;">⚠️ ${clOp} tarefa(s) obrigatória(s)</span>`:''}
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:.76rem;color:var(--texto-leve);">
+          ${e.responsavel?`👤 ${esc(e.responsavel)}`:''}
+          ${e.categoria?`🏷 ${CLbl[e.categoria]||e.categoria}`:''}
+          ${e.dataPrevistoInicio?`📅 ${formatarData(e.dataPrevistoInicio)} → ${e.dataPrevistoFim?formatarData(e.dataPrevistoFim):'?'}`:''}
+          ${e.peso?`⚖️ Peso: ${e.peso}%`:''}
+        </div>
+        ${perc>0||se==='em_execucao'?`
+          <div class="prog-bar" style="max-width:380px;">
+            <div class="prog-fill" style="width:${perc}%;background:${progColor};"></div>
+          </div>
+          <div style="font-size:.71rem;color:var(--texto-leve);">${perc}% executado</div>`:''}
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0;">
+        ${btns.join('')}
+      </div>
+    </div>
+    <div class="etapa-body" id="body-${e.id}">
+      ${depsBlock.length?`
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:.82rem;">
+          ⚠️ Aguardando conclusão de: ${depsBlock.map(d=>`<strong>${esc(d.nome)}</strong>`).join(', ')}
+        </div>`:''}
+      ${(e.dependencias||[]).length?`
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.72rem;font-weight:700;color:var(--texto-leve);margin-bottom:5px;">DEPENDE DE:</div>
+          ${e.dependencias.map(id=>{
+            const d=etapas.find(x=>x.id===id); if(!d) return '';
+            const ds=statusEf(d);
+            return `<span class="dep-tag"><span style="width:8px;height:8px;border-radius:50%;background:${ds==='concluida'?'#059669':ds==='em_execucao'?'#2563eb':'#d97706'};display:inline-block;flex-shrink:0;"></span>${esc(d.nome)}<span class="sp sp-${ds}" style="font-size:.65rem;padding:1px 6px;">${SLbl[ds]||ds}</span></span>`;
+          }).join('')}
+        </div>`:''}
+      ${e.descricao?`<p style="font-size:.84rem;color:var(--texto-leve);margin-bottom:10px;">${esc(e.descricao)}</p>`:''}
+      ${e.dataRealInicio||e.dataRealFim?`
+        <div style="font-size:.78rem;margin-bottom:8px;">
+          <strong>Datas reais:</strong>
+          ${e.dataRealInicio?`Início: ${formatarData(e.dataRealInicio)}`:''}
+          ${e.dataRealFim?` · Fim: ${formatarData(e.dataRealFim)}`:''}
+        </div>`:''}
+      ${cl.length?`
+        <div style="margin-top:4px;">
+          <div style="font-size:.72rem;font-weight:700;color:var(--texto-leve);margin-bottom:6px;">CHECKLIST (${clFt}/${cl.length})</div>
+          ${cl.slice(0,4).map(item=>`
+            <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;padding:4px 0;">
+              <span style="color:${item.concluida?'#059669':'var(--cinza)'};">${item.concluida?'✓':'○'}</span>
+              <span style="text-decoration:${item.concluida?'line-through':'none'};color:${item.concluida?'var(--texto-leve)':'inherit'}">${esc(item.descricao)}</span>
+              ${item.obrigatoria&&!item.concluida?'<span style="font-size:.68rem;color:#991b1b;font-weight:700;">OBRIGATÓRIA</span>':''}
+            </div>`).join('')}
+          ${cl.length>4?`<button class="btn btn-outline btn-sm" style="margin-top:6px;" onclick='abrirChecklist("${e.id}")'>Ver todas (${cl.length})</button>`:''}
+        </div>`:''}
+      ${e.observacoes?`<p style="font-size:.78rem;font-style:italic;color:var(--texto-leve);margin-top:8px;">${esc(e.observacoes)}</p>`:''}
+    </div>
+  </div>`;
+}
+
+function toggleCard(id) {
+  document.getElementById('body-'+id)?.classList.toggle('aberto');
+}
+
+// ── MUDAR STATUS ──
+async function mudarStatus(id, novo) {
+  const e = etapas.find(x=>x.id===id); if(!e) return;
+
+  if (novo==='em_execucao') {
+    const dpend = (e.dependencias||[]).filter(did=>{
+      const d=etapas.find(x=>x.id===did); return !d||d.status!=='concluida';
+    });
+    if (dpend.length && !confirm(`Dependências não concluídas:\n${dpend.map(id=>etapas.find(x=>x.id===id)?.nome||id).join(', ')}\n\nIniciar mesmo assim?`)) return;
+    if (!e.dataRealInicio) e.dataRealInicio = hoje();
+  }
+  if (novo==='concluida') {
+    const obrigPend = (e.checklist||[]).filter(i=>i.obrigatoria&&!i.concluida);
+    if (obrigPend.length && !confirm(`${obrigPend.length} tarefa(s) obrigatória(s) do checklist pendente(s).\n\nConcluir mesmo assim?`)) return;
+    if (!e.dataRealFim) e.dataRealFim = hoje();
+    e.percentualExecutado = 100;
+  }
+  e.status = novo;
+  await sync(`Status: ${e.nome} → ${SLbl[novo]}`);
+  renderEtapas(); atualizarStats();
+  toast(`${e.nome} → ${SLbl[novo]}`, 'sucesso');
+}
+
+// ── MODAL ETAPA ──
+function abrirModalEtapa() {
+  idEdit = null;
+  document.getElementById('me-titulo').textContent = 'Nova Etapa';
+  ['e-nome','e-cod','e-resp','e-desc','e-obs'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('e-ord').value   = etapas.length+1;
+  document.getElementById('e-cat').value   = 'outros';
+  document.getElementById('e-status').value= 'planejada';
+  document.getElementById('e-peso').value  = '';
+  document.getElementById('e-perc').value  = '0';
+  ['e-pi','e-pf','e-ri','e-rf'].forEach(id=>document.getElementById(id).value='');
+  renderDeps(null,[]);
+  document.getElementById('modal-etapa').classList.add('aberto');
+  setTimeout(()=>document.getElementById('e-nome').focus(),80);
+}
+
+function editarEtapa(id) {
+  const e = etapas.find(x=>x.id===id); if(!e) return;
+  idEdit = id;
+  document.getElementById('me-titulo').textContent = 'Editar Etapa';
+  document.getElementById('e-nome').value   = e.nome||'';
+  document.getElementById('e-cod').value    = e.codigo||'';
+  document.getElementById('e-ord').value    = e.ordem||'';
+  document.getElementById('e-cat').value    = e.categoria||'outros';
+  document.getElementById('e-resp').value   = e.responsavel||'';
+  document.getElementById('e-desc').value   = e.descricao||'';
+  document.getElementById('e-obs').value    = e.observacoes||'';
+  document.getElementById('e-status').value = e.status||'planejada';
+  document.getElementById('e-peso').value   = e.peso||'';
+  document.getElementById('e-perc').value   = e.percentualExecutado||0;
+  document.getElementById('e-pi').value     = e.dataPrevistoInicio||'';
+  document.getElementById('e-pf').value     = e.dataPrevistoFim||'';
+  document.getElementById('e-ri').value     = e.dataRealInicio||'';
+  document.getElementById('e-rf').value     = e.dataRealFim||'';
+  renderDeps(id, e.dependencias||[]);
+  document.getElementById('modal-etapa').classList.add('aberto');
+}
+
+function renderDeps(editId, sel) {
+  const outras = etapas.filter(e=>e.id!==editId);
+  const w = document.getElementById('deps-wrap');
+  if (!outras.length) { w.innerHTML='<span style="font-size:.78rem;color:var(--texto-leve);">Nenhuma outra etapa cadastrada.</span>'; return; }
+  w.innerHTML = outras.map(e=>`
+    <label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;background:var(--branco);border:1px solid var(--cinza);border-radius:6px;padding:4px 9px;font-size:.8rem;">
+      <input type="checkbox" value="${e.id}" ${sel.includes(e.id)?'checked':''} style="margin:0;"/>
+      ${esc(e.nome)}
+    </label>`).join('');
+}
+
+function fecharModalEtapa() { document.getElementById('modal-etapa').classList.remove('aberto'); }
+
+async function salvarEtapa() {
+  const nome = document.getElementById('e-nome').value.trim();
+  if (!nome) { toast('Nome da etapa é obrigatório.','erro'); return; }
+  const deps = [...document.querySelectorAll('#deps-wrap input:checked')].map(i=>i.value);
+  const etapa = {
+    id:                  idEdit||uid(),
+    obraId:              OBRA_ID,
+    nome,
+    codigo:              document.getElementById('e-cod').value.trim(),
+    ordem:               parseInt(document.getElementById('e-ord').value)||etapas.length+1,
+    categoria:           document.getElementById('e-cat').value,
+    responsavel:         document.getElementById('e-resp').value.trim(),
+    descricao:           document.getElementById('e-desc').value.trim(),
+    observacoes:         document.getElementById('e-obs').value.trim(),
+    status:              document.getElementById('e-status').value,
+    peso:                parseFloat(document.getElementById('e-peso').value)||0,
+    percentualExecutado: parseFloat(document.getElementById('e-perc').value)||0,
+    dataPrevistoInicio:  document.getElementById('e-pi').value||null,
+    dataPrevistoFim:     document.getElementById('e-pf').value||null,
+    dataRealInicio:      document.getElementById('e-ri').value||null,
+    dataRealFim:         document.getElementById('e-rf').value||null,
+    dependencias:        deps,
+    checklist:           idEdit?(etapas.find(x=>x.id===idEdit)?.checklist||[]):[],
+    criadoEm:            idEdit?(etapas.find(x=>x.id===idEdit)?.criadoEm||hoje()):hoje(),
+  };
+  etapas = idEdit ? etapas.map(x=>x.id===idEdit?etapa:x) : [...etapas,etapa];
+  fecharModalEtapa();
+  await sync(`Etapa: ${nome}`);
+  renderEtapas(); atualizarStats();
+  toast('Etapa salva!','sucesso');
+}
+
+async function excluirEtapa(id) {
+  const e=etapas.find(x=>x.id===id); if(!e) return;
+  if(!confirm(`Excluir a etapa "${e.nome}"?`)) return;
+  etapas = etapas.filter(x=>x.id!==id).map(x=>({...x,dependencias:(x.dependencias||[]).filter(d=>d!==id)}));
+  await sync(`Excluir etapa: ${e.nome}`);
+  renderEtapas(); atualizarStats();
+  toast('Etapa excluída.','sucesso');
+}
+
+// ── CHECKLIST ──
+function abrirChecklist(etapaId) {
+  clId = etapaId;
+  const e = etapas.find(x=>x.id===etapaId); if(!e) return;
+  document.getElementById('cl-titulo').textContent = `Checklist — ${e.nome}`;
+  document.getElementById('cl-nd').value='';
+  document.getElementById('cl-nr').value='';
+  document.getElementById('cl-no').value='true';
+  renderClBody(e);
+  document.getElementById('modal-cl').classList.add('aberto');
+}
+
+function renderClBody(e) {
+  const cl = e.checklist||[];
+  const c = document.getElementById('cl-body');
+  if (!cl.length) { c.innerHTML='<div style="padding:20px;text-align:center;color:var(--texto-leve);">Nenhuma tarefa ainda.</div>'; return; }
+  c.innerHTML = cl.map(item=>`
+    <div class="cl-item">
+      <input type="checkbox" ${item.concluida?'checked':''} onchange="toggleClItem('${item.id}')"
+        style="margin-top:3px;flex-shrink:0;width:16px;height:16px;cursor:pointer;"/>
+      <div style="flex:1;">
+        <div style="font-size:.88rem;${item.concluida?'text-decoration:line-through;color:var(--texto-leve);':''}">${esc(item.descricao)}</div>
+        <div style="font-size:.73rem;color:var(--texto-leve);margin-top:2px;display:flex;gap:8px;">
+          ${item.obrigatoria?'<strong style="color:#991b1b;">OBRIGATÓRIA</strong>':'<span>Opcional</span>'}
+          ${item.responsavel?`· 👤 ${esc(item.responsavel)}`:''}
+        </div>
+      </div>
+      <button onclick="removerClItem('${item.id}')" title="Remover"
+        style="background:none;border:none;color:var(--texto-leve);cursor:pointer;padding:4px 6px;border-radius:4px;font-size:.9rem;"
+        onmouseover="this.style.color='var(--vermelho)'" onmouseout="this.style.color='var(--texto-leve)'">✕</button>
+    </div>`).join('');
+}
+
+function toggleClItem(itemId) {
+  const e=etapas.find(x=>x.id===clId); if(!e) return;
+  const item=e.checklist.find(i=>i.id===itemId); if(!item) return;
+  item.concluida=!item.concluida;
+  renderClBody(e);
+}
+function removerClItem(itemId) {
+  const e=etapas.find(x=>x.id===clId); if(!e) return;
+  e.checklist=e.checklist.filter(i=>i.id!==itemId);
+  renderClBody(e);
+}
+function addClItem() {
+  const desc=document.getElementById('cl-nd').value.trim();
+  if(!desc){toast('Informe a descrição.','aviso');return;}
+  const e=etapas.find(x=>x.id===clId); if(!e) return;
+  if(!e.checklist) e.checklist=[];
+  e.checklist.push({id:uid(),descricao:desc,obrigatoria:document.getElementById('cl-no').value==='true',responsavel:document.getElementById('cl-nr').value.trim(),concluida:false});
+  document.getElementById('cl-nd').value='';
+  document.getElementById('cl-nr').value='';
+  renderClBody(e);
+}
+async function salvarChecklist() {
+  fecharChecklist();
+  await sync('Checklist atualizado');
+  renderEtapas(); atualizarStats();
+  toast('Checklist salvo!','sucesso');
+}
+function fecharChecklist() { document.getElementById('modal-cl').classList.remove('aberto'); }
+
+// ── SYNC ──
+async function sync(msg) {
+  const todas = carregarLocal(LS_ET)||[];
+  const outras = todas.filter(e=>e.obraId!==OBRA_ID);
+  const merged = [...outras,...etapas];
+  salvarLocal(LS_ET,merged);
+  if(!configurado()) return;
+  setSyncStatus('amarelo','Sincronizando...');
+  try {
+    shaEt = await salvarDados(PATH_ET, merged, shaEt, msg);
+    setSyncStatus('verde','Sincronizado');
+  } catch(err) {
+    setSyncStatus('vermelho','Erro sync');
+    toast('Erro ao sincronizar: '+err.message,'aviso');
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -153,8 +153,9 @@ function renderLista() {
       <td>${o.previsaoConclusao?formatarData(o.previsaoConclusao):'—'}</td>
       <td><span class="badge ${stMap[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span></td>
       <td><div style="display:flex;gap:4px;">
+        <a href="cronograma/?obra=${o.id}" class="btn btn-primary btn-sm" title="Cronograma da Obra">📋 Cronograma</a>
         <button class="btn btn-outline btn-sm" onclick='editar(${JSON.stringify(o.id)})'>✏️</button>
-        <a href="../relatorios/?obra=${o.id}" class="btn btn-primary btn-sm" title="Relatório">📈</a>
+        <a href="../relatorios/?obra=${o.id}" class="btn btn-outline btn-sm" title="Relatório">📈</a>
         <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluir(${JSON.stringify(o.id)})'>🗑</button>
       </div></td>
     </tr>`).join('')}</tbody></table>`;
