@@ -2376,5 +2376,27 @@
     "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.",
     "criadoEm": "2026-07-20",
     "ofxId": "6a198e63"
+  },
+  {
+    "id": "mrt40t184mqc4",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.",
+    "data": "2026-06-12",
+    "valor": 390.98,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-12",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a2c45b6"
   }
 ]
