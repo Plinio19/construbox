@@ -2420,5 +2420,27 @@
     "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - NU PAGAMENTOS",
     "criadoEm": "2026-07-20",
     "ofxId": "6a319596"
+  },
+  {
+    "id": "mrt410sc6eoh1",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "Marli Aparecida dos Santos - BCO C6 S.A.",
+    "data": "2026-06-19",
+    "valor": 990,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-19",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - BCO C6 S.A.",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a35a510"
   }
 ]
