@@ -309,7 +309,28 @@ function limparExtrato() {
   toast('Extrato limpo.', 'aviso');
 }
 
+function autoMarcarConciliados() {
+  const ofxIdsLanc = new Set(lancamentos.map(l => l.ofxId).filter(Boolean));
+  const lancChaves  = new Set();
+  lancamentos.forEach(l => {
+    const base = `${l.data}|${l.valor}`;
+    if (l.tipo === 'reembolso') { lancChaves.add(`${base}|credito`); lancChaves.add(`${base}|debito`); }
+    else lancChaves.add(`${base}|${l.tipo==='receita'?'credito':'debito'}`);
+  });
+  let mudou = false;
+  extratoLinhas.forEach(l => {
+    if (l.conciliado) return;
+    const chave = `${l.data}|${l.valor}|${l.tipo}`;
+    if ((l.fitid && ofxIdsLanc.has(l.fitid)) || lancChaves.has(chave)) {
+      l.conciliado = true;
+      mudou = true;
+    }
+  });
+  if (mudou) salvarLocal(LS_EXT, extratoLinhas);
+}
+
 function renderExtrato() {
+  autoMarcarConciliados();
   const card = document.getElementById('card-extrato');
   if(!extratoLinhas.length){ card.style.display='none'; return; }
   card.style.display='block';
