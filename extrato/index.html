@@ -97,6 +97,7 @@
           <button class="chip"       id="chip-all"  onclick="setFiltro('todos')">Todos</button>
           <button class="chip"       id="chip-lanc" onclick="setFiltro('lancados')">Lançados</button>
           <button class="chip"       id="chip-ign"  onclick="setFiltro('ignorados')">Ignorados</button>
+          <button class="btn btn-outline btn-sm" style="margin-left:8px;" onclick="ignorarTodosRDB()" title="Ignora todas as linhas pendentes com categoria Ignorar (RDB, aplicações, etc.)">🚫 Ignorar todos RDB</button>
         </div>
         <div class="resumo-bar" id="resumo-bar"></div>
       </div>
@@ -591,6 +592,18 @@ function ignorar(id) {
   setEstado(id, { status: 'ignorado' });
   renderLista();
   toast('Ignorado.', '');
+}
+
+function ignorarTodosRDB() {
+  const pendentes = OFX_TRANSACOES.filter(t => {
+    const est = getEstado(t.id);
+    return est.status === 'pendente' && est.cat === 'ignorar';
+  });
+  if (!pendentes.length) { toast('Nenhum pendente com categoria Ignorar.', 'aviso'); return; }
+  if (!confirm(`Ignorar ${pendentes.length} linha(s) com categoria "Ignorar" (RDB, aplicações, etc.)?`)) return;
+  pendentes.forEach(t => setEstado(t.id, { status: 'ignorado' }));
+  renderLista(); atualizarStats();
+  toast(`${pendentes.length} linha(s) ignorada(s).`, 'sucesso');
 }
 
 // ── LANÇAR ──
