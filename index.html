@@ -293,7 +293,7 @@ function renderDash(obras, lanc) {
 
   // ── DISTRIBUIÇÃO DISPONÍVEL ──
   const disponivel = resultadoBruto - totalDist;
-  const projecao   = disponivel + totAR - totalAPagar;
+  const projecao   = disponivel + totAR - totMOSald;
   const dispColor  = disponivel >= 0 ? 'var(--verde)' : 'var(--vermelho)';
   const projColor  = projecao   >= 0 ? 'var(--verde)' : 'var(--vermelho)';
 
@@ -325,15 +325,15 @@ function renderDash(obras, lanc) {
         <span style="color:var(--verde);">+ ${formatarMoeda(totAR)}</span>
       </div>
       <div class="dist-row" style="font-size:.8rem;">
-        <span>− A Pagar (pendentes)</span>
-        <span style="color:var(--vermelho);">− ${formatarMoeda(totalAPagar)}</span>
+        <span>− MO a Pagar (orçamento)</span>
+        <span style="color:var(--vermelho);">− ${formatarMoeda(totMOSald)}</span>
       </div>
       <div class="dist-row" style="font-weight:800;font-size:.95rem;">
         <span>= Saldo Projetado</span>
         <span style="color:${projColor};">${formatarMoeda(projecao)}</span>
       </div>
     </div>
-    ${totAR===0&&totalAPagar===0?`<div class="dist-sub" style="margin-top:8px;">ℹ️ Informe o valor de contrato nas obras para ver a projeção completa.</div>`:''}
+    ${totAR===0&&totMOSald===0?`<div class="dist-sub" style="margin-top:8px;">ℹ️ Informe o valor de contrato e orçamento MO nas obras para ver a projeção completa.</div>`:''}
   `;
 }
 
