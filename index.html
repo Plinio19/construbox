@@ -255,6 +255,8 @@ function renderDash(obras, lanc) {
   // ── TABELA CONSOLIDADO ──
   const totRec    = obraMetrics.reduce((s,m)=>s+m.rec,0);
   const totAR     = obraMetrics.reduce((s,m)=>s+m.aRec,0);
+  // Atualiza KPI "A Receber" com o valor baseado em contratos (mais preciso que lançamentos pendentes)
+  document.getElementById('kpi-a-receber').textContent = formatarMoeda(totAR);
   const totMO     = obraMetrics.reduce((s,m)=>s+m.mo,0);
   const totMOOrc  = obraMetrics.reduce((s,m)=>s+m.moOrcada,0);
   const totMOSald = obraMetrics.reduce((s,m)=>s+m.moSaldo,0);
@@ -291,7 +293,7 @@ function renderDash(obras, lanc) {
 
   // ── DISTRIBUIÇÃO DISPONÍVEL ──
   const disponivel = resultadoBruto - totalDist;
-  const projecao   = disponivel + totalAReceber - totalAPagar;
+  const projecao   = disponivel + totAR - totalAPagar;
   const dispColor  = disponivel >= 0 ? 'var(--verde)' : 'var(--vermelho)';
   const projColor  = projecao   >= 0 ? 'var(--verde)' : 'var(--vermelho)';
 
@@ -320,7 +322,7 @@ function renderDash(obras, lanc) {
       <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-leve);margin-bottom:6px;">Projeção incluindo pendências</div>
       <div class="dist-row" style="font-size:.8rem;">
         <span>+ A Receber (contratos)</span>
-        <span style="color:var(--verde);">+ ${formatarMoeda(totalAReceber)}</span>
+        <span style="color:var(--verde);">+ ${formatarMoeda(totAR)}</span>
       </div>
       <div class="dist-row" style="font-size:.8rem;">
         <span>− A Pagar (pendentes)</span>
@@ -331,7 +333,7 @@ function renderDash(obras, lanc) {
         <span style="color:${projColor};">${formatarMoeda(projecao)}</span>
       </div>
     </div>
-    ${totalAReceber===0&&totalAPagar===0?`<div class="dist-sub" style="margin-top:8px;">ℹ️ Adicione contas a receber/pagar ou informe o valor de contrato nas obras para ver a projeção completa.</div>`:''}
+    ${totAR===0&&totalAPagar===0?`<div class="dist-sub" style="margin-top:8px;">ℹ️ Informe o valor de contrato nas obras para ver a projeção completa.</div>`:''}
   `;
 }
 
