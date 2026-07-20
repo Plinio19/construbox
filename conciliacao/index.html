@@ -189,33 +189,41 @@ function parseOFX(content) {
 }
 
 function renderPreviewOFX(txns) {
-  const fitidsExist  = new Set(extratoLinhas.map(l => l.fitid).filter(Boolean));
-  const ofxIdsLanc   = new Set(lancamentos.map(l => l.ofxId).filter(Boolean));
+  const fitidsExist = new Set(extratoLinhas.map(l => l.fitid).filter(Boolean));
+  const ofxIdsLanc  = new Set(lancamentos.map(l => l.ofxId).filter(Boolean));
+  // Fallback: data+valor+tipo para detectar lançamentos feitos com FITIDs inventados
+  const lancChaves  = new Set(lancamentos.map(l => `${l.data}|${l.valor}|${l.tipo==='receita'?'credito':'debito'}`));
+  const extChaves   = new Set(extratoLinhas.map(l => `${l.data}|${l.valor}|${l.tipo}`));
 
-  const cat = txns.map(t => ({
-    ...t,
-    status: fitidsExist.has(t.fitid) ? 'ja_importada'
-          : ofxIdsLanc.has(t.fitid)  ? 'ja_conciliada'
-          : 'nova'
-  }));
+  const cat = txns.map(t => {
+    const chave = `${t.data}|${t.valor}|${t.tipo}`;
+    if (fitidsExist.has(t.fitid))  return {...t, status:'ja_importada'};
+    if (ofxIdsLanc.has(t.fitid))   return {...t, status:'ja_conciliada'};
+    if (extChaves.has(chave))       return {...t, status:'ja_importada'};
+    if (lancChaves.has(chave))      return {...t, status:'possivel_dup'};
+    return {...t, status:'nova'};
+  });
   window._ofxPreview = cat;
 
-  const novas   = cat.filter(t => t.status === 'nova').length;
-  const jaImp   = cat.filter(t => t.status === 'ja_importada').length;
-  const jaConc  = cat.filter(t => t.status === 'ja_conciliada').length;
+  const novas  = cat.filter(t => t.status === 'nova').length;
+  const jaImp  = cat.filter(t => t.status === 'ja_importada').length;
+  const jaConc = cat.filter(t => t.status === 'ja_conciliada').length;
+  const dups   = cat.filter(t => t.status === 'possivel_dup').length;
 
-  const pill = (txt, cor) => `<span style="display:inline-block;padding:2px 9px;border-radius:999px;font-size:.72rem;font-weight:700;background:${cor.bg};color:${cor.c}">${txt}</span>`;
-  const pNova  = pill('Nova', {bg:'#fef3c7',c:'#92400e'});
-  const pImp   = pill('Já importada', {bg:'var(--fundo2)',c:'var(--texto-leve)'});
-  const pConc  = pill('Já conciliada', {bg:'#d1fae5',c:'#065f46'});
+  const pill = (txt, bg, c) => `<span style="display:inline-block;padding:2px 9px;border-radius:999px;font-size:.72rem;font-weight:700;background:${bg};color:${c}">${txt}</span>`;
+  const pNova = pill('Nova',              '#fef3c7','#92400e');
+  const pImp  = pill('Já importada',      'var(--fundo2)','var(--texto-leve)');
+  const pConc = pill('Já conciliada',     '#d1fae5','#065f46');
+  const pDup  = pill('Possível duplicata','#fee2e2','#991b1b');
 
+  const acaoLabel = novas + dups;
   const prev = document.getElementById('ofx-preview');
   prev.style.display = 'block';
   prev.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:repeat(${dups?5:4},1fr);gap:8px;margin-bottom:12px;">
       <div style="background:var(--fundo2);border-radius:8px;padding:10px;text-align:center;">
         <div style="font-size:1.4rem;font-weight:700;">${txns.length}</div>
-        <div style="font-size:.72rem;color:var(--texto-leve);">Total no arquivo</div>
+        <div style="font-size:.72rem;color:var(--texto-leve);">Total</div>
       </div>
       <div style="background:#fef3c7;border-radius:8px;padding:10px;text-align:center;">
         <div style="font-size:1.4rem;font-weight:700;color:#92400e;">${novas}</div>
@@ -229,35 +237,49 @@ function renderPreviewOFX(txns) {
         <div style="font-size:1.4rem;font-weight:700;color:#065f46;">${jaConc}</div>
         <div style="font-size:.72rem;color:#065f46;">Já conciliadas</div>
       </div>
+      ${dups?`<div style="background:#fee2e2;border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:#991b1b;">${dups}</div>
+        <div style="font-size:.72rem;color:#991b1b;">Possível duplicata</div>
+      </div>`:''}
     </div>
-    ${novas
-      ? `<button class="btn btn-primary" style="margin-bottom:10px;" onclick="confirmarImportOFX()">📥 Adicionar ${novas} transação(ões) nova(s) ao extrato</button>`
+    ${dups?`<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#9a3412;margin-bottom:10px;">
+      ⚠️ <strong>${dups} transação(ões)</strong> com mesmo valor e data de lançamentos já existentes — provavelmente já conciliadas com FITIDs antigos. Revise antes de importar.
+    </div>`:''}
+    ${acaoLabel
+      ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+          ${novas?`<button class="btn btn-primary" onclick="confirmarImportOFX('nova')">📥 Importar ${novas} nova(s)</button>`:''}
+          ${dups?`<button class="btn btn-outline" onclick="confirmarImportOFX('dup')" style="color:var(--vermelho)">⚠️ Importar ${dups} possível(is) duplicata(s) mesmo assim</button>`:''}
+        </div>`
       : `<div style="color:var(--verde);font-weight:700;padding:6px 0;margin-bottom:10px;">✓ Todas as transações já estão no sistema</div>`}
     <div style="max-height:280px;overflow-y:auto;border:1px solid var(--cinza);border-radius:8px;">
       <table class="tabela" style="width:100%;font-size:.8rem;">
         <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th></tr></thead>
-        <tbody>${cat.map(t=>`<tr style="opacity:${t.status==='nova'?1:.45}">
+        <tbody>${cat.map(t=>`<tr style="opacity:${t.status==='nova'||t.status==='possivel_dup'?1:.4}">
           <td>${formatarData(t.data)}</td>
           <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(t.memo)}</td>
           <td style="font-weight:700;color:${t.tipo==='credito'?'var(--verde)':'var(--vermelho)'};">${t.tipo==='credito'?'+':'-'}${formatarMoeda(t.valor)}</td>
-          <td>${t.status==='nova'?pNova:t.status==='ja_importada'?pImp:pConc}</td>
+          <td>${t.status==='nova'?pNova:t.status==='ja_importada'?pImp:t.status==='ja_conciliada'?pConc:pDup}</td>
         </tr>`).join('')}</tbody>
       </table>
     </div>`;
 }
 
-function confirmarImportOFX() {
-  const novas = (window._ofxPreview || []).filter(t => t.status === 'nova');
-  if (!novas.length) return;
-  novas.forEach(t => {
+function confirmarImportOFX(filtro = 'nova') {
+  const statuses = filtro === 'dup' ? ['possivel_dup'] : ['nova'];
+  const importar = (window._ofxPreview || []).filter(t => statuses.includes(t.status));
+  if (!importar.length) return;
+  importar.forEach(t => {
     extratoLinhas.push({ id: uid(), fitid: t.fitid, data: t.data, descricao: t.memo, valor: t.valor, tipo: t.tipo, conciliado: false });
   });
+  // Remove as importadas do preview para não importar duas vezes
+  window._ofxPreview = (window._ofxPreview || []).map(t =>
+    statuses.includes(t.status) ? {...t, status:'ja_importada'} : t
+  );
   salvarLocal(LS_EXT, extratoLinhas);
-  window._ofxPreview = null;
-  document.getElementById('ofx-preview').style.display = 'none';
-  document.getElementById('ofx-inp').value = '';
   renderExtrato(); atualizarStats();
-  toast(`${novas.length} transação(ões) adicionada(s) ao extrato!`, 'sucesso');
+  // Re-renderiza preview atualizado
+  renderPreviewOFX(window._ofxPreview);
+  toast(`${importar.length} transação(ões) adicionada(s) ao extrato!`, 'sucesso');
 }
 
 function limparExtrato() {
