@@ -423,8 +423,7 @@ function cardEtapa(e) {
   btns.push(`<button class="btn btn-outline btn-sm" onclick='abrirChecklist("${e.id}")' title="Checklist">📋${cl.length?` ${clFt}/${cl.length}`:''}</button>`);
   btns.push(`<button class="btn btn-outline btn-sm${matsPend.length?' pulsing':''}" onclick='abrirMateriais("${e.id}")' title="Materiais">📦${mats.length?` ${mats.length}`:''}</button>`);
   btns.push(`<button class="btn btn-outline btn-sm" onclick='editarEtapa("${e.id}")'>✏️</button>`);
-  if (!['em_execucao','concluida'].includes(se))
-    btns.push(`<button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirEtapa("${e.id}")'>🗑</button>`);
+  btns.push(`<button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirEtapa("${e.id}")'>🗑</button>`);
 
   const progColor = se==='concluida'?'#059669':se==='em_execucao'?'#2563eb':'#6b7280';
 
@@ -616,7 +615,8 @@ async function salvarEtapa() {
 
 async function excluirEtapa(id) {
   const e=etapas.find(x=>x.id===id); if(!e) return;
-  if(!confirm(`Excluir a etapa "${e.nome}"?`)) return;
+  const aviso = ['em_execucao','concluida'].includes(e.status) ? `\n⚠️ Esta etapa está "${SLbl[e.status]}".` : '';
+  if(!confirm(`Excluir a etapa "${e.nome}"?${aviso}`)) return;
   etapas = etapas.filter(x=>x.id!==id).map(x=>({...x,dependencias:(x.dependencias||[]).filter(d=>d!==id)}));
   await sync(`Excluir etapa: ${e.nome}`);
   renderEtapas(); atualizarStats();
