@@ -376,6 +376,32 @@ let filtro = 'pendentes';
 function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '', beneficiario: '', clienteId: '', socioId: '', prestadorId: '' }; }
 function setEstado(id, patch) { estado[id] = { ...getEstado(id), ...patch }; salvarLocal(LS_EST, estado); }
 
+// Reconstrói estado das linhas a partir dos lançamentos (ofxId → estado 'lancado')
+// Usado quando o localStorage está vazio (PC novo) mas os lançamentos já vieram do GitHub
+function reconstruirEstado() {
+  let reconstruidos = 0;
+  lancamentos.forEach(l => {
+    if (!l.ofxId) return;
+    const atual = getEstado(l.ofxId);
+    if (atual.status !== 'pendente') return; // já tem estado local, respeita
+    let cat = '';
+    if (l.tipo === 'receita') cat = 'recebimento';
+    else if (l.tipo === 'reembolso' || l.isReembolso) cat = 'reembolso';
+    else if (l.categoria === 'mao-de-obra') cat = 'mao-de-obra';
+    else cat = 'outros';
+    setEstado(l.ofxId, {
+      status: 'lancado', cat,
+      obra:        l.obraId      || '',
+      descricao:   l.descricao   || '',
+      clienteId:   l.clienteId   || '',
+      socioId:     l.socioId     || '',
+      prestadorId: l.prestadorId || '',
+    });
+    reconstruidos++;
+  });
+  if (reconstruidos > 0) console.log(`[extrato] reconstruídos ${reconstruidos} estados do GitHub`);
+}
+
 // ── INIT ──
 async function init() {
   obras       = carregarLocal('cbx_obras')       || [];
@@ -400,6 +426,7 @@ async function init() {
     }
   });
 
+  reconstruirEstado(); // reconstrói "lancado" a partir do cache local de lançamentos
   renderLista();
   atualizarStats();
 
@@ -423,6 +450,8 @@ async function init() {
     salvarLocal('cbx_socios',       socios);
     salvarLocal('cbx_clientes',     clientes);
     salvarLocal('cbx_prestadores',  prestadores);
+
+    reconstruirEstado(); // reconstrói estado a partir dos lançamentos do GitHub
 
     // Re-aplicar sugestão de cliente após carregar
     OFX_TRANSACOES.forEach(t => {
