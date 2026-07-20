@@ -321,6 +321,10 @@ function renderDash(obras, lanc) {
     <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--cinza);">
       <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-leve);margin-bottom:6px;">Projeção incluindo pendências</div>
       <div class="dist-row" style="font-size:.8rem;">
+        <span>Disponível atual</span>
+        <span style="color:${dispColor};font-weight:700;">${disponivel >= 0 ? '+' : '−'} ${formatarMoeda(Math.abs(disponivel))}</span>
+      </div>
+      <div class="dist-row" style="font-size:.8rem;">
         <span>+ A Receber (contratos)</span>
         <span style="color:var(--verde);">+ ${formatarMoeda(totAR)}</span>
       </div>
@@ -328,7 +332,7 @@ function renderDash(obras, lanc) {
         <span>− MO a Pagar (orçamento)</span>
         <span style="color:var(--vermelho);">− ${formatarMoeda(totMOSald)}</span>
       </div>
-      <div class="dist-row" style="font-weight:800;font-size:.95rem;">
+      <div class="dist-row" style="font-weight:800;font-size:.95rem;border-top:1px solid var(--cinza);margin-top:4px;padding-top:8px;">
         <span>= Saldo Projetado</span>
         <span style="color:${projColor};">${formatarMoeda(projecao)}</span>
       </div>
