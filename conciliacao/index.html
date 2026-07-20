@@ -46,20 +46,25 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
 
-      <!-- IMPORTAR EXTRATO -->
+      <!-- IMPORTAR EXTRATO OFX -->
       <div class="card">
-        <div class="card-header"><h2>📥 Importar Extrato</h2></div>
+        <div class="card-header">
+          <h2>📥 Importar Extrato OFX</h2>
+          <button class="btn btn-outline btn-sm" onclick="limparExtrato()" style="color:var(--vermelho)">✕ Limpar extrato</button>
+        </div>
         <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
-          <p style="font-size:0.85rem;color:var(--texto-leve);">
-            Cole as linhas do extrato bancário abaixo. Formato esperado por linha:<br>
-            <code style="font-size:0.8rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;">DD/MM/AAAA | Descrição | +R$1.000,00 ou -R$1.000,00</code>
-          </p>
-          <textarea id="extrato-input" rows="8" placeholder="Ex:&#10;15/07/2026 | PIX João Silva | -R$1.500,00&#10;15/07/2026 | Medição Obra Rua das Flores | +R$8.000,00&#10;16/07/2026 | Combustível posto | -R$200,00"></textarea>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-primary" onclick="importarExtrato()">📥 Importar Linhas</button>
-            <button class="btn btn-outline" onclick="limparExtrato()">✕ Limpar</button>
+          <div id="drop-zone"
+            style="border:2px dashed var(--cinza);border-radius:10px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--fundo2);"
+            onclick="document.getElementById('ofx-inp').click()"
+            ondragover="event.preventDefault();this.style.borderColor='var(--brand)';this.style.background='#eff6ff'"
+            ondragleave="this.style.borderColor='var(--cinza)';this.style.background='var(--fundo2)'"
+            ondrop="event.preventDefault();this.style.borderColor='var(--cinza)';this.style.background='var(--fundo2)';processarOFX(event.dataTransfer.files[0])">
+            <input type="file" id="ofx-inp" accept=".ofx,.OFX" style="display:none" onchange="processarOFX(this.files[0])"/>
+            <div style="font-size:2.2rem;margin-bottom:8px;">📄</div>
+            <div style="font-weight:700;font-size:.95rem;margin-bottom:4px;">Arraste o arquivo .OFX aqui</div>
+            <div style="font-size:.8rem;color:var(--texto-leve);">ou clique para selecionar · Nubank, Inter, BB, Bradesco…</div>
           </div>
-          <p style="font-size:0.78rem;color:var(--texto-leve);">O extrato fica salvo localmente enquanto você trabalha.</p>
+          <div id="ofx-preview" style="display:none;"></div>
         </div>
       </div>
 
@@ -147,35 +152,120 @@ function atualizarStats() {
   document.getElementById('res-conc-val').textContent= formatarMoeda(concVal);
 }
 
-// ── EXTRATO ──
-function importarExtrato() {
-  const texto = document.getElementById('extrato-input').value.trim();
-  if(!texto){ toast('Cole o extrato acima.','aviso'); return; }
-  const linhas = texto.split('\n').filter(l=>l.trim());
-  let novas=0;
-  linhas.forEach(linha=>{
-    const parts = linha.split('|').map(p=>p.trim());
-    if(parts.length<3) return;
-    const [dataStr, descricao, valorStr] = parts;
-    const isCredito = valorStr.includes('+');
-    const valor = parseFloat(valorStr.replace(/[R$+\-\s.]/g,'').replace(',','.')) || 0;
-    if(!valor) return;
-    const [d,m,a] = dataStr.split('/');
-    const data = a&&m&&d ? `${a}-${m}-${d}` : hoje();
-    extratoLinhas.push({ id:uid(), data, descricao, valor, tipo: isCredito?'credito':'debito', conciliado:false });
-    novas++;
+// ── OFX IMPORT ──
+function processarOFX(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const txns = parseOFX(e.target.result);
+    if (!txns.length) { toast('Nenhuma transação encontrada no arquivo OFX.', 'aviso'); return; }
+    renderPreviewOFX(txns);
+  };
+  // Bancos brasileiros usam ISO-8859-1
+  reader.readAsText(file, 'ISO-8859-1');
+}
+
+function parseOFX(content) {
+  const txns = [];
+  // Suporta SGML-style (sem closing tags) e XML-style
+  const re = /<STMTTRN[^>]*>([\s\S]*?)<\/STMTTRN>/gi;
+  let m;
+  while ((m = re.exec(content)) !== null) {
+    const block = m[1];
+    const get = tag => {
+      const r = new RegExp(`<${tag}[^>]*>([^\n<\r]+)`, 'i').exec(block);
+      return r ? r[1].trim() : '';
+    };
+    const fitid = get('FITID');
+    const dt    = get('DTPOSTED').replace(/\[.*\]/, '').trim();
+    const amt   = parseFloat(get('TRNAMT').replace(',', '.')) || 0;
+    const memo  = (get('MEMO') || get('NAME') || '').replace(/&amp;/g,'&');
+    if (!fitid || !dt || !amt) continue;
+    const data = dt.length >= 8 ? `${dt.slice(0,4)}-${dt.slice(4,6)}-${dt.slice(6,8)}` : hoje();
+    txns.push({ fitid, data, valor: Math.abs(amt), tipo: amt >= 0 ? 'credito' : 'debito', memo });
+  }
+  // Ordena por data crescente
+  return txns.sort((a,b) => a.data.localeCompare(b.data));
+}
+
+function renderPreviewOFX(txns) {
+  const fitidsExist  = new Set(extratoLinhas.map(l => l.fitid).filter(Boolean));
+  const ofxIdsLanc   = new Set(lancamentos.map(l => l.ofxId).filter(Boolean));
+
+  const cat = txns.map(t => ({
+    ...t,
+    status: fitidsExist.has(t.fitid) ? 'ja_importada'
+          : ofxIdsLanc.has(t.fitid)  ? 'ja_conciliada'
+          : 'nova'
+  }));
+  window._ofxPreview = cat;
+
+  const novas   = cat.filter(t => t.status === 'nova').length;
+  const jaImp   = cat.filter(t => t.status === 'ja_importada').length;
+  const jaConc  = cat.filter(t => t.status === 'ja_conciliada').length;
+
+  const pill = (txt, cor) => `<span style="display:inline-block;padding:2px 9px;border-radius:999px;font-size:.72rem;font-weight:700;background:${cor.bg};color:${cor.c}">${txt}</span>`;
+  const pNova  = pill('Nova', {bg:'#fef3c7',c:'#92400e'});
+  const pImp   = pill('Já importada', {bg:'var(--fundo2)',c:'var(--texto-leve)'});
+  const pConc  = pill('Já conciliada', {bg:'#d1fae5',c:'#065f46'});
+
+  const prev = document.getElementById('ofx-preview');
+  prev.style.display = 'block';
+  prev.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+      <div style="background:var(--fundo2);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;">${txns.length}</div>
+        <div style="font-size:.72rem;color:var(--texto-leve);">Total no arquivo</div>
+      </div>
+      <div style="background:#fef3c7;border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:#92400e;">${novas}</div>
+        <div style="font-size:.72rem;color:#92400e;">Novas</div>
+      </div>
+      <div style="background:var(--fundo2);border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:var(--texto-leve);">${jaImp}</div>
+        <div style="font-size:.72rem;color:var(--texto-leve);">Já importadas</div>
+      </div>
+      <div style="background:#d1fae5;border-radius:8px;padding:10px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:700;color:#065f46;">${jaConc}</div>
+        <div style="font-size:.72rem;color:#065f46;">Já conciliadas</div>
+      </div>
+    </div>
+    ${novas
+      ? `<button class="btn btn-primary" style="margin-bottom:10px;" onclick="confirmarImportOFX()">📥 Adicionar ${novas} transação(ões) nova(s) ao extrato</button>`
+      : `<div style="color:var(--verde);font-weight:700;padding:6px 0;margin-bottom:10px;">✓ Todas as transações já estão no sistema</div>`}
+    <div style="max-height:280px;overflow-y:auto;border:1px solid var(--cinza);border-radius:8px;">
+      <table class="tabela" style="width:100%;font-size:.8rem;">
+        <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th></tr></thead>
+        <tbody>${cat.map(t=>`<tr style="opacity:${t.status==='nova'?1:.45}">
+          <td>${formatarData(t.data)}</td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(t.memo)}</td>
+          <td style="font-weight:700;color:${t.tipo==='credito'?'var(--verde)':'var(--vermelho)'};">${t.tipo==='credito'?'+':'-'}${formatarMoeda(t.valor)}</td>
+          <td>${t.status==='nova'?pNova:t.status==='ja_importada'?pImp:pConc}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function confirmarImportOFX() {
+  const novas = (window._ofxPreview || []).filter(t => t.status === 'nova');
+  if (!novas.length) return;
+  novas.forEach(t => {
+    extratoLinhas.push({ id: uid(), fitid: t.fitid, data: t.data, descricao: t.memo, valor: t.valor, tipo: t.tipo, conciliado: false });
   });
   salvarLocal(LS_EXT, extratoLinhas);
-  document.getElementById('extrato-input').value='';
+  window._ofxPreview = null;
+  document.getElementById('ofx-preview').style.display = 'none';
+  document.getElementById('ofx-inp').value = '';
   renderExtrato(); atualizarStats();
-  toast(`${novas} linha(s) importada(s).`,'sucesso');
+  toast(`${novas.length} transação(ões) adicionada(s) ao extrato!`, 'sucesso');
 }
 
 function limparExtrato() {
-  if(!confirm('Limpar todas as linhas do extrato?')) return;
-  extratoLinhas=[];
-  salvarLocal(LS_EXT,[]);
+  if (!confirm('Limpar todas as linhas do extrato?')) return;
+  extratoLinhas = [];
+  salvarLocal(LS_EXT, []);
   renderExtrato(); atualizarStats();
+  toast('Extrato limpo.', 'aviso');
 }
 
 function renderExtrato() {
