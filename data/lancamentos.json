@@ -2618,5 +2618,27 @@
     "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
     "criadoEm": "2026-07-20",
     "ofxId": "6a5e617f-fc7f-4b35-b15c-381f01107fb1"
+  },
+  {
+    "id": "mrtl2ngsiu05g",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001",
+    "data": "2026-07-20",
+    "valor": 520,
+    "status": "pago",
+    "beneficiario": "VITOR NONATO",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpbw8xy9hhvi",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a5e619e-ca51-40ae-b3c1-82aa8a547da9"
   }
 ]
