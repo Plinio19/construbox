@@ -377,18 +377,20 @@ let filtro = 'pendentes';
 function getEstado(id) { return estado[id] || { status: 'pendente', cat: '', obra: '', descricao: '', tipo: '', beneficiario: '', clienteId: '', socioId: '', prestadorId: '' }; }
 function setEstado(id, patch) { estado[id] = { ...getEstado(id), ...patch }; salvarLocal(LS_EST, estado); }
 
-// Reconstrói estado das linhas a partir dos lançamentos (ofxId → estado 'lancado')
-// Usado quando o localStorage está vazio (PC novo) mas os lançamentos já vieram do GitHub
+// Reconstrói estado das linhas a partir dos lançamentos (GitHub → localStorage)
+// 1ª passagem: match direto por ofxId
+// 2ª passagem: fallback por data+valor+tipo para lançamentos antigos sem ofxId
 function reconstruirEstado() {
   let reconstruidos = 0;
+
+  // Passagem 1 — ofxId direto
   lancamentos.forEach(l => {
     if (!l.ofxId) return;
     const atual = getEstado(l.ofxId);
-    if (atual.status !== 'pendente') return; // já tem estado local, respeita
+    if (atual.status !== 'pendente') return;
     if (l.tipo === 'ignorar') {
       setEstado(l.ofxId, { status: 'ignorado', cat: 'ignorar' });
-      reconstruidos++;
-      return;
+      reconstruidos++; return;
     }
     let cat = '';
     if (l.tipo === 'receita') cat = 'recebimento';
@@ -397,14 +399,40 @@ function reconstruirEstado() {
     else cat = 'outros';
     setEstado(l.ofxId, {
       status: 'lancado', cat,
-      obra:        l.obraId      || '',
-      descricao:   l.descricao   || '',
-      clienteId:   l.clienteId   || '',
-      socioId:     l.socioId     || '',
-      prestadorId: l.prestadorId || '',
+      obra: l.obraId || '', descricao: l.descricao || '',
+      clienteId: l.clienteId || '', socioId: l.socioId || '', prestadorId: l.prestadorId || '',
     });
     reconstruidos++;
   });
+
+  // Passagem 2 — fallback data+valor+tipo para lançamentos sem ofxId
+  const semOfx = lancamentos.filter(l => !l.ofxId && l.tipo !== 'ignorar');
+  if (semOfx.length) {
+    OFX_TRANSACOES.forEach(t => {
+      const atual = getEstado(t.id);
+      if (atual.status !== 'pendente') return;
+      const l = semOfx.find(l => {
+        if (l.data !== t.data || l.valor !== t.valor) return false;
+        if (l.tipo === 'receita')    return t.tipo === 'credito';
+        if (l.tipo === 'reembolso')  return t.tipo === 'credito' || t.tipo === 'debito';
+        return t.tipo === 'debito';
+      });
+      if (!l) return;
+      let cat = '';
+      if (l.tipo === 'receita') cat = 'recebimento';
+      else if (l.tipo === 'reembolso' || l.isReembolso) cat = 'reembolso';
+      else if (l.categoria === 'mao-de-obra') cat = 'mao-de-obra';
+      else cat = 'outros';
+      setEstado(t.id, {
+        status: 'lancado', cat,
+        obra: l.obraId || '', descricao: l.descricao || '',
+        clienteId: l.clienteId || '', socioId: l.socioId || '', prestadorId: l.prestadorId || '',
+      });
+      l.ofxId = t.id; // backfill para próximas vezes
+      reconstruidos++;
+    });
+  }
+
   if (reconstruidos > 0) console.log(`[extrato] reconstruídos ${reconstruidos} estados do GitHub`);
 }
 
