@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Compras de Obra</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .mat-pend-obra { margin-bottom:16px; }
+    .mat-pend-obra-header { font-weight:800; font-size:.92rem; padding:10px 14px; background:var(--fundo2); border-radius:8px 8px 0 0; border:1px solid var(--cinza); }
+    .mat-pend-etapa { border:1px solid var(--cinza); border-top:none; padding:10px 16px; }
+    .mat-pend-etapa:last-child { border-radius:0 0 8px 8px; }
+    .mat-pend-etapa-nome { font-weight:700; font-size:.84rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+    .mat-item { display:flex; align-items:center; gap:6px; font-size:.78rem; padding:4px 0; border-bottom:1px solid var(--cinza); }
+    .mat-item:last-child { border-bottom:none; }
+    .mat-item-nome { flex:1; min-width:0; }
+    .mat-item-qtd  { white-space:nowrap; font-size:.74rem; color:var(--texto-leve); }
+    .mat-item-status { flex-shrink:0; }
+    .prog-sm { height:4px; background:var(--cinza); border-radius:2px; width:80px; overflow:hidden; flex-shrink:0; }
+    .prog-sm-fill { height:100%; border-radius:2px; }
+    @media print {
+      .topbar, #sidebar-placeholder, .card-body-tabs, .no-print { display:none !important; }
+      .main { margin-left:0 !important; }
+    }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Compras de Obra</div>
+      <div class="topbar-sub" id="header-sub">Materiais pendentes e pedidos de compra</div>
+    </div>
+    <div class="topbar-acoes" style="display:flex;gap:8px;align-items:center;">
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+      <button class="btn btn-outline btn-sm no-print" onclick="window.print()">🖨️ Imprimir</button>
+      <button class="btn btn-outline btn-sm no-print" onclick="recarregar()">↻ Atualizar</button>
+    </div>
+  </div>
+  <div class="page">
+
+    <div class="stats-grid">
+      <div class="stat vermelho"><div class="valor" id="st-pend">0</div><div class="rotulo">Mat. Pendentes</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-sol">0</div><div class="rotulo">Compras Solicitadas</div></div>
+      <div class="stat verde"><div class="valor" id="st-ok">0</div><div class="rotulo">Entregues / OK</div></div>
+      <div class="stat azul"><div class="valor" id="st-val">R$ 0</div><div class="rotulo">Valor Prev. Total</div></div>
+    </div>
+
+    <!-- Filtros + Tabs -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-body" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="chip ativo" id="tab-pendentes" onclick="setTab('pendentes')">⚠️ Pendentes para Iniciar</button>
+        <button class="chip" id="tab-todos"    onclick="setTab('todos')">📦 Todos os Materiais</button>
+        <button class="chip" id="tab-pedidos"  onclick="setTab('pedidos')">🛒 Pedidos Solicitados</button>
+        <div style="flex:1;"></div>
+        <select id="filtro-obra" class="form-control" style="width:220px;" onchange="render()">
+          <option value="">Todas as Obras</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="conteudo"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL REGISTRAR ENTREGA ══ -->
+<div class="overlay" id="modal-entrega">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <h2>📥 Registrar Entrega</h2>
+      <button class="btn-fechar" onclick="fecharEntrega()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <div style="background:var(--fundo2);padding:10px 14px;border-radius:8px;font-size:.84rem;" id="ent-info"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo">
+          <label>Qtd Entregue (total acumulado)</label>
+          <input type="number" id="ent-qtd" min="0" step="0.01"/>
+        </div>
+        <div class="form-campo">
+          <label>Qtd Comprada (em pedido)</label>
+          <input type="number" id="ent-comp" min="0" step="0.01"/>
+        </div>
+      </div>
+      <div class="form-campo"><label>Fornecedor</label><input type="text" id="ent-forn"/></div>
+      <div class="form-campo"><label>Valor Comprado (R$)</label><input type="number" id="ent-valcomp" min="0" step="0.01"/></div>
+      <div class="form-campo"><label>Observação (NF, data…)</label><input type="text" id="ent-obs" placeholder="Ex: NF 4532 – entregue 20/07"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharEntrega()">Cancelar</button>
+      <button class="btn btn-success" onclick="confirmarEntrega()">✓ Salvar Entrega</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('compras');
+
+const PATH_ET = 'data/etapas.json';
+const PATH_OB = 'data/obras.json';
+const LS_ET   = 'cbx_etapas';
+const LS_OB   = 'cbx_obras';
+
+let etapas = [], obras = [], tab = 'pendentes';
+let entEtapaId = null, entMatId = null;
+
+const ClassLbl = {
+  obrigatorio_iniciar: 'Obrig. Iniciar',
+  obrigatorio_execucao: 'Obrig. Exec.',
+  complementar: 'Complementar',
+  opcional: 'Opcional'
+};
+const MatSLbl = { pendente:'Pendente', comprado:'Comprado', parcial:'Parcial', min_ok:'Mín OK', entregue:'Entregue' };
+
+function matStatusCalc(m) {
+  const prev = m.qtdPrevista || 0;
+  const min  = m.qtdMinIniciar || prev;
+  const ent  = m.qtdEntregue || 0;
+  if (prev > 0 && ent >= prev) return 'entregue';
+  if (min > 0  && ent >= min)  return 'min_ok';
+  if (ent > 0)                 return 'parcial';
+  if (m.pedidoCompra)          return 'comprado';
+  return 'pendente';
+}
+
+const MatSClass = { pendente:'vermelho', comprado:'amarelo', parcial:'azul', min_ok:'verde', entregue:'verde' };
+
+// ── INIT ──
+async function init() {
+  const cacheE = carregarLocal(LS_ET) || [];
+  const cacheO = carregarLocal(LS_OB) || [];
+  etapas = cacheE;
+  obras  = cacheO;
+  popularFiltroObra();
+  atualizarStats();
+  render();
+
+  if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
+  setSyncStatus('amarelo','Carregando...');
+  try {
+    const [rE, rO] = await Promise.all([carregarDados(PATH_ET), carregarDados(PATH_OB)]);
+    etapas = rE.lista; salvarLocal(LS_ET, etapas);
+    obras  = rO.lista; salvarLocal(LS_OB, obras);
+    popularFiltroObra();
+    atualizarStats();
+    render();
+    setSyncStatus('verde','Conectado');
+  } catch(err) {
+    setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso');
+  }
+}
+
+async function recarregar() { init(); }
+
+function popularFiltroObra() {
+  const sel = document.getElementById('filtro-obra');
+  const val = sel.value;
+  const obraIds = [...new Set(etapas.map(e => e.obraId))];
+  sel.innerHTML = '<option value="">Todas as Obras</option>' +
+    obraIds.map(id => {
+      const o = obras.find(x => x.id === id);
+      return `<option value="${id}" ${val===id?'selected':''}>${esc(o?o.nome:id)}</option>`;
+    }).join('');
+}
+
+function atualizarStats() {
+  const filtObraId = document.getElementById('filtro-obra')?.value || '';
+  const ets = etapas.filter(e => !filtObraId || e.obraId === filtObraId);
+  let pend=0, sol=0, ok=0, valor=0;
+  ets.forEach(e => (e.materiais||[]).forEach(m => {
+    const st = matStatusCalc(m);
+    if (['pendente','parcial'].includes(st)) pend++;
+    if (m.pedidoCompra && !['entregue','min_ok'].includes(st)) sol++;
+    if (['entregue','min_ok'].includes(st)) ok++;
+    valor += m.valorPrevisto || 0;
+  }));
+  document.getElementById('st-pend').textContent = pend;
+  document.getElementById('st-sol').textContent  = sol;
+  document.getElementById('st-ok').textContent   = ok;
+  document.getElementById('st-val').textContent  = formatarMoeda(valor);
+}
+
+// ── TABS ──
+function setTab(t) {
+  tab = t;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('ativo'));
+  document.getElementById('tab-'+t).classList.add('ativo');
+  render();
+}
+
+function render() {
+  atualizarStats();
+  if (tab === 'pendentes') renderPendentes();
+  else if (tab === 'todos') renderTodos();
+  else renderPedidos();
+}
+
+// ── TAB PENDENTES: etapas aguardando material ──
+function renderPendentes() {
+  const filtObraId = document.getElementById('filtro-obra').value;
+  const cont = document.getElementById('conteudo');
+
+  // Group by obra, show only stages with obrigatorio_iniciar pending
+  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filtObraId || id === filtObraId);
+
+  let html = '';
+  let totalBloq = 0;
+
+  obraIds.forEach(obraId => {
+    const obra = obras.find(o => o.id === obraId);
+    const etOb = etapas.filter(e => e.obraId === obraId).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+
+    const etBloq = etOb.filter(e => {
+      const pend = (e.materiais||[]).filter(m =>
+        m.classificacao === 'obrigatorio_iniciar' &&
+        (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
+        (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
+      );
+      return pend.length > 0;
+    });
+
+    if (!etBloq.length) return;
+    totalBloq += etBloq.length;
+
+    html += `<div class="mat-pend-obra">
+      <div class="mat-pend-obra-header">🏗️ ${esc(obra?obra.nome:obraId)}
+        <span style="font-weight:400;font-size:.78rem;color:var(--texto-leve);margin-left:8px;">${etBloq.length} etapa(s) aguardando material</span>
+      </div>
+      ${etBloq.map(e => {
+        const pend = (e.materiais||[]).filter(m =>
+          m.classificacao === 'obrigatorio_iniciar' &&
+          (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
+          (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
+        );
+        return `<div class="mat-pend-etapa">
+          <div class="mat-pend-etapa-nome">
+            <span style="background:var(--fundo2);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;">${e.ordem||'—'}</span>
+            ${esc(e.nome)}
+            ${e.responsavel?`<span style="font-size:.72rem;font-weight:400;color:var(--texto-leve);">👤 ${esc(e.responsavel)}</span>`:''}
+          </div>
+          ${pend.map(m => {
+            const min = m.qtdMinIniciar || m.qtdPrevista || 0;
+            const ent = m.qtdEntregue || 0;
+            const pct = min > 0 ? Math.min(100, Math.round(ent/min*100)) : 0;
+            const st  = matStatusCalc(m);
+            return `<div class="mat-item">
+              <div class="mat-item-nome">
+                <strong>${esc(m.nome)}</strong>
+                ${m.fornecedor?`<span style="font-size:.7rem;color:var(--texto-leve);"> · ${esc(m.fornecedor)}</span>`:''}
+              </div>
+              <div class="mat-item-qtd">${ent} / ${min} ${esc(m.unidade||'')} entregues</div>
+              <div class="prog-sm no-print"><div class="prog-sm-fill" style="width:${pct}%;background:${pct>=100?'#059669':pct>0?'#2563eb':'#ef4444'};"></div></div>
+              <span class="sp ms-${st} mat-item-status" style="font-size:.68rem;padding:2px 7px;">${MatSLbl[st]||st}</span>
+              <button class="btn btn-primary btn-sm no-print" onclick='abrirEntrega("${e.id}","${m.id}")' style="font-size:.72rem;padding:2px 8px;">📥 Registrar</button>
+              ${!m.pedidoCompra?`<button class="btn btn-outline btn-sm no-print" onclick='solicitarCompra("${e.id}","${m.id}")' style="font-size:.72rem;padding:2px 8px;">🛒 Solicitar</button>`
+                :`<span style="font-size:.68rem;color:var(--texto-leve);padding:2px 4px;">🛒 Solicitado</span>`}
+            </div>`;
+          }).join('')}
+        </div>`;
+      }).join('')}
+    </div>`;
+  });
+
+  if (!totalBloq) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">
+      ✅ Nenhuma etapa aguardando material${filtObraId?' nesta obra':''}.
+    </div>`;
+    return;
+  }
+  cont.innerHTML = html;
+}
+
+// ── TAB TODOS: todos os materiais de todas as etapas ──
+function renderTodos() {
+  const filtObraId = document.getElementById('filtro-obra').value;
+  const cont = document.getElementById('conteudo');
+
+  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filtObraId || id === filtObraId);
+
+  let html = '';
+  let totalMats = 0;
+
+  obraIds.forEach(obraId => {
+    const obra = obras.find(o => o.id === obraId);
+    const etOb = etapas.filter(e => e.obraId === obraId && (e.materiais||[]).length > 0)
+      .sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+    if (!etOb.length) return;
+
+    html += `<div class="mat-pend-obra">
+      <div class="mat-pend-obra-header">🏗️ ${esc(obra?obra.nome:obraId)}</div>
+      ${etOb.map(e => `<div class="mat-pend-etapa">
+        <div class="mat-pend-etapa-nome">
+          <span style="background:var(--fundo2);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;">${e.ordem||'—'}</span>
+          ${esc(e.nome)}
+          <span style="font-size:.72rem;font-weight:400;color:var(--texto-leve);">${(e.materiais||[]).length} material(is)</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="tabela" style="width:100%;font-size:.76rem;margin:0;">
+            <thead><tr>
+              <th>Material</th><th>Un.</th><th>Classificação</th>
+              <th style="text-align:center;">Prev.</th><th style="text-align:center;">Mín Ini.</th>
+              <th style="text-align:center;">Comprado</th><th style="text-align:center;">Entregue</th>
+              <th style="text-align:center;">Utilizado</th><th style="text-align:center;">Saldo</th>
+              <th>Fornecedor</th><th style="text-align:center;">Valor Prev.</th>
+              <th>Status</th><th class="no-print">Ações</th>
+            </tr></thead>
+            <tbody>${(e.materiais||[]).map(m => {
+              const st = matStatusCalc(m);
+              const saldo = (m.qtdEntregue||0) - (m.qtdUtilizada||0);
+              totalMats++;
+              return `<tr>
+                <td><strong>${esc(m.nome)}</strong></td>
+                <td>${esc(m.unidade||'—')}</td>
+                <td><span style="font-size:.68rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;white-space:nowrap;">${ClassLbl[m.classificacao]||m.classificacao}</span></td>
+                <td style="text-align:center;">${m.qtdPrevista||0}</td>
+                <td style="text-align:center;">${m.qtdMinIniciar||'—'}</td>
+                <td style="text-align:center;">${m.qtdComprada||0}</td>
+                <td style="text-align:center;"><strong>${m.qtdEntregue||0}</strong></td>
+                <td style="text-align:center;">${m.qtdUtilizada||0}</td>
+                <td style="text-align:center;${saldo<0?'color:var(--vermelho);font-weight:700;':''}">${saldo}</td>
+                <td style="font-size:.72rem;">${esc(m.fornecedor||'—')}</td>
+                <td style="text-align:center;">${m.valorPrevisto?formatarMoeda(m.valorPrevisto):'—'}</td>
+                <td><span class="badge ${MatSClass[st]||'cinza'}">${MatSLbl[st]||st}</span></td>
+                <td class="no-print"><div style="display:flex;gap:3px;">
+                  <button class="btn btn-primary btn-sm" onclick='abrirEntrega("${e.id}","${m.id}")' style="font-size:.7rem;padding:2px 7px;">📥</button>
+                  ${!m.pedidoCompra?`<button class="btn btn-outline btn-sm" onclick='solicitarCompra("${e.id}","${m.id}")' style="font-size:.7rem;padding:2px 7px;">🛒</button>`:''}
+                </div></td>
+              </tr>`;
+            }).join('')}</tbody>
+          </table>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  });
+
+  if (!totalMats) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhum material cadastrado nas etapas${filtObraId?' desta obra':''}. Acesse o Cronograma de cada obra para adicionar materiais às etapas.</div>`;
+    return;
+  }
+  cont.innerHTML = html;
+}
+
+// ── TAB PEDIDOS: materiais com compra solicitada ──
+function renderPedidos() {
+  const filtObraId = document.getElementById('filtro-obra').value;
+  const cont = document.getElementById('conteudo');
+
+  const rows = [];
+  etapas.filter(e => !filtObraId || e.obraId === filtObraId).forEach(e => {
+    const obra = obras.find(o => o.id === e.obraId);
+    (e.materiais||[]).filter(m => m.pedidoCompra).forEach(m => {
+      rows.push({ e, obra, m });
+    });
+  });
+
+  if (!rows.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">
+      Nenhuma compra solicitada${filtObraId?' nesta obra':''}.<br>
+      <span style="font-size:.82rem;">Acesse o Cronograma → Materiais de uma etapa e clique em 🛒 Solicitar Compra.</span>
+    </div>`;
+    return;
+  }
+
+  rows.sort((a,b) => {
+    const sa = matStatusCalc(a.m), sb = matStatusCalc(b.m);
+    const order = {pendente:0,comprado:1,parcial:2,min_ok:3,entregue:4};
+    return (order[sa]??9) - (order[sb]??9);
+  });
+
+  cont.innerHTML = `<div class="card"><div class="card-body" style="padding:0;">
+    <div style="overflow-x:auto;">
+      <table class="tabela" style="width:100%;font-size:.78rem;">
+        <thead><tr>
+          <th>Obra</th><th>Etapa</th><th>Material</th><th>Un.</th><th>Classificação</th>
+          <th style="text-align:center;">Prev.</th><th style="text-align:center;">Min Ini.</th>
+          <th style="text-align:center;">Comprado</th><th style="text-align:center;">Entregue</th>
+          <th>Fornecedor</th><th style="text-align:center;">Valor Prev.</th>
+          <th>Status</th><th class="no-print">Ações</th>
+        </tr></thead>
+        <tbody>${rows.map(({e,obra,m}) => {
+          const st = matStatusCalc(m);
+          return `<tr>
+            <td style="font-size:.72rem;">${esc(obra?obra.nome:e.obraId)}</td>
+            <td style="font-size:.72rem;">${esc(e.nome)}</td>
+            <td><strong>${esc(m.nome)}</strong>${m.obs?`<div style="font-size:.68rem;color:var(--texto-leve);">${esc(m.obs)}</div>`:''}</td>
+            <td>${esc(m.unidade||'—')}</td>
+            <td><span style="font-size:.68rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;white-space:nowrap;">${ClassLbl[m.classificacao]||m.classificacao}</span></td>
+            <td style="text-align:center;">${m.qtdPrevista||0}</td>
+            <td style="text-align:center;">${m.qtdMinIniciar||'—'}</td>
+            <td style="text-align:center;">${m.qtdComprada||0}</td>
+            <td style="text-align:center;"><strong>${m.qtdEntregue||0}</strong></td>
+            <td style="font-size:.72rem;">${esc(m.fornecedor||'—')}</td>
+            <td style="text-align:center;">${m.valorPrevisto?formatarMoeda(m.valorPrevisto):'—'}</td>
+            <td><span class="badge ${MatSClass[st]||'cinza'}">${MatSLbl[st]||st}</span></td>
+            <td class="no-print"><div style="display:flex;gap:3px;">
+              <button class="btn btn-primary btn-sm" onclick='abrirEntrega("${e.id}","${m.id}")' style="font-size:.7rem;padding:2px 7px;">📥 Registrar</button>
+            </div></td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>
+  </div></div>`;
+}
+
+// ── REGISTRAR ENTREGA ──
+function abrirEntrega(etapaId, matId) {
+  const e = etapas.find(x => x.id === etapaId); if (!e) return;
+  const m = (e.materiais||[]).find(x => x.id === matId); if (!m) return;
+  entEtapaId = etapaId; entMatId = matId;
+
+  document.getElementById('ent-info').innerHTML =
+    `<strong>${esc(m.nome)}</strong> — Etapa: ${esc(e.nome)}<br>
+     Previsto: <strong>${m.qtdPrevista||0} ${esc(m.unidade||'')}</strong>
+     · Mín para iniciar: <strong>${m.qtdMinIniciar||'—'} ${esc(m.unidade||'')}</strong>
+     · Entregue atual: <strong>${m.qtdEntregue||0} ${esc(m.unidade||'')}</strong>`;
+
+  document.getElementById('ent-qtd').value     = m.qtdEntregue||0;
+  document.getElementById('ent-comp').value    = m.qtdComprada||0;
+  document.getElementById('ent-forn').value    = m.fornecedor||'';
+  document.getElementById('ent-valcomp').value = m.valorComprado||0;
+  document.getElementById('ent-obs').value     = m.obs||'';
+  document.getElementById('modal-entrega').classList.add('aberto');
+  setTimeout(()=>document.getElementById('ent-qtd').focus(), 80);
+}
+
+async function confirmarEntrega() {
+  const e = etapas.find(x => x.id === entEtapaId); if (!e) return;
+  const m = (e.materiais||[]).find(x => x.id === entMatId); if (!m) return;
+
+  m.qtdEntregue  = parseFloat(document.getElementById('ent-qtd').value)||0;
+  m.qtdComprada  = parseFloat(document.getElementById('ent-comp').value)||0;
+  m.fornecedor   = document.getElementById('ent-forn').value.trim();
+  m.valorComprado= parseFloat(document.getElementById('ent-valcomp').value)||0;
+  m.obs          = document.getElementById('ent-obs').value.trim();
+
+  fecharEntrega();
+  await syncEtapas(`Entrega: ${m.nome} — ${e.nome}`);
+  render(); atualizarStats();
+  toast(`Entrega registrada: ${m.nome}`, 'sucesso');
+}
+
+function fecharEntrega() { document.getElementById('modal-entrega').classList.remove('aberto'); }
+
+// ── SOLICITAR COMPRA (inline) ──
+async function solicitarCompra(etapaId, matId) {
+  const e = etapas.find(x => x.id === etapaId); if (!e) return;
+  const m = (e.materiais||[]).find(x => x.id === matId); if (!m) return;
+  m.pedidoCompra    = true;
+  m.solicitacaoData = hoje();
+  await syncEtapas(`Solicitação de compra: ${m.nome}`);
+  render(); atualizarStats();
+  toast(`Compra solicitada: ${m.nome}`, 'sucesso');
+}
+
+// ── SYNC (sempre busca SHA fresco) ──
+async function syncEtapas(msg) {
+  salvarLocal(LS_ET, etapas);
+  if (!configurado()) { setSyncStatus('cinza','Offline'); return; }
+  setSyncStatus('amarelo','Sincronizando...');
+  try {
+    const cur = await ghGet(PATH_ET);
+    const sha = cur ? cur.sha : null;
+    await salvarDados(PATH_ET, etapas, sha, msg || 'Compras: atualizar materiais');
+    setSyncStatus('verde','Sincronizado');
+  } catch(err) {
+    setSyncStatus('vermelho','Erro sync');
+    toast('Erro ao sincronizar: '+err.message, 'aviso');
+  }
+}
+
+init();
+</script>
+</body>
+</html>

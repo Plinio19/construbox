@@ -48,6 +48,12 @@
     .ord-bloqueada  { background:#fee2e2; color:#991b1b; }
     .ord-concluida  { background:#d1fae5; color:#065f46; }
     .ord-cancelada  { background:#f3f4f6; color:#6b7280; }
+
+    .ms-pendente { background:#fee2e2; color:#991b1b; }
+    .ms-comprado { background:#fef3c7; color:#92400e; }
+    .ms-parcial  { background:#dbeafe; color:#1e40af; }
+    .ms-min_ok   { background:#d1fae5; color:#065f46; }
+    .ms-entregue { background:#d1fae5; color:#065f46; }
   </style>
 </head>
 <body>
@@ -202,6 +208,71 @@
   </div>
 </div>
 
+<!-- ══ MODAL MATERIAIS ══ -->
+<div class="overlay" id="modal-mat">
+  <div class="modal" style="max-width:98vw;width:900px;max-height:92vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h2 id="mat-titulo">📦 Materiais da Etapa</h2>
+      <button class="btn-fechar" onclick="fecharMateriais()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0 20px 8px;">
+      <div id="mat-summary" class="stats-grid" style="margin-bottom:14px;"></div>
+      <div id="mat-alert"></div>
+      <div id="mat-body"></div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--cinza);">
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;color:var(--texto-leve);">ADICIONAR MATERIAL</div>
+        <div style="display:grid;grid-template-columns:1fr 70px 180px 80px 90px 130px 100px auto;gap:8px;align-items:end;">
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Material *</label><input type="text" id="mn-nome" placeholder="Cimento CP-II" onkeydown="if(event.key==='Enter')addMat()"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Unidade</label><input type="text" id="mn-unid" placeholder="sc"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Classificação</label>
+            <select id="mn-class" style="font-size:.78rem;padding:5px 6px;">
+              <option value="obrigatorio_iniciar">Obrig. para Iniciar</option>
+              <option value="obrigatorio_execucao">Obrig. durante Exec.</option>
+              <option value="complementar">Complementar</option>
+              <option value="opcional">Opcional</option>
+            </select>
+          </div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Qtd Prev.</label><input type="number" id="mn-prev" placeholder="0" min="0" step="0.01"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Qtd Mín Ini.</label><input type="number" id="mn-min" placeholder="0" min="0" step="0.01"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Fornecedor</label><input type="text" id="mn-forn" placeholder="Opcional"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Valor Prev. (R$)</label><input type="number" id="mn-valprev" placeholder="0" min="0" step="0.01"/></div>
+          <button class="btn btn-primary" style="white-space:nowrap;padding:8px 12px;" onclick="addMat()">+ Adicionar</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharMateriais()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarMateriais()">✓ Salvar Materiais</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ATUALIZAR MATERIAL ══ -->
+<div class="overlay" id="modal-mat-upd">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <h2 id="mup-titulo">Atualizar Quantidades</h2>
+      <button class="btn-fechar" onclick="fecharMatUpd()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <div style="font-size:.82rem;color:var(--texto-leve);background:var(--fundo2);padding:8px 12px;border-radius:6px;" id="mup-info"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Qtd Comprada</label><input type="number" id="mup-comp" min="0" step="0.01"/></div>
+        <div class="form-campo"><label>Qtd Entregue</label><input type="number" id="mup-entr" min="0" step="0.01"/></div>
+        <div class="form-campo"><label>Qtd Reservada</label><input type="number" id="mup-res" min="0" step="0.01"/></div>
+        <div class="form-campo"><label>Qtd Utilizada</label><input type="number" id="mup-util" min="0" step="0.01"/></div>
+      </div>
+      <div class="form-campo"><label>Fornecedor</label><input type="text" id="mup-forn"/></div>
+      <div class="form-campo"><label>Valor Comprado (R$)</label><input type="number" id="mup-valcomp" min="0" step="0.01"/></div>
+      <div class="form-campo"><label>Observação (NF, data entrega…)</label><input type="text" id="mup-obs" placeholder="Ex: NF 1234 — entregue 18/07"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharMatUpd()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarMatUpd()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toasts"></div>
 <script src="../../assets/core.js"></script>
 <script>
@@ -280,11 +351,17 @@ function atualizarStats() {
   document.getElementById('st-bloc').textContent = etapas.filter(e=>AGUARDANDO.includes(statusEf(e))).length;
 }
 
-// Status efetivo: se tem deps não concluídas, força aguardando_etapa visualmente
+// Status efetivo: deps → material → status salvo
 function statusEf(e) {
   if (['em_execucao','pausada','concluida','cancelada','bloqueada'].includes(e.status)) return e.status;
   if ((e.dependencias||[]).some(id => { const d=etapas.find(x=>x.id===id); return !d||d.status!=='concluida'; }))
     return 'aguardando_etapa';
+  const matPend = (e.materiais||[]).filter(m =>
+    m.classificacao === 'obrigatorio_iniciar' &&
+    (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
+    (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
+  );
+  if (matPend.length) return 'aguardando_material';
   return e.status;
 }
 
@@ -324,6 +401,8 @@ function cardEtapa(e) {
   const cl   = e.checklist||[];
   const clFt = cl.filter(i=>i.concluida).length;
   const clOp = cl.filter(i=>i.obrigatoria&&!i.concluida).length;
+  const mats = e.materiais||[];
+  const matsPend = mats.filter(m => m.classificacao==='obrigatorio_iniciar' && (m.qtdMinIniciar||m.qtdPrevista||0)>0 && (m.qtdEntregue||0)<(m.qtdMinIniciar||m.qtdPrevista||0));
 
   const depsBlock = (e.dependencias||[])
     .map(id=>etapas.find(x=>x.id===id))
@@ -342,6 +421,7 @@ function cardEtapa(e) {
       btns.push(`<button class="btn btn-success btn-sm" onclick='mudarStatus("${e.id}","em_execucao")'>▶ Retomar</button>`);
   }
   btns.push(`<button class="btn btn-outline btn-sm" onclick='abrirChecklist("${e.id}")' title="Checklist">📋${cl.length?` ${clFt}/${cl.length}`:''}</button>`);
+  btns.push(`<button class="btn btn-outline btn-sm${matsPend.length?' pulsing':''}" onclick='abrirMateriais("${e.id}")' title="Materiais">📦${mats.length?` ${mats.length}`:''}</button>`);
   btns.push(`<button class="btn btn-outline btn-sm" onclick='editarEtapa("${e.id}")'>✏️</button>`);
   if (!['em_execucao','concluida'].includes(se))
     btns.push(`<button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirEtapa("${e.id}")'>🗑</button>`);
@@ -406,6 +486,18 @@ function cardEtapa(e) {
               ${item.obrigatoria&&!item.concluida?'<span style="font-size:.68rem;color:#991b1b;font-weight:700;">OBRIGATÓRIA</span>':''}
             </div>`).join('')}
           ${cl.length>4?`<button class="btn btn-outline btn-sm" style="margin-top:6px;" onclick='abrirChecklist("${e.id}")'>Ver todas (${cl.length})</button>`:''}
+        </div>`:''}
+      ${mats.length?`
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--cinza);">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.73rem;">
+            <span style="font-weight:700;color:var(--texto-leve);">📦 MATERIAIS:</span>
+            ${mats.filter(m=>matStatusCalc(m)==='entregue').length?`<span style="color:#059669;">✓ ${mats.filter(m=>matStatusCalc(m)==='entregue').length} entregue(s)</span>`:''}
+            ${mats.filter(m=>matStatusCalc(m)==='min_ok').length?`<span style="color:#2563eb;">● ${mats.filter(m=>matStatusCalc(m)==='min_ok').length} mín OK</span>`:''}
+            ${matsPend.length?`<span style="color:#d97706;font-weight:700;">⚠️ ${matsPend.length} pend. p/ iniciar</span>`:''}
+            ${!matsPend.length&&mats.length&&mats.every(m=>['entregue','min_ok'].includes(matStatusCalc(m)))?`<span style="color:#059669;font-weight:700;">✓ Tudo OK</span>`:''}
+            <button class="btn btn-outline btn-sm" style="font-size:.68rem;padding:1px 7px;" onclick='abrirMateriais("${e.id}")'>Ver detalhes →</button>
+          </div>
+          ${matsPend.length?`<div style="font-size:.72rem;color:var(--texto-leve);margin-top:3px;">${matsPend.map(m=>`${esc(m.nome)}: ${m.qtdEntregue||0}/${m.qtdMinIniciar||m.qtdPrevista||0} ${esc(m.unidade||'')}`).join(' · ')}</div>`:''}
         </div>`:''}
       ${e.observacoes?`<p style="font-size:.78rem;font-style:italic;color:var(--texto-leve);margin-top:8px;">${esc(e.observacoes)}</p>`:''}
     </div>
@@ -592,6 +684,182 @@ async function salvarChecklist() {
   toast('Checklist salvo!','sucesso');
 }
 function fecharChecklist() { document.getElementById('modal-cl').classList.remove('aberto'); }
+
+// ── MATERIAIS ──
+const ClassLbl = {
+  obrigatorio_iniciar: 'Obrig. Iniciar',
+  obrigatorio_execucao: 'Obrig. Exec.',
+  complementar: 'Complementar',
+  opcional: 'Opcional'
+};
+const MatSLbl = { pendente:'Pendente', comprado:'Comprado', parcial:'Parcial', min_ok:'Mín OK', entregue:'Entregue' };
+
+let matId = null, matUpdId = null;
+
+function matStatusCalc(m) {
+  const prev = m.qtdPrevista || 0;
+  const min  = m.qtdMinIniciar || prev;
+  const ent  = m.qtdEntregue || 0;
+  if (prev > 0 && ent >= prev) return 'entregue';
+  if (min > 0  && ent >= min)  return 'min_ok';
+  if (ent > 0)                 return 'parcial';
+  if (m.pedidoCompra)          return 'comprado';
+  return 'pendente';
+}
+
+function abrirMateriais(etapaId) {
+  matId = etapaId;
+  const e = etapas.find(x => x.id === etapaId); if (!e) return;
+  document.getElementById('mat-titulo').textContent = `📦 Materiais — ${e.nome}`;
+  ['mn-nome','mn-unid','mn-forn'].forEach(id => document.getElementById(id).value = '');
+  ['mn-prev','mn-min','mn-valprev'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mn-class').value = 'obrigatorio_iniciar';
+  renderMatBody(e);
+  document.getElementById('modal-mat').classList.add('aberto');
+}
+
+function renderMatBody(e) {
+  const mats = e.materiais || [];
+  const pendObrig = mats.filter(m => m.classificacao==='obrigatorio_iniciar' && (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0) && (m.qtdMinIniciar||m.qtdPrevista||0)>0).length;
+  const totalEntr = mats.filter(m => ['entregue','min_ok'].includes(matStatusCalc(m))).length;
+  const valorPrev = mats.reduce((s,m) => s+(m.valorPrevisto||0), 0);
+  const valorComp = mats.reduce((s,m) => s+(m.valorComprado||0), 0);
+
+  document.getElementById('mat-summary').innerHTML = `
+    <div class="stat" style="padding:10px;"><div class="valor" style="font-size:1.1rem;">${mats.length}</div><div class="rotulo">Materiais</div></div>
+    <div class="stat ${pendObrig?'vermelho':'verde'}" style="padding:10px;"><div class="valor" style="font-size:1.1rem;">${pendObrig}</div><div class="rotulo">Pend. Obrig.</div></div>
+    <div class="stat amarelo" style="padding:10px;"><div class="valor" style="font-size:1.1rem;">${totalEntr}</div><div class="rotulo">OK / Entregues</div></div>
+    <div class="stat azul" style="padding:10px;"><div class="valor" style="font-size:.85rem;">${formatarMoeda(valorPrev)}</div><div class="rotulo">Valor Previsto</div></div>
+  `;
+
+  const al = document.getElementById('mat-alert');
+  if (pendObrig > 0) {
+    al.style.display = 'block';
+    al.innerHTML = `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.82rem;">
+      ⚠️ <strong>${pendObrig} material(is) obrigatório(s) para iniciar</strong> ainda sem quantidade mínima entregue.
+    </div>`;
+  } else { al.style.display = 'none'; }
+
+  const body = document.getElementById('mat-body');
+  if (!mats.length) {
+    body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--texto-leve);">Nenhum material cadastrado. Use o formulário abaixo para adicionar.</div>';
+    return;
+  }
+  body.innerHTML = `<div style="overflow-x:auto;"><table class="tabela" style="width:100%;font-size:.78rem;">
+    <thead><tr>
+      <th>Material</th><th>Un.</th><th>Classificação</th>
+      <th style="text-align:center;">Prev.</th><th style="text-align:center;">Mín Ini.</th>
+      <th style="text-align:center;">Comprado</th><th style="text-align:center;">Entregue</th>
+      <th style="text-align:center;">Utilizado</th><th style="text-align:center;">Saldo</th>
+      <th>Fornecedor</th><th style="text-align:center;">Valor Prev.</th><th>Status</th><th>Ações</th>
+    </tr></thead>
+    <tbody>${mats.map(m => {
+      const st = matStatusCalc(m);
+      const saldo = (m.qtdEntregue||0) - (m.qtdUtilizada||0);
+      return `<tr>
+        <td><strong>${esc(m.nome)}</strong></td>
+        <td>${esc(m.unidade||'—')}</td>
+        <td><span style="font-size:.68rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;white-space:nowrap;">${ClassLbl[m.classificacao]||m.classificacao}</span></td>
+        <td style="text-align:center;">${m.qtdPrevista||0}</td>
+        <td style="text-align:center;">${m.qtdMinIniciar||'—'}</td>
+        <td style="text-align:center;">${m.qtdComprada||0}</td>
+        <td style="text-align:center;"><strong>${m.qtdEntregue||0}</strong></td>
+        <td style="text-align:center;">${m.qtdUtilizada||0}</td>
+        <td style="text-align:center;${saldo<0?'color:var(--vermelho);font-weight:700;':''}">${saldo}</td>
+        <td style="font-size:.72rem;">${esc(m.fornecedor||'—')}</td>
+        <td style="text-align:center;">${m.valorPrevisto?formatarMoeda(m.valorPrevisto):'—'}</td>
+        <td><span class="sp ms-${st}" style="font-size:.68rem;padding:2px 7px;">${MatSLbl[st]||st}</span></td>
+        <td><div style="display:flex;gap:3px;flex-shrink:0;">
+          <button class="btn btn-primary btn-sm" onclick='abrirMatUpd("${m.id}")' title="Atualizar quantidades">📥</button>
+          ${!m.pedidoCompra
+            ?`<button class="btn btn-outline btn-sm" onclick='solicitarCompra("${m.id}")' title="Solicitar compra">🛒</button>`
+            :`<span style="font-size:.68rem;color:var(--texto-leve);padding:2px 4px;">🛒 Solicitado</span>`}
+          <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerMat("${m.id}")'>✕</button>
+        </div></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+}
+
+function addMat() {
+  const nome = document.getElementById('mn-nome').value.trim();
+  if (!nome) { toast('Nome do material é obrigatório.','aviso'); return; }
+  const e = etapas.find(x => x.id === matId); if (!e) return;
+  if (!e.materiais) e.materiais = [];
+  e.materiais.push({
+    id: uid(), nome,
+    unidade:       document.getElementById('mn-unid').value.trim(),
+    classificacao: document.getElementById('mn-class').value,
+    qtdPrevista:   parseFloat(document.getElementById('mn-prev').value)||0,
+    qtdMinIniciar: parseFloat(document.getElementById('mn-min').value)||0,
+    qtdComprada:0, qtdEntregue:0, qtdReservada:0, qtdUtilizada:0,
+    fornecedor:    document.getElementById('mn-forn').value.trim(),
+    valorPrevisto: parseFloat(document.getElementById('mn-valprev').value)||0,
+    valorComprado:0, pedidoCompra:false, solicitacaoData:null, obs:''
+  });
+  ['mn-nome','mn-unid','mn-forn'].forEach(id => document.getElementById(id).value = '');
+  ['mn-prev','mn-min','mn-valprev'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mn-class').value = 'obrigatorio_iniciar';
+  renderMatBody(e);
+  document.getElementById('mn-nome').focus();
+}
+
+function removerMat(mid) {
+  const e = etapas.find(x => x.id === matId); if (!e) return;
+  if (!confirm('Remover este material?')) return;
+  e.materiais = (e.materiais||[]).filter(m => m.id !== mid);
+  renderMatBody(e);
+}
+
+function solicitarCompra(mid) {
+  const e = etapas.find(x => x.id === matId); if (!e) return;
+  const m = (e.materiais||[]).find(x => x.id === mid); if (!m) return;
+  m.pedidoCompra = true;
+  m.solicitacaoData = hoje();
+  renderMatBody(e);
+  toast(`Compra solicitada: ${m.nome}`, 'sucesso');
+}
+
+function abrirMatUpd(mid) {
+  const e = etapas.find(x => x.id === matId); if (!e) return;
+  const m = (e.materiais||[]).find(x => x.id === mid); if (!m) return;
+  matUpdId = mid;
+  document.getElementById('mup-titulo').textContent = `Atualizar — ${m.nome}`;
+  document.getElementById('mup-info').textContent = `Previsto: ${m.qtdPrevista||0} ${m.unidade||''} · Mín para iniciar: ${m.qtdMinIniciar||'—'} ${m.unidade||''}`;
+  document.getElementById('mup-comp').value    = m.qtdComprada||0;
+  document.getElementById('mup-entr').value    = m.qtdEntregue||0;
+  document.getElementById('mup-res').value     = m.qtdReservada||0;
+  document.getElementById('mup-util').value    = m.qtdUtilizada||0;
+  document.getElementById('mup-forn').value    = m.fornecedor||'';
+  document.getElementById('mup-valcomp').value = m.valorComprado||0;
+  document.getElementById('mup-obs').value     = m.obs||'';
+  document.getElementById('modal-mat-upd').classList.add('aberto');
+}
+
+function salvarMatUpd() {
+  const e = etapas.find(x => x.id === matId); if (!e) return;
+  const m = (e.materiais||[]).find(x => x.id === matUpdId); if (!m) return;
+  m.qtdComprada  = parseFloat(document.getElementById('mup-comp').value)||0;
+  m.qtdEntregue  = parseFloat(document.getElementById('mup-entr').value)||0;
+  m.qtdReservada = parseFloat(document.getElementById('mup-res').value)||0;
+  m.qtdUtilizada = parseFloat(document.getElementById('mup-util').value)||0;
+  m.fornecedor   = document.getElementById('mup-forn').value.trim();
+  m.valorComprado= parseFloat(document.getElementById('mup-valcomp').value)||0;
+  m.obs          = document.getElementById('mup-obs').value.trim();
+  fecharMatUpd();
+  renderMatBody(e);
+  toast('Quantidades atualizadas!', 'sucesso');
+}
+
+function fecharMatUpd() { document.getElementById('modal-mat-upd').classList.remove('aberto'); }
+
+async function salvarMateriais() {
+  fecharMateriais();
+  await sync('Materiais atualizados');
+  renderEtapas(); atualizarStats();
+  toast('Materiais salvos!', 'sucesso');
+}
+
+function fecharMateriais() { document.getElementById('modal-mat').classList.remove('aberto'); }
 
 // ── SYNC ──
 async function sync(msg) {
