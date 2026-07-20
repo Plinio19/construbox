@@ -2640,5 +2640,27 @@
     "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
     "criadoEm": "2026-07-20",
     "ofxId": "6a5e619e-ca51-40ae-b3c1-82aa8a547da9"
+  },
+  {
+    "id": "mrtl2qxweu4qd",
+    "obraId": "obra_rionegro",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.",
+    "data": "2026-07-20",
+    "valor": 4000,
+    "status": "pago",
+    "beneficiario": "Marcos Xavier",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb19v1kv9q8",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a5e6af2-eb53-4601-9b72-cff2b5e31a26"
   }
 ]
