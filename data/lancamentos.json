@@ -2464,5 +2464,27 @@
     "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.",
     "criadoEm": "2026-07-20",
     "ofxId": "6a1b1d2d"
+  },
+  {
+    "id": "mrt7to4jacdv3",
+    "obraId": "mrt7td7f5lijr",
+    "tipo": "receita",
+    "categoria": "adiantamento",
+    "descricao": "HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "data": "2026-05-20",
+    "valor": 15000,
+    "status": "pago",
+    "beneficiario": "HOTEL IN BOX LTDA",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-05-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a0d9c6a"
   }
 ]
