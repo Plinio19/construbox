@@ -2398,5 +2398,27 @@
     "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - BCO C6 S.A.",
     "criadoEm": "2026-07-20",
     "ofxId": "6a2c45b6"
+  },
+  {
+    "id": "mrt40yw4dkgde",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "Ricardo Monteiro Menino - NU PAGAMENTOS",
+    "data": "2026-06-16",
+    "valor": 150,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-06-16",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - NU PAGAMENTOS",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a319596"
   }
 ]
