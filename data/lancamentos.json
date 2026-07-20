@@ -2596,5 +2596,27 @@
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-07-20",
     "ofxId": "6a5e5fbc-8877-4689-88f6-8db2d103c389"
+  },
+  {
+    "id": "mrtl2hg42hzmq",
+    "obraId": "obra_itu",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â",
+    "data": "2026-07-20",
+    "valor": 5980,
+    "status": "pago",
+    "beneficiario": "VITOR NONATO",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpbw8xy9hhvi",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-20",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a5e617f-fc7f-4b35-b15c-381f01107fb1"
   }
 ]
