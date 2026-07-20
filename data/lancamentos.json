@@ -2662,5 +2662,685 @@
     "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6",
     "criadoEm": "2026-07-20",
     "ofxId": "6a5e6af2-eb53-4601-9b72-cff2b5e31a26"
+  },
+  {
+    "id": "mrtqt3rf888l0",
+    "ofxId": "6a0d989e",
+    "tipo": "ignorar",
+    "data": "2026-05-20",
+    "valor": 1173.29,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rgdolfk",
+    "ofxId": "6a0d9cdb",
+    "tipo": "ignorar",
+    "data": "2026-05-20",
+    "valor": 2500,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rg5m21o",
+    "ofxId": "6a0e0f28",
+    "tipo": "ignorar",
+    "data": "2026-05-20",
+    "valor": 443.6,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rgcarx3",
+    "ofxId": "6a0f0881",
+    "tipo": "ignorar",
+    "data": "2026-05-21",
+    "valor": 1000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rhdfsp2",
+    "ofxId": "6a0f9067",
+    "tipo": "ignorar",
+    "data": "2026-05-21",
+    "valor": 1443.6,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rifo8ze",
+    "ofxId": "6a0f9283",
+    "tipo": "ignorar",
+    "data": "2026-05-21",
+    "valor": 18556.4,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rii6aez",
+    "ofxId": "6a142b6e",
+    "tipo": "ignorar",
+    "data": "2026-05-25",
+    "valor": 5000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rjwvhy5",
+    "ofxId": "6a143a02",
+    "tipo": "ignorar",
+    "data": "2026-05-25",
+    "valor": 2429,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rjgmwgs",
+    "ofxId": "6a198db1",
+    "tipo": "ignorar",
+    "data": "2026-05-29",
+    "valor": 660,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rjjps5e",
+    "ofxId": "6a198f6e",
+    "tipo": "ignorar",
+    "data": "2026-05-29",
+    "valor": 6000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rj6iumx",
+    "ofxId": "6a19f5eb",
+    "tipo": "ignorar",
+    "data": "2026-05-29",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rk2xn3o",
+    "ofxId": "6a1b1ce3",
+    "tipo": "ignorar",
+    "data": "2026-05-30",
+    "valor": 800,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rk6fj4i",
+    "ofxId": "6a1dbeff",
+    "tipo": "ignorar",
+    "data": "2026-06-01",
+    "valor": 584.29,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rkepm7v",
+    "ofxId": "6a1dbf0c",
+    "tipo": "ignorar",
+    "data": "2026-06-01",
+    "valor": 584.29,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rkleit6",
+    "ofxId": "6a1ddba1",
+    "tipo": "ignorar",
+    "data": "2026-06-01",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rliexnr",
+    "ofxId": "6a202ba1",
+    "tipo": "ignorar",
+    "data": "2026-06-03",
+    "valor": 3000,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rlhhozo",
+    "ofxId": "6a202be3",
+    "tipo": "ignorar",
+    "data": "2026-06-03",
+    "valor": 6500,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rl9wgyh",
+    "ofxId": "6a202f24",
+    "tipo": "ignorar",
+    "data": "2026-06-03",
+    "valor": 3000,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rl0h8cv",
+    "ofxId": "6a23367e",
+    "tipo": "ignorar",
+    "data": "2026-06-05",
+    "valor": 2000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rmmocyx",
+    "ofxId": "6a233689",
+    "tipo": "ignorar",
+    "data": "2026-06-05",
+    "valor": 4000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rmzxcx2",
+    "ofxId": "6a26d2ad",
+    "tipo": "ignorar",
+    "data": "2026-06-08",
+    "valor": 4964.77,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rm9q4gx",
+    "ofxId": "6a27dcc0",
+    "tipo": "ignorar",
+    "data": "2026-06-09",
+    "valor": 2000,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rmmvp7i",
+    "ofxId": "6a27dcf8",
+    "tipo": "ignorar",
+    "data": "2026-06-09",
+    "valor": 5243.6,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rn5fj68",
+    "ofxId": "6a280286",
+    "tipo": "ignorar",
+    "data": "2026-06-09",
+    "valor": 1500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rnwuej7",
+    "ofxId": "6a280290",
+    "tipo": "ignorar",
+    "data": "2026-06-09",
+    "valor": 1500,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rnsrg6q",
+    "ofxId": "6a2a9f95",
+    "tipo": "ignorar",
+    "data": "2026-06-11",
+    "valor": 150,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rn63w4l",
+    "ofxId": "6a2aed01",
+    "tipo": "ignorar",
+    "data": "2026-06-11",
+    "valor": 1500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3roa9uln",
+    "ofxId": "6a2c0d98",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 150,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rob7ypl",
+    "ofxId": "6a2c45c8",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 1500,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ro8vy14",
+    "ofxId": "6a2c4f33",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 35.23,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rpdd557",
+    "ofxId": "6a2c6371",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 518,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rpvemox",
+    "ofxId": "6a2c931f",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 180,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rpygrd6",
+    "ofxId": "6a2cb413",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 200,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rpnwzjv",
+    "ofxId": "6a2cb446",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 215.23,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rqf2xx3",
+    "ofxId": "6a2cb452",
+    "tipo": "ignorar",
+    "data": "2026-06-12",
+    "valor": 215.23,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rq05imq",
+    "ofxId": "6a2d4d04",
+    "tipo": "ignorar",
+    "data": "2026-06-13",
+    "valor": 2000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rq9zt0v",
+    "ofxId": "6a2d60c0",
+    "tipo": "ignorar",
+    "data": "2026-06-13",
+    "valor": 60,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rqvupub",
+    "ofxId": "6a2d613f",
+    "tipo": "ignorar",
+    "data": "2026-06-13",
+    "valor": 5,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rqbgiov",
+    "ofxId": "6a2d80ba",
+    "tipo": "ignorar",
+    "data": "2026-06-13",
+    "valor": 2500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rrce41b",
+    "ofxId": "6a2ef7cf",
+    "tipo": "ignorar",
+    "data": "2026-06-14",
+    "valor": 521.12,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rro3vzk",
+    "ofxId": "6a319581",
+    "tipo": "ignorar",
+    "data": "2026-06-16",
+    "valor": 150,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rrz44tk",
+    "ofxId": "6a33e806",
+    "tipo": "ignorar",
+    "data": "2026-06-18",
+    "valor": 2500,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rslid17",
+    "ofxId": "6a33e8b1",
+    "tipo": "ignorar",
+    "data": "2026-06-18",
+    "valor": 775,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rsk2wwv",
+    "ofxId": "6a33ea13",
+    "tipo": "ignorar",
+    "data": "2026-06-18",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rsfxvvg",
+    "ofxId": "6a344e4a",
+    "tipo": "ignorar",
+    "data": "2026-06-18",
+    "valor": 17500,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rsohmsy",
+    "ofxId": "6a352491",
+    "tipo": "ignorar",
+    "data": "2026-06-19",
+    "valor": 1200,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rtbtrac",
+    "ofxId": "6a355fc7",
+    "tipo": "ignorar",
+    "data": "2026-06-19",
+    "valor": 85,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rtylfnp",
+    "ofxId": "6a357f4e",
+    "tipo": "ignorar",
+    "data": "2026-06-19",
+    "valor": 16,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rtpvf54",
+    "ofxId": "6a359a4e",
+    "tipo": "ignorar",
+    "data": "2026-06-19",
+    "valor": 200,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ruuwbzn",
+    "ofxId": "6a3914f8",
+    "tipo": "ignorar",
+    "data": "2026-06-22",
+    "valor": 137.2,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rudibe4",
+    "ofxId": "6a3a7c6d",
+    "tipo": "ignorar",
+    "data": "2026-06-23",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ru51f1q",
+    "ofxId": "6a3d10c3",
+    "tipo": "ignorar",
+    "data": "2026-06-25",
+    "valor": 978.01,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ru43r2k",
+    "ofxId": "6a3d122d",
+    "tipo": "ignorar",
+    "data": "2026-06-25",
+    "valor": 2000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rvm13sn",
+    "ofxId": "6a3ed0a1",
+    "tipo": "ignorar",
+    "data": "2026-06-26",
+    "valor": 70,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rv9c1gl",
+    "ofxId": "6a43e5b4",
+    "tipo": "ignorar",
+    "data": "2026-06-30",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rvu9dhb",
+    "ofxId": "6a46e1c8",
+    "tipo": "ignorar",
+    "data": "2026-07-02",
+    "valor": 2000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rvjjy3r",
+    "ofxId": "6a46e1d6",
+    "tipo": "ignorar",
+    "data": "2026-07-02",
+    "valor": 500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rwpb8g7",
+    "ofxId": "6a4817a8",
+    "tipo": "ignorar",
+    "data": "2026-07-03",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rw73xie",
+    "ofxId": "6a498580",
+    "tipo": "ignorar",
+    "data": "2026-07-04",
+    "valor": 1417.07,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rwrfox0",
+    "ofxId": "6a4ce46a",
+    "tipo": "ignorar",
+    "data": "2026-07-07",
+    "valor": 7.07,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rwv905o",
+    "ofxId": "6a4ce47a",
+    "tipo": "ignorar",
+    "data": "2026-07-07",
+    "valor": 1500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rx05vme",
+    "ofxId": "6a4ce498",
+    "tipo": "ignorar",
+    "data": "2026-07-07",
+    "valor": 1400,
+    "descricao": "Aplicação RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rxzhcbh",
+    "ofxId": "6a4edaf8",
+    "tipo": "ignorar",
+    "data": "2026-07-08",
+    "valor": 3000,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rxwxr9i",
+    "ofxId": "6a4f9575",
+    "tipo": "ignorar",
+    "data": "2026-07-09",
+    "valor": 1500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3rx8fzia",
+    "ofxId": "6a52b2f3",
+    "tipo": "ignorar",
+    "data": "2026-07-11",
+    "valor": 1500,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ryj85we",
+    "ofxId": "6a551c62",
+    "tipo": "ignorar",
+    "data": "2026-07-13",
+    "valor": 908.01,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ryjkvml",
+    "ofxId": "6a551c6d",
+    "tipo": "ignorar",
+    "data": "2026-07-13",
+    "valor": 58.38,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtqt3ryuu4t6",
+    "ofxId": "6a551c78",
+    "tipo": "ignorar",
+    "data": "2026-07-13",
+    "valor": 35.23,
+    "descricao": "Resgate RDB",
+    "status": "ignorado",
+    "criadoEm": "2026-07-20"
   }
 ]
