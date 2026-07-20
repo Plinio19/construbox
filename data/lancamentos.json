@@ -2530,5 +2530,27 @@
     "obs": "[Divisão] Transferência recebida pelo Pix - HOTEL IN BOX LTDA - ASAAS IP S.A.",
     "criadoEm": "2026-07-20",
     "ofxId": "6a550bed"
+  },
+  {
+    "id": "mrtl0365vbyp8",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STON",
+    "data": "2026-07-18",
+    "valor": 650,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-18",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-07-20",
+    "ofxId": "6a5bd105-828b-411a-a743-adda081a2d64"
   }
 ]
