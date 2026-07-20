@@ -63,5 +63,18 @@
     "previsaoConclusao": null,
     "obs": "",
     "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mrtpspr8nhfhn",
+    "nome": "OBRA TESTE",
+    "cliente": "",
+    "endereco": "",
+    "status": "ativa",
+    "valorContrato": 0,
+    "valorMaoDeObra": 0,
+    "dataInicio": null,
+    "previsaoConclusao": null,
+    "obs": "",
+    "criadoEm": "2026-07-20"
   }
 ]
