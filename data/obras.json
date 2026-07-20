@@ -50,5 +50,18 @@
     "previsaoConclusao": null,
     "obs": "",
     "criadoEm": "2026-07-17"
+  },
+  {
+    "id": "mrt7td7f5lijr",
+    "nome": "MONTES CLAROS",
+    "cliente": "HOTEL INBOX",
+    "endereco": "",
+    "status": "ativa",
+    "valorContrato": 25000,
+    "valorMaoDeObra": 0,
+    "dataInicio": null,
+    "previsaoConclusao": null,
+    "obs": "",
+    "criadoEm": "2026-07-20"
   }
 ]
