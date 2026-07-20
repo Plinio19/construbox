@@ -322,6 +322,21 @@ const OFX_TRANSACOES = [
   {id:'6a595bee',data:'2026-07-16',tipo:'debito', valor:3500.00, memo:'Transferência enviada pelo Pix - GEOVANE ALVES MENDES - BCO C6 S.A.'},
 ];
 
+// ── TRANSAÇÕES IMPORTADAS VIA CONCILIAÇÃO ──
+// Lê o cbx_extrato (localStorage da conciliação) e mescla as que têm fitid e ainda não estão aqui
+(function() {
+  try {
+    const imp = JSON.parse(localStorage.getItem('cbx_extrato') || '[]');
+    imp.forEach(t => {
+      if (!t.fitid) return;
+      if (OFX_TRANSACOES.find(x => x.id === t.fitid)) return; // já existe
+      OFX_TRANSACOES.push({ id: t.fitid, data: t.data, tipo: t.tipo, valor: t.valor, memo: t.descricao });
+    });
+    // Ordena por data
+    OFX_TRANSACOES.sort((a, b) => a.data.localeCompare(b.data));
+  } catch(e) {}
+})();
+
 // ── SUGESTÃO AUTOMÁTICA ──
 function sugerirCategoria(t) {
   const m = t.memo.toUpperCase();
