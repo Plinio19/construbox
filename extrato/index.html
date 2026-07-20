@@ -385,6 +385,11 @@ function reconstruirEstado() {
     if (!l.ofxId) return;
     const atual = getEstado(l.ofxId);
     if (atual.status !== 'pendente') return; // já tem estado local, respeita
+    if (l.tipo === 'ignorar') {
+      setEstado(l.ofxId, { status: 'ignorado', cat: 'ignorar' });
+      reconstruidos++;
+      return;
+    }
     let cat = '';
     if (l.tipo === 'receita') cat = 'recebimento';
     else if (l.tipo === 'reembolso' || l.isReembolso) cat = 'reembolso';
@@ -588,22 +593,41 @@ function onCatChange(id) {
 }
 
 // ── IGNORAR ──
-function ignorar(id) {
+async function ignorar(id) {
+  const t = OFX_TRANSACOES.find(x => x.id === id); if (!t) return;
+  // Evita duplicar se já existe lançamento ignorar para este ofxId
+  if (!lancamentos.find(l => l.ofxId === id && l.tipo === 'ignorar')) {
+    lancamentos.push({ id: uid(), ofxId: id, tipo: 'ignorar', data: t.data, valor: t.valor, descricao: t.memo, status: 'ignorado', criadoEm: hoje() });
+    salvarLocal(LS_LANC, lancamentos);
+    if (configurado()) {
+      try { shaLanc = await salvarDados('data/lancamentos.json', lancamentos, shaLanc, `Ignorar: ${t.memo.slice(0,50)}`); }
+      catch(e) { toast('Salvo local. Erro sync: '+e.message,'aviso'); }
+    }
+  }
   setEstado(id, { status: 'ignorado' });
-  renderLista();
-  toast('Ignorado.', '');
+  renderLista(); atualizarStats();
+  toast('Ignorado e salvo.', 'sucesso');
 }
 
-function ignorarTodosRDB() {
+async function ignorarTodosRDB() {
   const pendentes = OFX_TRANSACOES.filter(t => {
     const est = getEstado(t.id);
     return est.status === 'pendente' && est.cat === 'ignorar';
   });
   if (!pendentes.length) { toast('Nenhum pendente com categoria Ignorar.', 'aviso'); return; }
   if (!confirm(`Ignorar ${pendentes.length} linha(s) com categoria "Ignorar" (RDB, aplicações, etc.)?`)) return;
-  pendentes.forEach(t => setEstado(t.id, { status: 'ignorado' }));
+  pendentes.forEach(t => {
+    if (!lancamentos.find(l => l.ofxId === t.id && l.tipo === 'ignorar'))
+      lancamentos.push({ id: uid(), ofxId: t.id, tipo: 'ignorar', data: t.data, valor: t.valor, descricao: t.memo, status: 'ignorado', criadoEm: hoje() });
+    setEstado(t.id, { status: 'ignorado' });
+  });
+  salvarLocal(LS_LANC, lancamentos);
   renderLista(); atualizarStats();
   toast(`${pendentes.length} linha(s) ignorada(s).`, 'sucesso');
+  if (configurado()) {
+    try { shaLanc = await salvarDados('data/lancamentos.json', lancamentos, shaLanc, `Ignorar em lote: ${pendentes.length} linhas`); }
+    catch(e) { toast('Salvo local. Erro sync: '+e.message,'aviso'); }
+  }
 }
 
 // ── LANÇAR ──
@@ -691,11 +715,17 @@ async function desfazer(ofxId) {
   }
 }
 
-function desfazerIgnorar(ofxId) {
+async function desfazerIgnorar(ofxId) {
+  lancamentos = lancamentos.filter(l => !(l.ofxId === ofxId && l.tipo === 'ignorar'));
+  salvarLocal(LS_LANC, lancamentos);
   const est = getEstado(ofxId);
   setEstado(ofxId, { ...est, status: 'pendente' });
-  renderLista();
+  renderLista(); atualizarStats();
   toast('Item voltou para pendente.', '');
+  if (configurado()) {
+    try { shaLanc = await salvarDados('data/lancamentos.json', lancamentos, shaLanc, `Desfazer ignorar: ${ofxId}`); }
+    catch(e) { toast('Salvo local. Erro sync: '+e.message,'aviso'); }
+  }
 }
 
 // ── SPLIT MODAL ──
