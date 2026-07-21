@@ -36,6 +36,27 @@
             "valorUnitario": 0
           }
         ]
+      },
+      {
+        "id": "mruzz2uy38p2v",
+        "nome": "Montagem da Estrutura",
+        "categoria": "estrutura",
+        "responsavel": "",
+        "peso": 0,
+        "memorial": "Esta etapa compreende o transporte, posicionamento, levantamento e fixação definitiva dos painéis de Steel Frame previamente fabricados na Etapa 01 – Panelização, formando a estrutura completa do box conforme o projeto executivo.\n\nNenhum painel deverá ser montado sem que tenha sido previamente inspecionado, identificado e aprovado na etapa de fabricação.\n\nEscopo dos Serviços\n\nOs serviços desta etapa compreendem:\n\nConferência da locação e das medidas da base.\nConferência do alinhamento e nível da fundação ou plataforma.\nTransporte interno dos painéis até sua posição de montagem.\nLevantamento dos painéis estruturais.\nPosicionamento conforme o projeto executivo.\nFixação dos painéis na base estrutural.\nUnião entre painéis utilizando os elementos de fixação especificados.\nInstalação dos travamentos provisórios e definitivos.\nConferência do prumo, nível e esquadro da estrutura.\nAjustes necessários para garantir o perfeito alinhamento da edificação.\nLiberação da estrutura para a etapa de fechamento das paredes.\nComposição da Estrutura\n\nCada box deverá ser montado utilizando obrigatoriamente os seguintes painéis:\n\n02 (duas) paredes laterais;\n01 (uma) parede de fundo;\n01 (uma) parede frontal;\n01 (uma) parede do banheiro.\n\nTodos os painéis deverão ser montados exatamente na posição definida no projeto executivo, respeitando sua identificação e sequência de montagem.\n\nMateriais Aplicados\n\nNesta etapa poderão ser utilizados, conforme o projeto:\n\nEstrutura metálica previamente panelizada.\nParafusos estruturais.\nElementos de fixação.\nCantoneiras e reforços estruturais (quando previstos).\nChumbadores ou fixadores na base (quando especificados).",
+        "ordem": 2,
+        "materiais": [
+          {
+            "id": "mruzzmuyvj3dp",
+            "nome": "PARAFUSOS PARA ESTRUTURA - HIB",
+            "unidade": "un",
+            "classificacao": "obrigatorio_iniciar",
+            "qtdPorBox": 1,
+            "qtdMinPorBox": 1,
+            "fornecedor": "",
+            "valorUnitario": 0
+          }
+        ]
       }
     ]
   }
