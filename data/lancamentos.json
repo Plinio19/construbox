@@ -3342,5 +3342,27 @@
     "descricao": "Resgate RDB",
     "status": "ignorado",
     "criadoEm": "2026-07-20"
+  },
+  {
+    "id": "mruon1rf0qq3n",
+    "obraId": "obra_sinop",
+    "tipo": "despesa",
+    "categoria": "mao-de-obra",
+    "descricao": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/",
+    "data": "2026-07-21",
+    "valor": 1000,
+    "status": "pago",
+    "beneficiario": "GEOVANE ALVES",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": "mrpb82fzwc2dk",
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-21",
+    "dataVencimento": null,
+    "isReembolso": false,
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2",
+    "criadoEm": "2026-07-21",
+    "ofxId": "6a5f5961-b7d7-4e60-a24b-6fd627625b27"
   }
 ]
