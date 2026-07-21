@@ -3430,5 +3430,27 @@
     "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
     "criadoEm": "2026-07-21",
     "ofxId": "6a5f6f3c-3cc8-4bd8-bf59-685dc0f59e46"
+  },
+  {
+    "id": "mruonc55l6meu",
+    "obraId": "obra_itu",
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â",
+    "data": "2026-07-21",
+    "valor": 126.32,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": null,
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-21",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
+    "criadoEm": "2026-07-21",
+    "ofxId": "6a5f6f62-e300-47f7-8323-4ba3202c41a4"
   }
 ]
