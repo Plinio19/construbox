@@ -945,9 +945,11 @@ async function addMat() {
   if (!nome) { toast('Nome do material é obrigatório.','aviso'); return; }
   const e = etapas.find(x => x.id === matId); if (!e) return;
   if (!e.materiais) e.materiais = [];
+  const catItem = matCatalogo.find(x=>x.nome.toLowerCase()===nome.toLowerCase());
   e.materiais.push({
     id: uid(), nome,
-    unidade:       document.getElementById('mn-unid').value.trim(),
+    catalogoId:    catItem?.id || null,
+    unidade:       document.getElementById('mn-unid').value,
     classificacao: document.getElementById('mn-class').value,
     qtdPrevista:   parseFloat(document.getElementById('mn-prev').value)||0,
     qtdMinIniciar: parseFloat(document.getElementById('mn-min').value)||0,

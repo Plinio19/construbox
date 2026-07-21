@@ -552,9 +552,11 @@ function addMatTpl() {
   const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
   const e = (m.etapas||[]).find(x=>x.id===etapaMatTplId); if(!e) return;
   if(!e.materiais) e.materiais=[];
+  const catItem = matCatalogo.find(x=>x.nome.toLowerCase()===nome.toLowerCase());
   e.materiais.push({
     id:uid(), nome,
-    unidade:        document.getElementById('amm-unid').value.trim(),
+    catalogoId:     catItem?.id || null,
+    unidade:        document.getElementById('amm-unid').value,
     classificacao:  document.getElementById('amm-class').value,
     qtdPorBox:      parseFloat(document.getElementById('amm-qtd').value)||0,
     qtdMinPorBox:   parseFloat(document.getElementById('amm-min').value)||0,

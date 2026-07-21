@@ -558,7 +558,11 @@ function abrirModalMaterial(m) {
 async function salvarMaterial() {
   const nome = document.getElementById('mmat-nome').value.trim();
   if (!nome) { toast('Informe o nome.','aviso'); return; }
-  const id = document.getElementById('mmat-id').value || uid();
+  const id       = document.getElementById('mmat-id').value || uid();
+  const isEdicao = !!document.getElementById('mmat-id').value;
+  const antigo   = materiais.find(x=>x.id===id);
+  const oldNome    = antigo?.nome    || null;
+  const oldUnidade = antigo?.unidade || null;
   const obj = {
     id, nome,
     codigo:       document.getElementById('mmat-codigo').value.trim(),
@@ -572,12 +576,68 @@ async function salvarMaterial() {
     estoqueMin:   parseFloat(document.getElementById('mmat-estmin').value)||0,
     prazoEntrega: parseInt(document.getElementById('mmat-prazo').value)||0,
     obs:          document.getElementById('mmat-obs').value.trim(),
-    criadoEm: hoje(),
+    criadoEm: antigo?.criadoEm || hoje(),
   };
   materiais = materiais.filter(x=>x.id!==id); materiais.push(obj);
   salvarLocal('cbx_materiais_cat', materiais); renderMateriais(); fecharModal('modal-material');
   toast('Material salvo!','sucesso');
   if (configurado()) try { shaMat = await salvarDados('data/materiais_catalogo.json', materiais, shaMat, `Material: ${nome}`); } catch(e) { toast('Erro sync','aviso'); }
+  // propagar alterações para etapas e modelos
+  if (isEdicao && oldNome && (oldNome !== nome || oldUnidade !== obj.unidade)) {
+    await cascadeMaterialUpdate(id, oldNome, nome, obj.unidade);
+  }
+}
+
+async function cascadeMaterialUpdate(catId, oldNome, newNome, newUnidade) {
+  if (!configurado()) return;
+  let alterados = 0;
+
+  // ── ETAPAS ──
+  try {
+    const rE = await carregarDados('data/etapas.json').catch(()=>null);
+    if (rE) {
+      let mudou = false;
+      (rE.lista||[]).forEach(e => {
+        (e.materiais||[]).forEach(m => {
+          if (m.catalogoId === catId || m.nome === oldNome) {
+            if (m.nome !== newNome) { m.nome = newNome; mudou = true; alterados++; }
+            if (m.unidade !== newUnidade) { m.unidade = newUnidade; mudou = true; }
+            m.catalogoId = catId; // garante vínculo
+          }
+        });
+      });
+      if (mudou) {
+        salvarLocal('cbx_etapas', rE.lista);
+        await salvarDados('data/etapas.json', rE.lista, rE.sha, `Cascata material: ${oldNome} → ${newNome}`);
+      }
+    }
+  } catch(e) { /* etapas.json não existe ainda */ }
+
+  // ── MODELOS ──
+  try {
+    const rM = await carregarDados('data/modelos.json').catch(()=>null);
+    if (rM) {
+      let mudou = false;
+      (rM.lista||[]).forEach(mod => {
+        (mod.etapas||[]).forEach(e => {
+          (e.materiais||[]).forEach(m => {
+            if (m.catalogoId === catId || m.nome === oldNome) {
+              if (m.nome !== newNome) { m.nome = newNome; mudou = true; alterados++; }
+              if (m.unidade !== newUnidade) { m.unidade = newUnidade; mudou = true; }
+              m.catalogoId = catId;
+            }
+          });
+        });
+      });
+      if (mudou) {
+        salvarLocal('cbx_modelos', rM.lista);
+        await salvarDados('data/modelos.json', rM.lista, rM.sha, `Cascata material: ${oldNome} → ${newNome}`);
+      }
+    }
+  } catch(e) { /* modelos.json não existe ainda */ }
+
+  if (alterados > 0)
+    toast(`✓ Nome atualizado em ${alterados} referência(s) em etapas/modelos.`, 'sucesso');
 }
 
 async function excluirMaterial(id) {
