@@ -55,6 +55,12 @@
     .ms-min_ok   { background:#d1fae5; color:#065f46; }
     .ms-entregue { background:#d1fae5; color:#065f46; }
 
+    /* ── Wizard de 3 passos ── */
+    .wiz-bar { display:flex; margin:0 20px; border-radius:8px; overflow:hidden; background:var(--cinza); }
+    .wiz-step { flex:1; text-align:center; padding:9px 4px; font-size:.75rem; font-weight:700; color:var(--texto-leve); transition:all .2s; }
+    .wiz-step.ativo { background:var(--brand); color:#fff; }
+    .wiz-step.ok { background:var(--verde); color:#fff; }
+
     /* ── Material cards (sem scroll horizontal) ── */
     .mat-linha       { background:var(--fundo2); border:1px solid var(--cinza); border-radius:9px; padding:12px 14px; margin-bottom:7px; transition:background .15s; }
     .mat-linha:hover { background:var(--branco); }
@@ -81,7 +87,7 @@
         <span id="sync-texto">Conectando</span>
       </div>
       <a href="../" class="btn btn-outline btn-sm">← Obras</a>
-      <button class="btn btn-primary" onclick="abrirModalEtapa()">+ Nova Etapa</button>
+      <button class="btn btn-primary" onclick="iniciarAssistenteEtapa()">+ Nova Etapa</button>
     </div>
   </div>
   <div class="page">
@@ -117,6 +123,11 @@
     <div class="modal-header">
       <h2 id="me-titulo">Nova Etapa</h2>
       <button class="btn-fechar" onclick="fecharModalEtapa()">✕</button>
+    </div>
+    <div id="wiz-bar-etapa" class="wiz-bar" style="display:none;margin-top:12px;">
+      <div class="wiz-step ativo">① Etapa</div>
+      <div class="wiz-step">② Checklist</div>
+      <div class="wiz-step">③ Materiais</div>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
 
@@ -182,8 +193,10 @@
       <div class="form-campo"><label>Observações</label><textarea id="e-obs" rows="2" placeholder="Observações adicionais..."></textarea></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharModalEtapa()">Cancelar</button>
-      <button class="btn btn-success" onclick="salvarEtapa()">✓ Salvar Etapa</button>
+      <button class="btn btn-outline" id="wiz-btn-cancel-etapa-normal" onclick="fecharModalEtapa()">Cancelar</button>
+      <button class="btn btn-success" id="wiz-btn-save-etapa" onclick="salvarEtapa()">✓ Salvar Etapa</button>
+      <button class="btn btn-outline" id="wiz-btn-cancel-etapa" style="display:none;" onclick="cancelarAssistente()">✕ Cancelar</button>
+      <button class="btn btn-primary" id="wiz-btn-next-etapa" style="display:none;" onclick="wizIrParaChecklist()">Próximo: Checklist →</button>
     </div>
   </div>
 </div>
@@ -194,6 +207,11 @@
     <div class="modal-header">
       <h2 id="cl-titulo">Checklist</h2>
       <button class="btn-fechar" onclick="fecharChecklist()">✕</button>
+    </div>
+    <div id="wiz-bar-cl" class="wiz-bar" style="display:none;margin-top:12px;">
+      <div class="wiz-step ok">① Etapa</div>
+      <div class="wiz-step ativo">② Checklist</div>
+      <div class="wiz-step">③ Materiais</div>
     </div>
     <div class="modal-body" style="padding:0 20px 8px;">
       <div id="cl-body"></div>
@@ -213,8 +231,10 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharChecklist()">Fechar</button>
-      <button class="btn btn-success" onclick="salvarChecklist()">✓ Salvar</button>
+      <button class="btn btn-outline" id="wiz-btn-close-cl" onclick="fecharChecklist()">Fechar</button>
+      <button class="btn btn-success" id="wiz-btn-save-cl" onclick="salvarChecklist()">✓ Salvar</button>
+      <button class="btn btn-outline" id="wiz-btn-cancel-cl" style="display:none;" onclick="cancelarAssistente()">✕ Cancelar</button>
+      <button class="btn btn-primary" id="wiz-btn-next-cl" style="display:none;" onclick="wizIrParaMateriais()">Próximo: Materiais →</button>
     </div>
   </div>
 </div>
@@ -225,6 +245,11 @@
     <div class="modal-header">
       <h2 id="mat-titulo">📦 Materiais da Etapa</h2>
       <button class="btn-fechar" onclick="fecharMateriais()">✕</button>
+    </div>
+    <div id="wiz-bar-mat" class="wiz-bar" style="display:none;margin-top:12px;">
+      <div class="wiz-step ok">① Etapa</div>
+      <div class="wiz-step ok">② Checklist</div>
+      <div class="wiz-step ativo">③ Materiais</div>
     </div>
     <div class="modal-body" style="padding:0 20px 8px;">
       <div id="mat-summary" class="stats-grid" style="margin-bottom:14px;"></div>
@@ -252,8 +277,10 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharMateriais()">Cancelar</button>
-      <button class="btn btn-success" onclick="salvarMateriais()">✓ Salvar Materiais</button>
+      <button class="btn btn-outline" id="wiz-btn-cancel-mat-normal" onclick="fecharMateriais()">Cancelar</button>
+      <button class="btn btn-success" id="wiz-btn-save-mat" onclick="salvarMateriais()">✓ Salvar Materiais</button>
+      <button class="btn btn-outline" id="wiz-btn-cancel-mat" style="display:none;" onclick="cancelarAssistente()">✕ Cancelar</button>
+      <button class="btn btn-success" id="wiz-btn-concluir-mat" style="display:none;" onclick="wizConcluirAssistente()">✓ Concluir Assistente</button>
     </div>
   </div>
 </div>
@@ -594,10 +621,11 @@ function fecharModalEtapa() { document.getElementById('modal-etapa').classList.r
 
 async function salvarEtapa() {
   const nome = document.getElementById('e-nome').value.trim();
-  if (!nome) { toast('Nome da etapa é obrigatório.','erro'); return; }
+  if (!nome) { toast('Nome da etapa é obrigatório.','erro'); return null; }
   const deps = [...document.querySelectorAll('#deps-wrap input:checked')].map(i=>i.value);
+  const etapaId = idEdit || uid();
   const etapa = {
-    id:                  idEdit||uid(),
+    id:                  etapaId,
     obraId:              OBRA_ID,
     nome,
     codigo:              document.getElementById('e-cod').value.trim(),
@@ -622,6 +650,7 @@ async function salvarEtapa() {
   await sync(`Etapa: ${nome}`);
   renderEtapas(); atualizarStats();
   toast('Etapa salva!','sucesso');
+  return etapaId;
 }
 
 async function excluirEtapa(id) {
@@ -667,18 +696,20 @@ function renderClBody(e) {
     </div>`).join('');
 }
 
-function toggleClItem(itemId) {
+async function toggleClItem(itemId) {
   const e=etapas.find(x=>x.id===clId); if(!e) return;
   const item=e.checklist.find(i=>i.id===itemId); if(!item) return;
   item.concluida=!item.concluida;
   renderClBody(e);
+  await sync('Checklist atualizado');
 }
-function removerClItem(itemId) {
+async function removerClItem(itemId) {
   const e=etapas.find(x=>x.id===clId); if(!e) return;
   e.checklist=e.checklist.filter(i=>i.id!==itemId);
   renderClBody(e);
+  await sync('Item removido do checklist');
 }
-function addClItem() {
+async function addClItem() {
   const desc=document.getElementById('cl-nd').value.trim();
   if(!desc){toast('Informe a descrição.','aviso');return;}
   const e=etapas.find(x=>x.id===clId); if(!e) return;
@@ -687,6 +718,7 @@ function addClItem() {
   document.getElementById('cl-nd').value='';
   document.getElementById('cl-nr').value='';
   renderClBody(e);
+  await sync('Item adicionado ao checklist');
 }
 async function salvarChecklist() {
   fecharChecklist();
@@ -786,7 +818,7 @@ function renderMatBody(e) {
   }).join('');
 }
 
-function addMat() {
+async function addMat() {
   const nome = document.getElementById('mn-nome').value.trim();
   if (!nome) { toast('Nome do material é obrigatório.','aviso'); return; }
   const e = etapas.find(x => x.id === matId); if (!e) return;
@@ -807,22 +839,25 @@ function addMat() {
   document.getElementById('mn-class').value = 'obrigatorio_iniciar';
   renderMatBody(e);
   document.getElementById('mn-nome').focus();
+  await sync(`Material adicionado: ${nome}`);
 }
 
-function removerMat(mid) {
+async function removerMat(mid) {
   const e = etapas.find(x => x.id === matId); if (!e) return;
   if (!confirm('Remover este material?')) return;
   e.materiais = (e.materiais||[]).filter(m => m.id !== mid);
   renderMatBody(e);
+  await sync('Material removido');
 }
 
-function solicitarCompra(mid) {
+async function solicitarCompra(mid) {
   const e = etapas.find(x => x.id === matId); if (!e) return;
   const m = (e.materiais||[]).find(x => x.id === mid); if (!m) return;
   m.pedidoCompra = true;
   m.solicitacaoData = hoje();
   renderMatBody(e);
   toast(`Compra solicitada: ${m.nome}`, 'sucesso');
+  await sync(`Solicitação de compra: ${m.nome}`);
 }
 
 function abrirMatUpd(mid) {
@@ -841,7 +876,7 @@ function abrirMatUpd(mid) {
   document.getElementById('modal-mat-upd').classList.add('aberto');
 }
 
-function salvarMatUpd() {
+async function salvarMatUpd() {
   const e = etapas.find(x => x.id === matId); if (!e) return;
   const m = (e.materiais||[]).find(x => x.id === matUpdId); if (!m) return;
   m.qtdComprada  = parseFloat(document.getElementById('mup-comp').value)||0;
@@ -854,6 +889,7 @@ function salvarMatUpd() {
   fecharMatUpd();
   renderMatBody(e);
   toast('Quantidades atualizadas!', 'sucesso');
+  await sync(`Quantidades atualizadas: ${m.nome}`);
 }
 
 function fecharMatUpd() { document.getElementById('modal-mat-upd').classList.remove('aberto'); }
@@ -882,6 +918,77 @@ async function sync(msg) {
     setSyncStatus('vermelho','Erro sync');
     toast('Erro ao sincronizar: '+err.message,'aviso');
   }
+}
+
+// ── ASSISTENTE DE 3 PASSOS ──
+let modoAssistente = false;
+let wizEtapaId = null;
+
+function atualizarWizUI() {
+  const wiz = modoAssistente;
+  // barras de progresso
+  ['wiz-bar-etapa','wiz-bar-cl','wiz-bar-mat'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.style.display = wiz ? 'flex' : 'none';
+  });
+  // botões modal-etapa
+  document.getElementById('wiz-btn-cancel-etapa-normal').style.display = wiz ? 'none' : '';
+  document.getElementById('wiz-btn-save-etapa').style.display          = wiz ? 'none' : '';
+  document.getElementById('wiz-btn-cancel-etapa').style.display        = wiz ? '' : 'none';
+  document.getElementById('wiz-btn-next-etapa').style.display          = wiz ? '' : 'none';
+  // botões modal-cl
+  document.getElementById('wiz-btn-close-cl').style.display   = wiz ? 'none' : '';
+  document.getElementById('wiz-btn-save-cl').style.display    = wiz ? 'none' : '';
+  document.getElementById('wiz-btn-cancel-cl').style.display  = wiz ? '' : 'none';
+  document.getElementById('wiz-btn-next-cl').style.display    = wiz ? '' : 'none';
+  // botões modal-mat
+  document.getElementById('wiz-btn-cancel-mat-normal').style.display = wiz ? 'none' : '';
+  document.getElementById('wiz-btn-save-mat').style.display          = wiz ? 'none' : '';
+  document.getElementById('wiz-btn-cancel-mat').style.display        = wiz ? '' : 'none';
+  document.getElementById('wiz-btn-concluir-mat').style.display      = wiz ? '' : 'none';
+}
+
+function iniciarAssistenteEtapa() {
+  modoAssistente = true;
+  wizEtapaId = null;
+  abrirModalEtapa();
+  atualizarWizUI();
+  document.getElementById('me-titulo').textContent = '🧙 Nova Etapa — Passo 1 de 3';
+}
+
+async function wizIrParaChecklist() {
+  const id = await salvarEtapa();
+  if (!id) return;
+  wizEtapaId = id;
+  abrirChecklist(id);
+  document.getElementById('cl-titulo').textContent = '🧙 Checklist — Passo 2 de 3';
+  atualizarWizUI();
+}
+
+async function wizIrParaMateriais() {
+  fecharChecklist();
+  await sync('Checklist salvo');
+  renderEtapas(); atualizarStats();
+  abrirMateriais(wizEtapaId);
+  document.getElementById('mat-titulo').textContent = '🧙 Materiais — Passo 3 de 3';
+  atualizarWizUI();
+}
+
+async function wizConcluirAssistente() {
+  modoAssistente = false;
+  fecharMateriais();
+  await sync('Materiais salvos');
+  renderEtapas(); atualizarStats();
+  toast('Etapa criada com sucesso! ✓', 'sucesso');
+  wizEtapaId = null;
+}
+
+function cancelarAssistente() {
+  modoAssistente = false;
+  wizEtapaId = null;
+  fecharModalEtapa();
+  fecharChecklist();
+  fecharMateriais();
+  atualizarWizUI();
 }
 
 init();
