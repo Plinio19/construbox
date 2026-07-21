@@ -56,6 +56,17 @@
             "qtdMinPorBox": 1,
             "fornecedor": "",
             "valorUnitario": 0
+          },
+          {
+            "id": "mrv128w7ab3kw",
+            "nome": "MANTA ASFÁLTICA AUTOADESIVA",
+            "catalogoId": "mrv0zuc85kddn",
+            "unidade": "un",
+            "classificacao": "obrigatorio_iniciar",
+            "qtdPorBox": 2,
+            "qtdMinPorBox": 2,
+            "fornecedor": "",
+            "valorUnitario": 0
           }
         ]
       }
