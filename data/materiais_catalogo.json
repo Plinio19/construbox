@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "mruze2hktyugb",
+    "nome": "ESTRUTURA METALICA",
+    "codigo": "MAT-0001",
+    "spec": "",
+    "ncm": "",
+    "unidade": "un",
+    "categoria": "Ferragem e Aço",
+    "marca": "",
+    "fornecedorRef": "",
+    "valorRef": 0,
+    "estoqueMin": 0,
+    "prazoEntrega": 0,
+    "obs": "",
+    "criadoEm": "2026-07-21"
+  }
+]
