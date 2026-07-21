@@ -1,8 +1,8 @@
 [
   {
-    "id": "mruze2hktyugb",
-    "nome": "ESTRUTURA METALICA",
-    "codigo": "MAT-0001",
+    "id": "mruzeyfrbvyjs",
+    "nome": "PARAFUSOS PARA ESTRUTURA",
+    "codigo": "MAT-0002",
     "spec": "",
     "ncm": "",
     "unidade": "un",
@@ -16,9 +16,9 @@
     "criadoEm": "2026-07-21"
   },
   {
-    "id": "mruzeyfrbvyjs",
-    "nome": "PARAFUSOS PARA ESTRUTURA",
-    "codigo": "MAT-0002",
+    "id": "mruze2hktyugb",
+    "nome": "ESTRUTURA METALICA - HIB",
+    "codigo": "MAT-0001",
     "spec": "",
     "ncm": "",
     "unidade": "un",
