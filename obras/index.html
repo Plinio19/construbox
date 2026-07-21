@@ -60,6 +60,23 @@
       <button class="btn-fechar" onclick="fecharModal()">✕</button>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <!-- SEÇÃO MODELO (só nova obra) -->
+      <div id="modelo-section" style="background:var(--fundo2);border:1px solid var(--cinza);border-radius:8px;padding:12px 14px;">
+        <div style="font-size:.75rem;font-weight:700;color:var(--texto-leve);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;">📐 Modelo de Obra</div>
+        <div style="display:grid;grid-template-columns:1fr 180px;gap:12px;align-items:end;">
+          <div class="form-campo" style="margin:0">
+            <label>Usar modelo</label>
+            <select id="f-modelo" onchange="onModeloChange()">
+              <option value="">— Obra avulsa (sem modelo) —</option>
+            </select>
+          </div>
+          <div class="form-campo" style="margin:0;" id="f-boxes-wrap" style="display:none;">
+            <label>Qtd. de <span id="f-unidade-lbl">boxes</span></label>
+            <input type="number" id="f-boxes" value="1" min="1" step="1"/>
+          </div>
+        </div>
+        <div id="modelo-info" style="display:none;margin-top:8px;font-size:.78rem;color:var(--texto-leve);background:var(--branco);border-radius:6px;padding:6px 10px;border:1px solid var(--cinza);"></div>
+      </div>
       <div style="display:grid;grid-template-columns:1fr 140px 200px;gap:12px;">
         <div class="form-campo"><label>Nome da Obra *</label><input type="text" id="f-nome" placeholder="Ex: Residência Rua das Flores"/></div>
         <div class="form-campo"><label>Status</label>
@@ -103,26 +120,37 @@ const LS_KEY    = 'cbx_obras';
 document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('obras');
 
 let lista = []; let sha = null; let idEditando = null;
+let modelos = [];
 
 async function init() {
   const cfg = getConfig();
+  modelos = carregarLocal('cbx_modelos') || [];
   if (!configurado()) {
     setSyncStatus('vermelho', 'Não configurado');
     const l = carregarLocal(LS_KEY); if (l) { lista = l; atualizarStats(); renderLista(); }
+    popularSelectModelos();
     return;
   }
   setSyncStatus('amarelo', 'Carregando...');
   document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
   try {
-    const res = await carregarDados(DATA_PATH);
-    lista = res.lista; sha = res.sha;
+    const [resObras, resMod] = await Promise.all([
+      carregarDados(DATA_PATH),
+      carregarDados('data/modelos.json').catch(()=>({lista:[],sha:null})),
+    ]);
+    lista = resObras.lista; sha = resObras.sha;
+    modelos = resMod.lista || [];
     salvarLocal(LS_KEY, lista);
+    salvarLocal('cbx_modelos', modelos);
     atualizarStats(); renderLista();
+    popularSelectModelos();
     setSyncStatus('verde', 'Conectado');
   } catch(e) {
     setSyncStatus('vermelho', 'Erro');
     const l = carregarLocal(LS_KEY); if (l) { lista = l; atualizarStats(); renderLista(); toast('Cache local.', 'aviso'); }
     else toast('Erro ao carregar.', 'erro');
+    modelos = carregarLocal('cbx_modelos') || [];
+    popularSelectModelos();
   }
 }
 
@@ -169,6 +197,41 @@ function renderLista() {
     </tr>`).join('')}</tbody></table>`;
 }
 
+function popularSelectModelos() {
+  const sel = document.getElementById('f-modelo');
+  if (!sel) return;
+  const val = sel.value;
+  sel.innerHTML = '<option value="">— Obra avulsa (sem modelo) —</option>';
+  modelos.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id; opt.textContent = m.nome;
+    sel.appendChild(opt);
+  });
+  sel.value = val;
+}
+
+function onModeloChange() {
+  const val = document.getElementById('f-modelo').value;
+  const wrap = document.getElementById('f-boxes-wrap');
+  const info = document.getElementById('modelo-info');
+  if (val) {
+    wrap.style.display = '';
+    const m = modelos.find(x=>x.id===val);
+    if (m) {
+      document.getElementById('f-unidade-lbl').textContent = m.unidade||'boxes';
+      document.getElementById('f-boxes').value = 1;
+      const nEt = (m.etapas||[]).length;
+      const nMat = (m.etapas||[]).reduce((s,e)=>s+(e.materiais||[]).length,0);
+      const custo = (m.etapas||[]).reduce((s,e)=>s+(e.materiais||[]).reduce((a,mat)=>a+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0),0);
+      info.style.display = '';
+      info.innerHTML = `📐 <strong>${esc(m.nome)}</strong> · ${nEt} etapa(s) · ${nMat} material(is) · Custo por ${m.unidade||'box'}: <strong>${custo?formatarMoeda(custo):'—'}</strong>`;
+    }
+  } else {
+    wrap.style.display = 'none';
+    info.style.display = 'none';
+  }
+}
+
 function abrirModal() {
   idEditando = null;
   document.getElementById('modal-titulo').textContent = 'Nova Obra';
@@ -179,6 +242,11 @@ function abrirModal() {
   document.getElementById('f-mo').value       = '';
   document.getElementById('f-inicio').value   = '';
   document.getElementById('f-previsao').value = '';
+  // reset modelo
+  document.getElementById('modelo-section').style.display = '';
+  document.getElementById('f-modelo').value = '';
+  document.getElementById('f-boxes-wrap').style.display = 'none';
+  document.getElementById('modelo-info').style.display = 'none';
   document.getElementById('modal-obra').classList.add('aberto');
   setTimeout(()=>document.getElementById('f-nome').focus(),80);
 }
@@ -187,6 +255,8 @@ function editar(id) {
   const o = lista.find(x=>x.id===id); if(!o) return;
   idEditando = id;
   document.getElementById('modal-titulo').textContent = 'Editar Obra';
+  // ocultar seção modelo na edição
+  document.getElementById('modelo-section').style.display = 'none';
   document.getElementById('f-nome').value      = o.nome||'';
   document.getElementById('f-cliente').value   = o.cliente||'';
   document.getElementById('f-endereco').value  = o.endereco||'';
@@ -205,6 +275,9 @@ function fecharModal() { document.getElementById('modal-obra').classList.remove(
 async function salvar() {
   const nome = document.getElementById('f-nome').value.trim();
   if (!nome) { toast('Nome da obra é obrigatório.','erro'); return; }
+  const modeloId  = !idEditando ? (document.getElementById('f-modelo').value||null) : null;
+  const qtdBoxes  = modeloId ? (parseInt(document.getElementById('f-boxes').value)||1) : null;
+  const modeloSel = modeloId ? modelos.find(x=>x.id===modeloId) : null;
   const obra = {
     id:               idEditando || uid(),
     nome,
@@ -217,6 +290,10 @@ async function salvar() {
     dataInicio:       document.getElementById('f-inicio').value||null,
     previsaoConclusao:document.getElementById('f-previsao').value||null,
     obs:              document.getElementById('f-obs').value.trim(),
+    modeloId:         modeloId || (idEditando?(lista.find(x=>x.id===idEditando)?.modeloId||null):null),
+    modeloNome:       modeloSel?.nome || (idEditando?(lista.find(x=>x.id===idEditando)?.modeloNome||null):null),
+    modeloUnidade:    modeloSel?.unidade || (idEditando?(lista.find(x=>x.id===idEditando)?.modeloUnidade||null):null),
+    qtdBoxes:         qtdBoxes ?? (idEditando?(lista.find(x=>x.id===idEditando)?.qtdBoxes||null):null),
     criadoEm:         idEditando?(lista.find(x=>x.id===idEditando)?.criadoEm||hoje()):hoje(),
   };
   lista = idEditando ? lista.map(x=>x.id===idEditando?obra:x) : [...lista,obra];
@@ -225,9 +302,70 @@ async function salvar() {
   toast('Obra salva!','sucesso');
   if(configurado()){
     setSyncStatus('amarelo','Sincronizando...');
-    try{ sha = await salvarDados(DATA_PATH,lista,sha,`Obra: ${obra.nome}`); setSyncStatus('verde','Sincronizado'); }
-    catch(e){ setSyncStatus('vermelho','Erro sync'); toast('Erro sync: '+e.message,'aviso'); }
+    try{
+      sha = await salvarDados(DATA_PATH,lista,sha,`Obra: ${obra.nome}`);
+      setSyncStatus('verde','Sincronizado');
+    } catch(e){ setSyncStatus('vermelho','Erro sync'); toast('Erro sync: '+e.message,'aviso'); return; }
+    // gerar etapas se obra nova com modelo
+    if (!idEditando && modeloSel) {
+      const nEt = (modeloSel.etapas||[]).length;
+      setSyncStatus('amarelo', `Gerando ${nEt} etapas…`);
+      try {
+        const n = await gerarEtapasDoModelo(obra.id, modeloSel, qtdBoxes);
+        toast(`✓ ${n} etapas criadas automaticamente (${qtdBoxes}× ${modeloSel.unidade||'box'})!`, 'sucesso');
+        setSyncStatus('verde', 'Etapas criadas');
+      } catch(e) {
+        toast('Obra salva, erro ao gerar etapas: '+e.message, 'aviso');
+      }
+    }
   }
+}
+
+async function gerarEtapasDoModelo(obraId, modelo, qtdBoxes) {
+  // buscar SHA atual das etapas
+  let etapasAtuais = carregarLocal('cbx_etapas') || [];
+  let shaEt = null;
+  try {
+    const res = await carregarDados('data/etapas.json');
+    etapasAtuais = res.lista || []; shaEt = res.sha;
+  } catch(e) { /* usa local */ }
+
+  const novas = (modelo.etapas||[]).map((et, idx) => ({
+    id: uid(), obraId,
+    nome:        et.nome,
+    codigo:      et.codigo || String(idx+1).padStart(2,'0'),
+    ordem:       et.ordem  || idx+1,
+    categoria:   et.categoria   || 'outros',
+    responsavel: et.responsavel || '',
+    descricao:   et.descricao   || '',
+    observacoes: '',
+    status:      'planejada',
+    peso:        et.peso || 0,
+    percentualExecutado: 0,
+    dataPrevistoInicio: null, dataPrevistoFim: null,
+    dataRealInicio:     null, dataRealFim:     null,
+    dependencias: [],
+    checklist:  (et.checklist||[]).map(cl=>({...cl, id:uid(), concluida:false})),
+    materiais:  (et.materiais||[]).map(mat=>({
+      id: uid(), nome: mat.nome,
+      unidade:       mat.unidade||'',
+      classificacao: mat.classificacao||'obrigatorio_iniciar',
+      qtdPrevista:   Math.round((mat.qtdPorBox||0) * qtdBoxes * 100)/100,
+      qtdMinIniciar: Math.round((mat.qtdMinPorBox||mat.qtdPorBox||0) * qtdBoxes * 100)/100,
+      qtdComprada:0, qtdEntregue:0, qtdReservada:0, qtdUtilizada:0,
+      fornecedor:    mat.fornecedor||'',
+      valorPrevisto: Math.round((mat.valorUnitario||0)*(mat.qtdPorBox||0)*qtdBoxes*100)/100,
+      valorComprado: 0, pedidoCompra:false, solicitacaoData:null, obs:'',
+      modeloRef:     mat.id,
+    })),
+    criadoEm:          hoje(),
+    geradoDeModelo:    modelo.id,
+  }));
+
+  const merged = [...etapasAtuais, ...novas];
+  salvarLocal('cbx_etapas', merged);
+  await salvarDados('data/etapas.json', merged, shaEt, `Etapas: ${modelo.nome} ×${qtdBoxes}`);
+  return novas.length;
 }
 
 async function excluir(id) {

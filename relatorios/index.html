@@ -77,26 +77,29 @@ document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('relator
 
 const OBRA_PARAM = new URLSearchParams(window.location.search).get('obra');
 
-let obras = [], lancamentos = [], etapas = [];
+let obras = [], lancamentos = [], etapas = [], modelos = [];
 
 async function init() {
-  obras       = carregarLocal('cbx_obras') || [];
-  lancamentos = carregarLocal('cbx_lanc')  || [];
-  etapas      = carregarLocal('cbx_etapas')|| [];
+  obras       = carregarLocal('cbx_obras')   || [];
+  lancamentos = carregarLocal('cbx_lanc')    || [];
+  etapas      = carregarLocal('cbx_etapas')  || [];
+  modelos     = carregarLocal('cbx_modelos') || [];
   preencherFiltros(); aplicarParam(); renderRelatorios();
 
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
   try {
-    const [rO, rL, rE] = await Promise.all([
+    const [rO, rL, rE, rM] = await Promise.all([
       carregarDados('data/obras.json'),
       carregarDados('data/lancamentos.json'),
       carregarDados('data/etapas.json').catch(()=>({lista:[],sha:null})),
+      carregarDados('data/modelos.json').catch(()=>({lista:[],sha:null})),
     ]);
-    obras       = rO.lista; lancamentos = rL.lista; etapas = rE.lista;
-    salvarLocal('cbx_obras', obras);
-    salvarLocal('cbx_lanc',  lancamentos);
-    salvarLocal('cbx_etapas',etapas);
+    obras       = rO.lista; lancamentos = rL.lista; etapas = rE.lista; modelos = rM.lista||[];
+    salvarLocal('cbx_obras',   obras);
+    salvarLocal('cbx_lanc',    lancamentos);
+    salvarLocal('cbx_etapas',  etapas);
+    salvarLocal('cbx_modelos', modelos);
     preencherFiltros(); aplicarParam(); renderRelatorios();
     setSyncStatus('verde','Conectado');
   } catch(e) { setSyncStatus('vermelho','Erro'); }
@@ -176,6 +179,7 @@ function renderObra(o) {
         <span class="badge ${stCor[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span>
         <button class="btn btn-sm no-print" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick='exportarRelatorioInterno("${o.id}")'>📄 Interno</button>
         <button class="btn btn-sm no-print" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick='exportarRelatorioCliente("${o.id}")'>📋 Cliente</button>
+        ${o.modeloId ? `<button class="btn btn-sm no-print" style="background:rgba(217,119,6,.85);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick='exportarContraprova("${o.id}")'>📊 Contraprova</button>` : ''}
       </div>
     </div>
 
@@ -314,6 +318,87 @@ function exportarRelatorioCliente(obraId) {
   </tbody></table>
   ${gerarDocumentoMateriaisFaltantes(o, d.etOb)}`;
   abrirDocumentoImpressao(`Relatório de Obra — ${o.nome}`, `${o.cliente?'Cliente: '+o.cliente+' · ':''}${o.dataInicio?'Início: '+formatarData(o.dataInicio):''}`, body);
+}
+
+// ── CONTRAPROVA ──
+function exportarContraprova(obraId) {
+  const o = obras.find(x=>x.id===obraId); if(!o||!o.modeloId) return;
+  const modelo = modelos.find(x=>x.id===o.modeloId);
+  const qtdBoxes = o.qtdBoxes || 1;
+  const unidade  = o.modeloUnidade || 'box';
+  const etOb = etapas.filter(e=>e.obraId===o.id).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+
+  // montar linhas: planejado (modelo*boxes) vs realizado (qtdUtilizada)
+  let totalPlanVal = 0, totalRealVal = 0;
+  const linhas = etOb.flatMap(e => {
+    const mats = e.materiais||[];
+    if(!mats.length) return [];
+    return mats.map(m => {
+      const planejado = m.qtdPrevista || 0;
+      const realizado = m.qtdUtilizada || 0;
+      const variacao  = realizado - planejado;
+      const valorUnit = planejado>0 ? Math.round((m.valorPrevisto||0)/planejado*100)/100 : 0;
+      const planVal   = planejado * valorUnit;
+      const realVal   = realizado * valorUnit;
+      totalPlanVal += planVal; totalRealVal += realVal;
+      const cor = variacao === 0 ? '#059669' : variacao > 0 ? '#dc2626' : '#d97706';
+      return { etapa:e.nome, mat:m, planejado, realizado, variacao, valorUnit, planVal, realVal, cor };
+    });
+  });
+
+  const pctGasto = totalPlanVal > 0 ? Math.round(totalRealVal/totalPlanVal*100) : null;
+
+  const body = `
+  <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:.85rem;">
+    📊 <strong>Contraprova de Materiais</strong> — ${esc(o.nome)}<br>
+    Modelo: <strong>${esc(modelo?.nome||o.modeloNome||'—')}</strong> ·
+    Quantidade: <strong>${qtdBoxes} ${unidade}(s)</strong> ·
+    Gerado em: ${hoje()}
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="val">${qtdBoxes}</div><div class="lbl">${unidade}(s)</div></div>
+    <div class="kpi"><div class="val">${linhas.length}</div><div class="lbl">Materiais</div></div>
+    <div class="kpi"><div class="val">${formatarMoeda(totalPlanVal)}</div><div class="lbl">Custo Planejado</div></div>
+    <div class="kpi"><div class="val">${formatarMoeda(totalRealVal)}</div><div class="lbl">Custo Realizado</div></div>
+    ${pctGasto!==null?`<div class="kpi"><div class="val" style="color:${pctGasto>100?'#dc2626':'#059669'};">${pctGasto}%</div><div class="lbl">do Planejado</div></div>`:''}
+  </div>
+  <div class="section-title">📦 Comparativo de Materiais</div>
+  <table>
+    <thead><tr>
+      <th>Etapa</th><th>Material</th><th>Unid.</th>
+      <th>Previsto (${qtdBoxes}×)</th><th>Realizado</th><th>Variação</th>
+      <th>Valor Unit.</th><th>Custo Prev.</th><th>Custo Real</th>
+    </tr></thead>
+    <tbody>${linhas.length ? linhas.map(l=>`<tr>
+      <td style="font-size:.8rem;">${esc(l.etapa)}</td>
+      <td><strong>${esc(l.mat.nome)}</strong></td>
+      <td>${esc(l.mat.unidade||'')}</td>
+      <td>${l.planejado}</td>
+      <td>${l.realizado}</td>
+      <td style="font-weight:700;color:${l.cor};">${l.variacao>0?'+':''}${l.variacao}</td>
+      <td>${l.valorUnit?formatarMoeda(l.valorUnit):'—'}</td>
+      <td>${l.planVal?formatarMoeda(l.planVal):'—'}</td>
+      <td style="font-weight:700;">${l.realVal?formatarMoeda(l.realVal):'—'}</td>
+    </tr>`).join('') : '<tr><td colspan="9" style="color:#64748b;">Sem materiais registrados</td></tr>'}
+    </tbody>
+    <tfoot><tr>
+      <td colspan="7" style="text-align:right;font-weight:700;">TOTAL</td>
+      <td style="font-weight:800;">${formatarMoeda(totalPlanVal)}</td>
+      <td style="font-weight:800;color:${totalRealVal>totalPlanVal?'#dc2626':'#059669'};">${formatarMoeda(totalRealVal)}</td>
+    </tr></tfoot>
+  </table>
+  <div style="margin-top:14px;font-size:.8rem;color:#64748b;">
+    <strong>Legenda:</strong>
+    <span style="color:#059669;">Verde = dentro do planejado</span> ·
+    <span style="color:#d97706;">Amarelo = economizado</span> ·
+    <span style="color:#dc2626;">Vermelho = extrapolou</span>
+  </div>`;
+
+  abrirDocumentoImpressao(
+    `Contraprova — ${o.nome}`,
+    `${o.cliente?'Cliente: '+o.cliente+' · ':''}Modelo: ${o.modeloNome||'—'} · ${qtdBoxes} ${unidade}(s)`,
+    body
+  );
 }
 
 init();

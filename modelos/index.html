@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construbox — Modelos de Obra</title>
+  <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .et-card { background:var(--branco); border:1px solid var(--cinza); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+    .et-header { display:grid; grid-template-columns:40px 1fr auto; gap:10px; padding:10px 14px; cursor:pointer; align-items:center; }
+    .et-body { display:none; padding:12px 16px 14px; border-top:1px solid var(--cinza); background:var(--fundo2); }
+    .et-body.aberto { display:block; }
+    .mat-tpl-row { display:grid; grid-template-columns:1fr 60px 170px 80px 80px 110px 90px auto; gap:8px; align-items:center; padding:7px 0; border-bottom:1px solid var(--cinza); font-size:.8rem; }
+    .mat-tpl-row:last-child { border-bottom:none; }
+    .mat-tpl-header { font-weight:700; color:var(--texto-leve); font-size:.72rem; text-transform:uppercase; letter-spacing:.03em; }
+    .screen { display:block; }
+    .screen.oculto { display:none; }
+  </style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-titulo">Modelos de Obra</div>
+      <div class="topbar-sub">Templates reutilizáveis por unidade (box, apartamento, sala…)</div>
+    </div>
+    <div class="topbar-acoes">
+      <button class="btn btn-outline btn-sm no-print" onclick="init()">🔄 Sincronizar</button>
+      <div class="sync-pill">
+        <div class="sync-dot amarelo" id="sync-dot"></div>
+        <span id="sync-texto">Conectando</span>
+      </div>
+      <button id="btn-novo-modelo" class="btn btn-primary" onclick="abrirModalModelo()">+ Novo Modelo</button>
+    </div>
+  </div>
+  <div class="page">
+
+    <!-- SCREEN 1: lista de modelos -->
+    <div id="screen-lista" class="screen">
+      <div class="stats-grid" style="margin-bottom:16px;">
+        <div class="stat"><div class="valor" id="st-tot">0</div><div class="rotulo">Modelos</div></div>
+        <div class="stat azul"><div class="valor" id="st-et">0</div><div class="rotulo">Etapas (média)</div></div>
+        <div class="stat verde"><div class="valor" id="st-mat">0</div><div class="rotulo">Materiais (média)</div></div>
+        <div class="stat amarelo"><div class="valor" id="st-custo">R$ 0</div><div class="rotulo">Custo Médio/Box</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>📐 Modelos Cadastrados</h2></div>
+        <div class="card-body" id="lista-container">
+          <div style="text-align:center;padding:48px;color:var(--texto-leve);">Carregando…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: editor de etapas do modelo selecionado -->
+    <div id="screen-editor" class="screen oculto">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="voltarLista()">← Voltar</button>
+        <div style="flex:1;">
+          <div style="font-size:1.1rem;font-weight:800;" id="ed-nome">Modelo</div>
+          <div style="font-size:.78rem;color:var(--texto-leve);" id="ed-sub"></div>
+        </div>
+        <button class="btn btn-success btn-sm" onclick="salvarModelos('Etapas do modelo atualizadas')">💾 Salvar Alterações</button>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-body" style="padding:12px 16px;">
+          <div style="font-size:.8rem;font-weight:700;color:var(--texto-leve);margin-bottom:8px;">+ ADICIONAR ETAPA AO MODELO</div>
+          <div style="display:grid;grid-template-columns:1fr 200px 80px 90px auto;gap:10px;align-items:end;">
+            <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Nome da Etapa *</label><input type="text" id="add-et-nome" placeholder="Ex: Demolição"/></div>
+            <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Categoria</label>
+              <select id="add-et-cat">
+                <option value="fundacao">Fundação</option><option value="estrutura">Estrutura</option>
+                <option value="alvenaria">Alvenaria</option><option value="cobertura">Cobertura</option>
+                <option value="instalacoes">Instalações</option><option value="acabamento" selected>Acabamento</option>
+                <option value="externo">Externo</option><option value="outros">Outros</option>
+              </select>
+            </div>
+            <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Peso (%)</label><input type="number" id="add-et-peso" placeholder="0" min="0" max="100" step="1"/></div>
+            <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Responsável</label><input type="text" id="add-et-resp" placeholder="Opcional"/></div>
+            <button class="btn btn-primary" onclick="addEtapaModelo()">+ Etapa</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="lista-etapas-modelo">
+        <div style="text-align:center;padding:40px;color:var(--texto-leve);">Nenhuma etapa. Use o formulário acima.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ MODAL MODELO (info básica) ══ -->
+<div class="overlay" id="modal-modelo">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <h2 id="mm-titulo">Novo Modelo</h2>
+      <button class="btn-fechar" onclick="fecharModalModelo()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <div class="form-campo"><label>Nome do Modelo *</label><input type="text" id="m-nome" placeholder="Ex: Hotel Inbox – Box Padrão"/></div>
+      <div style="display:grid;grid-template-columns:1fr 140px;gap:12px;">
+        <div class="form-campo"><label>Descrição</label><input type="text" id="m-desc" placeholder="Ex: Template padrão para reforma de box"/></div>
+        <div class="form-campo"><label>Unidade</label><input type="text" id="m-unidade" placeholder="box" oninput="atualizarHint()"/></div>
+      </div>
+      <div style="background:var(--fundo2);border:1px solid var(--cinza);border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--texto-leve);">
+        💡 Após criar, abra as <strong>etapas</strong> do modelo e adicione os materiais com a quantidade por <strong id="m-unidade-hint">box</strong>. Ao criar uma obra, informe quantas <strong id="m-unidade-hint2">unidades</strong> ela tem — o sistema multiplica automaticamente.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModalModelo()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarModelo()">✓ Criar Modelo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL MATERIAIS DO TEMPLATE ══ -->
+<div class="overlay" id="modal-mat-tpl">
+  <div class="modal" style="max-width:98vw;width:920px;max-height:92vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h2 id="mmt-titulo">📦 Materiais da Etapa</h2>
+      <button class="btn-fechar" onclick="fecharMatTpl()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:0 20px 8px;">
+      <div id="mmt-body"></div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--cinza);">
+        <div style="font-weight:700;font-size:.8rem;margin-bottom:8px;color:var(--texto-leve);">+ ADICIONAR MATERIAL AO TEMPLATE</div>
+        <div style="display:grid;grid-template-columns:1fr 65px 180px 85px 85px 120px 100px auto;gap:8px;align-items:end;">
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Material *</label><input type="text" id="amm-nome" placeholder="Cimento CP-II" onkeydown="if(event.key==='Enter')addMatTpl()"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Unid.</label><input type="text" id="amm-unid" placeholder="sc"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Classificação</label>
+            <select id="amm-class" style="font-size:.75rem;padding:5px 6px;">
+              <option value="obrigatorio_iniciar">Obrig. Iniciar</option>
+              <option value="obrigatorio_execucao">Obrig. Exec.</option>
+              <option value="complementar">Complementar</option>
+              <option value="opcional">Opcional</option>
+            </select>
+          </div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;" id="lbl-qtd-box">Qtd/box</label><input type="number" id="amm-qtd" placeholder="0" min="0" step="0.01"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;" id="lbl-min-box">Mín/box</label><input type="number" id="amm-min" placeholder="0" min="0" step="0.01"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Fornecedor</label><input type="text" id="amm-forn" placeholder="Opcional"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Valor Unit. (R$)</label><input type="number" id="amm-val" placeholder="0" min="0" step="0.01"/></div>
+          <button class="btn btn-primary" style="padding:8px 10px;white-space:nowrap;" onclick="addMatTpl()">+ Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" onclick="fecharMatTpl()">✓ Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+<script src="../assets/core.js"></script>
+<script>
+const PATH_MOD = 'data/modelos.json';
+const LS_MOD   = 'cbx_modelos';
+document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('modelos');
+
+let modelos = []; let sha = null;
+let modeloEditId  = null;
+let modeloAtualId = null;
+let etapaMatTplId = null;
+
+const ClassLbl = { obrigatorio_iniciar:'Obrig. Iniciar', obrigatorio_execucao:'Obrig. Exec.', complementar:'Complementar', opcional:'Opcional' };
+
+async function init() {
+  setSyncStatus('amarelo','Carregando…');
+  const local = carregarLocal(LS_MOD);
+  if (local) { modelos = local; renderLista(); }
+  if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
+  try {
+    const res = await carregarDados(PATH_MOD).catch(()=>({lista:[],sha:null}));
+    modelos = res.lista || []; sha = res.sha;
+    salvarLocal(LS_MOD, modelos);
+    renderLista();
+    setSyncStatus('verde','Conectado');
+  } catch(e) {
+    setSyncStatus('vermelho','Erro');
+    toast('Erro ao carregar modelos.','erro');
+  }
+}
+
+async function salvarModelos(msg) {
+  salvarLocal(LS_MOD, modelos);
+  if (!configurado()) { toast('Configure o GitHub para salvar.','aviso'); return; }
+  setSyncStatus('amarelo','Salvando…');
+  try {
+    sha = await salvarDados(PATH_MOD, modelos, sha, msg);
+    setSyncStatus('verde','Salvo');
+    toast('Modelo salvo!','sucesso');
+  } catch(e) {
+    setSyncStatus('vermelho','Erro sync');
+    toast('Erro: '+e.message,'aviso');
+  }
+}
+
+// ── LISTA ──
+function renderLista() {
+  const nMed = m => (m.etapas||[]).reduce((s,e)=>s+(e.materiais||[]).length,0);
+  const custoMed = m => (m.etapas||[]).reduce((s,e)=>s+(e.materiais||[]).reduce((a,mat)=>a+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0),0);
+  document.getElementById('st-tot').textContent = modelos.length;
+  document.getElementById('st-et').textContent  = modelos.length ? Math.round(modelos.reduce((s,m)=>s+(m.etapas||[]).length,0)/modelos.length) : 0;
+  document.getElementById('st-mat').textContent = modelos.length ? Math.round(modelos.reduce((s,m)=>s+nMed(m),0)/modelos.length) : 0;
+  const custTotal = modelos.length ? custoMed(modelos.reduce((best,m)=>nMed(m)>nMed(best)?m:best,modelos[0]||{})) : 0;
+  document.getElementById('st-custo').textContent = formatarMoeda(custTotal);
+
+  const c = document.getElementById('lista-container');
+  if (!modelos.length) {
+    c.innerHTML = '<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhum modelo cadastrado. Clique em "+ Novo Modelo".</div>';
+    return;
+  }
+  c.innerHTML = `<table class="tabela" style="width:100%;"><thead><tr>
+    <th>Nome</th><th>Unidade</th><th>Etapas</th><th>Materiais</th><th>Custo/un.</th><th>Criado em</th><th>Ações</th>
+  </tr></thead><tbody>${modelos.map(m=>{
+    const nEt  = (m.etapas||[]).length;
+    const nMat = nMed(m);
+    const custo = custoMed(m);
+    return `<tr>
+      <td><strong>${esc(m.nome)}</strong>${m.descricao?`<div style="font-size:.72rem;color:var(--texto-leve);">${esc(m.descricao)}</div>`:''}</td>
+      <td><span class="badge azul">${esc(m.unidade||'un')}</span></td>
+      <td>${nEt}</td><td>${nMat}</td>
+      <td style="font-weight:700;">${custo?formatarMoeda(custo):'—'}</td>
+      <td style="font-size:.78rem;">${m.criadoEm||'—'}</td>
+      <td><div style="display:flex;gap:4px;">
+        <button class="btn btn-primary btn-sm" onclick='abrirEditor("${m.id}")'>📋 Etapas</button>
+        <button class="btn btn-outline btn-sm" onclick='editarModelo("${m.id}")'>✏️ Editar</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirModelo("${m.id}")'>🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ── MODAL MODELO BÁSICO ──
+function atualizarHint() {
+  const v = document.getElementById('m-unidade').value||'box';
+  document.getElementById('m-unidade-hint').textContent  = v;
+  document.getElementById('m-unidade-hint2').textContent = v+'s';
+}
+function abrirModalModelo() {
+  modeloEditId = null;
+  document.getElementById('mm-titulo').textContent = 'Novo Modelo';
+  document.getElementById('m-nome').value = '';
+  document.getElementById('m-desc').value = '';
+  document.getElementById('m-unidade').value = 'box';
+  atualizarHint();
+  document.getElementById('modal-modelo').classList.add('aberto');
+  setTimeout(()=>document.getElementById('m-nome').focus(),80);
+}
+function editarModelo(id) {
+  const m = modelos.find(x=>x.id===id); if(!m) return;
+  modeloEditId = id;
+  document.getElementById('mm-titulo').textContent = 'Editar Modelo';
+  document.getElementById('m-nome').value    = m.nome||'';
+  document.getElementById('m-desc').value    = m.descricao||'';
+  document.getElementById('m-unidade').value = m.unidade||'box';
+  atualizarHint();
+  document.getElementById('modal-modelo').classList.add('aberto');
+}
+function fecharModalModelo() { document.getElementById('modal-modelo').classList.remove('aberto'); }
+async function salvarModelo() {
+  const nome = document.getElementById('m-nome').value.trim();
+  if(!nome){toast('Nome é obrigatório.','aviso');return;}
+  const unidade = document.getElementById('m-unidade').value.trim()||'box';
+  const desc    = document.getElementById('m-desc').value.trim();
+  if (modeloEditId) {
+    const m = modelos.find(x=>x.id===modeloEditId); if(!m) return;
+    m.nome = nome; m.descricao = desc; m.unidade = unidade;
+  } else {
+    modelos.push({ id:uid(), nome, descricao:desc, unidade, criadoEm:hoje(), etapas:[] });
+  }
+  fecharModalModelo(); renderLista();
+  await salvarModelos(modeloEditId?`Editar modelo: ${nome}`:`Novo modelo: ${nome}`);
+}
+async function excluirModelo(id) {
+  const m = modelos.find(x=>x.id===id); if(!m) return;
+  if(!confirm(`Excluir o modelo "${m.nome}"? Esta ação não afeta obras já criadas.`)) return;
+  modelos = modelos.filter(x=>x.id!==id);
+  renderLista();
+  await salvarModelos(`Excluir modelo: ${m.nome}`);
+}
+
+// ── SCREEN 2: EDITOR DE ETAPAS ──
+function abrirEditor(modeloId) {
+  const m = modelos.find(x=>x.id===modeloId); if(!m) return;
+  modeloAtualId = modeloId;
+  document.getElementById('ed-nome').textContent = m.nome;
+  atualizarSubEditor(m);
+  document.getElementById('screen-lista').classList.add('oculto');
+  document.getElementById('screen-editor').classList.remove('oculto');
+  document.getElementById('btn-novo-modelo').style.display = 'none';
+  atualizarLabelsUnidade(m.unidade||'box');
+  renderEtapasModelo();
+}
+function atualizarSubEditor(m) {
+  const nEt = (m.etapas||[]).length;
+  const nMat = (m.etapas||[]).reduce((s,e)=>s+(e.materiais||[]).length,0);
+  const custo = (m.etapas||[]).reduce((s,e)=>s+(e.materiais||[]).reduce((a,mat)=>a+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0),0);
+  document.getElementById('ed-sub').textContent = `Unidade: ${m.unidade||'box'} · ${nEt} etapa(s) · ${nMat} material(is) · Custo/un.: ${custo?formatarMoeda(custo):'—'}`;
+}
+function atualizarLabelsUnidade(unidade) {
+  document.getElementById('lbl-qtd-box').textContent = `Qtd/${unidade}`;
+  document.getElementById('lbl-min-box').textContent = `Mín/${unidade}`;
+}
+function voltarLista() {
+  modeloAtualId = null;
+  document.getElementById('screen-editor').classList.add('oculto');
+  document.getElementById('screen-lista').classList.remove('oculto');
+  document.getElementById('btn-novo-modelo').style.display = '';
+  renderLista();
+}
+
+function renderEtapasModelo() {
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const etapas = m.etapas||[];
+  const unidade = m.unidade||'box';
+  const cont = document.getElementById('lista-etapas-modelo');
+  if(!etapas.length){
+    cont.innerHTML = '<div class="card"><div class="card-body" style="padding:32px;text-align:center;color:var(--texto-leve);">Nenhuma etapa. Use o formulário acima para adicionar.</div></div>';
+    return;
+  }
+  cont.innerHTML = etapas.map((e,idx)=>{
+    const nMat = (e.materiais||[]).length;
+    const custo = (e.materiais||[]).reduce((s,mat)=>s+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0);
+    return `<div class="et-card">
+      <div class="et-header" onclick="toggleEtapaModelo('${e.id}')">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;">${e.ordem||idx+1}</div>
+        <div>
+          <div style="font-weight:700;font-size:.92rem;">${esc(e.nome)}</div>
+          <div style="font-size:.73rem;color:var(--texto-leve);">${e.categoria} · ${nMat} material(is) · Custo/${unidade}: ${custo?formatarMoeda(custo):'—'}</div>
+        </div>
+        <div style="display:flex;gap:6px;" onclick="event.stopPropagation()">
+          <button class="btn btn-primary btn-sm" onclick='abrirMatTpl("${e.id}")'>📦 Materiais</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerEtapaModelo("${e.id}")'>✕</button>
+        </div>
+      </div>
+      <div class="et-body" id="etb-${e.id}">
+        ${!nMat
+          ? `<div style="font-size:.82rem;color:var(--texto-leve);">Sem materiais — clique em "📦 Materiais" para adicionar.</div>`
+          : `<div class="mat-tpl-row mat-tpl-header">
+              <span>Material</span><span>Unid.</span><span>Classificação</span>
+              <span>Qtd/${unidade}</span><span>Mín/${unidade}</span><span>Fornecedor</span><span>Valor Unit.</span><span></span>
+             </div>
+             ${(e.materiais||[]).map(mat=>`
+              <div class="mat-tpl-row">
+                <span><strong>${esc(mat.nome)}</strong></span>
+                <span>${esc(mat.unidade||'')}</span>
+                <span style="font-size:.72rem;">${ClassLbl[mat.classificacao]||'—'}</span>
+                <span><b>${mat.qtdPorBox||0}</b></span>
+                <span>${mat.qtdMinPorBox||'—'}</span>
+                <span style="font-size:.78rem;">${mat.fornecedor||'—'}</span>
+                <span>${mat.valorUnitario?formatarMoeda(mat.valorUnitario):'—'}</span>
+                <span><button class="btn btn-outline btn-sm" style="color:var(--vermelho);padding:2px 8px;" onclick='removerMatTpl("${e.id}","${mat.id}")'>✕</button></span>
+              </div>`).join('')}`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleEtapaModelo(id) {
+  document.getElementById(`etb-${id}`)?.classList.toggle('aberto');
+}
+function addEtapaModelo() {
+  const nome = document.getElementById('add-et-nome').value.trim();
+  if(!nome){toast('Nome da etapa é obrigatório.','aviso');return;}
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  if(!m.etapas) m.etapas=[];
+  m.etapas.push({
+    id:uid(), nome,
+    categoria: document.getElementById('add-et-cat').value,
+    responsavel: document.getElementById('add-et-resp').value.trim(),
+    peso: parseFloat(document.getElementById('add-et-peso').value)||0,
+    ordem: m.etapas.length+1,
+    materiais:[]
+  });
+  document.getElementById('add-et-nome').value='';
+  document.getElementById('add-et-peso').value='';
+  document.getElementById('add-et-resp').value='';
+  atualizarSubEditor(m);
+  renderEtapasModelo();
+}
+function removerEtapaModelo(eId) {
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  if(!confirm('Remover esta etapa do modelo?')) return;
+  m.etapas = (m.etapas||[]).filter(e=>e.id!==eId);
+  m.etapas.forEach((e,i)=>e.ordem=i+1);
+  atualizarSubEditor(m);
+  renderEtapasModelo();
+}
+
+// ── MODAL MATERIAIS DO TEMPLATE ──
+function abrirMatTpl(etapaId) {
+  etapaMatTplId = etapaId;
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const e = (m.etapas||[]).find(x=>x.id===etapaId); if(!e) return;
+  document.getElementById('mmt-titulo').textContent = `📦 Materiais — ${e.nome}`;
+  atualizarLabelsUnidade(m.unidade||'box');
+  renderMatTpl(m, e);
+  document.getElementById('modal-mat-tpl').classList.add('aberto');
+}
+function fecharMatTpl() {
+  document.getElementById('modal-mat-tpl').classList.remove('aberto');
+  etapaMatTplId = null;
+  const m = modelos.find(x=>x.id===modeloAtualId);
+  if(m){ atualizarSubEditor(m); renderEtapasModelo(); }
+}
+function renderMatTpl(m, e) {
+  const mats = e.materiais||[];
+  const unidade = m.unidade||'box';
+  const body = document.getElementById('mmt-body');
+  if(!mats.length){
+    body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--texto-leve);">Nenhum material. Use o formulário abaixo.</div>';
+    return;
+  }
+  body.innerHTML = `<table class="tabela" style="width:100%;"><thead><tr>
+    <th>Material</th><th>Unid.</th><th>Classificação</th>
+    <th>Qtd/${unidade}</th><th>Mín/${unidade}</th><th>Fornecedor</th><th>Valor Unit.</th><th>Total/${unidade}</th><th></th>
+  </tr></thead><tbody>${mats.map(mat=>`<tr>
+    <td>${esc(mat.nome)}</td>
+    <td>${esc(mat.unidade||'')}</td>
+    <td style="font-size:.75rem;">${ClassLbl[mat.classificacao]||'—'}</td>
+    <td><b>${mat.qtdPorBox||0}</b></td>
+    <td>${mat.qtdMinPorBox||'—'}</td>
+    <td style="font-size:.75rem;">${mat.fornecedor||'—'}</td>
+    <td>${mat.valorUnitario?formatarMoeda(mat.valorUnitario):'—'}</td>
+    <td style="font-weight:700;">${mat.valorUnitario&&mat.qtdPorBox?formatarMoeda(mat.valorUnitario*mat.qtdPorBox):'—'}</td>
+    <td><button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerMatTplById("${mat.id}")'>✕</button></td>
+  </tr>`).join('')}</tbody></table>
+  <div style="text-align:right;margin-top:10px;font-size:.85rem;"><strong>Total/un.:</strong> <span style="font-weight:800;color:var(--brand);">${formatarMoeda(mats.reduce((s,mat)=>s+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0))}</span></div>`;
+}
+function addMatTpl() {
+  const nome = document.getElementById('amm-nome').value.trim();
+  if(!nome){toast('Nome do material é obrigatório.','aviso');return;}
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const e = (m.etapas||[]).find(x=>x.id===etapaMatTplId); if(!e) return;
+  if(!e.materiais) e.materiais=[];
+  e.materiais.push({
+    id:uid(), nome,
+    unidade:        document.getElementById('amm-unid').value.trim(),
+    classificacao:  document.getElementById('amm-class').value,
+    qtdPorBox:      parseFloat(document.getElementById('amm-qtd').value)||0,
+    qtdMinPorBox:   parseFloat(document.getElementById('amm-min').value)||0,
+    fornecedor:     document.getElementById('amm-forn').value.trim(),
+    valorUnitario:  parseFloat(document.getElementById('amm-val').value)||0,
+  });
+  ['amm-nome','amm-unid','amm-forn'].forEach(id=>document.getElementById(id).value='');
+  ['amm-qtd','amm-min','amm-val'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('amm-class').value='obrigatorio_iniciar';
+  renderMatTpl(m, e);
+  document.getElementById('amm-nome').focus();
+}
+function removerMatTplById(mid) {
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const e = (m.etapas||[]).find(x=>x.id===etapaMatTplId); if(!e) return;
+  e.materiais = (e.materiais||[]).filter(x=>x.id!==mid);
+  renderMatTpl(m, e);
+}
+function removerMatTpl(eId, mid) {
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const e = (m.etapas||[]).find(x=>x.id===eId); if(!e) return;
+  e.materiais = (e.materiais||[]).filter(x=>x.id!==mid);
+  atualizarSubEditor(m);
+  renderEtapasModelo();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -148,6 +148,7 @@ const MODULOS = [
   { grupo: 'Cadastros' },
   { id: 'cadastros',        label: 'Sócios & Clientes',  icone: '👥', href: '/cadastros/' },
   { id: 'obras',            label: 'Obras',              icone: '🏗️', href: '/obras/' },
+  { id: 'modelos',          label: 'Modelos de Obra',    icone: '📐', href: '/modelos/' },
   { id: 'compras',          label: 'Compras de Obra',    icone: '🛒', href: '/compras/' },
   { grupo: 'Financeiro' },
   { id: 'lancamentos',      label: 'Lançamentos',        icone: '📝', href: '/lancamentos/' },

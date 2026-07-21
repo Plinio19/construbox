@@ -82,6 +82,7 @@
     </div>
     <div class="topbar-acoes" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <button class="btn btn-outline btn-sm no-print" onclick="init()" title="Buscar dados atualizados do GitHub">🔄 Sincronizar</button>
+      <button class="btn btn-outline btn-sm no-print" onclick="abrirSalvarComoModelo()" title="Salvar esta obra como modelo reutilizável">💾 Salvar como Modelo</button>
       <div class="sync-pill">
         <div class="sync-dot amarelo" id="sync-dot"></div>
         <span id="sync-texto">Conectando</span>
@@ -307,6 +308,33 @@
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="fecharMatUpd()">Cancelar</button>
       <button class="btn btn-success" onclick="salvarMatUpd()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL SALVAR COMO MODELO ══ -->
+<div class="overlay" id="modal-salvar-modelo">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <h2>💾 Salvar como Modelo</h2>
+      <button class="btn-fechar" onclick="document.getElementById('modal-salvar-modelo').classList.remove('aberto')">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <div class="form-campo"><label>Nome do Modelo *</label><input type="text" id="scm-nome" placeholder="Ex: Hotel Inbox – Box Padrão"/></div>
+      <div style="display:grid;grid-template-columns:1fr 130px;gap:12px;">
+        <div class="form-campo"><label>Descrição</label><input type="text" id="scm-desc" placeholder="Opcional"/></div>
+        <div class="form-campo"><label>Unidade</label><input type="text" id="scm-unidade" placeholder="box"/></div>
+      </div>
+      <div class="form-campo">
+        <label>Esta obra tem quantas <span id="scm-lbl-unid">unidades</span>?</label>
+        <input type="number" id="scm-boxes" value="1" min="1"/>
+        <span class="hint">As quantidades serão divididas por este número para gerar a qtd por unidade.</span>
+      </div>
+      <div id="scm-preview" style="background:var(--fundo2);border:1px solid var(--cinza);border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--texto-leve);"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="document.getElementById('modal-salvar-modelo').classList.remove('aberto')">Cancelar</button>
+      <button class="btn btn-success" onclick="confirmarSalvarComoModelo()">✓ Salvar Modelo</button>
     </div>
   </div>
 </div>
@@ -917,6 +945,91 @@ async function sync(msg) {
   } catch(err) {
     setSyncStatus('vermelho','Erro sync');
     toast('Erro ao sincronizar: '+err.message,'aviso');
+  }
+}
+
+// ── SALVAR COMO MODELO ──
+function abrirSalvarComoModelo() {
+  if (!etapas.length) { toast('Nenhuma etapa para salvar.','aviso'); return; }
+  // pré-preencher com dados da obra se disponíveis
+  const obras = carregarLocal('cbx_obras') || [];
+  const obra  = obras.find(x=>x.id===OBRA_ID);
+  document.getElementById('scm-nome').value    = obra?.modeloNome || '';
+  document.getElementById('scm-desc').value    = '';
+  document.getElementById('scm-unidade').value = obra?.modeloUnidade || 'box';
+  document.getElementById('scm-boxes').value   = obra?.qtdBoxes || 1;
+  const unidade = obra?.modeloUnidade || 'box';
+  document.getElementById('scm-lbl-unid').textContent = unidade+'s';
+  const nMat = etapas.reduce((s,e)=>s+(e.materiais||[]).length,0);
+  document.getElementById('scm-preview').innerHTML =
+    `📋 Serão salvas <strong>${etapas.length} etapas</strong> e <strong>${nMat} materiais</strong> como template de <strong>1 ${unidade}</strong>.`;
+  document.getElementById('modal-salvar-modelo').classList.add('aberto');
+  setTimeout(()=>document.getElementById('scm-nome').focus(),80);
+}
+
+async function confirmarSalvarComoModelo() {
+  const nome = document.getElementById('scm-nome').value.trim();
+  if(!nome){toast('Nome do modelo é obrigatório.','aviso');return;}
+  const qtdBoxes = parseFloat(document.getElementById('scm-boxes').value)||1;
+  const unidade  = document.getElementById('scm-unidade').value.trim()||'box';
+  const desc     = document.getElementById('scm-desc').value.trim();
+
+  // carregar modelos atuais
+  let modelos = carregarLocal('cbx_modelos')||[];
+  let shaMod  = null;
+  try {
+    const res = await carregarDados('data/modelos.json').catch(()=>({lista:[],sha:null}));
+    modelos = res.lista||[]; shaMod = res.sha;
+  } catch(e) { /* usa local */ }
+
+  // verificar se já existe modelo com mesmo nome
+  const existente = modelos.find(m=>m.nome.toLowerCase()===nome.toLowerCase());
+  if (existente && !confirm(`Já existe um modelo chamado "${existente.nome}". Substituir?`)) return;
+
+  const novoModelo = {
+    id: existente?.id || uid(),
+    nome, descricao:desc, unidade,
+    criadoEm: existente?.criadoEm || hoje(),
+    atualizadoEm: hoje(),
+    etapas: etapas.map((e,idx)=>({
+      id: uid(), nome:e.nome,
+      codigo:   e.codigo || String(idx+1).padStart(2,'0'),
+      ordem:    idx+1,
+      categoria: e.categoria||'outros',
+      responsavel: e.responsavel||'',
+      descricao:   e.descricao||'',
+      peso:        e.peso||0,
+      checklist:   (e.checklist||[]).map(cl=>({...cl, id:uid(), concluida:false})),
+      materiais:   (e.materiais||[]).map(m=>({
+        id: uid(), nome:m.nome,
+        unidade:       m.unidade||'',
+        classificacao: m.classificacao||'obrigatorio_iniciar',
+        qtdPorBox:     Math.round((m.qtdPrevista||0)/qtdBoxes*100)/100,
+        qtdMinPorBox:  Math.round((m.qtdMinIniciar||0)/qtdBoxes*100)/100,
+        fornecedor:    m.fornecedor||'',
+        valorUnitario: m.qtdPrevista>0 ? Math.round((m.valorPrevisto||0)/(m.qtdPrevista||1)*100)/100 : 0,
+      })),
+    })),
+  };
+
+  if (existente) modelos = modelos.map(m=>m.id===existente.id?novoModelo:m);
+  else modelos.push(novoModelo);
+
+  salvarLocal('cbx_modelos', modelos);
+  document.getElementById('modal-salvar-modelo').classList.remove('aberto');
+
+  if (configurado()) {
+    setSyncStatus('amarelo','Salvando modelo…');
+    try {
+      await salvarDados('data/modelos.json', modelos, shaMod, `Modelo: ${nome}`);
+      setSyncStatus('verde','Salvo');
+      toast(`Modelo "${nome}" salvo com ${novoModelo.etapas.length} etapas!`,'sucesso');
+    } catch(e) {
+      setSyncStatus('vermelho','Erro');
+      toast('Erro ao salvar modelo: '+e.message,'aviso');
+    }
+  } else {
+    toast(`Modelo "${nome}" salvo localmente.`,'sucesso');
   }
 }
 
