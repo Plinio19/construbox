@@ -54,7 +54,7 @@
 
 <!-- MODAL OBRA -->
 <div class="overlay" id="modal-obra">
-  <div class="modal" style="max-width:580px;">
+  <div class="modal" style="max-width:760px;max-height:94vh;overflow-y:auto;">
     <div class="modal-header">
       <h2 id="modal-titulo">Nova Obra</h2>
       <button class="btn-fechar" onclick="fecharModal()">✕</button>
@@ -103,11 +103,74 @@
         <div class="form-campo"><label>Data de Início</label><input type="date" id="f-inicio"/></div>
         <div class="form-campo"><label>Previsão de Conclusão</label><input type="date" id="f-previsao"/></div>
       </div>
-      <div class="form-campo"><label>Observações</label><textarea id="f-obs" rows="3" placeholder="Informações adicionais sobre a obra..."></textarea></div>
+      <div class="form-campo"><label>Observações</label><textarea id="f-obs" rows="2" placeholder="Informações adicionais sobre a obra..."></textarea></div>
+
+      <!-- ── PARCELAS DO CONTRATO ── -->
+      <div style="border-top:2px solid var(--cinza);padding-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--texto-leve);">💰 Parcelas do Contrato (A Receber)</div>
+          <div style="display:flex;gap:4px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="presetParcelas('avista')">À vista</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="presetParcelas('2x')">2× 50%</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="presetParcelas('3x')">3× 30/30/40</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="addParcela()">+ Linha</button>
+          </div>
+        </div>
+        <div id="parc-header" style="display:grid;grid-template-columns:1fr 110px 130px auto;gap:6px;padding:0 0 4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--texto-leve);">
+          <span>Descrição</span><span>Valor (R$)</span><span>Vencimento</span><span></span>
+        </div>
+        <div id="parcelas-lista"></div>
+        <div id="parcelas-total" style="text-align:right;font-size:.78rem;margin-top:4px;"></div>
+      </div>
+
+      <!-- ── FUNCIONÁRIOS DA OBRA ── -->
+      <div style="border-top:2px solid var(--cinza);padding-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--texto-leve);">🔨 Mão de Obra (A Pagar)</div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+            <select id="f-novo-func" style="font-size:.8rem;padding:5px 8px;border:1px solid var(--cinza);border-radius:6px;max-width:200px;">
+              <option value="">Selecionar prestador…</option>
+            </select>
+            <button type="button" class="btn btn-outline btn-sm" onclick="addFuncObra()">+ Adicionar</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="abrirMiniModalPrestador()">+ Cadastrar Novo</button>
+          </div>
+        </div>
+        <div id="func-header" style="display:grid;grid-template-columns:1fr 80px 110px 130px auto;gap:6px;padding:0 0 4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--texto-leve);">
+          <span>Prestador</span><span>Função</span><span>Valor (R$)</span><span>Vencimento</span><span></span>
+        </div>
+        <div id="func-lista"></div>
+        <div id="func-total" style="text-align:right;font-size:.78rem;margin-top:4px;"></div>
+      </div>
+
+      <!-- aviso de geração -->
+      <div id="aviso-lancamentos" style="display:none;background:#d1fae5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 14px;font-size:.8rem;color:#065f46;"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-outline" id="btn-gerar-lanc" style="display:none;color:var(--verde);" onclick="gerarLancamentosManual()">💰 Gerar Lançamentos</button>
       <button class="btn btn-success" onclick="salvar()">✓ Salvar Obra</button>
+    </div>
+  </div>
+</div>
+
+<!-- MINI-MODAL NOVO PRESTADOR -->
+<div class="overlay" id="modal-mini-prest">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h2>🔨 Novo Prestador</h2>
+      <button class="btn-fechar" onclick="document.getElementById('modal-mini-prest').classList.remove('aberto')">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:0 20px 4px;">
+      <div class="form-campo"><label>Nome *</label><input type="text" id="mp-nome" placeholder="Nome completo"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-campo"><label>Função</label><input type="text" id="mp-funcao" placeholder="Pedreiro, Eletricista…"/></div>
+        <div class="form-campo"><label>Telefone</label><input type="text" id="mp-tel" placeholder="(11) 9 0000-0000"/></div>
+      </div>
+      <div class="form-campo"><label>Chave PIX</label><input type="text" id="mp-pix" placeholder="CPF, e-mail ou telefone"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="document.getElementById('modal-mini-prest').classList.remove('aberto')">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarMiniPrestador()">✓ Salvar e Adicionar à Obra</button>
     </div>
   </div>
 </div>
@@ -120,37 +183,49 @@ const LS_KEY    = 'cbx_obras';
 document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('obras');
 
 let lista = []; let sha = null; let idEditando = null;
-let modelos = [];
+let modelos = []; let prestadores = [];
+let lancamentos = []; let shaLanc = null;
+let parcelas = []; let funcionariosObra = [];
 
 async function init() {
   const cfg = getConfig();
-  modelos = carregarLocal('cbx_modelos') || [];
+  modelos     = carregarLocal('cbx_modelos')    || [];
+  prestadores = carregarLocal('cbx_prestadores') || [];
+  lancamentos = carregarLocal('cbx_lanc')        || [];
   if (!configurado()) {
     setSyncStatus('vermelho', 'Não configurado');
     const l = carregarLocal(LS_KEY); if (l) { lista = l; atualizarStats(); renderLista(); }
-    popularSelectModelos();
+    popularSelectModelos(); popularSelectPrestadores();
     return;
   }
   setSyncStatus('amarelo', 'Carregando...');
   document.getElementById('header-sub').textContent = `${cfg.owner}/${cfg.repo}`;
   try {
-    const [resObras, resMod] = await Promise.all([
+    const [resObras, resMod, resPrest, resLanc] = await Promise.all([
       carregarDados(DATA_PATH),
       carregarDados('data/modelos.json').catch(()=>({lista:[],sha:null})),
+      carregarDados('data/prestadores.json').catch(()=>({lista:[],sha:null})),
+      carregarDados('data/lancamentos.json').catch(()=>({lista:[],sha:null})),
     ]);
     lista = resObras.lista; sha = resObras.sha;
-    modelos = resMod.lista || [];
+    modelos      = resMod.lista   || [];
+    prestadores  = resPrest.lista || [];
+    lancamentos  = resLanc.lista  || []; shaLanc = resLanc.sha;
     salvarLocal(LS_KEY, lista);
-    salvarLocal('cbx_modelos', modelos);
+    salvarLocal('cbx_modelos',    modelos);
+    salvarLocal('cbx_prestadores',prestadores);
+    salvarLocal('cbx_lanc',       lancamentos);
     atualizarStats(); renderLista();
-    popularSelectModelos();
+    popularSelectModelos(); popularSelectPrestadores();
     setSyncStatus('verde', 'Conectado');
   } catch(e) {
     setSyncStatus('vermelho', 'Erro');
     const l = carregarLocal(LS_KEY); if (l) { lista = l; atualizarStats(); renderLista(); toast('Cache local.', 'aviso'); }
     else toast('Erro ao carregar.', 'erro');
-    modelos = carregarLocal('cbx_modelos') || [];
-    popularSelectModelos();
+    modelos     = carregarLocal('cbx_modelos')    || [];
+    prestadores = carregarLocal('cbx_prestadores') || [];
+    lancamentos = carregarLocal('cbx_lanc')        || [];
+    popularSelectModelos(); popularSelectPrestadores();
   }
 }
 
@@ -247,6 +322,11 @@ function abrirModal() {
   document.getElementById('f-modelo').value = '';
   document.getElementById('f-boxes-wrap').style.display = 'none';
   document.getElementById('modelo-info').style.display = 'none';
+  // reset parcelas e funcionários
+  parcelas = []; funcionariosObra = [];
+  renderParcelas(); renderFuncObra();
+  document.getElementById('aviso-lancamentos').style.display = 'none';
+  document.getElementById('btn-gerar-lanc').style.display = 'none';
   document.getElementById('modal-obra').classList.add('aberto');
   setTimeout(()=>document.getElementById('f-nome').focus(),80);
 }
@@ -257,6 +337,21 @@ function editar(id) {
   document.getElementById('modal-titulo').textContent = 'Editar Obra';
   // ocultar seção modelo na edição
   document.getElementById('modelo-section').style.display = 'none';
+  // carregar parcelas e funcionários da obra
+  parcelas = (o.parcelas||[]).map(p=>({...p}));
+  funcionariosObra = (o.funcionariosObra||[]).map(f=>({...f}));
+  renderParcelas(); renderFuncObra();
+  // mostrar botão "Gerar Lançamentos" se houver parcelas/funcionários mas nenhum lancamento gerado
+  const temLancGerado = lancamentos.some(l=>l.obraId===id&&l.geradoDaObra);
+  const temConf = parcelas.length || funcionariosObra.length;
+  document.getElementById('btn-gerar-lanc').style.display = (temConf && !temLancGerado) ? '' : 'none';
+  const aviso = document.getElementById('aviso-lancamentos');
+  if (temLancGerado) {
+    aviso.style.display = '';
+    const nRec = lancamentos.filter(l=>l.obraId===id&&l.geradoDaObra&&l.tipo==='receita').length;
+    const nDes = lancamentos.filter(l=>l.obraId===id&&l.geradoDaObra&&l.tipo==='despesa').length;
+    aviso.textContent = `✓ ${nRec} receita(s) e ${nDes} despesa(s) já foram geradas automaticamente para esta obra.`;
+  } else { aviso.style.display = 'none'; }
   document.getElementById('f-nome').value      = o.nome||'';
   document.getElementById('f-cliente').value   = o.cliente||'';
   document.getElementById('f-endereco').value  = o.endereco||'';
@@ -294,6 +389,8 @@ async function salvar() {
     modeloNome:       modeloSel?.nome || (idEditando?(lista.find(x=>x.id===idEditando)?.modeloNome||null):null),
     modeloUnidade:    modeloSel?.unidade || (idEditando?(lista.find(x=>x.id===idEditando)?.modeloUnidade||null):null),
     qtdBoxes:         qtdBoxes ?? (idEditando?(lista.find(x=>x.id===idEditando)?.qtdBoxes||null):null),
+    parcelas:         parcelas.filter(p=>p.valor>0),
+    funcionariosObra: funcionariosObra.filter(f=>f.valor>0),
     criadoEm:         idEditando?(lista.find(x=>x.id===idEditando)?.criadoEm||hoje()):hoje(),
   };
   lista = idEditando ? lista.map(x=>x.id===idEditando?obra:x) : [...lista,obra];
@@ -306,6 +403,11 @@ async function salvar() {
       sha = await salvarDados(DATA_PATH,lista,sha,`Obra: ${obra.nome}`);
       setSyncStatus('verde','Sincronizado');
     } catch(e){ setSyncStatus('vermelho','Erro sync'); toast('Erro sync: '+e.message,'aviso'); return; }
+    // gerar lançamentos de receita e despesa
+    if (!idEditando) {
+      const nLanc = await gerarLancamentosObra(obra);
+      if (nLanc > 0) toast(`✓ ${nLanc} lançamento(s) criado(s) automaticamente!`, 'sucesso');
+    }
     // gerar etapas se obra nova com modelo
     if (!idEditando && modeloSel) {
       const nEt = (modeloSel.etapas||[]).length;
@@ -375,6 +477,205 @@ async function excluir(id) {
   salvarLocal(LS_KEY, lista); atualizarStats(); renderLista();
   toast('Obra excluída.','sucesso');
   if(configurado()){ try{ sha=await salvarDados(DATA_PATH,lista,sha,`Excluir obra: ${o.nome}`); }catch(e){toast('Erro sync','aviso');} }
+}
+
+// ── PRESTADORES ──
+function popularSelectPrestadores() {
+  const sel = document.getElementById('f-novo-func');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Selecionar prestador…</option>';
+  [...prestadores].sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.nome + (p.funcao ? ` (${p.funcao})` : '');
+    sel.appendChild(opt);
+  });
+}
+
+function abrirMiniModalPrestador() {
+  ['mp-nome','mp-funcao','mp-tel','mp-pix'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('modal-mini-prest').classList.add('aberto');
+  setTimeout(()=>document.getElementById('mp-nome').focus(),80);
+}
+
+async function salvarMiniPrestador() {
+  const nome = document.getElementById('mp-nome').value.trim();
+  if (!nome) { toast('Nome é obrigatório.','aviso'); return; }
+  const novo = {
+    id: uid(), nome,
+    funcao:   document.getElementById('mp-funcao').value.trim(),
+    telefone: document.getElementById('mp-tel').value.trim(),
+    pix:      document.getElementById('mp-pix').value.trim(),
+    doc: '', obs: '', criadoEm: hoje(),
+  };
+  prestadores.push(novo);
+  salvarLocal('cbx_prestadores', prestadores);
+  popularSelectPrestadores();
+  document.getElementById('f-novo-func').value = novo.id;
+  document.getElementById('modal-mini-prest').classList.remove('aberto');
+  toast('Prestador cadastrado!','sucesso');
+  // adicionar direto à obra e salvar no GitHub
+  addFuncObra();
+  if (configurado()) {
+    try {
+      const res = await carregarDados('data/prestadores.json').catch(()=>({lista:[],sha:null}));
+      const todos = [...(res.lista||[]).filter(x=>x.id!==novo.id), novo];
+      await salvarDados('data/prestadores.json', todos, res.sha, `Prestador: ${nome}`);
+    } catch(e) { /* sem sync, local ok */ }
+  }
+}
+
+// ── PARCELAS ──
+function presetParcelas(tipo) {
+  const contrato = parseFloat(document.getElementById('f-contrato').value)||0;
+  if (!contrato) { toast('Informe o Valor do Contrato primeiro.','aviso'); return; }
+  const inicio = document.getElementById('f-inicio').value || hoje();
+  const fim    = document.getElementById('f-previsao').value;
+  // helper: add N days to date string
+  const addDias = (d, n) => { const dt = new Date(d+'T12:00:00'); dt.setDate(dt.getDate()+n); return dt.toISOString().split('T')[0]; };
+  const meio = inicio && fim
+    ? addDias(inicio, Math.round((new Date(fim)-new Date(inicio))/(1000*86400)/2))
+    : addDias(inicio, 30);
+  const vFim = fim || addDias(inicio, 60);
+  const r = v => Math.round(v * 100) / 100;
+  switch(tipo) {
+    case 'avista':
+      parcelas = [{id:uid(), descricao:'Pagamento Único', valor:contrato, vencimento:inicio}]; break;
+    case '2x':
+      parcelas = [
+        {id:uid(), descricao:'1ª Parcela (50%)', valor:r(contrato*0.5), vencimento:inicio},
+        {id:uid(), descricao:'2ª Parcela (50%)', valor:r(contrato*0.5), vencimento:vFim},
+      ]; break;
+    case '3x':
+      parcelas = [
+        {id:uid(), descricao:'1ª Parcela — Início (30%)',     valor:r(contrato*0.30), vencimento:inicio},
+        {id:uid(), descricao:'2ª Parcela — Meio da Obra (30%)',valor:r(contrato*0.30), vencimento:meio},
+        {id:uid(), descricao:'3ª Parcela — Conclusão (40%)',  valor:r(contrato*0.40), vencimento:vFim},
+      ]; break;
+  }
+  renderParcelas();
+}
+
+function addParcela() {
+  parcelas.push({id:uid(), descricao:'Parcela '+(parcelas.length+1), valor:0, vencimento:''});
+  renderParcelas();
+}
+function removeParcela(idx) { parcelas.splice(idx,1); renderParcelas(); }
+
+function renderParcelas() {
+  const cont = document.getElementById('parcelas-lista');
+  if (!parcelas.length) {
+    cont.innerHTML = '<div style="font-size:.8rem;color:var(--texto-leve);padding:6px 0;">Nenhuma parcela. Use os botões de preset ou "+ Linha".</div>';
+    document.getElementById('parcelas-total').innerHTML = '';
+    return;
+  }
+  cont.innerHTML = parcelas.map((p,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 110px 130px auto;gap:6px;align-items:center;margin-bottom:5px;">
+      <input type="text" class="form-control" style="font-size:.82rem;" value="${esc(p.descricao)}" placeholder="Descrição" oninput="parcelas[${i}].descricao=this.value"/>
+      <input type="number" class="form-control" style="font-size:.82rem;" value="${p.valor||''}" placeholder="0,00" min="0" step="0.01" oninput="parcelas[${i}].valor=parseFloat(this.value)||0;atualizarTotalParcelas()"/>
+      <input type="date" class="form-control" style="font-size:.82rem;" value="${p.vencimento||''}" onchange="parcelas[${i}].vencimento=this.value"/>
+      <button type="button" class="btn btn-outline btn-sm" style="color:var(--vermelho);padding:4px 8px;" onclick="removeParcela(${i})">✕</button>
+    </div>`).join('');
+  atualizarTotalParcelas();
+}
+function atualizarTotalParcelas() {
+  const total = parcelas.reduce((s,p)=>s+(p.valor||0),0);
+  const contrato = parseFloat(document.getElementById('f-contrato').value)||0;
+  const diff = contrato - total;
+  const cor = Math.abs(diff) < 0.01 ? 'var(--verde)' : 'var(--vermelho)';
+  document.getElementById('parcelas-total').innerHTML = total
+    ? `Total parcelas: <strong style="color:${cor};">${formatarMoeda(total)}</strong>${Math.abs(diff)>0.01?` <span style="color:var(--texto-leve);">(${diff>0?'faltam':'sobram'} ${formatarMoeda(Math.abs(diff))} do contrato)</span>`:' ✓'}`
+    : '';
+}
+
+// ── FUNCIONÁRIOS DA OBRA ──
+function addFuncObra() {
+  const sel = document.getElementById('f-novo-func');
+  const prestId = sel.value;
+  if (!prestId) { toast('Selecione um prestador.','aviso'); return; }
+  if (funcionariosObra.some(f=>f.prestadorId===prestId)) { toast('Já adicionado.','aviso'); sel.value=''; return; }
+  const p = prestadores.find(x=>x.id===prestId); if(!p) return;
+  funcionariosObra.push({id:uid(), prestadorId:p.id, nome:p.nome, funcao:p.funcao||'', valor:0, vencimento:''});
+  sel.value='';
+  renderFuncObra();
+}
+function removeFuncObra(idx) { funcionariosObra.splice(idx,1); renderFuncObra(); }
+
+function renderFuncObra() {
+  const cont = document.getElementById('func-lista');
+  if (!funcionariosObra.length) {
+    cont.innerHTML = '<div style="font-size:.8rem;color:var(--texto-leve);padding:6px 0;">Nenhum prestador adicionado.</div>';
+    document.getElementById('func-total').innerHTML = '';
+    return;
+  }
+  cont.innerHTML = funcionariosObra.map((f,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 80px 110px 130px auto;gap:6px;align-items:center;margin-bottom:5px;">
+      <div style="font-size:.82rem;font-weight:700;padding:5px 0;">${esc(f.nome)}</div>
+      <input type="text" class="form-control" style="font-size:.78rem;" value="${esc(f.funcao)}" placeholder="Função" oninput="funcionariosObra[${i}].funcao=this.value"/>
+      <input type="number" class="form-control" style="font-size:.82rem;" value="${f.valor||''}" placeholder="R$" min="0" step="0.01" oninput="funcionariosObra[${i}].valor=parseFloat(this.value)||0;atualizarTotalFunc()"/>
+      <input type="date" class="form-control" style="font-size:.82rem;" value="${f.vencimento||''}" onchange="funcionariosObra[${i}].vencimento=this.value"/>
+      <button type="button" class="btn btn-outline btn-sm" style="color:var(--vermelho);padding:4px 8px;" onclick="removeFuncObra(${i})">✕</button>
+    </div>`).join('');
+  atualizarTotalFunc();
+}
+function atualizarTotalFunc() {
+  const total = funcionariosObra.reduce((s,f)=>s+(f.valor||0),0);
+  document.getElementById('func-total').innerHTML = total
+    ? `Total mão de obra: <strong style="color:var(--vermelho);">${formatarMoeda(total)}</strong>` : '';
+}
+
+// ── GERAR LANÇAMENTOS ──
+async function gerarLancamentosObra(obra) {
+  const parcs = (obra.parcelas||[]).filter(p=>p.valor>0);
+  const funcs = (obra.funcionariosObra||[]).filter(f=>f.valor>0);
+  if (!parcs.length && !funcs.length) return 0;
+  // buscar SHA atual
+  let lancs = carregarLocal('cbx_lanc')||[];
+  try {
+    const res = await carregarDados('data/lancamentos.json');
+    lancs = res.lista||[]; shaLanc = res.sha;
+  } catch(e) {}
+  const novos = [
+    ...parcs.map(p=>({
+      id:uid(), tipo:'receita',
+      descricao: `${p.descricao} — ${obra.nome}`,
+      categoria: 'medicao',
+      valor: p.valor, status:'pendente',
+      data: p.vencimento||hoje(), dataVencimento: p.vencimento||null,
+      obraId: obra.id, geradoDaObra:true, criadoEm:hoje(),
+    })),
+    ...funcs.map(f=>({
+      id:uid(), tipo:'despesa',
+      descricao: `Mão de Obra: ${f.nome}${f.funcao?' ('+f.funcao+')':''} — ${obra.nome}`,
+      categoria: 'mao-obra',
+      valor: f.valor, status:'pendente',
+      data: f.vencimento||hoje(), dataVencimento: f.vencimento||null,
+      obraId: obra.id, geradoDaObra:true, criadoEm:hoje(),
+    })),
+  ];
+  const merged = [...lancs, ...novos];
+  lancamentos = merged;
+  salvarLocal('cbx_lanc', merged);
+  if (configurado()) {
+    try {
+      shaLanc = await salvarDados('data/lancamentos.json', merged, shaLanc, `Lançamentos: ${obra.nome}`);
+    } catch(e) { toast('Lançamentos salvos localmente (erro sync).','aviso'); }
+  }
+  return novos.length;
+}
+
+async function gerarLancamentosManual() {
+  const o = lista.find(x=>x.id===idEditando); if(!o) return;
+  const n = await gerarLancamentosObra(o);
+  if (n > 0) {
+    toast(`✓ ${n} lançamento(s) gerado(s)!`,'sucesso');
+    document.getElementById('btn-gerar-lanc').style.display = 'none';
+    const aviso = document.getElementById('aviso-lancamentos');
+    aviso.style.display = '';
+    aviso.textContent = `✓ ${n} lançamento(s) criado(s) para esta obra.`;
+  } else {
+    toast('Nenhum valor preenchido para gerar.','aviso');
+  }
 }
 
 init();
