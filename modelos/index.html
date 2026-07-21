@@ -60,6 +60,7 @@
           <div style="font-size:1.1rem;font-weight:800;" id="ed-nome">Modelo</div>
           <div style="font-size:.78rem;color:var(--texto-leve);" id="ed-sub"></div>
         </div>
+        <button class="btn btn-outline btn-sm" onclick="imprimirModelo(modeloAtualId)">🖨️ Imprimir Modelo</button>
         <button class="btn btn-success btn-sm" onclick="salvarModelos('Etapas do modelo atualizadas')">💾 Salvar Alterações</button>
       </div>
 
@@ -337,6 +338,7 @@ function renderLista() {
       <td style="font-size:.78rem;">${m.criadoEm||'—'}</td>
       <td><div style="display:flex;gap:4px;">
         <button class="btn btn-primary btn-sm" onclick='abrirEditor("${m.id}")'>📋 Etapas</button>
+        <button class="btn btn-outline btn-sm" onclick='imprimirModelo("${m.id}")'>🖨️</button>
         <button class="btn btn-outline btn-sm" onclick='editarModelo("${m.id}")'>✏️ Editar</button>
         <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirModelo("${m.id}")'>🗑</button>
       </div></td>
@@ -577,6 +579,86 @@ function removerMatTpl(eId, mid) {
   e.materiais = (e.materiais||[]).filter(x=>x.id!==mid);
   atualizarSubEditor(m);
   renderEtapasModelo();
+}
+
+// ── IMPRESSÃO ──
+const ClassLblMod = { obrigatorio_iniciar:'Obrig. para Iniciar', obrigatorio_execucao:'Obrig. durante Exec.', complementar:'Complementar', opcional:'Opcional' };
+const CatLblMod   = { fundacao:'Fundação', estrutura:'Estrutura', alvenaria:'Alvenaria', cobertura:'Cobertura', instalacoes:'Instalações', acabamento:'Acabamento', externo:'Externo', outros:'Outros' };
+
+function imprimirModelo(modeloId) {
+  const m = modelos.find(x=>x.id===modeloId); if(!m) return;
+  const unidade = m.unidade||'box';
+  const etapas  = m.etapas||[];
+  const custoTotal = etapas.reduce((s,e)=>s+(e.materiais||[]).reduce((a,mat)=>a+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0),0);
+
+  const bloco = (titulo, corpo) => `
+    <div style="margin-top:14px;">
+      <div style="font-weight:700;font-size:.8rem;letter-spacing:.04em;padding-bottom:4px;border-bottom:1px solid #e2e8f0;margin-bottom:8px;text-transform:uppercase;">${titulo}</div>
+      ${corpo}
+    </div>`;
+
+  const secEtapas = etapas.length ? etapas.map((e,idx)=>{
+    const mats = e.materiais||[];
+    const cl   = e.checklist||[];
+    const custoEt = mats.reduce((s,mat)=>s+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0);
+
+    const secMemorial = e.memorial ? `
+      <div style="background:#fefce8;border:1px solid #fde047;border-radius:6px;padding:10px 13px;margin:8px 0;">
+        <div style="font-size:.72rem;font-weight:700;color:#92400e;margin-bottom:5px;letter-spacing:.03em;">MEMORIAL TÉCNICO / INSTRUÇÕES DE EXECUÇÃO</div>
+        <pre style="font-family:inherit;font-size:.8rem;white-space:pre-wrap;line-height:1.65;">${esc(e.memorial)}</pre>
+      </div>` : '';
+
+    const secCl = cl.length ? `
+      <div style="margin-top:8px;">
+        <div style="font-size:.72rem;font-weight:700;color:#64748b;margin-bottom:4px;">CHECKLIST (${cl.length} tarefa${cl.length>1?'s':''})</div>
+        ${cl.map((it,i)=>`<div style="font-size:.8rem;padding:3px 0;">${i+1}. ${esc(it.descricao)}${it.obrigatoria?' <strong style="color:#991b1b;">[OBRIGATÓRIA]</strong>':''}</div>`).join('')}
+      </div>` : '';
+
+    const secMats = mats.length ? `
+      <table style="margin-top:8px;"><thead><tr>
+        <th>Material</th><th>Un.</th><th>Classificação</th>
+        <th>Qtd/${unidade}</th><th>Mín/${unidade}</th><th>Fornecedor</th><th>Vlr Unit.</th><th>Total/${unidade}</th>
+      </tr></thead><tbody>
+      ${mats.map(mat=>`<tr>
+        <td><strong>${esc(mat.nome)}</strong></td>
+        <td>${esc(mat.unidade||'')}</td>
+        <td style="font-size:.72rem;">${ClassLblMod[mat.classificacao]||mat.classificacao||'—'}</td>
+        <td style="text-align:center;">${mat.qtdPorBox||0}</td>
+        <td style="text-align:center;">${mat.qtdMinPorBox||'—'}</td>
+        <td style="font-size:.72rem;">${esc(mat.fornecedor||'—')}</td>
+        <td>${mat.valorUnitario?'R$ '+mat.valorUnitario.toFixed(2):'—'}</td>
+        <td style="font-weight:700;">${mat.valorUnitario&&mat.qtdPorBox?'R$ '+(mat.valorUnitario*mat.qtdPorBox).toFixed(2):'—'}</td>
+      </tr>`).join('')}
+      <tr style="background:#f8fafc;font-weight:700;">
+        <td colspan="7" style="text-align:right;font-size:.78rem;">Total da etapa por ${unidade}:</td>
+        <td>${custoEt?'R$ '+custoEt.toFixed(2):'—'}</td>
+      </tr>
+      </tbody></table>` : '<p style="font-size:.78rem;color:#94a3b8;margin-top:6px;">Sem materiais.</p>';
+
+    return `<div style="margin-bottom:24px;page-break-inside:avoid;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:#d97706;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;">${e.ordem||idx+1}</div>
+        <div>
+          <div style="font-weight:800;font-size:.95rem;">${esc(e.nome)}</div>
+          <div style="font-size:.75rem;color:#64748b;">${CatLblMod[e.categoria]||e.categoria}${e.peso?` · ${e.peso}% da obra`:''}${e.responsavel?` · Resp.: ${esc(e.responsavel)}`:''}</div>
+        </div>
+      </div>
+      ${secMemorial}${secCl}${secMats}
+    </div>`;
+  }).join('') : '<p style="color:#94a3b8;">Nenhuma etapa cadastrada neste modelo.</p>';
+
+  const kpis = `<div class="kpi-grid">
+    <div class="kpi"><div class="val">${etapas.length}</div><div class="lbl">Etapas</div></div>
+    <div class="kpi"><div class="val">${etapas.reduce((s,e)=>s+(e.materiais||[]).length,0)}</div><div class="lbl">Materiais</div></div>
+    <div class="kpi"><div class="val">${custoTotal?'R$ '+custoTotal.toFixed(2):'—'}</div><div class="lbl">Custo/${unidade}</div></div>
+    <div class="kpi"><div class="val">${unidade}</div><div class="lbl">Unidade base</div></div>
+  </div>`;
+
+  abrirDocumentoImpressao(
+    `Modelo: ${m.nome}`,
+    `${m.descricao||''} · Unidade: ${unidade}`,
+    kpis + bloco('Etapas do Modelo', secEtapas)
+  );
 }
 
 // ── EDITAR ETAPA ──
