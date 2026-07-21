@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "mruylr4frpjos",
+    "nome": "HIB - BOX PADRÃO",
+    "descricao": "Templeta padrão de 1 box do HIB",
+    "unidade": "box",
+    "criadoEm": "2026-07-21",
+    "etapas": []
+  }
+]
