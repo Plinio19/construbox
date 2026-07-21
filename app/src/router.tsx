@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import Configuracoes from './pages/configuracoes/Configuracoes';
+import ObrasPage from './pages/obras/ObrasPage';
 import EmBreve from './pages/EmBreve';
 
 export const router = createBrowserRouter([
@@ -10,7 +11,7 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true,                        element: <Dashboard /> },
-      { path: 'obras',                      element: <EmBreve titulo="Obras" /> },
+      { path: 'obras',                      element: <ObrasPage /> },
       { path: 'obras/:id',                  element: <EmBreve titulo="Obra" /> },
       { path: 'obras/:id/cronograma',       element: <EmBreve titulo="Cronograma" /> },
       { path: 'modelos',                    element: <EmBreve titulo="Modelos" /> },
