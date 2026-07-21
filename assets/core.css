@@ -263,3 +263,18 @@ mark.pesquisa-destaque { background: #fef08a; color: inherit; border-radius: 2px
   .sidebar { transform: translateX(-100%); }
   .main { margin-left: 0; }
 }
+
+/* ── RESPONSIVIDADE TELAS GRANDES ── */
+@media (min-width: 1600px) {
+  html, body { font-size: 15px; }
+  .page { max-width: 1600px; }
+}
+@media (min-width: 1920px) {
+  html, body { font-size: 16px; }
+  .page { max-width: 1800px; }
+  :root { --sidebar-w: 250px; --topbar-h: 64px; }
+}
+@media (min-width: 2560px) {
+  html, body { font-size: 18px; }
+  .page { max-width: 2100px; }
+}

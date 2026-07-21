@@ -3,62 +3,98 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Construbox — Cadastros</title>
+  <title>Construbox — Cadastro Geral</title>
   <link rel="stylesheet" href="../assets/core.css"/>
+  <style>
+    .cad-painel { display:none; }
+    .cad-painel.ativo { display:block; }
+    .cad-row { display:flex; justify-content:space-between; align-items:center; padding:11px 4px; border-bottom:1px solid var(--cinza); gap:12px; }
+    .cad-row:last-child { border-bottom:none; }
+    .cad-nome { font-weight:700; font-size:.88rem; }
+    .cad-sub  { font-size:.76rem; color:var(--texto-leve); margin-top:2px; }
+    .cad-acoes { display:flex; gap:6px; flex-shrink:0; }
+  </style>
 </head>
 <body>
 <div id="sidebar-placeholder"></div>
 <div class="main">
   <div class="topbar">
     <div>
-      <div class="topbar-titulo">Cadastros</div>
-      <div class="topbar-sub">Sócios e Clientes</div>
+      <div class="topbar-titulo">Cadastro Geral</div>
+      <div class="topbar-sub">Sócios, Clientes, Funcionários, Materiais e Fornecedores</div>
     </div>
     <div class="topbar-acoes">
+      <button class="btn btn-outline btn-sm no-print" onclick="init()" title="Buscar dados atualizados do GitHub">🔄 Sincronizar</button>
       <div class="sync-pill">
         <div class="sync-dot amarelo" id="sync-dot"></div>
         <span id="sync-texto">Conectando</span>
       </div>
     </div>
   </div>
-  <div class="page" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+  <div class="page">
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-body" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="chip ativo" id="tab-socios"      onclick="setTab('socios')">👥 Sócios</button>
+        <button class="chip"       id="tab-clientes"    onclick="setTab('clientes')">🏢 Clientes</button>
+        <button class="chip"       id="tab-funcionarios" onclick="setTab('funcionarios')">🔨 Funcionários</button>
+        <button class="chip"       id="tab-materiais"   onclick="setTab('materiais')">📦 Materiais</button>
+        <button class="chip"       id="tab-fornecedores" onclick="setTab('fornecedores')">🚚 Fornecedores</button>
+      </div>
+    </div>
 
     <!-- ── SÓCIOS ── -->
-    <div>
+    <div id="painel-socios" class="cad-painel ativo">
       <div class="card">
         <div class="card-header">
           <h2>👥 Sócios</h2>
           <button class="btn btn-primary btn-sm" onclick="abrirModalSocio()">+ Novo Sócio</button>
         </div>
-        <div class="card-body" id="lista-socios">
-          <div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div>
-        </div>
+        <div class="card-body" id="lista-socios"><div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div></div>
       </div>
     </div>
 
     <!-- ── CLIENTES ── -->
-    <div>
+    <div id="painel-clientes" class="cad-painel">
       <div class="card">
         <div class="card-header">
           <h2>🏢 Clientes</h2>
           <button class="btn btn-primary btn-sm" onclick="abrirModalCliente()">+ Novo Cliente</button>
         </div>
-        <div class="card-body" id="lista-clientes">
-          <div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div>
-        </div>
+        <div class="card-body" id="lista-clientes"><div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div></div>
       </div>
     </div>
 
-    <!-- ── PRESTADORES / FUNCIONÁRIOS ── -->
-    <div style="grid-column:1/-1;">
+    <!-- ── FUNCIONÁRIOS ── -->
+    <div id="painel-funcionarios" class="cad-painel">
       <div class="card">
         <div class="card-header">
           <h2>🔨 Prestadores & Funcionários</h2>
           <button class="btn btn-primary btn-sm" onclick="abrirModalPrestador()">+ Novo Prestador</button>
         </div>
-        <div class="card-body" id="lista-prestadores">
-          <div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div>
+        <div class="card-body" id="lista-prestadores"><div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- ── MATERIAIS ── -->
+    <div id="painel-materiais" class="cad-painel">
+      <div class="card">
+        <div class="card-header">
+          <h2>📦 Catálogo de Materiais</h2>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalMaterial()">+ Novo Material</button>
         </div>
+        <div class="card-body" id="lista-materiais"><div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- ── FORNECEDORES ── -->
+    <div id="painel-fornecedores" class="cad-painel">
+      <div class="card">
+        <div class="card-header">
+          <h2>🚚 Fornecedores</h2>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalFornecedor()">+ Novo Fornecedor</button>
+        </div>
+        <div class="card-body" id="lista-fornecedores"><div style="text-align:center;padding:24px;color:var(--texto-leve);">Carregando...</div></div>
       </div>
     </div>
 
@@ -76,35 +112,12 @@
       <input type="hidden" id="msoc-id"/>
       <div class="form-campo"><label>Nome *</label><input id="msoc-nome" type="text" placeholder="Nome completo"/></div>
       <div class="form-campo"><label>CPF</label><input id="msoc-cpf" type="text" placeholder="000.000.000-00"/></div>
-      <div class="form-campo"><label>Participação (%)</label><input id="msoc-pct" type="number" min="0" max="100" step="1" value="50" placeholder="50"/></div>
+      <div class="form-campo"><label>Participação (%)</label><input id="msoc-pct" type="number" min="0" max="100" step="1" value="50"/></div>
       <div class="form-campo"><label>Observações</label><textarea id="msoc-obs" rows="2"></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="fecharModal('modal-socio')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarSocio()">✓ Salvar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL PRESTADOR -->
-<div class="overlay" id="modal-prestador">
-  <div class="modal" style="max-width:420px;">
-    <div class="modal-header">
-      <h2 id="mprest-titulo">Novo Prestador</h2>
-      <button class="btn-fechar" onclick="fecharModal('modal-prestador')">✕</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="mprest-id"/>
-      <div class="form-campo"><label>Nome *</label><input id="mprest-nome" type="text" placeholder="Nome completo"/></div>
-      <div class="form-campo"><label>CPF / CNPJ</label><input id="mprest-doc" type="text" placeholder="000.000.000-00"/></div>
-      <div class="form-campo"><label>Função / Serviço</label><input id="mprest-funcao" type="text" placeholder="Ex: Pedreiro, Eletricista, Pintor..."/></div>
-      <div class="form-campo"><label>Telefone</label><input id="mprest-tel" type="text" placeholder="(00) 00000-0000"/></div>
-      <div class="form-campo"><label>Chave PIX</label><input id="mprest-pix" type="text" placeholder="CPF, e-mail, telefone ou chave aleatória"/></div>
-      <div class="form-campo"><label>Observações</label><textarea id="mprest-obs" rows="2"></textarea></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharModal('modal-prestador')">Cancelar</button>
-      <button class="btn btn-primary" onclick="salvarPrestador()">✓ Salvar</button>
     </div>
   </div>
 </div>
@@ -123,11 +136,10 @@
         <label>CNPJ / CPF</label>
         <div style="display:flex;gap:8px;align-items:center;">
           <input id="mcli-cnpj" type="text" placeholder="00.000.000/0001-00" style="flex:1;"/>
-          <button class="btn btn-outline btn-sm" onclick="buscarCNPJ()" title="Buscar dados pelo CNPJ">🔍 Buscar</button>
+          <button class="btn btn-outline btn-sm" onclick="buscarCNPJ('mcli-cnpj','mcli-nome','mcli-email','mcli-tel')">🔍 Buscar</button>
         </div>
-        <span class="hint">Informe o CNPJ e clique em Buscar para preencher automaticamente.</span>
       </div>
-      <div class="form-campo"><label>Contato (nome)</label><input id="mcli-contato" type="text"/></div>
+      <div class="form-campo"><label>Contato</label><input id="mcli-contato" type="text"/></div>
       <div class="form-campo"><label>E-mail</label><input id="mcli-email" type="email"/></div>
       <div class="form-campo"><label>Telefone</label><input id="mcli-tel" type="text"/></div>
       <div class="form-campo"><label>Observações</label><textarea id="mcli-obs" rows="2"></textarea></div>
@@ -139,6 +151,89 @@
   </div>
 </div>
 
+<!-- MODAL PRESTADOR -->
+<div class="overlay" id="modal-prestador">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h2 id="mprest-titulo">Novo Prestador</h2>
+      <button class="btn-fechar" onclick="fecharModal('modal-prestador')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mprest-id"/>
+      <div class="form-campo"><label>Nome *</label><input id="mprest-nome" type="text"/></div>
+      <div class="form-campo"><label>CPF / CNPJ</label><input id="mprest-doc" type="text"/></div>
+      <div class="form-campo"><label>Função / Serviço</label><input id="mprest-funcao" type="text" placeholder="Ex: Pedreiro, Eletricista..."/></div>
+      <div class="form-campo"><label>Telefone</label><input id="mprest-tel" type="text"/></div>
+      <div class="form-campo"><label>Chave PIX</label><input id="mprest-pix" type="text"/></div>
+      <div class="form-campo"><label>Observações</label><textarea id="mprest-obs" rows="2"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModal('modal-prestador')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarPrestador()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MATERIAL -->
+<div class="overlay" id="modal-material">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h2 id="mmat-titulo">Novo Material</h2>
+      <button class="btn-fechar" onclick="fecharModal('modal-material')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mmat-id"/>
+      <div class="form-campo"><label>Nome *</label><input id="mmat-nome" type="text" placeholder="Ex: Cimento CP-II"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Unidade</label><input id="mmat-unidade" type="text" placeholder="sc, m², kg, un..."/></div>
+        <div class="form-campo"><label>Valor Ref. (R$)</label><input id="mmat-valor" type="number" min="0" step="0.01" placeholder="0,00"/></div>
+      </div>
+      <div class="form-campo"><label>Categoria</label><input id="mmat-categoria" type="text" placeholder="Ex: Cimento, Ferragem, Hidráulica..."/></div>
+      <div class="form-campo"><label>Observações</label><textarea id="mmat-obs" rows="2"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModal('modal-material')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarMaterial()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORNECEDOR -->
+<div class="overlay" id="modal-fornecedor">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <h2 id="mforn-titulo">Novo Fornecedor</h2>
+      <button class="btn-fechar" onclick="fecharModal('modal-fornecedor')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="mforn-id"/>
+      <div class="form-campo"><label>Nome / Razão Social *</label><input id="mforn-nome" type="text"/></div>
+      <div class="form-campo">
+        <label>CNPJ</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input id="mforn-cnpj" type="text" placeholder="00.000.000/0001-00" style="flex:1;"/>
+          <button class="btn btn-outline btn-sm" onclick="buscarCNPJ('mforn-cnpj','mforn-nome','mforn-email','mforn-tel')">🔍 Buscar</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo"><label>Contato</label><input id="mforn-contato" type="text"/></div>
+        <div class="form-campo"><label>Telefone</label><input id="mforn-tel" type="text"/></div>
+      </div>
+      <div class="form-campo"><label>E-mail</label><input id="mforn-email" type="email"/></div>
+      <div class="form-campo"><label>Especialidade (materiais que fornece)</label><input id="mforn-esp" type="text" placeholder="Ex: Cimento, Areia, Brita"/></div>
+      <div class="form-campo"><label>Observações</label><textarea id="mforn-obs" rows="2"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharModal('modal-fornecedor')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarFornecedor()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- datalists para autocomplete em outras páginas -->
+<datalist id="lista-catalogo-mat"></datalist>
+<datalist id="lista-catalogo-forn"></datalist>
+
 <div class="toast-container" id="toasts"></div>
 <script src="../assets/core.js"></script>
 <script>
@@ -147,85 +242,81 @@ document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('cadastr
 let socios      = []; let shaS = null;
 let clientes    = []; let shaC = null;
 let prestadores = []; let shaP = null;
+let materiais   = []; let shaMat = null;
+let fornecedores= []; let shaForn = null;
+
+let tabAtual = 'socios';
+
+function setTab(t) {
+  tabAtual = t;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('ativo'));
+  document.getElementById('tab-'+t).classList.add('ativo');
+  document.querySelectorAll('.cad-painel').forEach(p => p.classList.remove('ativo'));
+  document.getElementById('painel-'+t).classList.add('ativo');
+}
 
 async function init() {
   socios      = carregarLocal('cbx_socios')      || [];
   clientes    = carregarLocal('cbx_clientes')    || [];
   prestadores = carregarLocal('cbx_prestadores') || [];
-  renderSocios(); renderClientes(); renderPrestadores();
+  materiais   = carregarLocal('cbx_materiais_cat')   || [];
+  fornecedores= carregarLocal('cbx_fornecedores') || [];
+  renderTudo();
 
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
   try {
-    const [rS, rC, rP] = await Promise.all([
+    const [rS, rC, rP, rM, rF] = await Promise.all([
       carregarDados('data/socios.json'),
       carregarDados('data/clientes.json'),
       carregarDados('data/prestadores.json'),
+      carregarDados('data/materiais_catalogo.json').catch(()=>({lista:[],sha:null})),
+      carregarDados('data/fornecedores.json').catch(()=>({lista:[],sha:null})),
     ]);
-    socios      = rS.lista; shaS = rS.sha;
-    clientes    = rC.lista; shaC = rC.sha;
-    prestadores = rP.lista; shaP = rP.sha;
+    socios      = rS.lista; shaS    = rS.sha;
+    clientes    = rC.lista; shaC    = rC.sha;
+    prestadores = rP.lista; shaP    = rP.sha;
+    materiais   = rM.lista; shaMat  = rM.sha;
+    fornecedores= rF.lista; shaForn = rF.sha;
     salvarLocal('cbx_socios',      socios);
     salvarLocal('cbx_clientes',    clientes);
     salvarLocal('cbx_prestadores', prestadores);
-    renderSocios(); renderClientes(); renderPrestadores();
+    salvarLocal('cbx_materiais_cat', materiais);
+    salvarLocal('cbx_fornecedores',  fornecedores);
+    renderTudo();
     setSyncStatus('verde','Conectado');
-  } catch(e) { setSyncStatus('vermelho','Erro'); }
+  } catch(e) { setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso'); }
 }
 
-// ── RENDER SÓCIOS ──
+function renderTudo() {
+  renderSocios(); renderClientes(); renderPrestadores(); renderMateriais(); renderFornecedores();
+}
+
+// ── ABAS ──
+function fecharModal(id) { document.getElementById(id).classList.remove('aberto'); }
+
+// ── SÓCIOS ──
 function renderSocios() {
   const cont = document.getElementById('lista-socios');
-  if (!socios.length) { cont.innerHTML = `<div style="text-align:center;padding:24px;color:var(--texto-leve);">Nenhum sócio cadastrado.</div>`; return; }
-  cont.innerHTML = socios.map(s => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--cinza);">
-      <div>
-        <div style="font-weight:700;">${esc(s.nome)}</div>
-        <div style="font-size:.8rem;color:var(--texto-leve);">
-          ${s.cpf ? `CPF: ${esc(s.cpf)} · ` : ''}${s.percentual != null ? `${s.percentual}% de participação` : ''}
-        </div>
-      </div>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-outline btn-sm" onclick='editarSocio("${s.id}")'>✏️</button>
-        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirSocio("${s.id}")'>🗑</button>
-      </div>
-    </div>`).join('');
+  if (!socios.length) { cont.innerHTML = empty('Nenhum sócio cadastrado.'); return; }
+  cont.innerHTML = socios.map(s => `<div class="cad-row">
+    <div><div class="cad-nome">${esc(s.nome)}</div>
+    <div class="cad-sub">${s.cpf?`CPF: ${esc(s.cpf)} · `:''}${s.percentual!=null?`${s.percentual}% participação`:''}</div></div>
+    <div class="cad-acoes">
+      <button class="btn btn-outline btn-sm" onclick='abrirModalSocio(socios.find(x=>x.id=="${s.id}"))'>✏️</button>
+      <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirSocio("${s.id}")'>🗑</button>
+    </div></div>`).join('');
 }
-
-// ── RENDER CLIENTES ──
-function renderClientes() {
-  const cont = document.getElementById('lista-clientes');
-  if (!clientes.length) { cont.innerHTML = `<div style="text-align:center;padding:24px;color:var(--texto-leve);">Nenhum cliente cadastrado.</div>`; return; }
-  cont.innerHTML = clientes.map(c => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--cinza);">
-      <div>
-        <div style="font-weight:700;">${esc(c.nome)}</div>
-        <div style="font-size:.8rem;color:var(--texto-leve);">
-          ${c.cnpj ? `CNPJ: ${esc(c.cnpj)}` : ''}${c.contato ? ` · ${esc(c.contato)}` : ''}
-          ${c.telefone ? ` · ${esc(c.telefone)}` : ''}
-        </div>
-      </div>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-outline btn-sm" onclick='editarCliente("${c.id}")'>✏️</button>
-        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirCliente("${c.id}")'>🗑</button>
-      </div>
-    </div>`).join('');
-}
-
-// ── MODAIS ──
-function fecharModal(id) { document.getElementById(id).classList.remove('aberto'); }
 
 function abrirModalSocio(s) {
   document.getElementById('msoc-titulo').textContent = s ? 'Editar Sócio' : 'Novo Sócio';
-  document.getElementById('msoc-id').value    = s?.id    || '';
-  document.getElementById('msoc-nome').value  = s?.nome  || '';
-  document.getElementById('msoc-cpf').value   = s?.cpf   || '';
-  document.getElementById('msoc-pct').value   = s?.percentual ?? 50;
-  document.getElementById('msoc-obs').value   = s?.obs   || '';
+  document.getElementById('msoc-id').value   = s?.id||'';
+  document.getElementById('msoc-nome').value = s?.nome||'';
+  document.getElementById('msoc-cpf').value  = s?.cpf||'';
+  document.getElementById('msoc-pct').value  = s?.percentual??50;
+  document.getElementById('msoc-obs').value  = s?.obs||'';
   document.getElementById('modal-socio').classList.add('aberto');
 }
-
-function editarSocio(id) { abrirModalSocio(socios.find(x=>x.id===id)); }
 
 async function salvarSocio() {
   const nome = document.getElementById('msoc-nome').value.trim();
@@ -247,34 +338,45 @@ async function excluirSocio(id) {
   if (configurado()) try { shaS = await salvarDados('data/socios.json', socios, shaS, 'Excluir sócio'); } catch(e) {}
 }
 
+// ── CLIENTES ──
+function renderClientes() {
+  const cont = document.getElementById('lista-clientes');
+  if (!clientes.length) { cont.innerHTML = empty('Nenhum cliente cadastrado.'); return; }
+  cont.innerHTML = clientes.map(c => `<div class="cad-row">
+    <div><div class="cad-nome">${esc(c.nome)}</div>
+    <div class="cad-sub">${c.cnpj?`${esc(c.cnpj)} · `:''}${c.contato?esc(c.contato):''}${c.telefone?` · ${esc(c.telefone)}`:''}</div></div>
+    <div class="cad-acoes">
+      <button class="btn btn-outline btn-sm" onclick='abrirModalCliente(clientes.find(x=>x.id=="${c.id}"))'>✏️</button>
+      <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirCliente("${c.id}")'>🗑</button>
+    </div></div>`).join('');
+}
+
 function abrirModalCliente(c) {
-  document.getElementById('mcli-titulo').textContent  = c ? 'Editar Cliente' : 'Novo Cliente';
-  document.getElementById('mcli-id').value     = c?.id      || '';
-  document.getElementById('mcli-nome').value   = c?.nome    || '';
-  document.getElementById('mcli-cnpj').value   = c?.cnpj    || '';
-  document.getElementById('mcli-contato').value= c?.contato || '';
-  document.getElementById('mcli-email').value  = c?.email   || '';
-  document.getElementById('mcli-tel').value    = c?.telefone|| '';
-  document.getElementById('mcli-obs').value    = c?.obs     || '';
+  document.getElementById('mcli-titulo').textContent = c ? 'Editar Cliente' : 'Novo Cliente';
+  document.getElementById('mcli-id').value      = c?.id||'';
+  document.getElementById('mcli-nome').value    = c?.nome||'';
+  document.getElementById('mcli-cnpj').value    = c?.cnpj||'';
+  document.getElementById('mcli-contato').value = c?.contato||'';
+  document.getElementById('mcli-email').value   = c?.email||'';
+  document.getElementById('mcli-tel').value     = c?.telefone||'';
+  document.getElementById('mcli-obs').value     = c?.obs||'';
   document.getElementById('modal-cliente').classList.add('aberto');
 }
 
-function editarCliente(id) { abrirModalCliente(clientes.find(x=>x.id===id)); }
-
-async function buscarCNPJ() {
-  const cnpj = document.getElementById('mcli-cnpj').value.replace(/\D/g,'');
+async function buscarCNPJ(idCnpj, idNome, idEmail, idTel) {
+  const cnpj = document.getElementById(idCnpj).value.replace(/\D/g,'');
   if (cnpj.length !== 14) { toast('CNPJ inválido (14 dígitos).','aviso'); return; }
   toast('Buscando...','');
   try {
     const r = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
-    if (!r.ok) throw new Error('Não encontrado');
+    if (!r.ok) throw new Error();
     const d = await r.json();
-    document.getElementById('mcli-nome').value    = d.razao_social || '';
-    document.getElementById('mcli-email').value   = d.email || '';
-    document.getElementById('mcli-tel').value     = d.ddd_telefone_1 ? `(${d.ddd_telefone_1}) ${d.telefone_1||''}` : '';
-    document.getElementById('mcli-cnpj').value    = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
+    document.getElementById(idNome).value  = d.razao_social||'';
+    document.getElementById(idEmail).value = d.email||'';
+    document.getElementById(idTel).value   = d.ddd_telefone_1?`(${d.ddd_telefone_1}) ${d.telefone_1||''}` :'';
+    document.getElementById(idCnpj).value  = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
     toast('Dados preenchidos!','sucesso');
-  } catch(e) { toast('CNPJ não encontrado na Receita Federal.','aviso'); }
+  } catch(e) { toast('CNPJ não encontrado.','aviso'); }
 }
 
 async function salvarCliente() {
@@ -283,9 +385,9 @@ async function salvarCliente() {
   const id = document.getElementById('mcli-id').value || uid();
   const obj = { id, nome, cnpj: document.getElementById('mcli-cnpj').value.trim(),
     contato: document.getElementById('mcli-contato').value.trim(),
-    email:   document.getElementById('mcli-email').value.trim(),
-    telefone:document.getElementById('mcli-tel').value.trim(),
-    obs:     document.getElementById('mcli-obs').value.trim(), criadoEm: hoje() };
+    email: document.getElementById('mcli-email').value.trim(),
+    telefone: document.getElementById('mcli-tel').value.trim(),
+    obs: document.getElementById('mcli-obs').value.trim(), criadoEm: hoje() };
   clientes = clientes.filter(x=>x.id!==id); clientes.push(obj);
   salvarLocal('cbx_clientes', clientes); renderClientes(); fecharModal('modal-cliente');
   toast('Cliente salvo!','sucesso');
@@ -299,58 +401,40 @@ async function excluirCliente(id) {
   if (configurado()) try { shaC = await salvarDados('data/clientes.json', clientes, shaC, 'Excluir cliente'); } catch(e) {}
 }
 
-// ── RENDER PRESTADORES ──
+// ── PRESTADORES ──
 function renderPrestadores() {
   const cont = document.getElementById('lista-prestadores');
-  if (!prestadores.length) {
-    cont.innerHTML = `<div style="text-align:center;padding:24px;color:var(--texto-leve);">Nenhum prestador cadastrado.</div>`;
-    return;
-  }
-  cont.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0;">` +
-    prestadores.map(p => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 8px;border-bottom:1px solid var(--cinza);">
-        <div>
-          <div style="font-weight:700;">${esc(p.nome)}</div>
-          <div style="font-size:.78rem;color:var(--texto-leve);">
-            ${p.funcao ? `${esc(p.funcao)}` : ''}
-            ${p.doc ? ` · ${esc(p.doc)}` : ''}
-            ${p.pix ? ` · PIX: ${esc(p.pix)}` : ''}
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
-          <button class="btn btn-outline btn-sm" onclick='editarPrestador("${p.id}")'>✏️</button>
-          <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirPrestador("${p.id}")'>🗑</button>
-        </div>
-      </div>`).join('') + `</div>`;
+  if (!prestadores.length) { cont.innerHTML = empty('Nenhum prestador cadastrado.'); return; }
+  cont.innerHTML = prestadores.map(p => `<div class="cad-row">
+    <div><div class="cad-nome">${esc(p.nome)}</div>
+    <div class="cad-sub">${p.funcao?esc(p.funcao):''}${p.doc?` · ${esc(p.doc)}`:''}${p.pix?` · PIX: ${esc(p.pix)}`:''}</div></div>
+    <div class="cad-acoes">
+      <button class="btn btn-outline btn-sm" onclick='abrirModalPrestador(prestadores.find(x=>x.id=="${p.id}"))'>✏️</button>
+      <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirPrestador("${p.id}")'>🗑</button>
+    </div></div>`).join('');
 }
 
 function abrirModalPrestador(p) {
   document.getElementById('mprest-titulo').textContent = p ? 'Editar Prestador' : 'Novo Prestador';
-  document.getElementById('mprest-id').value     = p?.id     || '';
-  document.getElementById('mprest-nome').value   = p?.nome   || '';
-  document.getElementById('mprest-doc').value    = p?.doc    || '';
-  document.getElementById('mprest-funcao').value = p?.funcao || '';
-  document.getElementById('mprest-tel').value    = p?.telefone || '';
-  document.getElementById('mprest-pix').value    = p?.pix    || '';
-  document.getElementById('mprest-obs').value    = p?.obs    || '';
+  document.getElementById('mprest-id').value     = p?.id||'';
+  document.getElementById('mprest-nome').value   = p?.nome||'';
+  document.getElementById('mprest-doc').value    = p?.doc||'';
+  document.getElementById('mprest-funcao').value = p?.funcao||'';
+  document.getElementById('mprest-tel').value    = p?.telefone||'';
+  document.getElementById('mprest-pix').value    = p?.pix||'';
+  document.getElementById('mprest-obs').value    = p?.obs||'';
   document.getElementById('modal-prestador').classList.add('aberto');
 }
-
-function editarPrestador(id) { abrirModalPrestador(prestadores.find(x=>x.id===id)); }
 
 async function salvarPrestador() {
   const nome = document.getElementById('mprest-nome').value.trim();
   if (!nome) { toast('Informe o nome.','aviso'); return; }
   const id = document.getElementById('mprest-id').value || uid();
-  const obj = {
-    id, nome,
-    doc:      document.getElementById('mprest-doc').value.trim(),
-    funcao:   document.getElementById('mprest-funcao').value.trim(),
+  const obj = { id, nome, doc: document.getElementById('mprest-doc').value.trim(),
+    funcao: document.getElementById('mprest-funcao').value.trim(),
     telefone: document.getElementById('mprest-tel').value.trim(),
-    pix:      document.getElementById('mprest-pix').value.trim(),
-    obs:      document.getElementById('mprest-obs').value.trim(),
-    criadoEm: hoje(),
-  };
+    pix: document.getElementById('mprest-pix').value.trim(),
+    obs: document.getElementById('mprest-obs').value.trim(), criadoEm: hoje() };
   prestadores = prestadores.filter(x=>x.id!==id); prestadores.push(obj);
   salvarLocal('cbx_prestadores', prestadores); renderPrestadores(); fecharModal('modal-prestador');
   toast('Prestador salvo!','sucesso');
@@ -363,6 +447,118 @@ async function excluirPrestador(id) {
   salvarLocal('cbx_prestadores', prestadores); renderPrestadores();
   if (configurado()) try { shaP = await salvarDados('data/prestadores.json', prestadores, shaP, 'Excluir prestador'); } catch(e) {}
 }
+
+// ── MATERIAIS ──
+function renderMateriais() {
+  const cont = document.getElementById('lista-materiais');
+  if (!materiais.length) { cont.innerHTML = empty('Nenhum material no catálogo. Adicione para usar autocomplete no Cronograma.'); return; }
+  const mOrd = [...materiais].sort((a,b)=>(a.categoria||'').localeCompare(b.categoria||'')||(a.nome||'').localeCompare(b.nome||''));
+  let catAtual = null; let html = '';
+  mOrd.forEach(m => {
+    if (m.categoria !== catAtual) {
+      catAtual = m.categoria;
+      if (catAtual) html += `<div style="font-size:.72rem;font-weight:700;color:var(--texto-leve);padding:10px 4px 4px;text-transform:uppercase;letter-spacing:.05em;">${esc(catAtual)}</div>`;
+    }
+    html += `<div class="cad-row">
+      <div><div class="cad-nome">${esc(m.nome)}</div>
+      <div class="cad-sub">Un.: ${esc(m.unidade||'—')}${m.valorRef?` · Ref.: ${formatarMoeda(m.valorRef)}`:''}</div></div>
+      <div class="cad-acoes">
+        <button class="btn btn-outline btn-sm" onclick='abrirModalMaterial(materiais.find(x=>x.id=="${m.id}"))'>✏️</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirMaterial("${m.id}")'>🗑</button>
+      </div></div>`;
+  });
+  cont.innerHTML = html;
+  // atualiza datalist
+  document.getElementById('lista-catalogo-mat').innerHTML =
+    materiais.map(m => `<option value="${esc(m.nome)}" data-unidade="${esc(m.unidade||'')}" data-valor="${m.valorRef||0}">`).join('');
+}
+
+function abrirModalMaterial(m) {
+  document.getElementById('mmat-titulo').textContent = m ? 'Editar Material' : 'Novo Material';
+  document.getElementById('mmat-id').value        = m?.id||'';
+  document.getElementById('mmat-nome').value      = m?.nome||'';
+  document.getElementById('mmat-unidade').value   = m?.unidade||'';
+  document.getElementById('mmat-valor').value     = m?.valorRef||'';
+  document.getElementById('mmat-categoria').value = m?.categoria||'';
+  document.getElementById('mmat-obs').value       = m?.obs||'';
+  document.getElementById('modal-material').classList.add('aberto');
+  setTimeout(()=>document.getElementById('mmat-nome').focus(),80);
+}
+
+async function salvarMaterial() {
+  const nome = document.getElementById('mmat-nome').value.trim();
+  if (!nome) { toast('Informe o nome.','aviso'); return; }
+  const id = document.getElementById('mmat-id').value || uid();
+  const obj = { id, nome, unidade: document.getElementById('mmat-unidade').value.trim(),
+    valorRef: parseFloat(document.getElementById('mmat-valor').value)||0,
+    categoria: document.getElementById('mmat-categoria').value.trim(),
+    obs: document.getElementById('mmat-obs').value.trim(), criadoEm: hoje() };
+  materiais = materiais.filter(x=>x.id!==id); materiais.push(obj);
+  salvarLocal('cbx_materiais_cat', materiais); renderMateriais(); fecharModal('modal-material');
+  toast('Material salvo!','sucesso');
+  if (configurado()) try { shaMat = await salvarDados('data/materiais_catalogo.json', materiais, shaMat, `Material: ${nome}`); } catch(e) { toast('Erro sync','aviso'); }
+}
+
+async function excluirMaterial(id) {
+  if (!confirm('Excluir material do catálogo?')) return;
+  materiais = materiais.filter(x=>x.id!==id);
+  salvarLocal('cbx_materiais_cat', materiais); renderMateriais();
+  if (configurado()) try { shaMat = await salvarDados('data/materiais_catalogo.json', materiais, shaMat, 'Excluir material'); } catch(e) {}
+}
+
+// ── FORNECEDORES ──
+function renderFornecedores() {
+  const cont = document.getElementById('lista-fornecedores');
+  if (!fornecedores.length) { cont.innerHTML = empty('Nenhum fornecedor cadastrado. Adicione para usar autocomplete em Compras.'); return; }
+  cont.innerHTML = fornecedores.map(f => `<div class="cad-row">
+    <div><div class="cad-nome">${esc(f.nome)}</div>
+    <div class="cad-sub">${f.especialidade?`${esc(f.especialidade)} · `:''}${f.contato?esc(f.contato):''}${f.telefone?` · ${esc(f.telefone)}`:''}</div></div>
+    <div class="cad-acoes">
+      <button class="btn btn-outline btn-sm" onclick='abrirModalFornecedor(fornecedores.find(x=>x.id=="${f.id}"))'>✏️</button>
+      <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirFornecedor("${f.id}")'>🗑</button>
+    </div></div>`).join('');
+  // atualiza datalist
+  document.getElementById('lista-catalogo-forn').innerHTML =
+    fornecedores.map(f => `<option value="${esc(f.nome)}" data-contato="${esc(f.contato||'')}">`).join('');
+}
+
+function abrirModalFornecedor(f) {
+  document.getElementById('mforn-titulo').textContent = f ? 'Editar Fornecedor' : 'Novo Fornecedor';
+  document.getElementById('mforn-id').value      = f?.id||'';
+  document.getElementById('mforn-nome').value    = f?.nome||'';
+  document.getElementById('mforn-cnpj').value    = f?.cnpj||'';
+  document.getElementById('mforn-contato').value = f?.contato||'';
+  document.getElementById('mforn-tel').value     = f?.telefone||'';
+  document.getElementById('mforn-email').value   = f?.email||'';
+  document.getElementById('mforn-esp').value     = f?.especialidade||'';
+  document.getElementById('mforn-obs').value     = f?.obs||'';
+  document.getElementById('modal-fornecedor').classList.add('aberto');
+}
+
+async function salvarFornecedor() {
+  const nome = document.getElementById('mforn-nome').value.trim();
+  if (!nome) { toast('Informe o nome.','aviso'); return; }
+  const id = document.getElementById('mforn-id').value || uid();
+  const obj = { id, nome, cnpj: document.getElementById('mforn-cnpj').value.trim(),
+    contato: document.getElementById('mforn-contato').value.trim(),
+    telefone: document.getElementById('mforn-tel').value.trim(),
+    email: document.getElementById('mforn-email').value.trim(),
+    especialidade: document.getElementById('mforn-esp').value.trim(),
+    obs: document.getElementById('mforn-obs').value.trim(), criadoEm: hoje() };
+  fornecedores = fornecedores.filter(x=>x.id!==id); fornecedores.push(obj);
+  salvarLocal('cbx_fornecedores', fornecedores); renderFornecedores(); fecharModal('modal-fornecedor');
+  toast('Fornecedor salvo!','sucesso');
+  if (configurado()) try { shaForn = await salvarDados('data/fornecedores.json', fornecedores, shaForn, `Fornecedor: ${nome}`); } catch(e) { toast('Erro sync','aviso'); }
+}
+
+async function excluirFornecedor(id) {
+  if (!confirm('Excluir fornecedor?')) return;
+  fornecedores = fornecedores.filter(x=>x.id!==id);
+  salvarLocal('cbx_fornecedores', fornecedores); renderFornecedores();
+  if (configurado()) try { shaForn = await salvarDados('data/fornecedores.json', fornecedores, shaForn, 'Excluir fornecedor'); } catch(e) {}
+}
+
+function empty(msg) { return `<div style="text-align:center;padding:28px;color:var(--texto-leve);font-size:.84rem;">${msg}</div>`; }
 
 document.querySelectorAll('.overlay').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('aberto'); }));
 init();
