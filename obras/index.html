@@ -59,13 +59,19 @@
       <button class="btn-fechar" onclick="fecharModal()">✕</button>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
-      <div style="display:grid;grid-template-columns:1fr 140px;gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 140px 200px;gap:12px;">
         <div class="form-campo"><label>Nome da Obra *</label><input type="text" id="f-nome" placeholder="Ex: Residência Rua das Flores"/></div>
         <div class="form-campo"><label>Status</label>
           <select id="f-status">
             <option value="ativa">Ativa</option>
             <option value="paralisada">Paralisada</option>
             <option value="concluida">Concluída</option>
+          </select>
+        </div>
+        <div class="form-campo"><label>Material da Obra</label>
+          <select id="f-mat-resp">
+            <option value="cliente">Por conta do Cliente</option>
+            <option value="empresa">Por conta da Empresa</option>
           </select>
         </div>
       </div>
@@ -143,12 +149,13 @@ function renderLista() {
   const stMap = { ativa:'verde', concluida:'azul', paralisada:'amarelo' };
   const stLbl = { ativa:'Ativa', concluida:'Concluída', paralisada:'Paralisada' };
   cont.innerHTML = `<table class="tabela" style="width:100%;">
-    <thead><tr><th>Nome da Obra</th><th>Cliente</th><th>Valor Contrato</th><th>Orçamento MO</th><th>Início</th><th>Previsão</th><th>Status</th><th>Ações</th></tr></thead>
+    <thead><tr><th>Nome da Obra</th><th>Cliente</th><th>Valor Contrato</th><th>Orçamento MO</th><th>Material</th><th>Início</th><th>Previsão</th><th>Status</th><th>Ações</th></tr></thead>
     <tbody>${f.map(o => `<tr>
       <td><strong>${hl(o.nome,busca)}</strong>${o.endereco?`<div style="font-size:0.73rem;color:var(--texto-leve);">${esc(o.endereco)}</div>`:''}</td>
       <td>${hl(o.cliente||'—',busca)}</td>
       <td>${o.valorContrato?formatarMoeda(o.valorContrato):'—'}</td>
       <td>${o.valorMaoDeObra?formatarMoeda(o.valorMaoDeObra):'—'}</td>
+      <td>${o.responsavelMaterial==='empresa'?'<span class="badge azul">Empresa</span>':'<span class="badge cinza">Cliente</span>'}</td>
       <td>${o.dataInicio?formatarData(o.dataInicio):'—'}</td>
       <td>${o.previsaoConclusao?formatarData(o.previsaoConclusao):'—'}</td>
       <td><span class="badge ${stMap[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span></td>
@@ -165,7 +172,8 @@ function abrirModal() {
   idEditando = null;
   document.getElementById('modal-titulo').textContent = 'Nova Obra';
   ['f-nome','f-cliente','f-endereco','f-obs'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('f-status').value   = 'ativa';
+  document.getElementById('f-status').value    = 'ativa';
+  document.getElementById('f-mat-resp').value  = 'cliente';
   document.getElementById('f-contrato').value = '';
   document.getElementById('f-mo').value       = '';
   document.getElementById('f-inicio').value   = '';
@@ -182,6 +190,7 @@ function editar(id) {
   document.getElementById('f-cliente').value   = o.cliente||'';
   document.getElementById('f-endereco').value  = o.endereco||'';
   document.getElementById('f-status').value    = o.status||'ativa';
+  document.getElementById('f-mat-resp').value  = o.responsavelMaterial||'cliente';
   document.getElementById('f-contrato').value  = o.valorContrato||'';
   document.getElementById('f-mo').value        = o.valorMaoDeObra||'';
   document.getElementById('f-inicio').value    = o.dataInicio||'';
@@ -202,7 +211,8 @@ async function salvar() {
     endereco:         document.getElementById('f-endereco').value.trim(),
     status:           document.getElementById('f-status').value,
     valorContrato:    parseFloat(document.getElementById('f-contrato').value)||0,
-    valorMaoDeObra:   parseFloat(document.getElementById('f-mo').value)||0,
+    valorMaoDeObra:      parseFloat(document.getElementById('f-mo').value)||0,
+    responsavelMaterial: document.getElementById('f-mat-resp').value||'cliente',
     dataInicio:       document.getElementById('f-inicio').value||null,
     previsaoConclusao:document.getElementById('f-previsao').value||null,
     obs:              document.getElementById('f-obs').value.trim(),

@@ -6,59 +6,79 @@
   <title>Construbox — Compras de Obra</title>
   <link rel="stylesheet" href="../assets/core.css"/>
   <style>
-    /* ── Obra card ── */
     .obra-card { background:var(--branco); border-radius:12px; box-shadow:0 1px 8px rgba(0,0,0,.07); margin-bottom:20px; overflow:hidden; border:1px solid var(--cinza); }
     .obra-header { background:var(--brand); color:#fff; padding:13px 20px; display:flex; align-items:center; gap:12px; }
     .obra-header-titulo { font-weight:800; font-size:.95rem; }
     .obra-header-sub { font-size:.78rem; opacity:.82; margin-top:1px; }
-    .obra-header-badge { background:rgba(255,255,255,.22); border-radius:20px; padding:3px 10px; font-size:.74rem; font-weight:700; margin-left:auto; flex-shrink:0; }
+    .obra-header-badge { background:rgba(255,255,255,.22); border-radius:20px; padding:3px 10px; font-size:.74rem; font-weight:700; margin-left:auto; flex-shrink:0; white-space:nowrap; }
 
-    /* ── Etapa section ── */
-    .etapa-section { padding:14px 18px 6px; border-top:1px solid var(--cinza); }
-    .etapa-section:first-child { border-top:none; }
-    .etapa-nome-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-    .etapa-num { width:30px; height:30px; border-radius:50%; background:var(--fundo2); border:1px solid var(--cinza); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.78rem; color:var(--texto-leve); flex-shrink:0; }
-    .etapa-nome-texto { font-weight:700; font-size:.88rem; }
-    .etapa-resp { font-size:.73rem; color:var(--texto-leve); }
+    .etapa-section { padding:12px 18px 6px; border-top:1px solid var(--cinza); }
+    .etapa-nome-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+    .etapa-num { width:28px; height:28px; border-radius:50%; background:var(--fundo2); border:1px solid var(--cinza); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.76rem; color:var(--texto-leve); flex-shrink:0; }
+    .etapa-nome-texto { font-weight:700; font-size:.87rem; }
 
-    /* ── Material card ── */
-    .mat-card { display:flex; align-items:center; gap:12px; background:var(--fundo2); border:1px solid var(--cinza); border-radius:9px; padding:10px 14px; margin-bottom:7px; transition:box-shadow .15s, background .15s; }
-    .mat-card:hover { background:var(--branco); box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .mat-card { display:flex; align-items:center; gap:10px; background:var(--fundo2); border:1px solid var(--cinza); border-radius:9px; padding:10px 14px; margin-bottom:6px; transition:box-shadow .15s, background .15s; }
+    .mat-card:hover { background:var(--branco); box-shadow:0 2px 8px rgba(0,0,0,.07); }
+    .mat-card.selecionado { background:#eff6ff; border-color:#93c5fd; }
+    .mat-card-check { flex-shrink:0; width:18px; height:18px; cursor:pointer; accent-color:var(--brand); }
     .mat-card-info { flex:1; min-width:0; }
-    .mat-card-nome { font-weight:700; font-size:.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .mat-card-sub  { font-size:.72rem; color:var(--texto-leve); margin-top:2px; }
-    .mat-card-class { font-size:.68rem; background:var(--cinza); color:var(--texto-leve); border-radius:4px; padding:1px 6px; margin-left:6px; font-weight:600; }
+    .mat-card-nome { font-weight:700; font-size:.84rem; }
+    .mat-card-sub  { font-size:.71rem; color:var(--texto-leve); margin-top:2px; }
+    .mat-card-class { font-size:.67rem; background:var(--cinza); color:var(--texto-leve); border-radius:4px; padding:1px 5px; margin-left:5px; font-weight:600; }
 
-    /* ── Progress ── */
-    .prog-wrap { display:flex; flex-direction:column; gap:3px; min-width:110px; flex-shrink:0; }
-    .prog-label { font-size:.69rem; color:var(--texto-leve); white-space:nowrap; }
+    .prog-wrap { display:flex; flex-direction:column; gap:3px; min-width:100px; flex-shrink:0; }
+    .prog-label { font-size:.68rem; color:var(--texto-leve); white-space:nowrap; }
     .prog-track { height:6px; background:var(--cinza); border-radius:3px; overflow:hidden; }
-    .prog-fill  { height:100%; border-radius:3px; transition:width .4s; }
+    .prog-fill  { height:100%; border-radius:3px; }
 
-    /* ── Action buttons ── */
     .btn-pill { display:inline-flex; align-items:center; gap:5px; border-radius:20px; padding:6px 14px; font-size:.74rem; font-weight:700; cursor:pointer; border:1.5px solid; transition:all .18s; white-space:nowrap; line-height:1; }
     .btn-pill-green  { background:#f0fdf4; color:#16a34a; border-color:#86efac; }
     .btn-pill-green:hover  { background:#16a34a; color:#fff; border-color:#16a34a; }
     .btn-pill-orange { background:#fff7ed; color:#c2410c; border-color:#fdba74; }
     .btn-pill-orange:hover { background:#ea580c; color:#fff; border-color:#ea580c; }
+    .btn-pill-blue   { background:#eff6ff; color:#1d4ed8; border-color:#93c5fd; }
+    .btn-pill-blue:hover   { background:#1d4ed8; color:#fff; border-color:#1d4ed8; }
     .btn-pill-done   { background:#f0fdf4; color:#16a34a; border-color:#86efac; cursor:default; opacity:.8; }
-    .btns-acao { display:flex; gap:6px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+    .btns-acao { display:flex; gap:6px; flex-shrink:0; }
 
-    /* ── Status badge override ── */
     .st-pendente  { background:#fee2e2; color:#991b1b; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
-    .st-comprado  { background:#fef3c7; color:#92400e; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
-    .st-parcial   { background:#dbeafe; color:#1e40af; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
-    .st-min_ok    { background:#d1fae5; color:#065f46; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+    .st-em_pedido { background:#dbeafe; color:#1e40af; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
     .st-entregue  { background:#d1fae5; color:#065f46; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+    .st-parcial   { background:#fef3c7; color:#92400e; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
 
-    /* ── Empty state ── */
+    /* Pedido card */
+    .ped-card { background:var(--branco); border:1px solid var(--cinza); border-radius:12px; margin-bottom:14px; overflow:hidden; }
+    .ped-header { display:flex; align-items:center; gap:14px; padding:14px 18px; background:var(--fundo2); border-bottom:1px solid var(--cinza); }
+    .ped-num { font-weight:900; font-size:1rem; color:var(--brand); }
+    .ped-forn { font-size:.84rem; font-weight:600; }
+    .ped-data { font-size:.74rem; color:var(--texto-leve); }
+    .ped-itens-list { padding:10px 18px; }
+    .ped-item-row { display:flex; align-items:center; gap:10px; font-size:.8rem; padding:6px 0; border-bottom:1px solid var(--cinza); }
+    .ped-item-row:last-child { border-bottom:none; }
+    .ped-item-nome { flex:1; }
+    .ped-item-obra { font-size:.7rem; color:var(--texto-leve); }
+    .ped-item-qtd  { white-space:nowrap; font-weight:600; }
+    .ped-item-val  { white-space:nowrap; color:var(--texto-leve); font-size:.74rem; }
+
+    /* Barra de seleção flutuante */
+    .sel-bar { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--brand); color:#fff; border-radius:40px; padding:12px 24px; display:flex; align-items:center; gap:16px; box-shadow:0 4px 24px rgba(37,99,235,.35); transition:transform .25s; z-index:200; white-space:nowrap; }
+    .sel-bar.visivel { transform:translateX(-50%) translateY(0); }
+    .sel-bar-texto { font-weight:700; font-size:.9rem; }
+
+    /* Modal itens table */
+    .itens-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+    .itens-table th { background:var(--fundo2); padding:7px 10px; text-align:left; font-size:.76rem; color:var(--texto-leve); border-bottom:1px solid var(--cinza); }
+    .itens-table td { padding:7px 10px; border-bottom:1px solid var(--cinza); vertical-align:middle; }
+    .itens-table tr:last-child td { border-bottom:none; }
+    .itens-table input[type=number] { width:80px; }
+
     .empty-state { text-align:center; padding:56px 24px; color:var(--texto-leve); }
     .empty-state .icon { font-size:2.8rem; margin-bottom:12px; }
     .empty-state .titulo { font-weight:700; font-size:1rem; color:var(--texto); margin-bottom:6px; }
     .empty-state .desc { font-size:.82rem; }
 
     @media print {
-      .topbar, #sidebar-placeholder, .no-print { display:none !important; }
+      .topbar, #sidebar-placeholder, .no-print, .sel-bar { display:none !important; }
       .main { margin-left:0 !important; }
     }
   </style>
@@ -69,33 +89,32 @@
   <div class="topbar">
     <div>
       <div class="topbar-titulo">Compras de Obra</div>
-      <div class="topbar-sub" id="header-sub">Materiais pendentes e pedidos de compra</div>
+      <div class="topbar-sub">Necessidades, pedidos e entregas de materiais</div>
     </div>
     <div class="topbar-acoes" style="display:flex;gap:8px;align-items:center;">
       <div class="sync-pill">
         <div class="sync-dot amarelo" id="sync-dot"></div>
         <span id="sync-texto">Conectando</span>
       </div>
-      <button class="btn btn-outline btn-sm no-print" onclick="window.print()">🖨️ Imprimir</button>
       <button class="btn btn-outline btn-sm no-print" onclick="recarregar()">↻ Atualizar</button>
     </div>
   </div>
   <div class="page">
 
     <div class="stats-grid">
-      <div class="stat vermelho"><div class="valor" id="st-pend">0</div><div class="rotulo">Mat. Pendentes</div></div>
-      <div class="stat amarelo"><div class="valor" id="st-sol">0</div><div class="rotulo">Compras Solicitadas</div></div>
-      <div class="stat verde"><div class="valor" id="st-ok">0</div><div class="rotulo">Entregues / OK</div></div>
-      <div class="stat azul"><div class="valor" id="st-val">R$ 0</div><div class="rotulo">Valor Prev. Total</div></div>
+      <div class="stat vermelho"><div class="valor" id="st-nec">0</div><div class="rotulo">Necessidades Abertas</div></div>
+      <div class="stat azul"><div class="valor" id="st-ped">0</div><div class="rotulo">Pedidos em Andamento</div></div>
+      <div class="stat verde"><div class="valor" id="st-ok">0</div><div class="rotulo">Pedidos Concluídos</div></div>
+      <div class="stat amarelo"><div class="valor" id="st-val">R$ 0</div><div class="rotulo">Valor em Pedidos</div></div>
     </div>
 
     <div class="card" style="margin-bottom:16px;">
       <div class="card-body" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <button class="chip ativo" id="tab-pendentes" onclick="setTab('pendentes')">⚠️ Pendentes para Iniciar</button>
-        <button class="chip" id="tab-todos"   onclick="setTab('todos')">📦 Todos os Materiais</button>
-        <button class="chip" id="tab-pedidos" onclick="setTab('pedidos')">🛒 Pedidos Solicitados</button>
+        <button class="chip ativo" id="tab-nec"  onclick="setTab('nec')">📋 Necessidades</button>
+        <button class="chip" id="tab-ped"         onclick="setTab('ped')">🛒 Pedidos</button>
+        <button class="chip" id="tab-conc"        onclick="setTab('conc')">✅ Concluídos</button>
         <div style="flex:1;"></div>
-        <select id="filtro-obra" class="form-control" style="width:220px;" onchange="render()">
+        <select id="filtro-obra" class="form-control" style="width:210px;" onchange="render()">
           <option value="">Todas as Obras</option>
         </select>
       </div>
@@ -105,32 +124,68 @@
   </div>
 </div>
 
-<!-- ══ MODAL REGISTRAR ENTREGA ══ -->
-<div class="overlay" id="modal-entrega">
-  <div class="modal" style="max-width:480px;">
+<!-- Barra flutuante de seleção -->
+<div class="sel-bar no-print" id="sel-bar">
+  <span class="sel-bar-texto" id="sel-texto">0 item(s) selecionado(s)</span>
+  <button class="btn" style="background:#fff;color:var(--brand);font-weight:700;border:none;" onclick="abrirGerarPedido()">🛒 Gerar Pedido</button>
+  <button class="btn" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);" onclick="limparSelecao()">✕ Limpar</button>
+</div>
+
+<!-- ══ MODAL GERAR PEDIDO ══ -->
+<div class="overlay" id="modal-pedido">
+  <div class="modal" style="max-width:680px;">
     <div class="modal-header">
-      <h2>📥 Registrar Entrega</h2>
-      <button class="btn-fechar" onclick="fecharEntrega()">✕</button>
+      <h2>🛒 Gerar Pedido de Compra</h2>
+      <button class="btn-fechar" onclick="fecharPedido()">✕</button>
     </div>
-    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
-      <div style="background:var(--fundo2);padding:10px 14px;border-radius:8px;font-size:.84rem;line-height:1.5;" id="ent-info"></div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;padding:0 20px 4px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-campo">
-          <label>Qtd Entregue (total acumulado)</label>
-          <input type="number" id="ent-qtd" min="0" step="0.01"/>
-        </div>
-        <div class="form-campo">
-          <label>Qtd em Pedido (comprada)</label>
-          <input type="number" id="ent-comp" min="0" step="0.01"/>
-        </div>
+        <div class="form-campo"><label>Fornecedor</label><input type="text" id="ped-forn" placeholder="Nome do fornecedor"/></div>
+        <div class="form-campo"><label>Previsão de Entrega</label><input type="date" id="ped-prev"/></div>
       </div>
-      <div class="form-campo"><label>Fornecedor</label><input type="text" id="ent-forn"/></div>
-      <div class="form-campo"><label>Valor Comprado (R$)</label><input type="number" id="ent-valcomp" min="0" step="0.01"/></div>
-      <div class="form-campo"><label>Observação (NF, data…)</label><input type="text" id="ent-obs" placeholder="Ex: NF 4532 – entregue 20/07"/></div>
+      <div class="form-campo"><label>Observação</label><input type="text" id="ped-obs" placeholder="Informações adicionais..."/></div>
+      <div style="overflow-x:auto;">
+        <table class="itens-table" id="ped-itens-table">
+          <thead><tr>
+            <th>Material</th><th>Obra / Etapa</th><th>Un</th>
+            <th>Qtd Solicitada</th><th>Valor Unit. (R$)</th><th>Total</th>
+          </tr></thead>
+          <tbody id="ped-itens-body"></tbody>
+          <tfoot>
+            <tr><td colspan="5" style="text-align:right;font-weight:700;padding:8px 10px;">Total Geral:</td>
+            <td style="font-weight:900;padding:8px 10px;color:var(--brand);" id="ped-total">R$ 0,00</td></tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="fecharEntrega()">Cancelar</button>
-      <button class="btn btn-success" onclick="confirmarEntrega()">✓ Salvar Entrega</button>
+      <button class="btn btn-outline" onclick="fecharPedido()">Cancelar</button>
+      <button class="btn btn-outline" onclick="salvarPedido('rascunho')">💾 Salvar Rascunho</button>
+      <button class="btn btn-primary" onclick="salvarPedido('enviado')">✓ Gerar Pedido</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL REGISTRAR RECEBIMENTO ══ -->
+<div class="overlay" id="modal-receb">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-header">
+      <h2>📥 Registrar Recebimento</h2>
+      <button class="btn-fechar" onclick="fecharReceb()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px;padding:0 20px 4px;">
+      <div style="background:var(--fundo2);padding:10px 14px;border-radius:8px;font-size:.84rem;" id="receb-info"></div>
+      <div style="overflow-x:auto;">
+        <table class="itens-table">
+          <thead><tr><th>Material</th><th>Obra / Etapa</th><th>Un</th><th>Qtd Pedida</th><th>Qtd Recebida</th></tr></thead>
+          <tbody id="receb-itens-body"></tbody>
+        </table>
+      </div>
+      <div class="form-campo"><label>Observação</label><input type="text" id="receb-obs" placeholder="NF, data de entrega..."/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharReceb()">Cancelar</button>
+      <button class="btn btn-success" onclick="confirmarReceb()">✓ Confirmar Recebimento</button>
     </div>
   </div>
 </div>
@@ -140,13 +195,18 @@
 <script>
 document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('compras');
 
-const PATH_ET = 'data/etapas.json';
-const PATH_OB = 'data/obras.json';
-const LS_ET   = 'cbx_etapas';
-const LS_OB   = 'cbx_obras';
+const PATH_ET  = 'data/etapas.json';
+const PATH_OB  = 'data/obras.json';
+const PATH_PED = 'data/pedidos.json';
+const LS_ET    = 'cbx_etapas';
+const LS_OB    = 'cbx_obras';
+const LS_PED   = 'cbx_pedidos';
 
-let etapas = [], obras = [], tab = 'pendentes';
-let entEtapaId = null, entMatId = null;
+let etapas = [], obras = [], pedidos = [];
+let shaEt = null, shaOb = null, shaPed = null;
+let tab = 'nec';
+let selecionados = {};   // key: "etapaId|matId" → { etapa, mat, obra }
+let pedidoRecebId = null;
 
 const ClassLbl = {
   obrigatorio_iniciar: 'Obrig. Iniciar',
@@ -154,42 +214,41 @@ const ClassLbl = {
   complementar: 'Complementar',
   opcional: 'Opcional'
 };
-const MatSLbl = { pendente:'Pendente', comprado:'Comprado', parcial:'Parcial', min_ok:'Mín OK', entregue:'Entregue' };
-
-function matStatusCalc(m) {
-  const prev = m.qtdPrevista || 0;
-  const min  = m.qtdMinIniciar || prev;
-  const ent  = m.qtdEntregue || 0;
-  if (prev > 0 && ent >= prev) return 'entregue';
-  if (min > 0  && ent >= min)  return 'min_ok';
-  if (ent > 0)                 return 'parcial';
-  if (m.pedidoCompra)          return 'comprado';
-  return 'pendente';
-}
+const PedStLbl = { rascunho:'Rascunho', enviado:'Enviado', recebido_parcial:'Receb. Parcial', recebido:'Recebido' };
+const PedStCor  = { rascunho:'cinza', enviado:'azul', recebido_parcial:'amarelo', recebido:'verde' };
 
 // ── INIT ──
 async function init() {
-  etapas = carregarLocal(LS_ET) || [];
-  obras  = carregarLocal(LS_OB) || [];
-  popularFiltroObra(); atualizarStats(); render();
+  etapas  = carregarLocal(LS_ET)  || [];
+  obras   = carregarLocal(LS_OB)  || [];
+  pedidos = carregarLocal(LS_PED) || [];
+  popularFiltro(); atualizarStats(); render();
 
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
   try {
-    const [rE, rO] = await Promise.all([carregarDados(PATH_ET), carregarDados(PATH_OB)]);
-    etapas = rE.lista; salvarLocal(LS_ET, etapas);
-    obras  = rO.lista; salvarLocal(LS_OB, obras);
-    popularFiltroObra(); atualizarStats(); render();
+    const [rE, rO, rP] = await Promise.all([
+      carregarDados(PATH_ET),
+      carregarDados(PATH_OB),
+      carregarDados(PATH_PED).catch(() => ({ lista: [], sha: null }))
+    ]);
+    etapas  = rE.lista; shaEt  = rE.sha; salvarLocal(LS_ET, etapas);
+    obras   = rO.lista; shaOb  = rO.sha; salvarLocal(LS_OB, obras);
+    pedidos = rP.lista; shaPed = rP.sha; salvarLocal(LS_PED, pedidos);
+    popularFiltro(); atualizarStats(); render();
     setSyncStatus('verde','Conectado');
-  } catch(err) { setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso'); }
+  } catch(e) { setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso'); }
 }
 
-async function recarregar() { init(); }
+async function recarregar() { selecionados = {}; atualizarBarraSel(); init(); }
 
-function popularFiltroObra() {
+function popularFiltro() {
   const sel = document.getElementById('filtro-obra');
   const val = sel.value;
-  const ids = [...new Set(etapas.map(e => e.obraId))];
+  const ids = [...new Set(etapas.map(e => e.obraId))].filter(id => {
+    const o = obras.find(x => x.id === id);
+    return o && o.responsavelMaterial === 'empresa';
+  });
   sel.innerHTML = '<option value="">Todas as Obras</option>' +
     ids.map(id => {
       const o = obras.find(x => x.id === id);
@@ -198,296 +257,382 @@ function popularFiltroObra() {
 }
 
 function atualizarStats() {
-  const filt = document.getElementById('filtro-obra')?.value || '';
-  const ets  = etapas.filter(e => !filt || e.obraId === filt);
-  let pend=0, sol=0, ok=0, valor=0;
-  ets.forEach(e => (e.materiais||[]).forEach(m => {
-    const st = matStatusCalc(m);
-    if (['pendente','parcial'].includes(st)) pend++;
-    if (m.pedidoCompra && !['entregue','min_ok'].includes(st)) sol++;
-    if (['entregue','min_ok'].includes(st)) ok++;
-    valor += m.valorPrevisto || 0;
-  }));
-  document.getElementById('st-pend').textContent = pend;
-  document.getElementById('st-sol').textContent  = sol;
-  document.getElementById('st-ok').textContent   = ok;
-  document.getElementById('st-val').textContent  = formatarMoeda(valor);
+  let nec = 0, ped = 0, ok = 0, val = 0;
+  // necessidades = materiais de obras "empresa" não totalmente cobertos
+  etapas.forEach(e => {
+    const o = obras.find(x => x.id === e.obraId);
+    if (!o || o.responsavelMaterial !== 'empresa') return;
+    (e.materiais||[]).forEach(m => {
+      const st = matProcStatus(m, e.id);
+      if (st === 'pendente') nec++;
+    });
+  });
+  pedidos.forEach(p => {
+    if (p.status === 'recebido') ok++;
+    else ped++;
+    val += calcTotalPed(p);
+  });
+  document.getElementById('st-nec').textContent = nec;
+  document.getElementById('st-ped').textContent = ped;
+  document.getElementById('st-ok').textContent  = ok;
+  document.getElementById('st-val').textContent = formatarMoeda(val);
+}
+
+// Status de um material no processo de compra
+function matProcStatus(m, etapaId) {
+  const prev = m.qtdPrevista || 0;
+  const ent  = m.qtdEntregue || 0;
+  if (prev > 0 && ent >= prev) return 'entregue';
+  if (ent > 0 && ent < prev)   return 'parcial';
+  const emPed = pedidos.some(p =>
+    p.status !== 'recebido' &&
+    p.itens.some(i => i.matId === m.id && i.etapaId === etapaId)
+  );
+  if (emPed) return 'em_pedido';
+  return 'pendente';
+}
+
+function calcTotalPed(p) {
+  return (p.itens||[]).reduce((s, i) => s + ((i.qtdSolicitada||0) * (i.valorUnit||0)), 0);
 }
 
 function setTab(t) {
   tab = t;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('ativo'));
   document.getElementById('tab-'+t).classList.add('ativo');
+  if (t !== 'nec') { selecionados = {}; atualizarBarraSel(); }
   render();
 }
 
 function render() {
   atualizarStats();
-  if (tab === 'pendentes') renderPendentes();
-  else if (tab === 'todos') renderTodos();
-  else renderPedidos();
+  if (tab === 'nec')  renderNecessidades();
+  else if (tab === 'ped')  renderPedidos(false);
+  else renderPedidos(true);
 }
 
-// ── Helpers visuais ──
-function progColor(pct) {
-  if (pct >= 100) return '#059669';
-  if (pct >= 50)  return '#2563eb';
-  if (pct > 0)    return '#d97706';
-  return '#ef4444';
-}
-
-function matCardHtml(m, etapaId, showSolicitar = true) {
-  const st  = matStatusCalc(m);
-  const min = m.qtdMinIniciar || m.qtdPrevista || 0;
-  const ent = m.qtdEntregue || 0;
-  const pct = min > 0 ? Math.min(100, Math.round(ent / min * 100)) : 0;
-
-  const btnRegistrar = `<button class="btn-pill btn-pill-green no-print" onclick='abrirEntrega("${etapaId}","${m.id}")'>📥 Registrar entrega</button>`;
-  const btnSolicitar = m.pedidoCompra
-    ? `<span class="btn-pill btn-pill-done">✓ Compra solicitada</span>`
-    : showSolicitar ? `<button class="btn-pill btn-pill-orange no-print" onclick='solicitarCompra("${etapaId}","${m.id}")'>🛒 Solicitar compra</button>` : '';
-
-  return `<div class="mat-card">
-    <div class="mat-card-info">
-      <div class="mat-card-nome">${esc(m.nome)}<span class="mat-card-class">${ClassLbl[m.classificacao]||m.classificacao}</span></div>
-      <div class="mat-card-sub">${m.fornecedor?`Fornec.: ${esc(m.fornecedor)} · `:''}Un.: ${esc(m.unidade||'—')} · Prev.: ${m.qtdPrevista||0}</div>
-    </div>
-    ${min > 0 ? `<div class="prog-wrap no-print">
-      <div class="prog-label">${ent} / ${min} ${esc(m.unidade||'')} entregues</div>
-      <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${progColor(pct)};"></div></div>
-    </div>` : ''}
-    <span class="st-${st}">${MatSLbl[st]||st}</span>
-    <div class="btns-acao">${btnRegistrar}${btnSolicitar}</div>
-  </div>`;
-}
-
-// ── TAB PENDENTES ──
-function renderPendentes() {
+// ── TAB NECESSIDADES ──
+function renderNecessidades() {
   const filt = document.getElementById('filtro-obra').value;
-  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filt || id === filt);
-  let html = '', total = 0;
+  const obrasEmpresa = obras.filter(o =>
+    o.responsavelMaterial === 'empresa' && (!filt || o.id === filt)
+  );
 
-  obraIds.forEach(obraId => {
-    const obra  = obras.find(o => o.id === obraId);
-    const etOb  = etapas.filter(e => e.obraId === obraId).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
-    const etBloq = etOb.filter(e =>
-      (e.materiais||[]).some(m =>
-        m.classificacao === 'obrigatorio_iniciar' &&
-        (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
-        (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
-      )
-    );
-    if (!etBloq.length) return;
-    total += etBloq.length;
-
-    html += `<div class="obra-card">
-      <div class="obra-header">
-        <div>
-          <div class="obra-header-titulo">🏗️ ${esc(obra?obra.nome:obraId)}</div>
-          ${obra?.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
-        </div>
-        <div class="obra-header-badge">${etBloq.length} etapa(s) bloqueada(s)</div>
-      </div>
-      ${etBloq.map(e => {
-        const pend = (e.materiais||[]).filter(m =>
-          m.classificacao === 'obrigatorio_iniciar' &&
-          (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
-          (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
-        );
-        return `<div class="etapa-section">
-          <div class="etapa-nome-row">
-            <div class="etapa-num">${e.ordem||'—'}</div>
-            <div>
-              <div class="etapa-nome-texto">${esc(e.nome)}</div>
-              ${e.responsavel?`<div class="etapa-resp">👤 ${esc(e.responsavel)}</div>`:''}
-            </div>
-            <span class="badge amarelo" style="margin-left:auto;font-size:.72rem;">⏳ Aguard. Material</span>
-          </div>
-          ${pend.map(m => matCardHtml(m, e.id)).join('')}
-        </div>`;
-      }).join('')}
-    </div>`;
-  });
-
-  document.getElementById('conteudo').innerHTML = total ? html : `<div class="empty-state">
-    <div class="icon">✅</div>
-    <div class="titulo">Nenhuma etapa aguardando material</div>
-    <div class="desc">Todos os materiais obrigatórios estão disponíveis${filt?' nesta obra':''}.</div>
-  </div>`;
-}
-
-// ── TAB TODOS ──
-function renderTodos() {
-  const filt = document.getElementById('filtro-obra').value;
-  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filt || id === filt);
-  let html = '', totalMats = 0;
-
-  obraIds.forEach(obraId => {
-    const obra = obras.find(o => o.id === obraId);
-    const etOb = etapas.filter(e => e.obraId === obraId && (e.materiais||[]).length > 0)
-      .sort((a,b)=>(a.ordem||999)-(b.ordem||999));
-    if (!etOb.length) return;
-
-    html += `<div class="obra-card">
-      <div class="obra-header">
-        <div>
-          <div class="obra-header-titulo">🏗️ ${esc(obra?obra.nome:obraId)}</div>
-          ${obra?.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
-        </div>
-        <div class="obra-header-badge">${etOb.reduce((s,e)=>s+(e.materiais||[]).length,0)} materiais</div>
-      </div>
-      ${etOb.map(e => {
-        totalMats += (e.materiais||[]).length;
-        return `<div class="etapa-section">
-          <div class="etapa-nome-row">
-            <div class="etapa-num">${e.ordem||'—'}</div>
-            <div>
-              <div class="etapa-nome-texto">${esc(e.nome)}</div>
-              ${e.responsavel?`<div class="etapa-resp">👤 ${esc(e.responsavel)}</div>`:''}
-            </div>
-            <span style="margin-left:auto;font-size:.73rem;color:var(--texto-leve);">${(e.materiais||[]).length} material(is)</span>
-          </div>
-          ${(e.materiais||[]).map(m => matCardHtml(m, e.id, !m.pedidoCompra)).join('')}
-        </div>`;
-      }).join('')}
-    </div>`;
-  });
-
-  document.getElementById('conteudo').innerHTML = totalMats ? html : `<div class="empty-state">
-    <div class="icon">📦</div>
-    <div class="titulo">Nenhum material cadastrado</div>
-    <div class="desc">Acesse o Cronograma de cada obra para adicionar materiais às etapas.</div>
-  </div>`;
-}
-
-// ── TAB PEDIDOS ──
-function renderPedidos() {
-  const filt = document.getElementById('filtro-obra').value;
-  const rows = [];
-  etapas.filter(e => !filt || e.obraId === filt).forEach(e => {
-    const obra = obras.find(o => o.id === e.obraId);
-    (e.materiais||[]).filter(m => m.pedidoCompra).forEach(m => rows.push({ e, obra, m }));
-  });
-
-  if (!rows.length) {
+  if (!obrasEmpresa.length) {
     document.getElementById('conteudo').innerHTML = `<div class="empty-state">
-      <div class="icon">🛒</div>
-      <div class="titulo">Nenhuma compra solicitada</div>
-      <div class="desc">Acesse o Cronograma → 📦 Materiais de uma etapa e clique em <strong>🛒 Solicitar compra</strong>.</div>
-    </div>`;
-    return;
+      <div class="icon">🏢</div>
+      <div class="titulo">Nenhuma obra com material por conta da empresa</div>
+      <div class="desc">Edite uma obra e defina <strong>Material da Obra → Por conta da Empresa</strong> para gerar necessidades de compra.</div>
+    </div>`; return;
   }
 
-  rows.sort((a,b) => {
-    const ord = {pendente:0,parcial:1,comprado:2,min_ok:3,entregue:4};
-    return (ord[matStatusCalc(a.m)]??9) - (ord[matStatusCalc(b.m)]??9);
-  });
+  let html = '', totalNec = 0;
 
-  // Agrupar por obra
-  const porObra = {};
-  rows.forEach(r => {
-    const k = r.e.obraId;
-    if (!porObra[k]) porObra[k] = [];
-    porObra[k].push(r);
-  });
+  obrasEmpresa.forEach(obra => {
+    const etOb = etapas.filter(e => e.obraId === obra.id).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+    const matsTodos = [];
+    etOb.forEach(e => (e.materiais||[]).forEach(m => matsTodos.push({ e, m })));
+    if (!matsTodos.length) return;
 
-  let html = '';
-  Object.entries(porObra).forEach(([obraId, items]) => {
-    const obra = obras.find(o => o.id === obraId);
+    const pendentes = matsTodos.filter(({e,m}) => matProcStatus(m, e.id) !== 'entregue');
+    totalNec += pendentes.filter(({e,m}) => matProcStatus(m, e.id) === 'pendente').length;
+
     html += `<div class="obra-card">
       <div class="obra-header">
         <div>
-          <div class="obra-header-titulo">🏗️ ${esc(obra?obra.nome:obraId)}</div>
-          ${obra?.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
+          <div class="obra-header-titulo">🏗️ ${esc(obra.nome)}</div>
+          ${obra.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
         </div>
-        <div class="obra-header-badge">${items.length} pedido(s)</div>
-      </div>
-      <div style="padding:12px 18px;">
-        ${items.map(({e, m}) => {
-          const st  = matStatusCalc(m);
-          const min = m.qtdMinIniciar || m.qtdPrevista || 0;
-          const ent = m.qtdEntregue || 0;
-          const pct = min > 0 ? Math.min(100, Math.round(ent / min * 100)) : 0;
-          return `<div class="mat-card">
+        <div class="obra-header-badge">${pendentes.filter(x=>matProcStatus(x.m,x.e.id)==='pendente').length} pendente(s)</div>
+      </div>`;
+
+    // agrupar por etapa
+    etOb.forEach(e => {
+      const mats = (e.materiais||[]).filter(m => matProcStatus(m, e.id) !== 'entregue');
+      if (!mats.length) return;
+      html += `<div class="etapa-section">
+        <div class="etapa-nome-row">
+          <div class="etapa-num">${e.ordem||'—'}</div>
+          <div class="etapa-nome-texto">${esc(e.nome)}</div>
+        </div>
+        ${mats.map(m => {
+          const st  = matProcStatus(m, e.id);
+          const key = `${e.id}|${m.id}`;
+          const sel = !!selecionados[key];
+          const prev = m.qtdPrevista||0;
+          const ent  = m.qtdEntregue||0;
+          const pct  = prev>0 ? Math.min(100,Math.round(ent/prev*100)) : 0;
+          const chk  = st === 'pendente'
+            ? `<input type="checkbox" class="mat-card-check" ${sel?'checked':''} onchange='toggleSel("${e.id}","${m.id}","${esc(obra.nome)}","${esc(e.nome)}")'>`
+            : `<div style="width:18px;"></div>`;
+          return `<div class="mat-card ${sel?'selecionado':''}" id="mc-${key.replace('|','-')}">
+            ${chk}
             <div class="mat-card-info">
               <div class="mat-card-nome">${esc(m.nome)}<span class="mat-card-class">${ClassLbl[m.classificacao]||m.classificacao}</span></div>
-              <div class="mat-card-sub">Etapa: <strong>${esc(e.nome)}</strong>${m.fornecedor?` · Fornec.: ${esc(m.fornecedor)}`:''}</div>
+              <div class="mat-card-sub">Un.: ${esc(m.unidade||'—')} · Prev.: ${prev}${m.fornecedor?` · Fornec.: ${esc(m.fornecedor)}`:''}</div>
             </div>
-            ${min > 0 ? `<div class="prog-wrap no-print">
-              <div class="prog-label">${ent} / ${min} ${esc(m.unidade||'')} entregues</div>
-              <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${progColor(pct)};"></div></div>
-            </div>` : ''}
-            <span class="st-${st}">${MatSLbl[st]||st}</span>
-            <div class="btns-acao">
-              <button class="btn-pill btn-pill-green no-print" onclick='abrirEntrega("${e.id}","${m.id}")'>📥 Registrar entrega</button>
-            </div>
+            ${prev>0?`<div class="prog-wrap no-print">
+              <div class="prog-label">${ent} / ${prev} ${esc(m.unidade||'')} entregues</div>
+              <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${pct>=100?'#059669':pct>0?'#d97706':'#ef4444'};"></div></div>
+            </div>`:''}
+            <span class="st-${st}">${{pendente:'Pendente',em_pedido:'Em Pedido',parcial:'Parcial',entregue:'Entregue'}[st]||st}</span>
           </div>`;
         }).join('')}
-      </div>
-    </div>`;
+      </div>`;
+    });
+    html += '</div>';
   });
 
-  document.getElementById('conteudo').innerHTML = html;
+  if (!totalNec && !html.includes('obra-card')) {
+    document.getElementById('conteudo').innerHTML = `<div class="empty-state">
+      <div class="icon">✅</div><div class="titulo">Nenhuma necessidade aberta</div>
+      <div class="desc">Todos os materiais das obras da empresa já estão em pedido ou entregues.</div>
+    </div>`; return;
+  }
+
+  document.getElementById('conteudo').innerHTML = html || `<div class="empty-state">
+    <div class="icon">📦</div><div class="titulo">Nenhum material cadastrado nas etapas</div>
+    <div class="desc">Acesse o Cronograma de uma obra para adicionar materiais às etapas.</div>
+  </div>`;
 }
 
-// ── MODAL ENTREGA ──
-function abrirEntrega(etapaId, matId) {
-  const e = etapas.find(x => x.id === etapaId); if (!e) return;
-  const m = (e.materiais||[]).find(x => x.id === matId); if (!m) return;
-  entEtapaId = etapaId; entMatId = matId;
-  document.getElementById('ent-info').innerHTML =
-    `<strong>${esc(m.nome)}</strong><br>
-     Etapa: ${esc(e.nome)}<br>
-     Previsto: <strong>${m.qtdPrevista||0} ${esc(m.unidade||'')}</strong>
-     · Mín iniciar: <strong>${m.qtdMinIniciar||'—'} ${esc(m.unidade||'')}</strong>
-     · Entregue atual: <strong>${m.qtdEntregue||0} ${esc(m.unidade||'')}</strong>`;
-  document.getElementById('ent-qtd').value     = m.qtdEntregue||0;
-  document.getElementById('ent-comp').value    = m.qtdComprada||0;
-  document.getElementById('ent-forn').value    = m.fornecedor||'';
-  document.getElementById('ent-valcomp').value = m.valorComprado||0;
-  document.getElementById('ent-obs').value     = m.obs||'';
-  document.getElementById('modal-entrega').classList.add('aberto');
-  setTimeout(()=>document.getElementById('ent-qtd').focus(), 80);
+// ── TAB PEDIDOS / CONCLUÍDOS ──
+function renderPedidos(apenasConc) {
+  const filt = document.getElementById('filtro-obra').value;
+  let lista = pedidos.filter(p => apenasConc ? p.status==='recebido' : p.status!=='recebido');
+  if (filt) lista = lista.filter(p => p.itens.some(i => i.obraId === filt));
+
+  if (!lista.length) {
+    document.getElementById('conteudo').innerHTML = `<div class="empty-state">
+      <div class="icon">${apenasConc?'📦':'🛒'}</div>
+      <div class="titulo">${apenasConc?'Nenhum pedido concluído':'Nenhum pedido em andamento'}</div>
+      <div class="desc">${apenasConc?'Pedidos finalizados aparecerão aqui.':'Selecione materiais na aba <strong>Necessidades</strong> e clique em <strong>🛒 Gerar Pedido</strong>.'}</div>
+    </div>`; return;
+  }
+
+  lista.sort((a,b) => (b.criadoEm||'').localeCompare(a.criadoEm||''));
+
+  document.getElementById('conteudo').innerHTML = lista.map(p => {
+    const total = calcTotalPed(p);
+    return `<div class="ped-card">
+      <div class="ped-header">
+        <div>
+          <div class="ped-num">${esc(p.numero)}</div>
+          <div class="ped-forn">${p.fornecedor?esc(p.fornecedor):'Fornecedor não informado'}</div>
+          <div class="ped-data">Criado em ${formatarData(p.criadoEm)}${p.previsaoEntrega?` · Previsão: ${formatarData(p.previsaoEntrega)}`:''}</div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+          ${total>0?`<span style="font-weight:800;color:var(--brand);">${formatarMoeda(total)}</span>`:''}
+          <span class="badge ${PedStCor[p.status]||'cinza'}">${PedStLbl[p.status]||p.status}</span>
+          ${p.status!=='recebido'?`<button class="btn-pill btn-pill-green no-print" onclick='abrirReceb("${p.id}")'>📥 Registrar Recebimento</button>`:''}
+          <button class="btn-pill btn-pill-orange no-print" onclick='excluirPedido("${p.id}")'  style="padding:5px 10px;">🗑</button>
+        </div>
+      </div>
+      <div class="ped-itens-list">
+        ${(p.itens||[]).map(i => `<div class="ped-item-row">
+          <div class="ped-item-nome">
+            <div>${esc(i.nome)}</div>
+            <div class="ped-item-obra">${esc(i.obraNome||'—')} · ${esc(i.etapaNome||'—')}</div>
+          </div>
+          <div class="ped-item-qtd">${i.qtdSolicitada||0} ${esc(i.unidade||'')}</div>
+          <div class="ped-item-val">${i.valorUnit>0?formatarMoeda((i.qtdSolicitada||0)*(i.valorUnit||0)):''}</div>
+          <div class="ped-item-qtd" style="color:${(i.qtdEntregue||0)>=(i.qtdSolicitada||0)?'var(--verde)':'var(--texto-leve)'};">
+            ${(i.qtdEntregue||0)>0?`✓ ${i.qtdEntregue} recebidos`:''}
+          </div>
+        </div>`).join('')}
+        ${p.obs?`<div style="font-size:.76rem;color:var(--texto-leve);padding:6px 0;">Obs: ${esc(p.obs)}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-async function confirmarEntrega() {
-  const e = etapas.find(x => x.id === entEtapaId); if (!e) return;
-  const m = (e.materiais||[]).find(x => x.id === entMatId); if (!m) return;
-  m.qtdEntregue  = parseFloat(document.getElementById('ent-qtd').value)||0;
-  m.qtdComprada  = parseFloat(document.getElementById('ent-comp').value)||0;
-  m.fornecedor   = document.getElementById('ent-forn').value.trim();
-  m.valorComprado= parseFloat(document.getElementById('ent-valcomp').value)||0;
-  m.obs          = document.getElementById('ent-obs').value.trim();
-  fecharEntrega();
-  await syncEtapas(`Entrega: ${m.nome} — ${e.nome}`);
-  render(); atualizarStats();
-  toast(`Entrega registrada: ${m.nome}`, 'sucesso');
+// ── SELEÇÃO ──
+function toggleSel(etapaId, matId, obraNome, etapaNome) {
+  const e   = etapas.find(x => x.id === etapaId);
+  const m   = e && (e.materiais||[]).find(x => x.id === matId);
+  const key = `${etapaId}|${matId}`;
+  if (selecionados[key]) {
+    delete selecionados[key];
+  } else {
+    const obra = obras.find(o => o.id === e?.obraId);
+    selecionados[key] = { etapa: e, mat: m, obraNome, etapaNome, obraId: e?.obraId, obra };
+  }
+  const card = document.getElementById('mc-' + key.replace('|','-'));
+  if (card) card.classList.toggle('selecionado', !!selecionados[key]);
+  atualizarBarraSel();
 }
 
-function fecharEntrega() { document.getElementById('modal-entrega').classList.remove('aberto'); }
-
-async function solicitarCompra(etapaId, matId) {
-  const e = etapas.find(x => x.id === etapaId); if (!e) return;
-  const m = (e.materiais||[]).find(x => x.id === matId); if (!m) return;
-  m.pedidoCompra    = true;
-  m.solicitacaoData = hoje();
-  await syncEtapas(`Solicitação: ${m.nome}`);
-  render(); atualizarStats();
-  toast(`Compra solicitada: ${m.nome}`, 'sucesso');
+function atualizarBarraSel() {
+  const n = Object.keys(selecionados).length;
+  const bar = document.getElementById('sel-bar');
+  document.getElementById('sel-texto').textContent = `${n} material(is) selecionado(s)`;
+  bar.classList.toggle('visivel', n > 0 && tab === 'nec');
 }
 
-async function syncEtapas(msg) {
+function limparSelecao() {
+  selecionados = {};
+  atualizarBarraSel();
+  render();
+}
+
+// ── MODAL GERAR PEDIDO ──
+function nextNumPedido() {
+  if (!pedidos.length) return 'PED-001';
+  const nums = pedidos.map(p => parseInt((p.numero||'PED-0').split('-')[1])||0);
+  return `PED-${String(Math.max(...nums)+1).padStart(3,'0')}`;
+}
+
+function abrirGerarPedido() {
+  const itens = Object.values(selecionados);
+  if (!itens.length) return;
+  document.getElementById('ped-forn').value = '';
+  document.getElementById('ped-prev').value = '';
+  document.getElementById('ped-obs').value  = '';
+  const tbody = document.getElementById('ped-itens-body');
+  tbody.innerHTML = itens.map((it,idx) => {
+    const prev = it.mat?.qtdPrevista || 0;
+    const ent  = it.mat?.qtdEntregue || 0;
+    const solic = Math.max(0, prev - ent);
+    return `<tr>
+      <td><strong>${esc(it.mat?.nome||'—')}</strong></td>
+      <td style="font-size:.74rem;color:var(--texto-leve);">${esc(it.obraNome)} / ${esc(it.etapaNome)}</td>
+      <td>${esc(it.mat?.unidade||'—')}</td>
+      <td><input type="number" min="0" step="0.01" value="${solic}" id="pi-qtd-${idx}" oninput="recalcTotal()" style="width:80px;"/></td>
+      <td><input type="number" min="0" step="0.01" value="${it.mat?.valorPrevisto||0}" id="pi-val-${idx}" oninput="recalcTotal()" style="width:90px;"/></td>
+      <td id="pi-tot-${idx}" style="font-weight:700;">${formatarMoeda(solic*(it.mat?.valorPrevisto||0))}</td>
+    </tr>`;
+  }).join('');
+  recalcTotal();
+  document.getElementById('modal-pedido').classList.add('aberto');
+}
+
+function recalcTotal() {
+  const itens = Object.values(selecionados);
+  let total = 0;
+  itens.forEach((_, idx) => {
+    const qtd = parseFloat(document.getElementById(`pi-qtd-${idx}`)?.value)||0;
+    const val = parseFloat(document.getElementById(`pi-val-${idx}`)?.value)||0;
+    const t   = qtd * val;
+    const cel = document.getElementById(`pi-tot-${idx}`);
+    if (cel) cel.textContent = formatarMoeda(t);
+    total += t;
+  });
+  document.getElementById('ped-total').textContent = formatarMoeda(total);
+}
+
+async function salvarPedido(status) {
+  const itensSel = Object.values(selecionados);
+  if (!itensSel.length) return;
+  const pedido = {
+    id:             uid(),
+    numero:         nextNumPedido(),
+    fornecedor:     document.getElementById('ped-forn').value.trim(),
+    previsaoEntrega:document.getElementById('ped-prev').value || null,
+    obs:            document.getElementById('ped-obs').value.trim(),
+    status,
+    criadoEm:       hoje(),
+    itens: itensSel.map((it, idx) => ({
+      obraId:       it.obraId,
+      obraNome:     it.obraNome,
+      etapaId:      it.etapa?.id,
+      etapaNome:    it.etapaNome,
+      matId:        it.mat?.id,
+      nome:         it.mat?.nome,
+      unidade:      it.mat?.unidade,
+      qtdSolicitada:parseFloat(document.getElementById(`pi-qtd-${idx}`)?.value)||0,
+      valorUnit:    parseFloat(document.getElementById(`pi-val-${idx}`)?.value)||0,
+      qtdEntregue:  0,
+    }))
+  };
+  pedidos.push(pedido);
+  fecharPedido();
+  selecionados = {};
+  atualizarBarraSel();
+  salvarLocal(LS_PED, pedidos);
+  atualizarStats(); render();
+  toast(`Pedido ${pedido.numero} criado!`, 'sucesso');
+  await syncPedidos(`Pedido ${pedido.numero}`);
+}
+
+function fecharPedido() { document.getElementById('modal-pedido').classList.remove('aberto'); }
+
+// ── MODAL RECEBIMENTO ──
+function abrirReceb(pedidoId) {
+  const p = pedidos.find(x => x.id === pedidoId); if (!p) return;
+  pedidoRecebId = pedidoId;
+  document.getElementById('receb-info').innerHTML =
+    `<strong>${esc(p.numero)}</strong> · ${p.fornecedor?esc(p.fornecedor):'Sem fornecedor'}` +
+    (p.previsaoEntrega?` · Previsão: ${formatarData(p.previsaoEntrega)}`:'');
+  document.getElementById('receb-obs').value = '';
+  document.getElementById('receb-itens-body').innerHTML = (p.itens||[]).map((i,idx) => `<tr>
+    <td><strong>${esc(i.nome)}</strong></td>
+    <td style="font-size:.74rem;color:var(--texto-leve);">${esc(i.obraNome||'—')} / ${esc(i.etapaNome||'—')}</td>
+    <td>${esc(i.unidade||'—')}</td>
+    <td>${i.qtdSolicitada||0}</td>
+    <td><input type="number" min="0" step="0.01" value="${i.qtdSolicitada||0}" id="ri-qtd-${idx}" style="width:80px;"/></td>
+  </tr>`).join('');
+  document.getElementById('modal-receb').classList.add('aberto');
+}
+
+async function confirmarReceb() {
+  const p = pedidos.find(x => x.id === pedidoRecebId); if (!p) return;
+  const obs = document.getElementById('receb-obs').value.trim();
+  let totalSolic = 0, totalReceb = 0;
+  p.itens.forEach((item, idx) => {
+    const qtdR = parseFloat(document.getElementById(`ri-qtd-${idx}`)?.value)||0;
+    item.qtdEntregue = qtdR;
+    totalSolic += item.qtdSolicitada||0;
+    totalReceb += qtdR;
+    // atualizar material na etapa
+    const e = etapas.find(x => x.id === item.etapaId);
+    const m = e && (e.materiais||[]).find(x => x.id === item.matId);
+    if (m) {
+      m.qtdEntregue  = (m.qtdEntregue||0) + qtdR;
+      m.qtdComprada  = (m.qtdComprada||0) + (item.qtdSolicitada||0);
+      if (p.fornecedor) m.fornecedor = p.fornecedor;
+      if (obs) m.obs = obs;
+    }
+  });
+  p.status  = totalReceb >= totalSolic ? 'recebido' : 'recebido_parcial';
+  if (obs) p.obs = obs;
+  fecharReceb();
+  salvarLocal(LS_PED, pedidos);
   salvarLocal(LS_ET, etapas);
+  atualizarStats(); render();
+  toast(`Recebimento registrado — Pedido ${p.numero}`, 'sucesso');
+  await Promise.all([syncPedidos(`Receb. ${p.numero}`), syncEtapas(`Receb. ${p.numero}`)]);
+}
+
+function fecharReceb() { document.getElementById('modal-receb').classList.remove('aberto'); }
+
+// ── EXCLUIR PEDIDO ──
+async function excluirPedido(id) {
+  const p = pedidos.find(x => x.id === id); if (!p) return;
+  if (!confirm(`Excluir pedido ${p.numero}?`)) return;
+  pedidos = pedidos.filter(x => x.id !== id);
+  salvarLocal(LS_PED, pedidos);
+  atualizarStats(); render();
+  toast(`Pedido ${p.numero} excluído.`, 'sucesso');
+  await syncPedidos(`Excluir ${p.numero}`);
+}
+
+// ── SYNC ──
+async function syncPedidos(msg) {
   if (!configurado()) return;
   setSyncStatus('amarelo','Sincronizando...');
   try {
-    const cur = await ghGet(PATH_ET);
-    await salvarDados(PATH_ET, etapas, cur?.sha||null, msg);
+    const cur = await ghGet(PATH_PED);
+    shaPed = await salvarDados(PATH_PED, pedidos, cur?.sha||shaPed, msg);
     setSyncStatus('verde','Sincronizado');
-  } catch(err) {
-    setSyncStatus('vermelho','Erro sync');
-    toast('Erro: '+err.message,'aviso');
-  }
+  } catch(e) { setSyncStatus('vermelho','Erro'); toast('Erro sync: '+e.message,'aviso'); }
+}
+
+async function syncEtapas(msg) {
+  if (!configurado()) return;
+  try {
+    const cur = await ghGet(PATH_ET);
+    shaEt = await salvarDados(PATH_ET, etapas, cur?.sha||shaEt, msg);
+  } catch(e) { toast('Erro sync etapas: '+e.message,'aviso'); }
 }
 
 init();
