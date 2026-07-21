@@ -78,7 +78,19 @@
         "peso": 0,
         "memorial": "Esta etapa compreende a instalação da membrana hidrofugável sobre a estrutura em Steel Frame, formando uma barreira de proteção contra a penetração de água proveniente das intempéries, permitindo simultaneamente a saída do vapor d'água gerado no interior da edificação.\n\nA instalação deverá ocorrer somente após a conclusão e aprovação da montagem estrutural.\n\nEscopo dos Serviços\n\nOs serviços desta etapa compreendem:\n\nConferência da estrutura metálica montada.\nVerificação do alinhamento e estabilidade dos painéis.\nCorte da membrana conforme as dimensões das paredes.\nAplicação da membrana hidrofugável em todas as faces externas especificadas em projeto.\nFixação da membrana à estrutura utilizando os elementos de fixação recomendados pelo fabricante.\nExecução das sobreposições entre mantas conforme especificação técnica.\nVedação dos encontros, emendas e pontos críticos.\nRecortes para portas, janelas e demais aberturas previstas em projeto.\nInspeção final da continuidade da barreira de proteção.",
         "ordem": 3,
-        "materiais": []
+        "materiais": [
+          {
+            "id": "mrv19xr2mvty9",
+            "nome": "MEMBRANA HIDROFUGÁVEL",
+            "catalogoId": "mrv185udozgmf",
+            "unidade": "un",
+            "classificacao": "obrigatorio_iniciar",
+            "qtdPorBox": 1,
+            "qtdMinPorBox": 1,
+            "fornecedor": "",
+            "valorUnitario": 0
+          }
+        ]
       }
     ]
   }
