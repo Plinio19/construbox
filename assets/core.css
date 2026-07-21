@@ -143,6 +143,17 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Sego
 .tabela tbody tr.receita-row { border-left: 3px solid var(--verde); }
 .tabela tbody tr.despesa-row { border-left: 3px solid var(--vermelho); }
 
+/* ── CHIPS / TABS ── */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 16px; border-radius: 999px;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  border: 1.5px solid var(--cinza); background: var(--branco);
+  color: var(--texto-leve); transition: all .18s; white-space: nowrap;
+}
+.chip:hover { border-color: var(--brand); color: var(--brand); background: var(--azul-bg); }
+.chip.ativo { background: var(--brand); color: #fff; border-color: var(--brand); }
+
 /* ── BADGES ── */
 .badge {
   display: inline-flex; align-items: center;
