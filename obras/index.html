@@ -434,6 +434,7 @@ async function gerarEtapasDoModelo(obraId, modelo, qtdBoxes) {
 
   const novas = (modelo.etapas||[]).map((et, idx) => ({
     id: uid(), obraId,
+    modeloEtapaId: et.id,
     nome:        et.nome,
     codigo:      et.codigo || String(idx+1).padStart(2,'0'),
     ordem:       et.ordem  || idx+1,
@@ -451,6 +452,8 @@ async function gerarEtapasDoModelo(obraId, modelo, qtdBoxes) {
     checklist:  (et.checklist||[]).map(cl=>({...cl, id:uid(), concluida:false})),
     materiais:  (et.materiais||[]).map(mat=>({
       id: uid(), nome: mat.nome,
+      catalogoId:    mat.catalogoId || null,
+      modeloRef:     mat.id,
       unidade:       mat.unidade||'',
       classificacao: mat.classificacao||'obrigatorio_iniciar',
       qtdPrevista:   Math.round((mat.qtdPorBox||0) * qtdBoxes * 100)/100,
@@ -459,7 +462,6 @@ async function gerarEtapasDoModelo(obraId, modelo, qtdBoxes) {
       fornecedor:    mat.fornecedor||'',
       valorPrevisto: Math.round((mat.valorUnitario||0)*(mat.qtdPorBox||0)*qtdBoxes*100)/100,
       valorComprado: 0, pedidoCompra:false, solicitacaoData:null, obs:'',
-      modeloRef:     mat.id,
     })),
     criadoEm:          hoje(),
     geradoDeModelo:    modelo.id,

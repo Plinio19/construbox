@@ -316,9 +316,107 @@ async function salvarModelos(msg) {
     sha = await salvarDados(PATH_MOD, modelos, sha, msg);
     setSyncStatus('verde','Salvo');
     toast('Modelo salvo!','sucesso');
+    // propagar mudanças para obras vinculadas (só quando estiver no editor)
+    if (modeloAtualId) sincronizarObrasDoModelo(modeloAtualId);
   } catch(e) {
     setSyncStatus('vermelho','Erro sync');
     toast('Erro: '+e.message,'aviso');
+  }
+}
+
+async function sincronizarObrasDoModelo(modeloId) {
+  const modelo = modelos.find(x=>x.id===modeloId); if(!modelo) return;
+
+  let obras=[]; let etapas=[]; let shaEt=null;
+  try {
+    const [rO, rE] = await Promise.all([
+      carregarDados('data/obras.json'),
+      carregarDados('data/etapas.json').catch(()=>({lista:[],sha:null})),
+    ]);
+    obras  = rO.lista||[]; etapas = rE.lista||[]; shaEt = rE.sha;
+  } catch(e) { return; }
+
+  const vinculadas = obras.filter(o=>o.modeloId===modeloId);
+  if (!vinculadas.length) return;
+
+  let nEtapas=0, nMats=0;
+
+  vinculadas.forEach(obra => {
+    const qtdBoxes = obra.qtdBoxes || 1;
+    const etapasObra = etapas.filter(e=>e.obraId===obra.id);
+
+    (modelo.etapas||[]).forEach((et, idx) => {
+      const etExist = etapasObra.find(e=>e.modeloEtapaId===et.id);
+
+      if (!etExist) {
+        // nova etapa no modelo → adicionar na obra
+        const nova = {
+          id:uid(), obraId:obra.id, modeloEtapaId:et.id,
+          nome:et.nome, codigo:et.codigo||String(idx+1).padStart(2,'0'),
+          ordem:et.ordem||idx+1, categoria:et.categoria||'outros',
+          responsavel:et.responsavel||'', descricao:et.descricao||'',
+          observacoes:'', memorial:et.memorial||'',
+          status:'planejada', peso:et.peso||0, percentualExecutado:0,
+          dataPrevistoInicio:null, dataPrevistoFim:null,
+          dataRealInicio:null, dataRealFim:null,
+          dependencias:[],
+          checklist:(et.checklist||[]).map(cl=>({...cl,id:uid(),concluida:false})),
+          materiais:(et.materiais||[]).map(mat=>({
+            id:uid(), nome:mat.nome,
+            catalogoId:mat.catalogoId||null, modeloRef:mat.id,
+            unidade:mat.unidade||'',
+            classificacao:mat.classificacao||'obrigatorio_iniciar',
+            qtdPrevista:   Math.round((mat.qtdPorBox||0)*qtdBoxes*100)/100,
+            qtdMinIniciar: Math.round((mat.qtdMinPorBox||mat.qtdPorBox||0)*qtdBoxes*100)/100,
+            qtdComprada:0,qtdEntregue:0,qtdReservada:0,qtdUtilizada:0,
+            fornecedor:mat.fornecedor||'',
+            valorPrevisto:Math.round((mat.valorUnitario||0)*(mat.qtdPorBox||0)*qtdBoxes*100)/100,
+            valorComprado:0,pedidoCompra:false,solicitacaoData:null,obs:'',
+          })),
+          criadoEm:hoje(), geradoDeModelo:modeloId,
+        };
+        etapas.push(nova); nEtapas++;
+      } else {
+        // etapa existe → atualizar campos descritivos, preservar execução
+        etExist.nome        = et.nome;
+        etExist.categoria   = et.categoria   || etExist.categoria;
+        etExist.peso        = et.peso        ?? etExist.peso;
+        etExist.memorial    = et.memorial    || etExist.memorial;
+        etExist.responsavel = et.responsavel || etExist.responsavel;
+
+        // novos materiais no modelo → adicionar na etapa da obra
+        (et.materiais||[]).forEach(mat => {
+          if (!(etExist.materiais||[]).find(m=>m.modeloRef===mat.id)) {
+            if(!etExist.materiais) etExist.materiais=[];
+            etExist.materiais.push({
+              id:uid(), nome:mat.nome,
+              catalogoId:mat.catalogoId||null, modeloRef:mat.id,
+              unidade:mat.unidade||'',
+              classificacao:mat.classificacao||'obrigatorio_iniciar',
+              qtdPrevista:   Math.round((mat.qtdPorBox||0)*qtdBoxes*100)/100,
+              qtdMinIniciar: Math.round((mat.qtdMinPorBox||mat.qtdPorBox||0)*qtdBoxes*100)/100,
+              qtdComprada:0,qtdEntregue:0,qtdReservada:0,qtdUtilizada:0,
+              fornecedor:mat.fornecedor||'',
+              valorPrevisto:Math.round((mat.valorUnitario||0)*(mat.qtdPorBox||0)*qtdBoxes*100)/100,
+              valorComprado:0,pedidoCompra:false,solicitacaoData:null,obs:'',
+            });
+            nMats++;
+          }
+        });
+      }
+    });
+  });
+
+  if (nEtapas+nMats > 0) {
+    salvarLocal('cbx_etapas', etapas);
+    try {
+      await salvarDados('data/etapas.json', etapas, shaEt,
+        `Sync modelo "${modelo.nome}": +${nEtapas} etapa(s), +${nMats} material(is)`);
+      const partes = [];
+      if (nEtapas) partes.push(`${nEtapas} etapa(s) nova(s)`);
+      if (nMats)   partes.push(`${nMats} material(is) novo(s)`);
+      toast(`✓ ${vinculadas.length} obra(s) atualizada(s): ${partes.join(' e ')}.`, 'sucesso');
+    } catch(e) { toast('Sync local OK; erro ao salvar etapas no GitHub.','aviso'); }
   }
 }
 
