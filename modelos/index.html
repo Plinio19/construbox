@@ -115,6 +115,83 @@
   </div>
 </div>
 
+<!-- ══ MODAL EDITAR ETAPA DO MODELO ══ -->
+<div class="overlay" id="modal-ed-etapa">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <h2>✏️ Editar Etapa</h2>
+      <button class="btn-fechar" onclick="fecharEdEtapa()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
+      <input type="hidden" id="ede-id"/>
+      <div class="form-campo"><label>Nome da Etapa *</label><input type="text" id="ede-nome"/></div>
+      <div style="display:grid;grid-template-columns:1fr 100px 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Categoria</label>
+          <select id="ede-cat">
+            <option value="fundacao">Fundação</option><option value="estrutura">Estrutura</option>
+            <option value="alvenaria">Alvenaria</option><option value="cobertura">Cobertura</option>
+            <option value="instalacoes">Instalações</option><option value="acabamento">Acabamento</option>
+            <option value="externo">Externo</option><option value="outros">Outros</option>
+          </select>
+        </div>
+        <div class="form-campo" style="margin:0"><label>Peso (%)</label><input type="number" id="ede-peso" min="0" max="100" step="1"/></div>
+        <div class="form-campo" style="margin:0"><label>Responsável</label><input type="text" id="ede-resp" placeholder="Opcional"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharEdEtapa()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarEdEtapa()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MINI-MODAL MATERIAL NO CATÁLOGO ══ -->
+<div class="overlay" id="modal-mini-mat">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <h2>📦 Cadastrar no Catálogo</h2>
+      <button class="btn-fechar" onclick="fecharMiniMat()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:0 20px 4px;">
+      <div class="form-campo"><label>Nome *</label><input type="text" id="mmm-nome"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Unidade</label>
+          <select id="mmm-unid">
+            <option value="un">un</option><option value="sc">sc</option><option value="m²">m²</option>
+            <option value="m³">m³</option><option value="m">m</option><option value="kg">kg</option>
+            <option value="t">t</option><option value="l">l</option><option value="gl">gl</option>
+            <option value="cx">cx</option><option value="pc">pc</option><option value="barra">barra</option>
+          </select>
+        </div>
+        <div class="form-campo" style="margin:0"><label>Categoria</label>
+          <select id="mmm-cat">
+            <option value="Cimento e Argamassas">Cimento e Argamassas</option>
+            <option value="Ferragem e Aço">Ferragem e Aço</option>
+            <option value="Hidráulica e Esgoto">Hidráulica e Esgoto</option>
+            <option value="Elétrica e Iluminação">Elétrica e Iluminação</option>
+            <option value="Revestimento e Cerâmica">Revestimento e Cerâmica</option>
+            <option value="Madeira e Esquadrias">Madeira e Esquadrias</option>
+            <option value="Tintas e Vernizes">Tintas e Vernizes</option>
+            <option value="Impermeabilização">Impermeabilização</option>
+            <option value="Ferramentas e EPI">Ferramentas e EPI</option>
+            <option value="Vidro e Alumínio">Vidro e Alumínio</option>
+            <option value="Gesso e Drywall">Gesso e Drywall</option>
+            <option value="Outros" selected>Outros</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Marca/Fabricante</label><input type="text" id="mmm-marca" placeholder="Opcional"/></div>
+        <div class="form-campo" style="margin:0"><label>Valor Ref. (R$)</label><input type="number" id="mmm-val" min="0" step="0.01" placeholder="0,00"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharMiniMat()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarMiniMat()">✓ Salvar no Catálogo</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ MODAL MATERIAIS DO TEMPLATE ══ -->
 <div class="overlay" id="modal-mat-tpl">
   <div class="modal" style="max-width:98vw;width:920px;max-height:92vh;overflow-y:auto;">
@@ -125,10 +202,23 @@
     <div class="modal-body" style="padding:0 20px 8px;">
       <div id="mmt-body"></div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--cinza);">
-        <div style="font-weight:700;font-size:.8rem;margin-bottom:8px;color:var(--texto-leve);">+ ADICIONAR MATERIAL AO TEMPLATE</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-weight:700;font-size:.8rem;color:var(--texto-leve);">+ ADICIONAR MATERIAL AO TEMPLATE</div>
+          <button class="btn btn-outline btn-sm" onclick="abrirMiniMat()" title="Cadastrar novo material no catálogo">📦 Novo no Catálogo</button>
+        </div>
         <div style="display:grid;grid-template-columns:1fr 65px 180px 85px 85px 120px 100px auto;gap:8px;align-items:end;">
-          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Material *</label><input type="text" id="amm-nome" placeholder="Cimento CP-II" onkeydown="if(event.key==='Enter')addMatTpl()"/></div>
-          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Unid.</label><input type="text" id="amm-unid" placeholder="sc"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Material * <span id="amm-hint" style="color:var(--verde);font-weight:400;display:none;">✓ do catálogo</span></label>
+            <input type="text" id="amm-nome" list="dl-mat-cat-mod" placeholder="Digite ou selecione…" onchange="autoFillMatTpl()" onkeydown="if(event.key==='Enter')addMatTpl()"/>
+            <datalist id="dl-mat-cat-mod"></datalist>
+          </div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Unid.</label>
+            <select id="amm-unid" style="font-size:.78rem;padding:5px 4px;">
+              <option value="un">un</option><option value="sc">sc</option><option value="m²">m²</option>
+              <option value="m³">m³</option><option value="m">m</option><option value="kg">kg</option>
+              <option value="t">t</option><option value="l">l</option><option value="gl">gl</option>
+              <option value="cx">cx</option><option value="pc">pc</option><option value="barra">barra</option>
+            </select>
+          </div>
           <div class="form-campo" style="margin:0"><label style="font-size:.7rem;">Classificação</label>
             <select id="amm-class" style="font-size:.75rem;padding:5px 6px;">
               <option value="obrigatorio_iniciar">Obrig. Iniciar</option>
@@ -162,6 +252,7 @@ let modelos = []; let sha = null;
 let modeloEditId  = null;
 let modeloAtualId = null;
 let etapaMatTplId = null;
+let matCatalogo   = []; let shaMC = null;
 
 const ClassLbl = { obrigatorio_iniciar:'Obrig. Iniciar', obrigatorio_execucao:'Obrig. Exec.', complementar:'Complementar', opcional:'Opcional' };
 
@@ -169,17 +260,31 @@ async function init() {
   setSyncStatus('amarelo','Carregando…');
   const local = carregarLocal(LS_MOD);
   if (local) { modelos = local; renderLista(); }
+  matCatalogo = carregarLocal('cbx_materiais_cat') || [];
+  popularDatalistMat();
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   try {
-    const res = await carregarDados(PATH_MOD).catch(()=>({lista:[],sha:null}));
+    const [res, rMC] = await Promise.all([
+      carregarDados(PATH_MOD).catch(()=>({lista:[],sha:null})),
+      carregarDados('data/materiais_catalogo.json').catch(()=>({lista:[],sha:null})),
+    ]);
     modelos = res.lista || []; sha = res.sha;
+    matCatalogo = rMC.lista || []; shaMC = rMC.sha;
     salvarLocal(LS_MOD, modelos);
+    salvarLocal('cbx_materiais_cat', matCatalogo);
     renderLista();
+    popularDatalistMat();
     setSyncStatus('verde','Conectado');
   } catch(e) {
     setSyncStatus('vermelho','Erro');
     toast('Erro ao carregar modelos.','erro');
   }
+}
+
+function popularDatalistMat() {
+  const dl = document.getElementById('dl-mat-cat-mod');
+  if (!dl) return;
+  dl.innerHTML = matCatalogo.map(m=>`<option value="${esc(m.nome)}" data-unidade="${esc(m.unidade||'')}" data-valor="${m.valorRef||0}">`).join('');
 }
 
 async function salvarModelos(msg) {
@@ -332,6 +437,7 @@ function renderEtapasModelo() {
         </div>
         <div style="display:flex;gap:6px;" onclick="event.stopPropagation()">
           <button class="btn btn-primary btn-sm" onclick='abrirMatTpl("${e.id}")'>📦 Materiais</button>
+          <button class="btn btn-outline btn-sm" onclick='abrirEdEtapa("${e.id}")'>✏️</button>
           <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerEtapaModelo("${e.id}")'>✕</button>
         </div>
       </div>
@@ -462,6 +568,88 @@ function removerMatTpl(eId, mid) {
   e.materiais = (e.materiais||[]).filter(x=>x.id!==mid);
   atualizarSubEditor(m);
   renderEtapasModelo();
+}
+
+// ── EDITAR ETAPA ──
+function abrirEdEtapa(eId) {
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const e = (m.etapas||[]).find(x=>x.id===eId); if(!e) return;
+  document.getElementById('ede-id').value   = eId;
+  document.getElementById('ede-nome').value = e.nome||'';
+  document.getElementById('ede-cat').value  = e.categoria||'outros';
+  document.getElementById('ede-peso').value = e.peso||'';
+  document.getElementById('ede-resp').value = e.responsavel||'';
+  document.getElementById('modal-ed-etapa').classList.add('aberto');
+  setTimeout(()=>document.getElementById('ede-nome').focus(),80);
+}
+function fecharEdEtapa() { document.getElementById('modal-ed-etapa').classList.remove('aberto'); }
+async function salvarEdEtapa() {
+  const nome = document.getElementById('ede-nome').value.trim();
+  if(!nome){toast('Nome é obrigatório.','aviso');return;}
+  const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
+  const eId = document.getElementById('ede-id').value;
+  const e = (m.etapas||[]).find(x=>x.id===eId); if(!e) return;
+  e.nome       = nome;
+  e.categoria  = document.getElementById('ede-cat').value;
+  e.peso       = parseFloat(document.getElementById('ede-peso').value)||0;
+  e.responsavel= document.getElementById('ede-resp').value.trim();
+  fecharEdEtapa();
+  atualizarSubEditor(m);
+  renderEtapasModelo();
+  await salvarModelos(`Editar etapa: ${nome}`);
+}
+
+// ── AUTOCOMPLETE MATERIAL DO CATÁLOGO (template) ──
+function autoFillMatTpl() {
+  const nome = document.getElementById('amm-nome').value.trim();
+  const hint = document.getElementById('amm-hint');
+  const cat = matCatalogo.find(x=>x.nome.toLowerCase()===nome.toLowerCase());
+  if (cat) {
+    document.getElementById('amm-unid').value = cat.unidade || 'un';
+    if (cat.valorRef) document.getElementById('amm-val').value = cat.valorRef;
+    hint.style.display = '';
+  } else {
+    hint.style.display = 'none';
+  }
+}
+
+// ── MINI-MODAL MATERIAL NO CATÁLOGO ──
+function abrirMiniMat() {
+  const nomeAtual = document.getElementById('amm-nome')?.value.trim() || '';
+  document.getElementById('mmm-nome').value  = nomeAtual;
+  document.getElementById('mmm-unid').value  = 'un';
+  document.getElementById('mmm-cat').value   = 'Outros';
+  document.getElementById('mmm-marca').value = '';
+  document.getElementById('mmm-val').value   = '';
+  document.getElementById('modal-mini-mat').classList.add('aberto');
+  setTimeout(()=>document.getElementById('mmm-nome').focus(),80);
+}
+function fecharMiniMat() { document.getElementById('modal-mini-mat').classList.remove('aberto'); }
+async function salvarMiniMat() {
+  const nome = document.getElementById('mmm-nome').value.trim();
+  if(!nome){toast('Nome é obrigatório.','aviso');return;}
+  const novo = {
+    id: uid(), nome,
+    unidade:   document.getElementById('mmm-unid').value,
+    categoria: document.getElementById('mmm-cat').value,
+    marca:     document.getElementById('mmm-marca').value.trim(),
+    valorRef:  parseFloat(document.getElementById('mmm-val').value)||0,
+    criadoEm:  hoje(),
+  };
+  matCatalogo.push(novo);
+  salvarLocal('cbx_materiais_cat', matCatalogo);
+  popularDatalistMat();
+  // auto-preenche o campo de material
+  document.getElementById('amm-nome').value  = novo.nome;
+  document.getElementById('amm-unid').value  = novo.unidade;
+  if(novo.valorRef) document.getElementById('amm-val').value = novo.valorRef;
+  document.getElementById('amm-hint').style.display = '';
+  fecharMiniMat();
+  toast('Material cadastrado no catálogo!','sucesso');
+  // sync GitHub
+  if(configurado()) try {
+    shaMC = await salvarDados('data/materiais_catalogo.json', matCatalogo, shaMC, `Material catálogo: ${nome}`);
+  } catch(e) {}
 }
 
 init();

@@ -257,10 +257,23 @@
       <div id="mat-alert"></div>
       <div id="mat-body"></div>
       <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--cinza);">
-        <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;color:var(--texto-leve);">ADICIONAR MATERIAL</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-weight:700;font-size:.85rem;color:var(--texto-leve);">ADICIONAR MATERIAL</div>
+          <button class="btn btn-outline btn-sm" onclick="abrirMiniMatCron()" title="Cadastrar novo material no catálogo">📦 Novo no Catálogo</button>
+        </div>
+        <datalist id="dl-mat-cat-cron"></datalist>
         <div style="display:grid;grid-template-columns:1fr 70px 180px 80px 90px 130px 100px auto;gap:8px;align-items:end;">
-          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Material *</label><input type="text" id="mn-nome" placeholder="Cimento CP-II" onkeydown="if(event.key==='Enter')addMat()"/></div>
-          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Unidade</label><input type="text" id="mn-unid" placeholder="sc"/></div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Material * <span id="mn-hint" style="color:var(--verde);font-weight:400;display:none;">✓ catálogo</span></label>
+            <input type="text" id="mn-nome" list="dl-mat-cat-cron" placeholder="Digite ou selecione…" onchange="autoFillMatCron()" onkeydown="if(event.key==='Enter')addMat()"/>
+          </div>
+          <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Unidade</label>
+            <select id="mn-unid" style="font-size:.78rem;padding:5px 4px;">
+              <option value="un">un</option><option value="sc">sc</option><option value="m²">m²</option>
+              <option value="m³">m³</option><option value="m">m</option><option value="kg">kg</option>
+              <option value="t">t</option><option value="l">l</option><option value="gl">gl</option>
+              <option value="cx">cx</option><option value="pc">pc</option><option value="barra">barra</option>
+            </select>
+          </div>
           <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Classificação</label>
             <select id="mn-class" style="font-size:.78rem;padding:5px 6px;">
               <option value="obrigatorio_iniciar">Obrig. para Iniciar</option>
@@ -339,6 +352,53 @@
   </div>
 </div>
 
+<!-- ══ MINI-MODAL MATERIAL NO CATÁLOGO (cronograma) ══ -->
+<div class="overlay" id="modal-mini-mat-cron">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <h2>📦 Cadastrar no Catálogo</h2>
+      <button class="btn-fechar" onclick="fecharMiniMatCron()">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:0 20px 4px;">
+      <div class="form-campo"><label>Nome *</label><input type="text" id="mmmc-nome"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Unidade</label>
+          <select id="mmmc-unid">
+            <option value="un">un</option><option value="sc">sc</option><option value="m²">m²</option>
+            <option value="m³">m³</option><option value="m">m</option><option value="kg">kg</option>
+            <option value="t">t</option><option value="l">l</option><option value="gl">gl</option>
+            <option value="cx">cx</option><option value="pc">pc</option><option value="barra">barra</option>
+          </select>
+        </div>
+        <div class="form-campo" style="margin:0"><label>Categoria</label>
+          <select id="mmmc-cat">
+            <option value="Cimento e Argamassas">Cimento e Argamassas</option>
+            <option value="Ferragem e Aço">Ferragem e Aço</option>
+            <option value="Hidráulica e Esgoto">Hidráulica e Esgoto</option>
+            <option value="Elétrica e Iluminação">Elétrica e Iluminação</option>
+            <option value="Revestimento e Cerâmica">Revestimento e Cerâmica</option>
+            <option value="Madeira e Esquadrias">Madeira e Esquadrias</option>
+            <option value="Tintas e Vernizes">Tintas e Vernizes</option>
+            <option value="Impermeabilização">Impermeabilização</option>
+            <option value="Ferramentas e EPI">Ferramentas e EPI</option>
+            <option value="Vidro e Alumínio">Vidro e Alumínio</option>
+            <option value="Gesso e Drywall">Gesso e Drywall</option>
+            <option value="Outros" selected>Outros</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Marca/Fabricante</label><input type="text" id="mmmc-marca" placeholder="Opcional"/></div>
+        <div class="form-campo" style="margin:0"><label>Valor Ref. (R$)</label><input type="number" id="mmmc-val" min="0" step="0.01" placeholder="0,00"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="fecharMiniMatCron()">Cancelar</button>
+      <button class="btn btn-success" onclick="salvarMiniMatCron()">✓ Salvar no Catálogo</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toasts"></div>
 <script src="../../assets/core.js"></script>
 <script>
@@ -352,6 +412,7 @@ const LS_OB   = 'cbx_obras';
 
 let etapas = [], shaEt = null, obra = null;
 let filtro = '', idEdit = null, clId = null;
+let matCatalogo = []; let shaMC = null;
 
 const SLbl = {
   planejada:'Planejada', aguardando_etapa:'Aguard. Etapa',
@@ -374,22 +435,37 @@ async function init() {
   const cache = carregarLocal(LS_ET) || [];
   etapas = cache.filter(e => e.obraId === OBRA_ID);
   obra   = (carregarLocal(LS_OB) || []).find(o => o.id === OBRA_ID);
+  matCatalogo = carregarLocal('cbx_materiais_cat') || [];
+  popularDatalistMatCron();
   atualizarHeader(); renderEtapas(); atualizarStats();
 
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
   try {
-    const [rE, rO] = await Promise.all([carregarDados(PATH_ET), carregarDados('data/obras.json')]);
+    const [rE, rO, rMC] = await Promise.all([
+      carregarDados(PATH_ET),
+      carregarDados('data/obras.json'),
+      carregarDados('data/materiais_catalogo.json').catch(()=>({lista:[],sha:null})),
+    ]);
     const todas = rE.lista; shaEt = rE.sha;
     salvarLocal(LS_ET, todas);
     etapas = todas.filter(e => e.obraId === OBRA_ID);
     salvarLocal(LS_OB, rO.lista);
     obra = rO.lista.find(o => o.id === OBRA_ID);
+    matCatalogo = rMC.lista || []; shaMC = rMC.sha;
+    salvarLocal('cbx_materiais_cat', matCatalogo);
+    popularDatalistMatCron();
     atualizarHeader(); renderEtapas(); atualizarStats();
     setSyncStatus('verde','Conectado');
   } catch(err) {
     setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso');
   }
+}
+
+function popularDatalistMatCron() {
+  const dl = document.getElementById('dl-mat-cat-cron');
+  if(!dl) return;
+  dl.innerHTML = matCatalogo.map(m=>`<option value="${esc(m.nome)}" data-unidade="${esc(m.unidade||'')}" data-valor="${m.valorRef||0}">`).join('');
 }
 
 function atualizarHeader() {
@@ -782,7 +858,10 @@ function abrirMateriais(etapaId) {
   matId = etapaId;
   const e = etapas.find(x => x.id === etapaId); if (!e) return;
   document.getElementById('mat-titulo').textContent = `📦 Materiais — ${e.nome}`;
-  ['mn-nome','mn-unid','mn-forn'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mn-nome').value  = '';
+  document.getElementById('mn-unid').value  = 'un';
+  document.getElementById('mn-forn').value  = '';
+  document.getElementById('mn-hint').style.display = 'none';
   ['mn-prev','mn-min','mn-valprev'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('mn-class').value = 'obrigatorio_iniciar';
   renderMatBody(e);
@@ -862,7 +941,10 @@ async function addMat() {
     valorPrevisto: parseFloat(document.getElementById('mn-valprev').value)||0,
     valorComprado:0, pedidoCompra:false, solicitacaoData:null, obs:''
   });
-  ['mn-nome','mn-unid','mn-forn'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mn-nome').value  = '';
+  document.getElementById('mn-unid').value  = 'un';
+  document.getElementById('mn-forn').value  = '';
+  document.getElementById('mn-hint').style.display = 'none';
   ['mn-prev','mn-min','mn-valprev'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('mn-class').value = 'obrigatorio_iniciar';
   renderMatBody(e);
@@ -1102,6 +1184,57 @@ function cancelarAssistente() {
   fecharChecklist();
   fecharMateriais();
   atualizarWizUI();
+}
+
+// ── AUTOCOMPLETE MATERIAL DO CATÁLOGO (cronograma) ──
+function autoFillMatCron() {
+  const nome = document.getElementById('mn-nome').value.trim();
+  const hint = document.getElementById('mn-hint');
+  const cat = matCatalogo.find(x=>x.nome.toLowerCase()===nome.toLowerCase());
+  if (cat) {
+    document.getElementById('mn-unid').value = cat.unidade || 'un';
+    if (cat.valorRef) document.getElementById('mn-valprev').value = cat.valorRef;
+    hint.style.display = '';
+  } else {
+    hint.style.display = 'none';
+  }
+}
+
+// ── MINI-MODAL MATERIAL NO CATÁLOGO (cronograma) ──
+function abrirMiniMatCron() {
+  const nomeAtual = document.getElementById('mn-nome')?.value.trim() || '';
+  document.getElementById('mmmc-nome').value  = nomeAtual;
+  document.getElementById('mmmc-unid').value  = 'un';
+  document.getElementById('mmmc-cat').value   = 'Outros';
+  document.getElementById('mmmc-marca').value = '';
+  document.getElementById('mmmc-val').value   = '';
+  document.getElementById('modal-mini-mat-cron').classList.add('aberto');
+  setTimeout(()=>document.getElementById('mmmc-nome').focus(),80);
+}
+function fecharMiniMatCron() { document.getElementById('modal-mini-mat-cron').classList.remove('aberto'); }
+async function salvarMiniMatCron() {
+  const nome = document.getElementById('mmmc-nome').value.trim();
+  if(!nome){toast('Nome é obrigatório.','aviso');return;}
+  const novo = {
+    id: uid(), nome,
+    unidade:   document.getElementById('mmmc-unid').value,
+    categoria: document.getElementById('mmmc-cat').value,
+    marca:     document.getElementById('mmmc-marca').value.trim(),
+    valorRef:  parseFloat(document.getElementById('mmmc-val').value)||0,
+    criadoEm:  hoje(),
+  };
+  matCatalogo.push(novo);
+  salvarLocal('cbx_materiais_cat', matCatalogo);
+  popularDatalistMatCron();
+  document.getElementById('mn-nome').value = novo.nome;
+  document.getElementById('mn-unid').value = novo.unidade;
+  if(novo.valorRef) document.getElementById('mn-valprev').value = novo.valorRef;
+  document.getElementById('mn-hint').style.display = '';
+  fecharMiniMatCron();
+  toast('Material cadastrado no catálogo!','sucesso');
+  if(configurado()) try {
+    shaMC = await salvarDados('data/materiais_catalogo.json', matCatalogo, shaMC, `Material catálogo: ${nome}`);
+  } catch(e) {}
 }
 
 init();

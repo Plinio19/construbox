@@ -176,20 +176,72 @@
 
 <!-- MODAL MATERIAL -->
 <div class="overlay" id="modal-material">
-  <div class="modal" style="max-width:420px;">
+  <div class="modal" style="max-width:680px;max-height:92vh;overflow-y:auto;">
     <div class="modal-header">
       <h2 id="mmat-titulo">Novo Material</h2>
       <button class="btn-fechar" onclick="fecharModal('modal-material')">✕</button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:0 20px 4px;">
       <input type="hidden" id="mmat-id"/>
-      <div class="form-campo"><label>Nome *</label><input id="mmat-nome" type="text" placeholder="Ex: Cimento CP-II"/></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="form-campo"><label>Unidade</label><input id="mmat-unidade" type="text" placeholder="sc, m², kg, un..."/></div>
-        <div class="form-campo"><label>Valor Ref. (R$)</label><input id="mmat-valor" type="number" min="0" step="0.01" placeholder="0,00"/></div>
+
+      <div style="display:grid;grid-template-columns:140px 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Código Interno</label><input id="mmat-codigo" type="text" placeholder="MAT-0001"/></div>
+        <div class="form-campo" style="margin:0"><label>Nome / Descrição *</label><input id="mmat-nome" type="text" placeholder="Ex: Cimento CP-II 50kg"/></div>
       </div>
-      <div class="form-campo"><label>Categoria</label><input id="mmat-categoria" type="text" placeholder="Ex: Cimento, Ferragem, Hidráulica..."/></div>
-      <div class="form-campo"><label>Observações</label><textarea id="mmat-obs" rows="2"></textarea></div>
+
+      <div class="form-campo"><label>Especificação Técnica</label><input id="mmat-spec" type="text" placeholder="Ex: ABNT NBR 5732, resistência 32 MPa, saco 50 kg"/></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Categoria</label>
+          <select id="mmat-categoria">
+            <option value="">Selecionar…</option>
+            <option value="Cimento e Argamassas">Cimento e Argamassas</option>
+            <option value="Ferragem e Aço">Ferragem e Aço</option>
+            <option value="Hidráulica e Esgoto">Hidráulica e Esgoto</option>
+            <option value="Elétrica e Iluminação">Elétrica e Iluminação</option>
+            <option value="Revestimento e Cerâmica">Revestimento e Cerâmica</option>
+            <option value="Madeira e Esquadrias">Madeira e Esquadrias</option>
+            <option value="Tintas e Vernizes">Tintas e Vernizes</option>
+            <option value="Impermeabilização">Impermeabilização</option>
+            <option value="Ferramentas e EPI">Ferramentas e EPI</option>
+            <option value="Vidro e Alumínio">Vidro e Alumínio</option>
+            <option value="Gesso e Drywall">Gesso e Drywall</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+        <div class="form-campo" style="margin:0"><label>Unidade de Medida</label>
+          <select id="mmat-unidade">
+            <option value="un">un — Unidade</option>
+            <option value="sc">sc — Saco</option>
+            <option value="m²">m² — Metro quadrado</option>
+            <option value="m³">m³ — Metro cúbico</option>
+            <option value="m">m — Metro linear</option>
+            <option value="kg">kg — Quilograma</option>
+            <option value="t">t — Tonelada</option>
+            <option value="l">l — Litro</option>
+            <option value="gl">gl — Galão</option>
+            <option value="cx">cx — Caixa</option>
+            <option value="pc">pc — Peça</option>
+            <option value="pr">pr — Par</option>
+            <option value="rolo">rolo</option>
+            <option value="barra">barra</option>
+          </select>
+        </div>
+        <div class="form-campo" style="margin:0"><label>NCM</label><input id="mmat-ncm" type="text" placeholder="Ex: 2523.29.10"/></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Marca / Fabricante</label><input id="mmat-marca" type="text" placeholder="Ex: Votoran, Votorantim"/></div>
+        <div class="form-campo" style="margin:0"><label>Fornecedor Preferencial</label><input id="mmat-forn" type="text" placeholder="Nome do fornecedor"/></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div class="form-campo" style="margin:0"><label>Valor de Referência (R$)</label><input id="mmat-valor" type="number" min="0" step="0.01" placeholder="0,00"/></div>
+        <div class="form-campo" style="margin:0"><label>Estoque Mínimo</label><input id="mmat-estmin" type="number" min="0" step="1" placeholder="0"/></div>
+        <div class="form-campo" style="margin:0"><label>Prazo Entrega (dias)</label><input id="mmat-prazo" type="number" min="0" step="1" placeholder="0"/></div>
+      </div>
+
+      <div class="form-campo"><label>Observações</label><textarea id="mmat-obs" rows="2" placeholder="Informações adicionais, normas, cuidados de armazenamento..."></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="fecharModal('modal-material')">Cancelar</button>
@@ -459,27 +511,45 @@ function renderMateriais() {
       catAtual = m.categoria;
       if (catAtual) html += `<div style="font-size:.72rem;font-weight:700;color:var(--texto-leve);padding:10px 4px 4px;text-transform:uppercase;letter-spacing:.05em;">${esc(catAtual)}</div>`;
     }
+    const sub = [
+      m.codigo ? `Cód: ${esc(m.codigo)}` : '',
+      `Un.: ${esc(m.unidade||'—')}`,
+      m.marca ? `Marca: ${esc(m.marca)}` : '',
+      m.valorRef ? `Ref.: ${formatarMoeda(m.valorRef)}` : '',
+      m.prazoEntrega ? `Prazo: ${m.prazoEntrega}d` : '',
+    ].filter(Boolean).join(' · ');
     html += `<div class="cad-row">
-      <div><div class="cad-nome">${esc(m.nome)}</div>
-      <div class="cad-sub">Un.: ${esc(m.unidade||'—')}${m.valorRef?` · Ref.: ${formatarMoeda(m.valorRef)}`:''}</div></div>
+      <div><div class="cad-nome">${esc(m.nome)}${m.spec?`<span style="font-size:.72rem;font-weight:400;color:var(--texto-leve);margin-left:8px;">${esc(m.spec)}</span>`:''}</div>
+      <div class="cad-sub">${sub}</div></div>
       <div class="cad-acoes">
         <button class="btn btn-outline btn-sm" onclick='abrirModalMaterial(materiais.find(x=>x.id=="${m.id}"))'>✏️</button>
         <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirMaterial("${m.id}")'>🗑</button>
       </div></div>`;
   });
   cont.innerHTML = html;
-  // atualiza datalist
   document.getElementById('lista-catalogo-mat').innerHTML =
     materiais.map(m => `<option value="${esc(m.nome)}" data-unidade="${esc(m.unidade||'')}" data-valor="${m.valorRef||0}">`).join('');
+}
+
+function gerarCodigoMat() {
+  const n = materiais.length + 1;
+  return 'MAT-' + String(n).padStart(4,'0');
 }
 
 function abrirModalMaterial(m) {
   document.getElementById('mmat-titulo').textContent = m ? 'Editar Material' : 'Novo Material';
   document.getElementById('mmat-id').value        = m?.id||'';
+  document.getElementById('mmat-codigo').value    = m?.codigo || (m ? '' : gerarCodigoMat());
   document.getElementById('mmat-nome').value      = m?.nome||'';
-  document.getElementById('mmat-unidade').value   = m?.unidade||'';
-  document.getElementById('mmat-valor').value     = m?.valorRef||'';
+  document.getElementById('mmat-spec').value      = m?.spec||'';
+  document.getElementById('mmat-ncm').value       = m?.ncm||'';
+  document.getElementById('mmat-unidade').value   = m?.unidade||'un';
   document.getElementById('mmat-categoria').value = m?.categoria||'';
+  document.getElementById('mmat-marca').value     = m?.marca||'';
+  document.getElementById('mmat-forn').value      = m?.fornecedorRef||'';
+  document.getElementById('mmat-valor').value     = m?.valorRef||'';
+  document.getElementById('mmat-estmin').value    = m?.estoqueMin||'';
+  document.getElementById('mmat-prazo').value     = m?.prazoEntrega||'';
   document.getElementById('mmat-obs').value       = m?.obs||'';
   document.getElementById('modal-material').classList.add('aberto');
   setTimeout(()=>document.getElementById('mmat-nome').focus(),80);
@@ -489,10 +559,21 @@ async function salvarMaterial() {
   const nome = document.getElementById('mmat-nome').value.trim();
   if (!nome) { toast('Informe o nome.','aviso'); return; }
   const id = document.getElementById('mmat-id').value || uid();
-  const obj = { id, nome, unidade: document.getElementById('mmat-unidade').value.trim(),
-    valorRef: parseFloat(document.getElementById('mmat-valor').value)||0,
-    categoria: document.getElementById('mmat-categoria').value.trim(),
-    obs: document.getElementById('mmat-obs').value.trim(), criadoEm: hoje() };
+  const obj = {
+    id, nome,
+    codigo:       document.getElementById('mmat-codigo').value.trim(),
+    spec:         document.getElementById('mmat-spec').value.trim(),
+    ncm:          document.getElementById('mmat-ncm').value.trim(),
+    unidade:      document.getElementById('mmat-unidade').value,
+    categoria:    document.getElementById('mmat-categoria').value,
+    marca:        document.getElementById('mmat-marca').value.trim(),
+    fornecedorRef:document.getElementById('mmat-forn').value.trim(),
+    valorRef:     parseFloat(document.getElementById('mmat-valor').value)||0,
+    estoqueMin:   parseFloat(document.getElementById('mmat-estmin').value)||0,
+    prazoEntrega: parseInt(document.getElementById('mmat-prazo').value)||0,
+    obs:          document.getElementById('mmat-obs').value.trim(),
+    criadoEm: hoje(),
+  };
   materiais = materiais.filter(x=>x.id!==id); materiais.push(obj);
   salvarLocal('cbx_materiais_cat', materiais); renderMateriais(); fecharModal('modal-material');
   toast('Material salvo!','sucesso');
