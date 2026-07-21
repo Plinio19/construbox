@@ -5,6 +5,38 @@
     "descricao": "Templeta padrão de 1 box do HIB",
     "unidade": "box",
     "criadoEm": "2026-07-21",
-    "etapas": []
+    "etapas": [
+      {
+        "id": "mruzjtnyjsvk5",
+        "nome": "Fabricação dos Painéis (Panelização)",
+        "categoria": "estrutura",
+        "responsavel": "",
+        "peso": 0,
+        "memorial": "Nesta etapa a equipe trabalha no chão ou em bancada, montando os painéis de parede.\n\nServiços\n\nConferir projeto estrutural.\nCortar perfis.\nMontar os quadros das paredes.\nEsquadrejar os painéis.\nParafusar toda a estrutura.\nIdentificar cada painel conforme o projeto.",
+        "ordem": 1,
+        "materiais": [
+          {
+            "id": "mruzk7lylz4v1",
+            "nome": "ESTRUTURA METALICA - HIB",
+            "unidade": "un",
+            "classificacao": "obrigatorio_iniciar",
+            "qtdPorBox": 1,
+            "qtdMinPorBox": 1,
+            "fornecedor": "",
+            "valorUnitario": 0
+          },
+          {
+            "id": "mruzkjzyikzuw",
+            "nome": "PARAFUSOS PARA ESTRUTURA - HIB",
+            "unidade": "un",
+            "classificacao": "obrigatorio_iniciar",
+            "qtdPorBox": 1,
+            "qtdMinPorBox": 1,
+            "fornecedor": "",
+            "valorUnitario": 0
+          }
+        ]
+      }
+    ]
   }
 ]
