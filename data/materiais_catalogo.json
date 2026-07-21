@@ -30,5 +30,21 @@
     "prazoEntrega": 0,
     "obs": "",
     "criadoEm": "2026-07-21"
+  },
+  {
+    "id": "mrv01s5dku4mq",
+    "nome": "PARAFUSOS PARA MONTAGEM DA ESTRUTURA",
+    "codigo": "MAT-0003",
+    "spec": "",
+    "ncm": "",
+    "unidade": "un",
+    "categoria": "",
+    "marca": "",
+    "fornecedorRef": "",
+    "valorRef": 0,
+    "estoqueMin": 0,
+    "prazoEntrega": 0,
+    "obs": "",
+    "criadoEm": "2026-07-21"
   }
 ]
