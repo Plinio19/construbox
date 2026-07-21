@@ -3364,5 +3364,27 @@
     "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2",
     "criadoEm": "2026-07-21",
     "ofxId": "6a5f5961-b7d7-4e60-a24b-6fd627625b27"
+  },
+  {
+    "id": "mruon54p8pvu6",
+    "obraId": null,
+    "tipo": "reembolso",
+    "categoria": "reembolso",
+    "descricao": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STON",
+    "data": "2026-07-21",
+    "valor": 726.32,
+    "status": "pago",
+    "beneficiario": "",
+    "clienteId": "cli_hotelinbox",
+    "socioId": null,
+    "prestadorId": null,
+    "formaPagamento": "PIX",
+    "dataPagamento": "2026-07-21",
+    "dataVencimento": null,
+    "isReembolso": true,
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-07-21",
+    "ofxId": "6a5f6e85-e5ef-4d43-9dcd-bc9f14643209"
   }
 ]
