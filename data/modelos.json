@@ -26,8 +26,9 @@
             "valorUnitario": 0
           },
           {
-            "id": "mruzkjzyikzuw",
-            "nome": "PARAFUSOS PARA ESTRUTURA - HIB",
+            "id": "mrv0rqjmtz69v",
+            "nome": "PARAFUSOS PARA PANELIZAÇÃO DA ESTRUTURA - HIB",
+            "catalogoId": "mruzeyfrbvyjs",
             "unidade": "un",
             "classificacao": "obrigatorio_iniciar",
             "qtdPorBox": 1,
