@@ -46,5 +46,21 @@
     "prazoEntrega": 0,
     "obs": "",
     "criadoEm": "2026-07-21"
+  },
+  {
+    "id": "mrv0zuc85kddn",
+    "nome": "MANTA ASFÁLTICA AUTOADESIVA",
+    "codigo": "MAT-0004",
+    "spec": "",
+    "ncm": "",
+    "unidade": "un",
+    "categoria": "Impermeabilização",
+    "marca": "",
+    "fornecedorRef": "",
+    "valorRef": 0,
+    "estoqueMin": 0,
+    "prazoEntrega": 0,
+    "obs": "",
+    "criadoEm": "2026-07-21"
   }
 ]
