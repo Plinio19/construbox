@@ -83,6 +83,7 @@
     <div class="topbar-acoes" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <button class="btn btn-outline btn-sm no-print" onclick="init()" title="Buscar dados atualizados do GitHub">🔄 Sincronizar</button>
       <button class="btn btn-outline btn-sm no-print" onclick="abrirSalvarComoModelo()" title="Salvar esta obra como modelo reutilizável">💾 Salvar como Modelo</button>
+      <button class="btn btn-outline btn-sm no-print" onclick="imprimirCronograma()" title="Imprimir cronograma completo">🖨️ Cronograma</button>
       <div class="sync-pill">
         <div class="sync-dot amarelo" id="sync-dot"></div>
         <span id="sync-texto">Conectando</span>
@@ -154,7 +155,14 @@
         <div class="form-campo"><label>Responsável</label><input type="text" id="e-resp" placeholder="Nome do responsável"/></div>
       </div>
 
-      <div class="form-campo"><label>Descrição</label><textarea id="e-desc" rows="2" placeholder="Descreva a etapa..."></textarea></div>
+      <div class="form-campo"><label>Descrição (resumo)</label><textarea id="e-desc" rows="2" placeholder="Resumo da etapa para o cronograma..."></textarea></div>
+
+      <div class="form-campo">
+        <label>Memorial Técnico / Instruções de Execução
+          <span style="font-weight:400;font-size:.72rem;color:var(--texto-leve);margin-left:6px;">— será impresso na Ordem de Serviço entregue ao executor</span>
+        </label>
+        <textarea id="e-memorial" rows="6" placeholder="Descreva passo a passo o que deve ser executado: procedimentos, normas técnicas, tolerâncias, qualidade exigida, medidas, pontos de atenção…"></textarea>
+      </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div class="form-campo"><label>Data Prevista Início</label><input type="date" id="e-pi"/></div>
@@ -564,6 +572,7 @@ function cardEtapa(e) {
   }
   btns.push(`<button class="btn btn-outline btn-sm" onclick='abrirChecklist("${e.id}")' title="Checklist">📋${cl.length?` ${clFt}/${cl.length}`:''}</button>`);
   btns.push(`<button class="btn btn-outline btn-sm${matsPend.length?' pulsing':''}" onclick='abrirMateriais("${e.id}")' title="Materiais">📦${mats.length?` ${mats.length}`:''}</button>`);
+  btns.push(`<button class="btn btn-outline btn-sm no-print" onclick='imprimirOS("${e.id}")' title="Imprimir Ordem de Serviço">🖨️ OS</button>`);
   btns.push(`<button class="btn btn-outline btn-sm" onclick='editarEtapa("${e.id}")'>✏️</button>`);
   btns.push(`<button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='excluirEtapa("${e.id}")'>🗑</button>`);
 
@@ -611,6 +620,10 @@ function cardEtapa(e) {
           }).join('')}
         </div>`:''}
       ${e.descricao?`<p style="font-size:.84rem;color:var(--texto-leve);margin-bottom:10px;">${esc(e.descricao)}</p>`:''}
+      ${e.memorial?`<div style="background:#fefce8;border:1px solid #fde047;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+        <div style="font-size:.72rem;font-weight:700;color:#92400e;margin-bottom:6px;letter-spacing:.04em;">📋 MEMORIAL TÉCNICO / INSTRUÇÕES DE EXECUÇÃO</div>
+        <pre style="font-family:inherit;font-size:.82rem;white-space:pre-wrap;line-height:1.6;color:#1e293b;">${esc(e.memorial)}</pre>
+      </div>`:''}
       ${e.dataRealInicio||e.dataRealFim?`
         <div style="font-size:.78rem;margin-bottom:8px;">
           <strong>Datas reais:</strong>
@@ -676,7 +689,7 @@ async function mudarStatus(id, novo) {
 function abrirModalEtapa() {
   idEdit = null;
   document.getElementById('me-titulo').textContent = 'Nova Etapa';
-  ['e-nome','e-cod','e-resp','e-desc','e-obs'].forEach(id=>document.getElementById(id).value='');
+  ['e-nome','e-cod','e-resp','e-desc','e-obs','e-memorial'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('e-ord').value   = etapas.length+1;
   document.getElementById('e-cat').value   = 'outros';
   document.getElementById('e-status').value= 'planejada';
@@ -697,9 +710,10 @@ function editarEtapa(id) {
   document.getElementById('e-ord').value    = e.ordem||'';
   document.getElementById('e-cat').value    = e.categoria||'outros';
   document.getElementById('e-resp').value   = e.responsavel||'';
-  document.getElementById('e-desc').value   = e.descricao||'';
-  document.getElementById('e-obs').value    = e.observacoes||'';
-  document.getElementById('e-status').value = e.status||'planejada';
+  document.getElementById('e-desc').value     = e.descricao||'';
+  document.getElementById('e-obs').value      = e.observacoes||'';
+  document.getElementById('e-memorial').value = e.memorial||'';
+  document.getElementById('e-status').value   = e.status||'planejada';
   document.getElementById('e-peso').value   = e.peso||'';
   document.getElementById('e-perc').value   = e.percentualExecutado||0;
   document.getElementById('e-pi').value     = e.dataPrevistoInicio||'';
@@ -738,6 +752,7 @@ async function salvarEtapa() {
     responsavel:         document.getElementById('e-resp').value.trim(),
     descricao:           document.getElementById('e-desc').value.trim(),
     observacoes:         document.getElementById('e-obs').value.trim(),
+    memorial:            document.getElementById('e-memorial').value.trim(),
     status:              document.getElementById('e-status').value,
     peso:                parseFloat(document.getElementById('e-peso').value)||0,
     percentualExecutado: parseFloat(document.getElementById('e-perc').value)||0,
@@ -1184,6 +1199,149 @@ function cancelarAssistente() {
   fecharChecklist();
   fecharMateriais();
   atualizarWizUI();
+}
+
+// ── IMPRESSÃO ──
+const ClassLblOs = { obrigatorio_iniciar:'Obrigatório para Iniciar', obrigatorio_execucao:'Obrigatório durante Execução', complementar:'Complementar', opcional:'Opcional' };
+
+function imprimirOS(eId) {
+  const e = etapas.find(x=>x.id===eId); if(!e) return;
+  const obraNome  = obra?.nome  || '';
+  const obraCliente = obra?.cliente || '';
+  const cl   = e.checklist || [];
+  const mats = e.materiais || [];
+  const cat  = CLbl[e.categoria] || e.categoria || '';
+
+  const linhasDatas = [
+    e.dataPrevistoInicio ? `Previsto início: <strong>${formatarData(e.dataPrevistoInicio)}</strong>` : '',
+    e.dataPrevistoFim    ? `Previsto término: <strong>${formatarData(e.dataPrevistoFim)}</strong>`   : '',
+    e.dataRealInicio     ? `Real início: <strong>${formatarData(e.dataRealInicio)}</strong>`          : '',
+    e.dataRealFim        ? `Real término: <strong>${formatarData(e.dataRealFim)}</strong>`            : '',
+  ].filter(Boolean).join(' &nbsp;·&nbsp; ');
+
+  const bloco = (titulo, corpo) => `
+    <div style="margin-top:20px;">
+      <div style="font-weight:700;font-size:.85rem;letter-spacing:.04em;padding-bottom:5px;border-bottom:2px solid #e2e8f0;margin-bottom:10px;text-transform:uppercase;">${titulo}</div>
+      ${corpo}
+    </div>`;
+
+  const secMemorial = e.memorial ? bloco('Memorial Técnico / Instruções de Execução',
+    `<pre style="font-family:inherit;font-size:.84rem;white-space:pre-wrap;line-height:1.7;background:#fefce8;border:1px solid #fde047;border-radius:6px;padding:12px 14px;">${esc(e.memorial)}</pre>`
+  ) : '';
+
+  const secChecklist = cl.length ? bloco(`Checklist de Tarefas (${cl.length})`,
+    `<table><thead><tr><th style="width:32px;"></th><th>Tarefa</th><th>Tipo</th><th>Responsável</th><th>Concluída</th></tr></thead><tbody>
+    ${cl.map((item,i)=>`<tr>
+      <td style="text-align:center;">${i+1}</td>
+      <td>${esc(item.descricao)}${!item.obrigatoria?'':' <span style="color:#991b1b;font-size:.72rem;font-weight:700;">[OBRIGATÓRIA]</span>'}</td>
+      <td style="font-size:.75rem;">${item.obrigatoria?'Obrigatória':'Opcional'}</td>
+      <td>${esc(item.responsavel||'—')}</td>
+      <td style="text-align:center;">${item.concluida?'✓ Sim':'○ Não'}</td>
+    </tr>`).join('')}
+    </tbody></table>`
+  ) : '';
+
+  const secMats = mats.length ? bloco(`Materiais Necessários (${mats.length})`,
+    `<table><thead><tr><th>Material</th><th>Un.</th><th>Classificação</th><th>Qtd Prevista</th><th>Mín p/ Iniciar</th><th>Qtd Entregue</th><th>Fornecedor</th></tr></thead><tbody>
+    ${mats.map(m=>{
+      const status = m.qtdEntregue>=(m.qtdPrevista||0) ? '✅ OK' : m.qtdEntregue>=(m.qtdMinIniciar||0) ? '⚠️ Mín OK' : '❌ Pendente';
+      return `<tr>
+        <td><strong>${esc(m.nome)}</strong></td>
+        <td>${esc(m.unidade||'')}</td>
+        <td style="font-size:.75rem;">${ClassLblOs[m.classificacao]||m.classificacao||'—'}</td>
+        <td style="text-align:center;">${m.qtdPrevista||0}</td>
+        <td style="text-align:center;">${m.qtdMinIniciar||0}</td>
+        <td style="text-align:center;">${m.qtdEntregue||0} ${status}</td>
+        <td style="font-size:.75rem;">${esc(m.fornecedor||'—')}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`
+  ) : '';
+
+  const secObs = e.observacoes ? bloco('Observações',
+    `<p style="font-size:.84rem;line-height:1.6;">${esc(e.observacoes)}</p>`
+  ) : '';
+
+  const secAssinatura = `
+    <div style="margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+      <div>
+        <div style="font-size:.8rem;font-weight:700;margin-bottom:4px;">EXECUTOR / RESPONSÁVEL PELA EXECUÇÃO</div>
+        <div style="border-top:1px solid #1e293b;margin-top:32px;padding-top:6px;font-size:.75rem;color:#64748b;">Nome / Assinatura &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data: ___/___/______</div>
+      </div>
+      <div>
+        <div style="font-size:.8rem;font-weight:700;margin-bottom:4px;">VISTO DO RESPONSÁVEL TÉCNICO</div>
+        <div style="border-top:1px solid #1e293b;margin-top:32px;padding-top:6px;font-size:.75rem;color:#64748b;">Nome / Assinatura &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data: ___/___/______</div>
+      </div>
+    </div>`;
+
+  const corpo = `
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 18px;margin-bottom:4px;">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 20px;font-size:.84rem;">
+        <span style="color:#64748b;font-weight:700;">Etapa</span>
+        <span><strong>${e.codigo?`[${esc(e.codigo)}] `:''}${esc(e.nome)}</strong></span>
+        <span style="color:#64748b;font-weight:700;">Categoria</span><span>${cat}</span>
+        ${e.responsavel?`<span style="color:#64748b;font-weight:700;">Responsável</span><span>${esc(e.responsavel)}</span>`:''}
+        ${e.peso?`<span style="color:#64748b;font-weight:700;">Peso na Obra</span><span>${e.peso}%</span>`:''}
+        ${linhasDatas?`<span style="color:#64748b;font-weight:700;">Datas</span><span>${linhasDatas}</span>`:''}
+        <span style="color:#64748b;font-weight:700;">Status</span>
+        <span><strong>${SLbl[e.status]||e.status}</strong></span>
+      </div>
+      ${e.descricao?`<p style="font-size:.82rem;color:#64748b;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">${esc(e.descricao)}</p>`:''}
+    </div>
+    ${secMemorial}${secChecklist}${secMats}${secObs}${secAssinatura}`;
+
+  abrirDocumentoImpressao(
+    `OS — ${e.nome}`,
+    `${obraNome}${obraCliente?' | '+obraCliente:''} · Emitida em ${new Date().toLocaleDateString('pt-BR')}`,
+    corpo
+  );
+}
+
+function imprimirCronograma() {
+  const etapasVisiveis = filtro
+    ? etapas.filter(e => filtro==='aguardando' ? AGUARDANDO.includes(statusEf(e)) : statusEf(e)===filtro)
+    : [...etapas];
+  const ord = [...etapasVisiveis].sort((a,b)=>(a.ordem||0)-(b.ordem||0));
+
+  const resumo = `
+    <div class="kpi-grid">
+      <div class="kpi"><div class="val">${ord.length}</div><div class="lbl">Etapas</div></div>
+      <div class="kpi"><div class="val">${ord.filter(e=>statusEf(e)==='em_execucao').length}</div><div class="lbl">Em Execução</div></div>
+      <div class="kpi"><div class="val">${ord.filter(e=>statusEf(e)==='concluida').length}</div><div class="lbl">Concluídas</div></div>
+      <div class="kpi"><div class="val">${ord.filter(e=>AGUARDANDO.includes(statusEf(e))).length}</div><div class="lbl">Aguardando</div></div>
+    </div>`;
+
+  const tabela = `<table>
+    <thead><tr>
+      <th>#</th><th>Etapa</th><th>Categoria</th><th>Responsável</th>
+      <th>Início Prev.</th><th>Fim Prev.</th><th>%</th><th>Status</th>
+    </tr></thead>
+    <tbody>${ord.map(e=>`<tr>
+      <td style="text-align:center;">${e.ordem||'—'}</td>
+      <td><strong>${e.codigo?`[${esc(e.codigo)}] `:''}${esc(e.nome)}</strong>${e.descricao?`<div style="font-size:.72rem;color:#64748b;">${esc(e.descricao)}</div>`:''}</td>
+      <td style="font-size:.78rem;">${CLbl[e.categoria]||e.categoria||'—'}</td>
+      <td style="font-size:.78rem;">${esc(e.responsavel||'—')}</td>
+      <td style="font-size:.78rem;">${e.dataPrevistoInicio?formatarData(e.dataPrevistoInicio):'—'}</td>
+      <td style="font-size:.78rem;">${e.dataPrevistoFim?formatarData(e.dataPrevistoFim):'—'}</td>
+      <td style="text-align:center;">${e.percentualExecutado||0}%</td>
+      <td style="font-size:.78rem;font-weight:700;">${SLbl[statusEf(e)]||statusEf(e)}</td>
+    </tr>`).join('')}
+    </tbody></table>
+    <div style="margin-top:24px;">
+      <div style="font-weight:700;font-size:.85rem;padding-bottom:5px;border-bottom:2px solid #e2e8f0;margin-bottom:12px;text-transform:uppercase;">Memorial Técnico por Etapa</div>
+      ${ord.filter(e=>e.memorial).map(e=>`
+        <div style="margin-bottom:16px;page-break-inside:avoid;">
+          <div style="font-weight:700;font-size:.84rem;margin-bottom:4px;">${e.codigo?`[${esc(e.codigo)}] `:''}${esc(e.nome)}</div>
+          <pre style="font-family:inherit;font-size:.8rem;white-space:pre-wrap;line-height:1.6;background:#fefce8;border:1px solid #fde047;border-radius:6px;padding:10px 12px;">${esc(e.memorial)}</pre>
+        </div>`).join('')}
+      ${!ord.some(e=>e.memorial)?'<p style="font-size:.82rem;color:#94a3b8;">Nenhuma etapa com memorial técnico preenchido.</p>':''}
+    </div>`;
+
+  abrirDocumentoImpressao(
+    `Cronograma — ${obra?.nome||'Obra'}`,
+    `${obra?.cliente?obra.cliente+' · ':''}Emitido em ${new Date().toLocaleDateString('pt-BR')}`,
+    resumo + tabela
+  );
 }
 
 // ── AUTOCOMPLETE MATERIAL DO CATÁLOGO (cronograma) ──

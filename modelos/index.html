@@ -80,6 +80,10 @@
             <div class="form-campo" style="margin:0"><label style="font-size:.72rem;">Responsável</label><input type="text" id="add-et-resp" placeholder="Opcional"/></div>
             <button class="btn btn-primary" onclick="addEtapaModelo()">+ Etapa</button>
           </div>
+          <div class="form-campo" style="margin-top:8px;">
+            <label style="font-size:.72rem;">Memorial Técnico / Instruções de Execução <span style="font-weight:400;color:var(--texto-leve);">— impresso na OS entregue ao executor</span></label>
+            <textarea id="add-et-memorial" rows="4" placeholder="Descreva passo a passo: procedimentos, normas, tolerâncias, cuidados…" style="font-size:.82rem;"></textarea>
+          </div>
         </div>
       </div>
 
@@ -136,6 +140,9 @@
         </div>
         <div class="form-campo" style="margin:0"><label>Peso (%)</label><input type="number" id="ede-peso" min="0" max="100" step="1"/></div>
         <div class="form-campo" style="margin:0"><label>Responsável</label><input type="text" id="ede-resp" placeholder="Opcional"/></div>
+      </div>
+      <div class="form-campo"><label>Memorial Técnico / Instruções de Execução</label>
+        <textarea id="ede-memorial" rows="5" placeholder="Passo a passo para o executor: procedimentos, normas, tolerâncias, cuidados…"></textarea>
       </div>
     </div>
     <div class="modal-footer">
@@ -474,15 +481,17 @@ function addEtapaModelo() {
   if(!m.etapas) m.etapas=[];
   m.etapas.push({
     id:uid(), nome,
-    categoria: document.getElementById('add-et-cat').value,
-    responsavel: document.getElementById('add-et-resp').value.trim(),
-    peso: parseFloat(document.getElementById('add-et-peso').value)||0,
+    categoria:  document.getElementById('add-et-cat').value,
+    responsavel:document.getElementById('add-et-resp').value.trim(),
+    peso:       parseFloat(document.getElementById('add-et-peso').value)||0,
+    memorial:   document.getElementById('add-et-memorial').value.trim(),
     ordem: m.etapas.length+1,
     materiais:[]
   });
   document.getElementById('add-et-nome').value='';
   document.getElementById('add-et-peso').value='';
   document.getElementById('add-et-resp').value='';
+  document.getElementById('add-et-memorial').value='';
   atualizarSubEditor(m);
   renderEtapasModelo();
 }
@@ -574,11 +583,12 @@ function removerMatTpl(eId, mid) {
 function abrirEdEtapa(eId) {
   const m = modelos.find(x=>x.id===modeloAtualId); if(!m) return;
   const e = (m.etapas||[]).find(x=>x.id===eId); if(!e) return;
-  document.getElementById('ede-id').value   = eId;
-  document.getElementById('ede-nome').value = e.nome||'';
-  document.getElementById('ede-cat').value  = e.categoria||'outros';
-  document.getElementById('ede-peso').value = e.peso||'';
-  document.getElementById('ede-resp').value = e.responsavel||'';
+  document.getElementById('ede-id').value       = eId;
+  document.getElementById('ede-nome').value     = e.nome||'';
+  document.getElementById('ede-cat').value      = e.categoria||'outros';
+  document.getElementById('ede-peso').value     = e.peso||'';
+  document.getElementById('ede-resp').value     = e.responsavel||'';
+  document.getElementById('ede-memorial').value = e.memorial||'';
   document.getElementById('modal-ed-etapa').classList.add('aberto');
   setTimeout(()=>document.getElementById('ede-nome').focus(),80);
 }
@@ -593,6 +603,7 @@ async function salvarEdEtapa() {
   e.categoria  = document.getElementById('ede-cat').value;
   e.peso       = parseFloat(document.getElementById('ede-peso').value)||0;
   e.responsavel= document.getElementById('ede-resp').value.trim();
+  e.memorial   = document.getElementById('ede-memorial').value.trim();
   fecharEdEtapa();
   atualizarSubEditor(m);
   renderEtapasModelo();
