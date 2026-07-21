@@ -66,14 +66,15 @@
   },
   {
     "id": "mrtpspr8nhfhn",
-    "nome": "OBRA TESTE",
-    "cliente": "",
+    "nome": "ESPIRITO SANTO",
+    "cliente": "HOTEL INBOX",
     "endereco": "",
     "status": "ativa",
     "valorContrato": 0,
     "valorMaoDeObra": 0,
-    "dataInicio": null,
-    "previsaoConclusao": null,
+    "responsavelMaterial": "cliente",
+    "dataInicio": "2026-08-20",
+    "previsaoConclusao": "2026-10-20",
     "obs": "",
     "criadoEm": "2026-07-20"
   }
