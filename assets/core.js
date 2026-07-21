@@ -246,3 +246,65 @@ function salvarConfig() {
   toast('Salvo! Recarregando...', 'sucesso');
   setTimeout(() => location.reload(), 1200);
 }
+
+// ── UTILITÁRIO DE DOCUMENTO IMPRIMÍVEL ──
+function abrirDocumentoImpressao(titulo, subtitulo, corpoHtml) {
+  const data = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/>
+  <title>${titulo}</title>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family: system-ui, sans-serif; font-size:13px; color:#1e293b; padding:32px; }
+    h1 { font-size:1.4rem; margin-bottom:4px; }
+    .sub { color:#64748b; font-size:.85rem; margin-bottom:24px; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; }
+    th { background:#f1f5f9; padding:7px 10px; text-align:left; font-size:.78rem; color:#64748b; border-bottom:2px solid #e2e8f0; }
+    td { padding:7px 10px; border-bottom:1px solid #e2e8f0; }
+    tr:last-child td { border-bottom:none; }
+    .section-title { font-weight:700; font-size:.9rem; margin:20px 0 8px; padding-bottom:4px; border-bottom:2px solid #e2e8f0; }
+    .kpi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin:12px 0 20px; }
+    .kpi { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; }
+    .kpi .val { font-size:1.2rem; font-weight:800; }
+    .kpi .lbl { font-size:.72rem; color:#64748b; margin-top:2px; }
+    .footer { margin-top:32px; font-size:.72rem; color:#94a3b8; text-align:right; }
+    .aviso { background:#fef2f2; border:1px solid #fca5a5; border-radius:6px; padding:8px 14px; margin-bottom:16px; font-weight:700; color:#991b1b; font-size:.82rem; }
+    .prog-bar { background:#e2e8f0; border-radius:4px; height:6px; overflow:hidden; }
+    .prog-fill { height:100%; border-radius:4px; background:#2563eb; }
+    @media print { button { display:none !important; } }
+  </style>
+  </head><body>
+  <button onclick="window.print()" style="float:right;padding:6px 16px;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;">🖨️ Imprimir / Salvar PDF</button>
+  <h1>${titulo}</h1>
+  <div class="sub">${subtitulo}</div>
+  ${corpoHtml}
+  <div class="footer">Gerado em ${data} — Construbox</div>
+  </body></html>`;
+  const w = window.open('', '_blank');
+  if (w) { w.document.write(html); w.document.close(); }
+}
+
+function gerarDocumentoMateriaisFaltantes(obra, etapasDaObra) {
+  const linhas = [];
+  etapasDaObra.forEach(e => {
+    (e.materiais||[]).forEach(m => {
+      const falt = (m.qtdPrevista||0) - (m.qtdEntregue||0);
+      if (falt > 0) linhas.push({ etapa:e.nome, nome:m.nome, unidade:m.unidade||'', prev:m.qtdPrevista||0, ent:m.qtdEntregue||0, falt });
+    });
+  });
+  if (!linhas.length) return '<p style="color:#64748b;">Todos os materiais já foram entregues.</p>';
+  return `<div class="section-title">📦 Materiais com Entrega Pendente</div>
+  <table><thead><tr><th>Etapa</th><th>Material</th><th>Un.</th><th>Previsto</th><th>Entregue</th><th>Faltante</th></tr></thead>
+  <tbody>${linhas.map(l=>`<tr><td>${l.etapa}</td><td>${l.nome}</td><td>${l.unidade}</td><td>${l.prev}</td><td>${l.ent}</td><td><strong style="color:#dc2626;">${l.falt}</strong></td></tr>`).join('')}</tbody></table>`;
+}
+
+function atualizarPedidoAposEntrega(pedidosCompra, material) {
+  pedidosCompra.forEach(p => {
+    const item = (p.itens||[]).find(i => i.matId === material.id || i.materialId === material.id);
+    if (!item) return;
+    item.qtdRecebida = material.qtdEntregue || 0;
+    const totalSolic = (p.itens||[]).reduce((s,i) => s+(i.qtdSolicitada||i.qtd||0), 0);
+    const totalReceb = (p.itens||[]).reduce((s,i) => s+(i.qtdRecebida||0), 0);
+    if (totalReceb >= totalSolic) p.status = 'recebido';
+    else if (totalReceb > 0)      p.status = 'parcial';
+  });
+}

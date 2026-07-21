@@ -6,36 +6,32 @@
   <title>Construbox — Relatórios por Obra</title>
   <link rel="stylesheet" href="../assets/core.css"/>
   <style>
-    .obra-card {
-      border: 1px solid var(--cinza); border-radius: 12px;
-      padding: 0; margin-bottom: 20px; background: var(--branco);
-      box-shadow: var(--shadow); overflow: hidden;
-    }
-    .obra-header {
-      padding: 14px 20px; background: #1c1917; color: #fff;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .obra-header h3 { font-size: 1rem; font-weight: 700; }
-    .obra-header .cliente { font-size: 0.78rem; color: rgba(255,255,255,.6); margin-top: 2px; }
-    .obra-kpis {
-      display: grid; grid-template-columns: repeat(5,1fr);
-      gap: 0; border-bottom: 1px solid var(--cinza);
-    }
-    .kpi-box {
-      padding: 14px 16px; text-align: center;
-      border-right: 1px solid var(--cinza);
-    }
-    .kpi-box:last-child { border-right: none; }
-    .kpi-val { font-size: 1.15rem; font-weight: 800; }
-    .kpi-rot { font-size: 0.7rem; color: var(--texto-leve); margin-top: 3px; text-transform: uppercase; letter-spacing: .04em; }
-    .detalhe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-    .detalhe-col { padding: 14px 18px; }
-    .detalhe-col:first-child { border-right: 1px solid var(--cinza); }
-    .detalhe-titulo { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--texto-leve); margin-bottom: 10px; }
-    .detalhe-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--cinza); font-size: 0.85rem; }
-    .detalhe-row:last-child { border-bottom: none; }
-    .prog-bar { height: 6px; background: var(--cinza); border-radius: 999px; margin-top: 8px; overflow: hidden; }
-    .prog-fill { height: 100%; border-radius: 999px; background: var(--verde); transition: width .5s; }
+    .obra-card { border:1px solid var(--cinza); border-radius:12px; padding:0; margin-bottom:20px; background:var(--branco); box-shadow:var(--shadow); overflow:hidden; }
+    .obra-header { padding:14px 20px; background:#1c1917; color:#fff; display:flex; justify-content:space-between; align-items:center; }
+    .obra-header h3 { font-size:1rem; font-weight:700; }
+    .obra-header .cliente { font-size:0.78rem; color:rgba(255,255,255,.6); margin-top:2px; }
+    .obra-kpis { display:grid; grid-template-columns:repeat(5,1fr); gap:0; border-bottom:1px solid var(--cinza); }
+    .kpi-box { padding:14px 16px; text-align:center; border-right:1px solid var(--cinza); }
+    .kpi-box:last-child { border-right:none; }
+    .kpi-val { font-size:1.15rem; font-weight:800; }
+    .kpi-rot { font-size:0.7rem; color:var(--texto-leve); margin-top:3px; text-transform:uppercase; letter-spacing:.04em; }
+    .detalhe-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+    .detalhe-col { padding:14px 18px; }
+    .detalhe-col:first-child { border-right:1px solid var(--cinza); }
+    .detalhe-titulo { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--texto-leve); margin-bottom:10px; }
+    .detalhe-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--cinza); font-size:0.85rem; }
+    .detalhe-row:last-child { border-bottom:none; }
+    .prog-bar { height:6px; background:var(--cinza); border-radius:999px; margin-top:6px; overflow:hidden; }
+    .prog-fill { height:100%; border-radius:999px; transition:width .5s; }
+    /* Físico */
+    .fisico-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--cinza); border-bottom:1px solid var(--cinza); }
+    .fisico-kpi { padding:12px 16px; text-align:center; border-right:1px solid var(--cinza); }
+    .fisico-kpi:last-child { border-right:none; }
+    .et-linha { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--cinza); font-size:.82rem; }
+    .et-linha:last-child { border-bottom:none; }
+    .et-nome { flex:1; }
+    .et-pct  { font-weight:700; font-size:.8rem; min-width:36px; text-align:right; }
+    .et-prog { width:80px; flex-shrink:0; }
   </style>
 </head>
 <body>
@@ -44,7 +40,7 @@
   <div class="topbar">
     <div>
       <div class="topbar-titulo">Relatório por Obra</div>
-      <div class="topbar-sub" id="header-sub">Visão financeira por obra</div>
+      <div class="topbar-sub" id="header-sub">Visão financeira e física por obra</div>
     </div>
     <div class="topbar-acoes">
       <button class="btn btn-outline btn-sm no-print" onclick="init()" title="Buscar dados atualizados do GitHub">🔄 Sincronizar</button>
@@ -57,7 +53,7 @@
   <div class="page">
 
     <div class="card" style="margin-bottom:16px;">
-      <div class="card-body" style="display:flex;gap:8px;align-items:center;">
+      <div class="card-body" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <select id="f-obra" class="form-control" style="width:250px;" onchange="renderRelatorios()">
           <option value="">Todas as obras</option>
         </select>
@@ -78,79 +74,96 @@
 <script src="../assets/core.js"></script>
 <script>
 document.getElementById('sidebar-placeholder').innerHTML = buildSidebar('relatorios');
-let obras=[]; let lancamentos=[];
+
+const OBRA_PARAM = new URLSearchParams(window.location.search).get('obra');
+
+let obras = [], lancamentos = [], etapas = [];
 
 async function init() {
-  obras=carregarLocal('cbx_obras')||[]; lancamentos=carregarLocal('cbx_lanc')||[];
-  preencherFiltros(); renderRelatorios();
+  obras       = carregarLocal('cbx_obras') || [];
+  lancamentos = carregarLocal('cbx_lanc')  || [];
+  etapas      = carregarLocal('cbx_etapas')|| [];
+  preencherFiltros(); aplicarParam(); renderRelatorios();
 
-  // Verificar param ?obra=
-  const params=new URLSearchParams(window.location.search);
-  const obraId=params.get('obra');
-  if(obraId){ document.getElementById('f-obra').value=obraId; document.getElementById('f-status').value=''; renderRelatorios(); history.replaceState({},'','relatorios/'); }
-
-  if(!configurado()){ setSyncStatus('vermelho','Não configurado'); return; }
+  if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
   try {
-    const [rL,rO]=await Promise.all([carregarDados('data/lancamentos.json'),carregarDados('data/obras.json')]);
-    lancamentos=rL.lista; obras=rO.lista;
-    salvarLocal('cbx_lanc',lancamentos); salvarLocal('cbx_obras',obras);
-    preencherFiltros(); renderRelatorios();
+    const [rO, rL, rE] = await Promise.all([
+      carregarDados('data/obras.json'),
+      carregarDados('data/lancamentos.json'),
+      carregarDados('data/etapas.json').catch(()=>({lista:[],sha:null})),
+    ]);
+    obras       = rO.lista; lancamentos = rL.lista; etapas = rE.lista;
+    salvarLocal('cbx_obras', obras);
+    salvarLocal('cbx_lanc',  lancamentos);
+    salvarLocal('cbx_etapas',etapas);
+    preencherFiltros(); aplicarParam(); renderRelatorios();
     setSyncStatus('verde','Conectado');
-  } catch(e){ setSyncStatus('vermelho','Erro'); }
+  } catch(e) { setSyncStatus('vermelho','Erro'); }
+}
+
+function aplicarParam() {
+  if (!OBRA_PARAM) return;
+  const sel = document.getElementById('f-obra');
+  sel.value = OBRA_PARAM;
+  document.getElementById('f-status').value = '';
 }
 
 function preencherFiltros() {
-  const sel=document.getElementById('f-obra');
-  sel.innerHTML='<option value="">Todas as obras</option>'+obras.map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join('');
+  const sel = document.getElementById('f-obra');
+  const val = sel.value;
+  sel.innerHTML = '<option value="">Todas as obras</option>' +
+    obras.map(o => `<option value="${o.id}" ${val===o.id?'selected':''}>${esc(o.nome)}</option>`).join('');
 }
 
 function renderRelatorios() {
-  const fObra  = document.getElementById('f-obra').value;
-  const fStatus= document.getElementById('f-status').value;
-
-  let obrasFilt = fObra ? obras.filter(o=>o.id===fObra) :
-                  fStatus ? obras.filter(o=>o.status===fStatus) : obras;
-
+  const fObra   = document.getElementById('f-obra').value;
+  const fStatus = document.getElementById('f-status').value;
+  let obrasFilt = fObra ? obras.filter(o=>o.id===fObra)
+                : fStatus ? obras.filter(o=>o.status===fStatus) : obras;
   const cont = document.getElementById('relatorios-container');
-  if(!obrasFilt.length){
-    cont.innerHTML=`<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhuma obra encontrada. <a href="../obras/">Cadastrar obras →</a></div>`;
+  if (!obrasFilt.length) {
+    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhuma obra encontrada. <a href="../obras/">Cadastrar obras →</a></div>`;
     return;
   }
-
   cont.innerHTML = obrasFilt.map(o => renderObra(o)).join('');
 }
 
-function renderObra(o) {
-  const lanc = lancamentos.filter(l=>l.obraId===o.id);
-  const rec  = { pago: lanc.filter(l=>l.tipo==='receita'&&l.status==='pago').reduce((s,l)=>s+(l.valor||0),0),
-                  pend: lanc.filter(l=>l.tipo==='receita'&&l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0) };
-  const des  = { pago: lanc.filter(l=>l.tipo==='despesa'&&l.status==='pago').reduce((s,l)=>s+(l.valor||0),0),
-                  pend: lanc.filter(l=>l.tipo==='despesa'&&l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0) };
-  const saldo = rec.pago - des.pago;
+function calcularDadosObra(o) {
+  const lanc     = lancamentos.filter(l => l.obraId === o.id);
+  const etOb     = etapas.filter(e => e.obraId === o.id).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+  const recPago  = lanc.filter(l=>l.tipo==='receita'&&l.status==='pago').reduce((s,l)=>s+(l.valor||0),0);
+  const recPend  = lanc.filter(l=>l.tipo==='receita'&&l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0);
+  const desPago  = lanc.filter(l=>l.tipo==='despesa'&&l.status==='pago').reduce((s,l)=>s+(l.valor||0),0);
+  const desPend  = lanc.filter(l=>l.tipo==='despesa'&&l.status==='pendente').reduce((s,l)=>s+(l.valor||0),0);
+  const saldo    = recPago - desPago;
   const contrato = o.valorContrato || 0;
-  const percRec = contrato > 0 ? Math.min(100, Math.round(rec.pago/contrato*100)) : null;
+  const percRec  = contrato > 0 ? Math.min(100, Math.round(recPago/contrato*100)) : null;
 
-  // Por categoria - despesas pagas
-  const catDes = {};
-  lanc.filter(l=>l.tipo==='despesa').forEach(l=>{
-    const k=l.categoria||'outros';
-    if(!catDes[k]) catDes[k]={pago:0,pend:0};
-    if(l.status==='pago') catDes[k].pago+=l.valor||0;
-    else if(l.status==='pendente') catDes[k].pend+=l.valor||0;
-  });
+  // Físico
+  const etConc   = etOb.filter(e=>e.status==='concluida').length;
+  const etTotal  = etOb.length;
+  const percFis  = etTotal > 0 ? Math.round(etConc/etTotal*100) : 0;
+  const avgPct   = etTotal > 0 ? Math.round(etOb.reduce((s,e)=>s+(e.percentual||0),0)/etTotal) : 0;
 
-  // Receitas por categoria
-  const catRec = {};
-  lanc.filter(l=>l.tipo==='receita').forEach(l=>{
-    const k=l.categoria||'outros-rec';
-    if(!catRec[k]) catRec[k]={pago:0,pend:0};
-    if(l.status==='pago') catRec[k].pago+=l.valor||0;
-    else if(l.status==='pendente') catRec[k].pend+=l.valor||0;
-  });
+  // Materiais
+  const mats     = etOb.flatMap(e=>e.materiais||[]);
+  const matPend  = mats.filter(m=>(m.qtdEntregue||0)<(m.qtdPrevista||0) && (m.qtdPrevista||0)>0).length;
+  const matOk    = mats.filter(m=>(m.qtdPrevista||0)>0&&(m.qtdEntregue||0)>=(m.qtdPrevista||0)).length;
 
+  const catDes = {}, catRec = {};
+  lanc.filter(l=>l.tipo==='despesa').forEach(l=>{ const k=l.categoria||'outros'; if(!catDes[k]) catDes[k]={pago:0,pend:0}; if(l.status==='pago') catDes[k].pago+=l.valor||0; else if(l.status==='pendente') catDes[k].pend+=l.valor||0; });
+  lanc.filter(l=>l.tipo==='receita').forEach(l=>{ const k=l.categoria||'outros-rec'; if(!catRec[k]) catRec[k]={pago:0,pend:0}; if(l.status==='pago') catRec[k].pago+=l.valor||0; else if(l.status==='pendente') catRec[k].pend+=l.valor||0; });
+
+  return { lanc, etOb, recPago, recPend, desPago, desPend, saldo, contrato, percRec, etConc, etTotal, percFis, avgPct, mats, matPend, matOk, catDes, catRec };
+}
+
+function renderObra(o) {
+  const d = calcularDadosObra(o);
   const stLbl={ativa:'Ativa',concluida:'Concluída',paralisada:'Paralisada'};
   const stCor={ativa:'verde',concluida:'azul',paralisada:'amarelo'};
+  const etStCor={concluida:'var(--verde)',em_execucao:'var(--azul)',pendente:'var(--cinza2)',paralisada:'var(--amarelo)',aguardando_material:'var(--laranja)'};
+  const etStLbl={concluida:'Concluída',em_execucao:'Em exec.',pendente:'Pendente',paralisada:'Paralisada',aguardando_material:'Aguard. Mat.'};
 
   return `<div class="obra-card">
     <div class="obra-header">
@@ -159,87 +172,148 @@ function renderObra(o) {
         <div class="cliente">${o.cliente?'Cliente: '+esc(o.cliente):''}${o.dataInicio?' · Início: '+formatarData(o.dataInicio):''}</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
-        ${contrato?`<div style="text-align:right;"><div style="font-size:0.75rem;color:rgba(255,255,255,.5);">Contrato</div><div style="font-weight:700;color:var(--brand);">${formatarMoeda(contrato)}</div></div>`:''}
+        ${d.contrato?`<div style="text-align:right;"><div style="font-size:0.75rem;color:rgba(255,255,255,.5);">Contrato</div><div style="font-weight:700;color:var(--brand);">${formatarMoeda(d.contrato)}</div></div>`:''}
         <span class="badge ${stCor[o.status]||'cinza'}">${stLbl[o.status]||o.status}</span>
+        <button class="btn btn-sm no-print" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick='exportarRelatorioInterno("${o.id}")'>📄 Interno</button>
+        <button class="btn btn-sm no-print" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick='exportarRelatorioCliente("${o.id}")'>📋 Cliente</button>
       </div>
     </div>
 
-    <!-- KPIs -->
+    <!-- KPIs FINANCEIROS -->
     <div class="obra-kpis">
       <div class="kpi-box">
-        <div class="kpi-val" style="color:var(--verde);">${formatarMoeda(rec.pago)}</div>
+        <div class="kpi-val" style="color:var(--verde);">${formatarMoeda(d.recPago)}</div>
         <div class="kpi-rot">Recebido</div>
-        ${percRec!==null?`<div class="prog-bar"><div class="prog-fill" style="width:${percRec}%;"></div></div><div style="font-size:0.7rem;color:var(--texto-leve);margin-top:4px;">${percRec}% do contrato</div>`:''}
+        ${d.percRec!==null?`<div class="prog-bar"><div class="prog-fill" style="width:${d.percRec}%;background:var(--verde);"></div></div><div style="font-size:0.7rem;color:var(--texto-leve);margin-top:4px;">${d.percRec}% do contrato</div>`:''}
       </div>
-      <div class="kpi-box">
-        <div class="kpi-val" style="color:var(--azul);">${formatarMoeda(rec.pend)}</div>
-        <div class="kpi-rot">A Receber</div>
+      <div class="kpi-box"><div class="kpi-val" style="color:var(--azul);">${formatarMoeda(d.recPend)}</div><div class="kpi-rot">A Receber</div></div>
+      <div class="kpi-box"><div class="kpi-val" style="color:var(--vermelho);">${formatarMoeda(d.desPago)}</div><div class="kpi-rot">Total Pago</div></div>
+      <div class="kpi-box"><div class="kpi-val" style="color:var(--laranja);">${formatarMoeda(d.desPend)}</div><div class="kpi-rot">A Pagar</div></div>
+      <div class="kpi-box"><div class="kpi-val" style="color:${d.saldo>=0?'var(--verde)':'var(--vermelho)'};">${formatarMoeda(d.saldo)}</div><div class="kpi-rot">Saldo Líquido</div></div>
+    </div>
+
+    ${d.etTotal > 0 ? `
+    <!-- KPIs FÍSICOS -->
+    <div class="fisico-grid">
+      <div class="fisico-kpi"><div class="kpi-val">${d.etTotal}</div><div class="kpi-rot">Etapas</div></div>
+      <div class="fisico-kpi"><div class="kpi-val" style="color:var(--verde);">${d.etConc}</div><div class="kpi-rot">Concluídas</div></div>
+      <div class="fisico-kpi">
+        <div class="kpi-val">${d.avgPct}%</div>
+        <div class="kpi-rot">Progresso Médio</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${d.avgPct}%;background:var(--brand);"></div></div>
       </div>
-      <div class="kpi-box">
-        <div class="kpi-val" style="color:var(--vermelho);">${formatarMoeda(des.pago)}</div>
-        <div class="kpi-rot">Total Pago</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-val" style="color:var(--laranja);">${formatarMoeda(des.pend)}</div>
-        <div class="kpi-rot">A Pagar</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-val" style="color:${saldo>=0?'var(--verde)':'var(--vermelho)'};">${formatarMoeda(saldo)}</div>
-        <div class="kpi-rot">Saldo Líquido</div>
+      <div class="fisico-kpi">
+        <div class="kpi-val" style="color:${d.matPend>0?'var(--vermelho)':'var(--verde)'};">${d.matPend}</div>
+        <div class="kpi-rot">Mat. Pendentes</div>
       </div>
     </div>
 
-    <!-- DETALHAMENTO -->
+    <!-- PROGRESSO POR ETAPA -->
+    <div style="padding:12px 18px;border-bottom:1px solid var(--cinza);">
+      <div class="detalhe-titulo" style="margin-bottom:8px;">📋 Progresso por Etapa</div>
+      ${d.etOb.map(e=>`<div class="et-linha">
+        <div class="et-nome">${esc(e.nome)}</div>
+        <span style="font-size:.7rem;color:${etStCor[e.status]||'var(--texto-leve)'};">${etStLbl[e.status]||e.status}</span>
+        <div class="et-prog"><div class="prog-bar"><div class="prog-fill" style="width:${e.percentual||0}%;background:${e.status==='concluida'?'var(--verde)':'var(--brand)'};"></div></div></div>
+        <div class="et-pct">${e.percentual||0}%</div>
+      </div>`).join('')}
+    </div>` : ''}
+
+    <!-- DETALHAMENTO FINANCEIRO -->
     <div class="detalhe-grid">
-      <!-- Despesas por categoria -->
       <div class="detalhe-col">
         <div class="detalhe-titulo">💸 Despesas por Categoria</div>
-        ${Object.keys(catDes).length ? Object.entries(catDes).sort((a,b)=>(b[1].pago+b[1].pend)-(a[1].pago+a[1].pend)).map(([k,v])=>`
-          <div class="detalhe-row">
-            <span>${labelCategoria('despesa',k)}</span>
-            <span>
-              <span style="color:var(--vermelho);font-weight:700;">${formatarMoeda(v.pago)}</span>
-              ${v.pend?`<span style="font-size:0.75rem;color:var(--texto-leve);margin-left:6px;">+${formatarMoeda(v.pend)} pend.</span>`:''}
-            </span>
-          </div>`).join('')
-        : '<div style="color:var(--texto-leve);font-size:0.84rem;">Sem despesas registradas.</div>'}
+        ${Object.keys(d.catDes).length
+          ? Object.entries(d.catDes).sort((a,b)=>(b[1].pago+b[1].pend)-(a[1].pago+a[1].pend)).map(([k,v])=>`
+            <div class="detalhe-row">
+              <span>${labelCategoria('despesa',k)}</span>
+              <span><span style="color:var(--vermelho);font-weight:700;">${formatarMoeda(v.pago)}</span>
+              ${v.pend?`<span style="font-size:.75rem;color:var(--texto-leve);margin-left:6px;">+${formatarMoeda(v.pend)} pend.</span>`:''}</span>
+            </div>`).join('')
+          : '<div style="color:var(--texto-leve);font-size:.84rem;">Sem despesas.</div>'}
       </div>
-      <!-- Receitas por categoria -->
       <div class="detalhe-col">
         <div class="detalhe-titulo">💰 Receitas por Categoria</div>
-        ${Object.keys(catRec).length ? Object.entries(catRec).sort((a,b)=>(b[1].pago+b[1].pend)-(a[1].pago+a[1].pend)).map(([k,v])=>`
-          <div class="detalhe-row">
-            <span>${labelCategoria('receita',k)}</span>
-            <span>
-              <span style="color:var(--verde);font-weight:700;">${formatarMoeda(v.pago)}</span>
-              ${v.pend?`<span style="font-size:0.75rem;color:var(--texto-leve);margin-left:6px;">+${formatarMoeda(v.pend)} pend.</span>`:''}
-            </span>
-          </div>`).join('')
-        : '<div style="color:var(--texto-leve);font-size:0.84rem;">Sem receitas registradas.</div>'}
+        ${Object.keys(d.catRec).length
+          ? Object.entries(d.catRec).sort((a,b)=>(b[1].pago+b[1].pend)-(a[1].pago+a[1].pend)).map(([k,v])=>`
+            <div class="detalhe-row">
+              <span>${labelCategoria('receita',k)}</span>
+              <span><span style="color:var(--verde);font-weight:700;">${formatarMoeda(v.pago)}</span>
+              ${v.pend?`<span style="font-size:.75rem;color:var(--texto-leve);margin-left:6px;">+${formatarMoeda(v.pend)} pend.</span>`:''}</span>
+            </div>`).join('')
+          : '<div style="color:var(--texto-leve);font-size:.84rem;">Sem receitas.</div>'}
       </div>
     </div>
 
-    <!-- ÚLTIMOS LANÇAMENTOS DA OBRA -->
+    <!-- ÚLTIMOS LANÇAMENTOS -->
     <div style="padding:12px 18px;border-top:1px solid var(--cinza);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--texto-leve);">Últimos Lançamentos</span>
-        <a href="../lancamentos/?obra=${o.id}" style="font-size:0.78rem;color:var(--brand);">Ver todos →</a>
+        <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--texto-leve);">Últimos Lançamentos</span>
+        <a href="../lancamentos/?obra=${o.id}" style="font-size:.78rem;color:var(--brand);">Ver todos →</a>
       </div>
-      ${lanc.length ? [...lanc].reverse().slice(0,4).map(l=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--cinza);font-size:0.82rem;">
-          <div>
-            <span style="color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">●</span>
-            <span style="margin-left:6px;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</span>
-            <span style="color:var(--texto-leve);margin-left:8px;font-size:0.75rem;">${formatarData(l.data)}</span>
-          </div>
+      ${d.lanc.length ? [...d.lanc].reverse().slice(0,4).map(l=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--cinza);font-size:.82rem;">
+          <div><span style="color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">●</span>
+          <span style="margin-left:6px;">${esc(l.descricao||labelCategoria(l.tipo,l.categoria))}</span>
+          <span style="color:var(--texto-leve);margin-left:8px;font-size:.75rem;">${formatarData(l.data)}</span></div>
           <div style="font-weight:700;color:${l.tipo==='receita'?'var(--verde)':'var(--vermelho)'};">
             ${l.tipo==='receita'?'+':'-'}${formatarMoeda(l.valor)}
             ${badgeStatus(l.status).replace('<span','<span style="margin-left:6px;"')}
           </div>
         </div>`).join('')
-      : '<div style="color:var(--texto-leve);font-size:0.83rem;">Nenhum lançamento nesta obra.</div>'}
+      : '<div style="color:var(--texto-leve);font-size:.83rem;">Nenhum lançamento nesta obra.</div>'}
     </div>
   </div>`;
+}
+
+// ── EXPORTAR RELATÓRIO INTERNO ──
+function exportarRelatorioInterno(obraId) {
+  const o = obras.find(x=>x.id===obraId); if (!o) return;
+  const d = calcularDadosObra(o);
+  const kpis = `<div class="aviso">⚠️ USO INTERNO — Este relatório contém custos e não deve ser enviado ao cliente.</div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="val">${formatarMoeda(d.recPago)}</div><div class="lbl">Recebido</div></div>
+    <div class="kpi"><div class="val">${formatarMoeda(d.recPend)}</div><div class="lbl">A Receber</div></div>
+    <div class="kpi"><div class="val">${formatarMoeda(d.desPago)}</div><div class="lbl">Total Pago</div></div>
+    <div class="kpi"><div class="val">${formatarMoeda(d.desPend)}</div><div class="lbl">A Pagar</div></div>
+    <div class="kpi"><div class="val">${formatarMoeda(d.saldo)}</div><div class="lbl">Saldo Líquido</div></div>
+    <div class="kpi"><div class="val">${d.avgPct}%</div><div class="lbl">Progresso Físico</div></div>
+  </div>
+  <div class="section-title">💸 Despesas por Categoria</div>
+  <table><thead><tr><th>Categoria</th><th>Pago</th><th>Pendente</th></tr></thead>
+  <tbody>${Object.entries(d.catDes).map(([k,v])=>`<tr><td>${labelCategoria('despesa',k)}</td><td>${formatarMoeda(v.pago)}</td><td>${formatarMoeda(v.pend)}</td></tr>`).join('')||'<tr><td colspan="3" style="color:#64748b;">Sem despesas</td></tr>'}
+  </tbody></table>
+  <div class="section-title">💰 Receitas por Categoria</div>
+  <table><thead><tr><th>Categoria</th><th>Recebido</th><th>Pendente</th></tr></thead>
+  <tbody>${Object.entries(d.catRec).map(([k,v])=>`<tr><td>${labelCategoria('receita',k)}</td><td>${formatarMoeda(v.pago)}</td><td>${formatarMoeda(v.pend)}</td></tr>`).join('')||'<tr><td colspan="3" style="color:#64748b;">Sem receitas</td></tr>'}
+  </tbody></table>
+  <div class="section-title">📋 Etapas</div>
+  <table><thead><tr><th>Etapa</th><th>Status</th><th>Progresso</th><th>Responsável</th></tr></thead>
+  <tbody>${d.etOb.map(e=>`<tr><td>${esc(e.nome)}</td><td>${e.status}</td><td>${e.percentual||0}%<div class="prog-bar"><div class="prog-fill" style="width:${e.percentual||0}%;background:#2563eb;"></div></div></td><td>${esc(e.responsavel||'—')}</td></tr>`).join('')||'<tr><td colspan="4" style="color:#64748b;">Sem etapas</td></tr>'}
+  </tbody></table>
+  ${gerarDocumentoMateriaisFaltantes(o, d.etOb)}`;
+  abrirDocumentoImpressao(`Relatório Interno — ${o.nome}`, `${o.cliente||''} · Gerado para uso interno`, kpis);
+}
+
+// ── EXPORTAR RELATÓRIO CLIENTE ──
+function exportarRelatorioCliente(obraId) {
+  const o = obras.find(x=>x.id===obraId); if (!o) return;
+  const d = calcularDadosObra(o);
+  const body = `
+  <div class="kpi-grid">
+    <div class="kpi"><div class="val">${d.avgPct}%</div><div class="lbl">Progresso Médio</div></div>
+    <div class="kpi"><div class="val">${d.etConc} / ${d.etTotal}</div><div class="lbl">Etapas Concluídas</div></div>
+    <div class="kpi"><div class="val">${d.matOk} / ${d.mats.length}</div><div class="lbl">Materiais OK</div></div>
+    ${d.contrato?`<div class="kpi"><div class="val">${formatarMoeda(d.contrato)}</div><div class="lbl">Valor do Contrato</div></div>`:''}
+    ${d.contrato?`<div class="kpi"><div class="val">${formatarMoeda(d.recPago)}</div><div class="lbl">Recebido</div></div>`:''}
+  </div>
+  <div class="section-title">📋 Progresso por Etapa</div>
+  <table><thead><tr><th>Etapa</th><th>Status</th><th>Progresso</th></tr></thead>
+  <tbody>${d.etOb.map(e=>`<tr><td>${esc(e.nome)}</td><td>${{concluida:'✅ Concluída',em_execucao:'🔨 Em execução',pendente:'⏳ Pendente',paralisada:'⏸️ Paralisada',aguardando_material:'📦 Aguard. Material'}[e.status]||e.status}</td>
+  <td>${e.percentual||0}%<div class="prog-bar"><div class="prog-fill" style="width:${e.percentual||0}%;background:#2563eb;"></div></div></td></tr>`).join('')||'<tr><td colspan="3" style="color:#64748b;">Sem etapas</td></tr>'}
+  </tbody></table>
+  ${gerarDocumentoMateriaisFaltantes(o, d.etOb)}`;
+  abrirDocumentoImpressao(`Relatório de Obra — ${o.nome}`, `${o.cliente?'Cliente: '+o.cliente+' · ':''}${o.dataInicio?'Início: '+formatarData(o.dataInicio):''}`, body);
 }
 
 init();

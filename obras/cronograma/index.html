@@ -54,6 +54,16 @@
     .ms-parcial  { background:#dbeafe; color:#1e40af; }
     .ms-min_ok   { background:#d1fae5; color:#065f46; }
     .ms-entregue { background:#d1fae5; color:#065f46; }
+
+    /* ── Material cards (sem scroll horizontal) ── */
+    .mat-linha       { background:var(--fundo2); border:1px solid var(--cinza); border-radius:9px; padding:12px 14px; margin-bottom:7px; transition:background .15s; }
+    .mat-linha:hover { background:var(--branco); }
+    .mat-linha-topo  { display:flex; align-items:center; gap:8px; margin-bottom:7px; flex-wrap:wrap; }
+    .mat-linha-nome  { font-weight:700; font-size:.87rem; flex:1; min-width:120px; }
+    .mat-linha-tag   { font-size:.67rem; background:var(--cinza); color:var(--texto-leve); border-radius:4px; padding:2px 6px; font-weight:600; flex-shrink:0; white-space:nowrap; }
+    .mat-linha-stats { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:.76rem; color:var(--texto-leve); margin-bottom:8px; }
+    .mat-linha-stats b { color:var(--texto); }
+    .mat-linha-acoes { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
   </style>
 </head>
 <body>
@@ -746,39 +756,34 @@ function renderMatBody(e) {
     body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--texto-leve);">Nenhum material cadastrado. Use o formulário abaixo para adicionar.</div>';
     return;
   }
-  body.innerHTML = `<div style="overflow-x:auto;"><table class="tabela" style="width:100%;font-size:.78rem;">
-    <thead><tr>
-      <th>Material</th><th>Un.</th><th>Classificação</th>
-      <th style="text-align:center;">Prev.</th><th style="text-align:center;">Mín Ini.</th>
-      <th style="text-align:center;">Comprado</th><th style="text-align:center;">Entregue</th>
-      <th style="text-align:center;">Utilizado</th><th style="text-align:center;">Saldo</th>
-      <th>Fornecedor</th><th style="text-align:center;">Valor Prev.</th><th>Status</th><th>Ações</th>
-    </tr></thead>
-    <tbody>${mats.map(m => {
-      const st = matStatusCalc(m);
-      const saldo = (m.qtdEntregue||0) - (m.qtdUtilizada||0);
-      return `<tr>
-        <td><strong>${esc(m.nome)}</strong></td>
-        <td>${esc(m.unidade||'—')}</td>
-        <td><span style="font-size:.68rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;white-space:nowrap;">${ClassLbl[m.classificacao]||m.classificacao}</span></td>
-        <td style="text-align:center;">${m.qtdPrevista||0}</td>
-        <td style="text-align:center;">${m.qtdMinIniciar||'—'}</td>
-        <td style="text-align:center;">${m.qtdComprada||0}</td>
-        <td style="text-align:center;"><strong>${m.qtdEntregue||0}</strong></td>
-        <td style="text-align:center;">${m.qtdUtilizada||0}</td>
-        <td style="text-align:center;${saldo<0?'color:var(--vermelho);font-weight:700;':''}">${saldo}</td>
-        <td style="font-size:.72rem;">${esc(m.fornecedor||'—')}</td>
-        <td style="text-align:center;">${m.valorPrevisto?formatarMoeda(m.valorPrevisto):'—'}</td>
-        <td><span class="sp ms-${st}" style="font-size:.68rem;padding:2px 7px;">${MatSLbl[st]||st}</span></td>
-        <td><div style="display:flex;gap:3px;flex-shrink:0;">
-          <button class="btn btn-primary btn-sm" onclick='abrirMatUpd("${m.id}")' title="Atualizar quantidades">📥</button>
-          ${!m.pedidoCompra
-            ?`<button class="btn btn-outline btn-sm" onclick='solicitarCompra("${m.id}")' title="Solicitar compra">🛒</button>`
-            :`<span style="font-size:.68rem;color:var(--texto-leve);padding:2px 4px;">🛒 Solicitado</span>`}
-          <button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerMat("${m.id}")'>✕</button>
-        </div></td>
-      </tr>`;
-    }).join('')}</tbody></table></div>`;
+  body.innerHTML = mats.map(m => {
+    const st    = matStatusCalc(m);
+    const saldo = (m.qtdEntregue||0) - (m.qtdUtilizada||0);
+    return `<div class="mat-linha">
+      <div class="mat-linha-topo">
+        <div class="mat-linha-nome">${esc(m.nome)}</div>
+        <span class="mat-linha-tag">${ClassLbl[m.classificacao]||m.classificacao}</span>
+        <span class="sp ms-${st}" style="font-size:.68rem;padding:2px 8px;border-radius:20px;">${MatSLbl[st]||st}</span>
+      </div>
+      <div class="mat-linha-stats">
+        <span>Prev.: <b>${m.qtdPrevista||0} ${esc(m.unidade||'')}</b></span>
+        <span>Mín Ini.: <b>${m.qtdMinIniciar||'—'}</b></span>
+        <span>Entregue: <b style="${(m.qtdEntregue||0)>0?'color:var(--verde);':''}">${m.qtdEntregue||0}</b></span>
+        <span>Comprado: <b>${m.qtdComprada||0}</b></span>
+        <span>Utilizado: <b>${m.qtdUtilizada||0}</b></span>
+        <span>Saldo: <b style="${saldo<0?'color:var(--vermelho);':''}">${saldo}</b></span>
+        ${m.fornecedor?`<span>Fornec.: <b>${esc(m.fornecedor)}</b></span>`:''}
+        ${m.valorPrevisto?`<span>Valor Prev.: <b>${formatarMoeda(m.valorPrevisto)}</b></span>`:''}
+      </div>
+      <div class="mat-linha-acoes">
+        <button class="btn btn-primary btn-sm" onclick='abrirMatUpd("${m.id}")'>📥 Atualizar</button>
+        ${!m.pedidoCompra
+          ?`<button class="btn btn-outline btn-sm" onclick='solicitarCompra("${m.id}")'>🛒 Solicitar compra</button>`
+          :`<span class="sp ms-comprado" style="font-size:.68rem;padding:2px 8px;border-radius:20px;">🛒 Solicitado</span>`}
+        <button class="btn btn-outline btn-sm" style="color:var(--vermelho);margin-left:auto;" onclick='removerMat("${m.id}")'>✕ Remover</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function addMat() {
