@@ -262,6 +262,19 @@ let modeloAtualId = null;
 let etapaMatTplId = null;
 let matCatalogo   = []; let shaMC = null;
 
+// Resolve sempre do catálogo quando catalogoId existe
+function matInfo(m) {
+  const cat = m.catalogoId ? matCatalogo.find(x => x.id === m.catalogoId) : null;
+  return {
+    nome:    cat?.nome    || m.nome    || '',
+    unidade: cat?.unidade || m.unidade || '',
+    valorRef:cat?.valorRef|| 0,
+    marca:   cat?.marca   || '',
+    fornRef: cat?.fornecedorRef || '',
+    temCat:  !!cat,
+  };
+}
+
 const ClassLbl = { obrigatorio_iniciar:'Obrig. Iniciar', obrigatorio_execucao:'Obrig. Exec.', complementar:'Complementar', opcional:'Opcional' };
 
 async function init() {
@@ -457,17 +470,17 @@ function renderEtapasModelo() {
               <span>Material</span><span>Unid.</span><span>Classificação</span>
               <span>Qtd/${unidade}</span><span>Mín/${unidade}</span><span>Fornecedor</span><span>Valor Unit.</span><span></span>
              </div>
-             ${(e.materiais||[]).map(mat=>`
+             ${(e.materiais||[]).map(mat=>{ const inf=matInfo(mat); const vUnit=mat.valorUnitario||inf.valorRef||0; return `
               <div class="mat-tpl-row">
-                <span><strong>${esc(mat.nome)}</strong></span>
-                <span>${esc(mat.unidade||'')}</span>
+                <span><strong>${esc(inf.nome)}</strong>${inf.marca?`<div style="font-size:.68rem;color:var(--texto-leve);">${esc(inf.marca)}</div>`:''}</span>
+                <span>${esc(inf.unidade)}</span>
                 <span style="font-size:.72rem;">${ClassLbl[mat.classificacao]||'—'}</span>
                 <span><b>${mat.qtdPorBox||0}</b></span>
                 <span>${mat.qtdMinPorBox||'—'}</span>
-                <span style="font-size:.78rem;">${mat.fornecedor||'—'}</span>
-                <span>${mat.valorUnitario?formatarMoeda(mat.valorUnitario):'—'}</span>
+                <span style="font-size:.78rem;">${mat.fornecedor||inf.fornRef||'—'}</span>
+                <span>${vUnit?formatarMoeda(vUnit):'—'}</span>
                 <span><button class="btn btn-outline btn-sm" style="color:var(--vermelho);padding:2px 8px;" onclick='removerMatTpl("${e.id}","${mat.id}")'>✕</button></span>
-              </div>`).join('')}`}
+              </div>`; }).join('')}`}
       </div>
     </div>`;
   }).join('');
@@ -533,18 +546,22 @@ function renderMatTpl(m, e) {
   body.innerHTML = `<table class="tabela" style="width:100%;"><thead><tr>
     <th>Material</th><th>Unid.</th><th>Classificação</th>
     <th>Qtd/${unidade}</th><th>Mín/${unidade}</th><th>Fornecedor</th><th>Valor Unit.</th><th>Total/${unidade}</th><th></th>
-  </tr></thead><tbody>${mats.map(mat=>`<tr>
-    <td>${esc(mat.nome)}</td>
-    <td>${esc(mat.unidade||'')}</td>
+  </tr></thead><tbody>${mats.map(mat=>{
+    const inf = matInfo(mat);
+    const fornDisplay = mat.fornecedor || inf.fornRef;
+    const valorUnit = mat.valorUnitario || inf.valorRef || 0;
+    return `<tr>
+    <td>${esc(inf.nome)}${!inf.temCat?'<span title="Sem catálogo" style="font-size:.65rem;color:var(--texto-leve);"> ⚠</span>':''}${inf.marca?`<div style="font-size:.7rem;color:var(--texto-leve);">${esc(inf.marca)}</div>`:''}</td>
+    <td>${esc(inf.unidade)}</td>
     <td style="font-size:.75rem;">${ClassLbl[mat.classificacao]||'—'}</td>
     <td><b>${mat.qtdPorBox||0}</b></td>
     <td>${mat.qtdMinPorBox||'—'}</td>
-    <td style="font-size:.75rem;">${mat.fornecedor||'—'}</td>
-    <td>${mat.valorUnitario?formatarMoeda(mat.valorUnitario):'—'}</td>
-    <td style="font-weight:700;">${mat.valorUnitario&&mat.qtdPorBox?formatarMoeda(mat.valorUnitario*mat.qtdPorBox):'—'}</td>
+    <td style="font-size:.75rem;">${fornDisplay||'—'}</td>
+    <td>${valorUnit?formatarMoeda(valorUnit):'—'}</td>
+    <td style="font-weight:700;">${valorUnit&&mat.qtdPorBox?formatarMoeda(valorUnit*mat.qtdPorBox):'—'}</td>
     <td><button class="btn btn-outline btn-sm" style="color:var(--vermelho);" onclick='removerMatTplById("${mat.id}")'>✕</button></td>
-  </tr>`).join('')}</tbody></table>
-  <div style="text-align:right;margin-top:10px;font-size:.85rem;"><strong>Total/un.:</strong> <span style="font-weight:800;color:var(--brand);">${formatarMoeda(mats.reduce((s,mat)=>s+(mat.valorUnitario||0)*(mat.qtdPorBox||0),0))}</span></div>`;
+  </tr>`;}).join('')}</tbody></table>
+  <div style="text-align:right;margin-top:10px;font-size:.85rem;"><strong>Total/un.:</strong> <span style="font-weight:800;color:var(--brand);">${formatarMoeda(mats.reduce((s,mat)=>{ const inf=matInfo(mat); return s+(mat.valorUnitario||inf.valorRef||0)*(mat.qtdPorBox||0); },0))}</span></div>`;
 }
 function addMatTpl() {
   const nome = document.getElementById('amm-nome').value.trim();
@@ -621,16 +638,16 @@ function imprimirModelo(modeloId) {
         <th>Material</th><th>Un.</th><th>Classificação</th>
         <th>Qtd/${unidade}</th><th>Mín/${unidade}</th><th>Fornecedor</th><th>Vlr Unit.</th><th>Total/${unidade}</th>
       </tr></thead><tbody>
-      ${mats.map(mat=>`<tr>
-        <td><strong>${esc(mat.nome)}</strong></td>
-        <td>${esc(mat.unidade||'')}</td>
+      ${mats.map(mat=>{ const inf=matInfo(mat); const vUnit=mat.valorUnitario||inf.valorRef||0; return `<tr>
+        <td><strong>${esc(inf.nome)}</strong>${inf.marca?`<div style="font-size:.7rem;color:#64748b;">${esc(inf.marca)}</div>`:''}</td>
+        <td>${esc(inf.unidade)}</td>
         <td style="font-size:.72rem;">${ClassLblMod[mat.classificacao]||mat.classificacao||'—'}</td>
         <td style="text-align:center;">${mat.qtdPorBox||0}</td>
         <td style="text-align:center;">${mat.qtdMinPorBox||'—'}</td>
-        <td style="font-size:.72rem;">${esc(mat.fornecedor||'—')}</td>
-        <td>${mat.valorUnitario?'R$ '+mat.valorUnitario.toFixed(2):'—'}</td>
-        <td style="font-weight:700;">${mat.valorUnitario&&mat.qtdPorBox?'R$ '+(mat.valorUnitario*mat.qtdPorBox).toFixed(2):'—'}</td>
-      </tr>`).join('')}
+        <td style="font-size:.72rem;">${esc(mat.fornecedor||inf.fornRef||'—')}</td>
+        <td>${vUnit?'R$ '+vUnit.toFixed(2):'—'}</td>
+        <td style="font-weight:700;">${vUnit&&mat.qtdPorBox?'R$ '+(vUnit*mat.qtdPorBox).toFixed(2):'—'}</td>
+      </tr>`; }).join('')}
       <tr style="background:#f8fafc;font-weight:700;">
         <td colspan="7" style="text-align:right;font-size:.78rem;">Total da etapa por ${unidade}:</td>
         <td>${custoEt?'R$ '+custoEt.toFixed(2):'—'}</td>

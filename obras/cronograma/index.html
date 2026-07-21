@@ -422,6 +422,21 @@ let etapas = [], shaEt = null, obra = null;
 let filtro = '', idEdit = null, clId = null;
 let matCatalogo = []; let shaMC = null;
 
+// Resolve sempre do catálogo quando catalogoId existe — fallback nos campos locais
+function matInfo(m) {
+  const cat = m.catalogoId ? matCatalogo.find(x => x.id === m.catalogoId) : null;
+  return {
+    nome:      cat?.nome           || m.nome      || '',
+    unidade:   cat?.unidade        || m.unidade   || '',
+    valorRef:  cat?.valorRef       || 0,
+    categoria: cat?.categoria      || '',
+    marca:     cat?.marca          || '',
+    fornRef:   cat?.fornecedorRef  || '',
+    codigo:    cat?.codigo         || '',
+    temCat:    !!cat,
+  };
+}
+
 const SLbl = {
   planejada:'Planejada', aguardando_etapa:'Aguard. Etapa',
   aguardando_material:'Aguard. Material', aguardando_equipe:'Aguard. Equipe',
@@ -651,7 +666,7 @@ function cardEtapa(e) {
             ${!matsPend.length&&mats.length&&mats.every(m=>['entregue','min_ok'].includes(matStatusCalc(m)))?`<span style="color:#059669;font-weight:700;">✓ Tudo OK</span>`:''}
             <button class="btn btn-outline btn-sm" style="font-size:.68rem;padding:1px 7px;" onclick='abrirMateriais("${e.id}")'>Ver detalhes →</button>
           </div>
-          ${matsPend.length?`<div style="font-size:.72rem;color:var(--texto-leve);margin-top:3px;">${matsPend.map(m=>`${esc(m.nome)}: ${m.qtdEntregue||0}/${m.qtdMinIniciar||m.qtdPrevista||0} ${esc(m.unidade||'')}`).join(' · ')}</div>`:''}
+          ${matsPend.length?`<div style="font-size:.72rem;color:var(--texto-leve);margin-top:3px;">${matsPend.map(m=>{const inf=matInfo(m);return`${esc(inf.nome)}: ${m.qtdEntregue||0}/${m.qtdMinIniciar||m.qtdPrevista||0} ${esc(inf.unidade)}`;}).join(' · ')}</div>`:''}
         </div>`:''}
       ${e.observacoes?`<p style="font-size:.78rem;font-style:italic;color:var(--texto-leve);margin-top:8px;">${esc(e.observacoes)}</p>`:''}
     </div>
@@ -913,21 +928,26 @@ function renderMatBody(e) {
   body.innerHTML = mats.map(m => {
     const st    = matStatusCalc(m);
     const saldo = (m.qtdEntregue||0) - (m.qtdUtilizada||0);
+    const info  = matInfo(m);
+    const fornDisplay = m.fornecedor || info.fornRef; // fornecedor negociado > referência do catálogo
+    const valorCat = info.valorRef ? formatarMoeda(info.valorRef) : null;
     return `<div class="mat-linha">
       <div class="mat-linha-topo">
-        <div class="mat-linha-nome">${esc(m.nome)}</div>
+        <div class="mat-linha-nome">${esc(info.nome)}${info.temCat?'':' <span title="Não vinculado ao catálogo" style="font-size:.65rem;color:var(--texto-leve);">(sem catálogo)</span>'}</div>
+        ${info.marca?`<span class="mat-linha-tag" style="background:#ede9fe;color:#5b21b6;">${esc(info.marca)}</span>`:''}
         <span class="mat-linha-tag">${ClassLbl[m.classificacao]||m.classificacao}</span>
         <span class="sp ms-${st}" style="font-size:.68rem;padding:2px 8px;border-radius:20px;">${MatSLbl[st]||st}</span>
       </div>
       <div class="mat-linha-stats">
-        <span>Prev.: <b>${m.qtdPrevista||0} ${esc(m.unidade||'')}</b></span>
+        <span>Prev.: <b>${m.qtdPrevista||0} ${esc(info.unidade)}</b></span>
         <span>Mín Ini.: <b>${m.qtdMinIniciar||'—'}</b></span>
         <span>Entregue: <b style="${(m.qtdEntregue||0)>0?'color:var(--verde);':''}">${m.qtdEntregue||0}</b></span>
         <span>Comprado: <b>${m.qtdComprada||0}</b></span>
         <span>Utilizado: <b>${m.qtdUtilizada||0}</b></span>
         <span>Saldo: <b style="${saldo<0?'color:var(--vermelho);':''}">${saldo}</b></span>
-        ${m.fornecedor?`<span>Fornec.: <b>${esc(m.fornecedor)}</b></span>`:''}
+        ${fornDisplay?`<span>Fornec.: <b>${esc(fornDisplay)}</b></span>`:''}
         ${m.valorPrevisto?`<span>Valor Prev.: <b>${formatarMoeda(m.valorPrevisto)}</b></span>`:''}
+        ${valorCat?`<span style="color:var(--texto-leve);">Ref. catálogo: <b>${valorCat}/${esc(info.unidade)}</b></span>`:''}
       </div>
       <div class="mat-linha-acoes">
         <button class="btn btn-primary btn-sm" onclick='abrirMatUpd("${m.id}")'>📥 Atualizar</button>
@@ -991,8 +1011,9 @@ function abrirMatUpd(mid) {
   const e = etapas.find(x => x.id === matId); if (!e) return;
   const m = (e.materiais||[]).find(x => x.id === mid); if (!m) return;
   matUpdId = mid;
-  document.getElementById('mup-titulo').textContent = `Atualizar — ${m.nome}`;
-  document.getElementById('mup-info').textContent = `Previsto: ${m.qtdPrevista||0} ${m.unidade||''} · Mín para iniciar: ${m.qtdMinIniciar||'—'} ${m.unidade||''}`;
+  const mInf = matInfo(m);
+  document.getElementById('mup-titulo').textContent = `Atualizar — ${mInf.nome}`;
+  document.getElementById('mup-info').textContent = `Previsto: ${m.qtdPrevista||0} ${mInf.unidade} · Mín para iniciar: ${m.qtdMinIniciar||'—'} ${mInf.unidade}`;
   document.getElementById('mup-comp').value    = m.qtdComprada||0;
   document.getElementById('mup-entr').value    = m.qtdEntregue||0;
   document.getElementById('mup-res').value     = m.qtdReservada||0;
@@ -1246,15 +1267,16 @@ function imprimirOS(eId) {
   const secMats = mats.length ? bloco(`Materiais Necessários (${mats.length})`,
     `<table><thead><tr><th>Material</th><th>Un.</th><th>Classificação</th><th>Qtd Prevista</th><th>Mín p/ Iniciar</th><th>Qtd Entregue</th><th>Fornecedor</th></tr></thead><tbody>
     ${mats.map(m=>{
+      const inf = matInfo(m);
       const status = m.qtdEntregue>=(m.qtdPrevista||0) ? '✅ OK' : m.qtdEntregue>=(m.qtdMinIniciar||0) ? '⚠️ Mín OK' : '❌ Pendente';
       return `<tr>
-        <td><strong>${esc(m.nome)}</strong></td>
-        <td>${esc(m.unidade||'')}</td>
+        <td><strong>${esc(inf.nome)}</strong>${inf.marca?`<div style="font-size:.7rem;color:#64748b;">${esc(inf.marca)}</div>`:''}</td>
+        <td>${esc(inf.unidade)}</td>
         <td style="font-size:.75rem;">${ClassLblOs[m.classificacao]||m.classificacao||'—'}</td>
         <td style="text-align:center;">${m.qtdPrevista||0}</td>
         <td style="text-align:center;">${m.qtdMinIniciar||0}</td>
         <td style="text-align:center;">${m.qtdEntregue||0} ${status}</td>
-        <td style="font-size:.75rem;">${esc(m.fornecedor||'—')}</td>
+        <td style="font-size:.75rem;">${esc(m.fornecedor||inf.fornRef||'—')}</td>
       </tr>`;
     }).join('')}
     </tbody></table>`
