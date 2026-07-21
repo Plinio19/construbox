@@ -6,20 +6,59 @@
   <title>Construbox — Compras de Obra</title>
   <link rel="stylesheet" href="../assets/core.css"/>
   <style>
-    .mat-pend-obra { margin-bottom:16px; }
-    .mat-pend-obra-header { font-weight:800; font-size:.92rem; padding:10px 14px; background:var(--fundo2); border-radius:8px 8px 0 0; border:1px solid var(--cinza); }
-    .mat-pend-etapa { border:1px solid var(--cinza); border-top:none; padding:10px 16px; }
-    .mat-pend-etapa:last-child { border-radius:0 0 8px 8px; }
-    .mat-pend-etapa-nome { font-weight:700; font-size:.84rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
-    .mat-item { display:flex; align-items:center; gap:6px; font-size:.78rem; padding:4px 0; border-bottom:1px solid var(--cinza); }
-    .mat-item:last-child { border-bottom:none; }
-    .mat-item-nome { flex:1; min-width:0; }
-    .mat-item-qtd  { white-space:nowrap; font-size:.74rem; color:var(--texto-leve); }
-    .mat-item-status { flex-shrink:0; }
-    .prog-sm { height:4px; background:var(--cinza); border-radius:2px; width:80px; overflow:hidden; flex-shrink:0; }
-    .prog-sm-fill { height:100%; border-radius:2px; }
+    /* ── Obra card ── */
+    .obra-card { background:var(--branco); border-radius:12px; box-shadow:0 1px 8px rgba(0,0,0,.07); margin-bottom:20px; overflow:hidden; border:1px solid var(--cinza); }
+    .obra-header { background:var(--brand); color:#fff; padding:13px 20px; display:flex; align-items:center; gap:12px; }
+    .obra-header-titulo { font-weight:800; font-size:.95rem; }
+    .obra-header-sub { font-size:.78rem; opacity:.82; margin-top:1px; }
+    .obra-header-badge { background:rgba(255,255,255,.22); border-radius:20px; padding:3px 10px; font-size:.74rem; font-weight:700; margin-left:auto; flex-shrink:0; }
+
+    /* ── Etapa section ── */
+    .etapa-section { padding:14px 18px 6px; border-top:1px solid var(--cinza); }
+    .etapa-section:first-child { border-top:none; }
+    .etapa-nome-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .etapa-num { width:30px; height:30px; border-radius:50%; background:var(--fundo2); border:1px solid var(--cinza); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.78rem; color:var(--texto-leve); flex-shrink:0; }
+    .etapa-nome-texto { font-weight:700; font-size:.88rem; }
+    .etapa-resp { font-size:.73rem; color:var(--texto-leve); }
+
+    /* ── Material card ── */
+    .mat-card { display:flex; align-items:center; gap:12px; background:var(--fundo2); border:1px solid var(--cinza); border-radius:9px; padding:10px 14px; margin-bottom:7px; transition:box-shadow .15s, background .15s; }
+    .mat-card:hover { background:var(--branco); box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .mat-card-info { flex:1; min-width:0; }
+    .mat-card-nome { font-weight:700; font-size:.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mat-card-sub  { font-size:.72rem; color:var(--texto-leve); margin-top:2px; }
+    .mat-card-class { font-size:.68rem; background:var(--cinza); color:var(--texto-leve); border-radius:4px; padding:1px 6px; margin-left:6px; font-weight:600; }
+
+    /* ── Progress ── */
+    .prog-wrap { display:flex; flex-direction:column; gap:3px; min-width:110px; flex-shrink:0; }
+    .prog-label { font-size:.69rem; color:var(--texto-leve); white-space:nowrap; }
+    .prog-track { height:6px; background:var(--cinza); border-radius:3px; overflow:hidden; }
+    .prog-fill  { height:100%; border-radius:3px; transition:width .4s; }
+
+    /* ── Action buttons ── */
+    .btn-pill { display:inline-flex; align-items:center; gap:5px; border-radius:20px; padding:6px 14px; font-size:.74rem; font-weight:700; cursor:pointer; border:1.5px solid; transition:all .18s; white-space:nowrap; line-height:1; }
+    .btn-pill-green  { background:#f0fdf4; color:#16a34a; border-color:#86efac; }
+    .btn-pill-green:hover  { background:#16a34a; color:#fff; border-color:#16a34a; }
+    .btn-pill-orange { background:#fff7ed; color:#c2410c; border-color:#fdba74; }
+    .btn-pill-orange:hover { background:#ea580c; color:#fff; border-color:#ea580c; }
+    .btn-pill-done   { background:#f0fdf4; color:#16a34a; border-color:#86efac; cursor:default; opacity:.8; }
+    .btns-acao { display:flex; gap:6px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+
+    /* ── Status badge override ── */
+    .st-pendente  { background:#fee2e2; color:#991b1b; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+    .st-comprado  { background:#fef3c7; color:#92400e; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+    .st-parcial   { background:#dbeafe; color:#1e40af; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+    .st-min_ok    { background:#d1fae5; color:#065f46; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+    .st-entregue  { background:#d1fae5; color:#065f46; border-radius:20px; padding:3px 10px; font-size:.71rem; font-weight:700; white-space:nowrap; }
+
+    /* ── Empty state ── */
+    .empty-state { text-align:center; padding:56px 24px; color:var(--texto-leve); }
+    .empty-state .icon { font-size:2.8rem; margin-bottom:12px; }
+    .empty-state .titulo { font-weight:700; font-size:1rem; color:var(--texto); margin-bottom:6px; }
+    .empty-state .desc { font-size:.82rem; }
+
     @media print {
-      .topbar, #sidebar-placeholder, .card-body-tabs, .no-print { display:none !important; }
+      .topbar, #sidebar-placeholder, .no-print { display:none !important; }
       .main { margin-left:0 !important; }
     }
   </style>
@@ -50,12 +89,11 @@
       <div class="stat azul"><div class="valor" id="st-val">R$ 0</div><div class="rotulo">Valor Prev. Total</div></div>
     </div>
 
-    <!-- Filtros + Tabs -->
-    <div class="card" style="margin-bottom:14px;">
+    <div class="card" style="margin-bottom:16px;">
       <div class="card-body" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <button class="chip ativo" id="tab-pendentes" onclick="setTab('pendentes')">⚠️ Pendentes para Iniciar</button>
-        <button class="chip" id="tab-todos"    onclick="setTab('todos')">📦 Todos os Materiais</button>
-        <button class="chip" id="tab-pedidos"  onclick="setTab('pedidos')">🛒 Pedidos Solicitados</button>
+        <button class="chip" id="tab-todos"   onclick="setTab('todos')">📦 Todos os Materiais</button>
+        <button class="chip" id="tab-pedidos" onclick="setTab('pedidos')">🛒 Pedidos Solicitados</button>
         <div style="flex:1;"></div>
         <select id="filtro-obra" class="form-control" style="width:220px;" onchange="render()">
           <option value="">Todas as Obras</option>
@@ -75,14 +113,14 @@
       <button class="btn-fechar" onclick="fecharEntrega()">✕</button>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;padding:0 20px 4px;">
-      <div style="background:var(--fundo2);padding:10px 14px;border-radius:8px;font-size:.84rem;" id="ent-info"></div>
+      <div style="background:var(--fundo2);padding:10px 14px;border-radius:8px;font-size:.84rem;line-height:1.5;" id="ent-info"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div class="form-campo">
           <label>Qtd Entregue (total acumulado)</label>
           <input type="number" id="ent-qtd" min="0" step="0.01"/>
         </div>
         <div class="form-campo">
-          <label>Qtd Comprada (em pedido)</label>
+          <label>Qtd em Pedido (comprada)</label>
           <input type="number" id="ent-comp" min="0" step="0.01"/>
         </div>
       </div>
@@ -129,17 +167,11 @@ function matStatusCalc(m) {
   return 'pendente';
 }
 
-const MatSClass = { pendente:'vermelho', comprado:'amarelo', parcial:'azul', min_ok:'verde', entregue:'verde' };
-
 // ── INIT ──
 async function init() {
-  const cacheE = carregarLocal(LS_ET) || [];
-  const cacheO = carregarLocal(LS_OB) || [];
-  etapas = cacheE;
-  obras  = cacheO;
-  popularFiltroObra();
-  atualizarStats();
-  render();
+  etapas = carregarLocal(LS_ET) || [];
+  obras  = carregarLocal(LS_OB) || [];
+  popularFiltroObra(); atualizarStats(); render();
 
   if (!configurado()) { setSyncStatus('vermelho','Não configurado'); return; }
   setSyncStatus('amarelo','Carregando...');
@@ -147,13 +179,9 @@ async function init() {
     const [rE, rO] = await Promise.all([carregarDados(PATH_ET), carregarDados(PATH_OB)]);
     etapas = rE.lista; salvarLocal(LS_ET, etapas);
     obras  = rO.lista; salvarLocal(LS_OB, obras);
-    popularFiltroObra();
-    atualizarStats();
-    render();
+    popularFiltroObra(); atualizarStats(); render();
     setSyncStatus('verde','Conectado');
-  } catch(err) {
-    setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso');
-  }
+  } catch(err) { setSyncStatus('vermelho','Erro'); toast('Usando cache local.','aviso'); }
 }
 
 async function recarregar() { init(); }
@@ -161,17 +189,17 @@ async function recarregar() { init(); }
 function popularFiltroObra() {
   const sel = document.getElementById('filtro-obra');
   const val = sel.value;
-  const obraIds = [...new Set(etapas.map(e => e.obraId))];
+  const ids = [...new Set(etapas.map(e => e.obraId))];
   sel.innerHTML = '<option value="">Todas as Obras</option>' +
-    obraIds.map(id => {
+    ids.map(id => {
       const o = obras.find(x => x.id === id);
       return `<option value="${id}" ${val===id?'selected':''}>${esc(o?o.nome:id)}</option>`;
     }).join('');
 }
 
 function atualizarStats() {
-  const filtObraId = document.getElementById('filtro-obra')?.value || '';
-  const ets = etapas.filter(e => !filtObraId || e.obraId === filtObraId);
+  const filt = document.getElementById('filtro-obra')?.value || '';
+  const ets  = etapas.filter(e => !filt || e.obraId === filt);
   let pend=0, sol=0, ok=0, valor=0;
   ets.forEach(e => (e.materiais||[]).forEach(m => {
     const st = matStatusCalc(m);
@@ -186,7 +214,6 @@ function atualizarStats() {
   document.getElementById('st-val').textContent  = formatarMoeda(valor);
 }
 
-// ── TABS ──
 function setTab(t) {
   tab = t;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('ativo'));
@@ -201,36 +228,65 @@ function render() {
   else renderPedidos();
 }
 
-// ── TAB PENDENTES: etapas aguardando material ──
+// ── Helpers visuais ──
+function progColor(pct) {
+  if (pct >= 100) return '#059669';
+  if (pct >= 50)  return '#2563eb';
+  if (pct > 0)    return '#d97706';
+  return '#ef4444';
+}
+
+function matCardHtml(m, etapaId, showSolicitar = true) {
+  const st  = matStatusCalc(m);
+  const min = m.qtdMinIniciar || m.qtdPrevista || 0;
+  const ent = m.qtdEntregue || 0;
+  const pct = min > 0 ? Math.min(100, Math.round(ent / min * 100)) : 0;
+
+  const btnRegistrar = `<button class="btn-pill btn-pill-green no-print" onclick='abrirEntrega("${etapaId}","${m.id}")'>📥 Registrar entrega</button>`;
+  const btnSolicitar = m.pedidoCompra
+    ? `<span class="btn-pill btn-pill-done">✓ Compra solicitada</span>`
+    : showSolicitar ? `<button class="btn-pill btn-pill-orange no-print" onclick='solicitarCompra("${etapaId}","${m.id}")'>🛒 Solicitar compra</button>` : '';
+
+  return `<div class="mat-card">
+    <div class="mat-card-info">
+      <div class="mat-card-nome">${esc(m.nome)}<span class="mat-card-class">${ClassLbl[m.classificacao]||m.classificacao}</span></div>
+      <div class="mat-card-sub">${m.fornecedor?`Fornec.: ${esc(m.fornecedor)} · `:''}Un.: ${esc(m.unidade||'—')} · Prev.: ${m.qtdPrevista||0}</div>
+    </div>
+    ${min > 0 ? `<div class="prog-wrap no-print">
+      <div class="prog-label">${ent} / ${min} ${esc(m.unidade||'')} entregues</div>
+      <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${progColor(pct)};"></div></div>
+    </div>` : ''}
+    <span class="st-${st}">${MatSLbl[st]||st}</span>
+    <div class="btns-acao">${btnRegistrar}${btnSolicitar}</div>
+  </div>`;
+}
+
+// ── TAB PENDENTES ──
 function renderPendentes() {
-  const filtObraId = document.getElementById('filtro-obra').value;
-  const cont = document.getElementById('conteudo');
-
-  // Group by obra, show only stages with obrigatorio_iniciar pending
-  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filtObraId || id === filtObraId);
-
-  let html = '';
-  let totalBloq = 0;
+  const filt = document.getElementById('filtro-obra').value;
+  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filt || id === filt);
+  let html = '', total = 0;
 
   obraIds.forEach(obraId => {
-    const obra = obras.find(o => o.id === obraId);
-    const etOb = etapas.filter(e => e.obraId === obraId).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
-
-    const etBloq = etOb.filter(e => {
-      const pend = (e.materiais||[]).filter(m =>
+    const obra  = obras.find(o => o.id === obraId);
+    const etOb  = etapas.filter(e => e.obraId === obraId).sort((a,b)=>(a.ordem||999)-(b.ordem||999));
+    const etBloq = etOb.filter(e =>
+      (e.materiais||[]).some(m =>
         m.classificacao === 'obrigatorio_iniciar' &&
         (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
         (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
-      );
-      return pend.length > 0;
-    });
-
+      )
+    );
     if (!etBloq.length) return;
-    totalBloq += etBloq.length;
+    total += etBloq.length;
 
-    html += `<div class="mat-pend-obra">
-      <div class="mat-pend-obra-header">🏗️ ${esc(obra?obra.nome:obraId)}
-        <span style="font-weight:400;font-size:.78rem;color:var(--texto-leve);margin-left:8px;">${etBloq.length} etapa(s) aguardando material</span>
+    html += `<div class="obra-card">
+      <div class="obra-header">
+        <div>
+          <div class="obra-header-titulo">🏗️ ${esc(obra?obra.nome:obraId)}</div>
+          ${obra?.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
+        </div>
+        <div class="obra-header-badge">${etBloq.length} etapa(s) bloqueada(s)</div>
       </div>
       ${etBloq.map(e => {
         const pend = (e.materiais||[]).filter(m =>
@@ -238,53 +294,33 @@ function renderPendentes() {
           (m.qtdMinIniciar||m.qtdPrevista||0) > 0 &&
           (m.qtdEntregue||0) < (m.qtdMinIniciar||m.qtdPrevista||0)
         );
-        return `<div class="mat-pend-etapa">
-          <div class="mat-pend-etapa-nome">
-            <span style="background:var(--fundo2);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;">${e.ordem||'—'}</span>
-            ${esc(e.nome)}
-            ${e.responsavel?`<span style="font-size:.72rem;font-weight:400;color:var(--texto-leve);">👤 ${esc(e.responsavel)}</span>`:''}
+        return `<div class="etapa-section">
+          <div class="etapa-nome-row">
+            <div class="etapa-num">${e.ordem||'—'}</div>
+            <div>
+              <div class="etapa-nome-texto">${esc(e.nome)}</div>
+              ${e.responsavel?`<div class="etapa-resp">👤 ${esc(e.responsavel)}</div>`:''}
+            </div>
+            <span class="badge amarelo" style="margin-left:auto;font-size:.72rem;">⏳ Aguard. Material</span>
           </div>
-          ${pend.map(m => {
-            const min = m.qtdMinIniciar || m.qtdPrevista || 0;
-            const ent = m.qtdEntregue || 0;
-            const pct = min > 0 ? Math.min(100, Math.round(ent/min*100)) : 0;
-            const st  = matStatusCalc(m);
-            return `<div class="mat-item">
-              <div class="mat-item-nome">
-                <strong>${esc(m.nome)}</strong>
-                ${m.fornecedor?`<span style="font-size:.7rem;color:var(--texto-leve);"> · ${esc(m.fornecedor)}</span>`:''}
-              </div>
-              <div class="mat-item-qtd">${ent} / ${min} ${esc(m.unidade||'')} entregues</div>
-              <div class="prog-sm no-print"><div class="prog-sm-fill" style="width:${pct}%;background:${pct>=100?'#059669':pct>0?'#2563eb':'#ef4444'};"></div></div>
-              <span class="sp ms-${st} mat-item-status" style="font-size:.68rem;padding:2px 7px;">${MatSLbl[st]||st}</span>
-              <button class="btn btn-primary btn-sm no-print" onclick='abrirEntrega("${e.id}","${m.id}")' style="font-size:.72rem;padding:2px 8px;">📥 Registrar</button>
-              ${!m.pedidoCompra?`<button class="btn btn-outline btn-sm no-print" onclick='solicitarCompra("${e.id}","${m.id}")' style="font-size:.72rem;padding:2px 8px;">🛒 Solicitar</button>`
-                :`<span style="font-size:.68rem;color:var(--texto-leve);padding:2px 4px;">🛒 Solicitado</span>`}
-            </div>`;
-          }).join('')}
+          ${pend.map(m => matCardHtml(m, e.id)).join('')}
         </div>`;
       }).join('')}
     </div>`;
   });
 
-  if (!totalBloq) {
-    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">
-      ✅ Nenhuma etapa aguardando material${filtObraId?' nesta obra':''}.
-    </div>`;
-    return;
-  }
-  cont.innerHTML = html;
+  document.getElementById('conteudo').innerHTML = total ? html : `<div class="empty-state">
+    <div class="icon">✅</div>
+    <div class="titulo">Nenhuma etapa aguardando material</div>
+    <div class="desc">Todos os materiais obrigatórios estão disponíveis${filt?' nesta obra':''}.</div>
+  </div>`;
 }
 
-// ── TAB TODOS: todos os materiais de todas as etapas ──
+// ── TAB TODOS ──
 function renderTodos() {
-  const filtObraId = document.getElementById('filtro-obra').value;
-  const cont = document.getElementById('conteudo');
-
-  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filtObraId || id === filtObraId);
-
-  let html = '';
-  let totalMats = 0;
+  const filt = document.getElementById('filtro-obra').value;
+  const obraIds = [...new Set(etapas.map(e => e.obraId))].filter(id => !filt || id === filt);
+  let html = '', totalMats = 0;
 
   obraIds.forEach(obraId => {
     const obra = obras.find(o => o.id === obraId);
@@ -292,134 +328,119 @@ function renderTodos() {
       .sort((a,b)=>(a.ordem||999)-(b.ordem||999));
     if (!etOb.length) return;
 
-    html += `<div class="mat-pend-obra">
-      <div class="mat-pend-obra-header">🏗️ ${esc(obra?obra.nome:obraId)}</div>
-      ${etOb.map(e => `<div class="mat-pend-etapa">
-        <div class="mat-pend-etapa-nome">
-          <span style="background:var(--fundo2);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0;">${e.ordem||'—'}</span>
-          ${esc(e.nome)}
-          <span style="font-size:.72rem;font-weight:400;color:var(--texto-leve);">${(e.materiais||[]).length} material(is)</span>
+    html += `<div class="obra-card">
+      <div class="obra-header">
+        <div>
+          <div class="obra-header-titulo">🏗️ ${esc(obra?obra.nome:obraId)}</div>
+          ${obra?.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
         </div>
-        <div style="overflow-x:auto;">
-          <table class="tabela" style="width:100%;font-size:.76rem;margin:0;">
-            <thead><tr>
-              <th>Material</th><th>Un.</th><th>Classificação</th>
-              <th style="text-align:center;">Prev.</th><th style="text-align:center;">Mín Ini.</th>
-              <th style="text-align:center;">Comprado</th><th style="text-align:center;">Entregue</th>
-              <th style="text-align:center;">Utilizado</th><th style="text-align:center;">Saldo</th>
-              <th>Fornecedor</th><th style="text-align:center;">Valor Prev.</th>
-              <th>Status</th><th class="no-print">Ações</th>
-            </tr></thead>
-            <tbody>${(e.materiais||[]).map(m => {
-              const st = matStatusCalc(m);
-              const saldo = (m.qtdEntregue||0) - (m.qtdUtilizada||0);
-              totalMats++;
-              return `<tr>
-                <td><strong>${esc(m.nome)}</strong></td>
-                <td>${esc(m.unidade||'—')}</td>
-                <td><span style="font-size:.68rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;white-space:nowrap;">${ClassLbl[m.classificacao]||m.classificacao}</span></td>
-                <td style="text-align:center;">${m.qtdPrevista||0}</td>
-                <td style="text-align:center;">${m.qtdMinIniciar||'—'}</td>
-                <td style="text-align:center;">${m.qtdComprada||0}</td>
-                <td style="text-align:center;"><strong>${m.qtdEntregue||0}</strong></td>
-                <td style="text-align:center;">${m.qtdUtilizada||0}</td>
-                <td style="text-align:center;${saldo<0?'color:var(--vermelho);font-weight:700;':''}">${saldo}</td>
-                <td style="font-size:.72rem;">${esc(m.fornecedor||'—')}</td>
-                <td style="text-align:center;">${m.valorPrevisto?formatarMoeda(m.valorPrevisto):'—'}</td>
-                <td><span class="badge ${MatSClass[st]||'cinza'}">${MatSLbl[st]||st}</span></td>
-                <td class="no-print"><div style="display:flex;gap:3px;">
-                  <button class="btn btn-primary btn-sm" onclick='abrirEntrega("${e.id}","${m.id}")' style="font-size:.7rem;padding:2px 7px;">📥</button>
-                  ${!m.pedidoCompra?`<button class="btn btn-outline btn-sm" onclick='solicitarCompra("${e.id}","${m.id}")' style="font-size:.7rem;padding:2px 7px;">🛒</button>`:''}
-                </div></td>
-              </tr>`;
-            }).join('')}</tbody>
-          </table>
-        </div>
-      </div>`).join('')}
+        <div class="obra-header-badge">${etOb.reduce((s,e)=>s+(e.materiais||[]).length,0)} materiais</div>
+      </div>
+      ${etOb.map(e => {
+        totalMats += (e.materiais||[]).length;
+        return `<div class="etapa-section">
+          <div class="etapa-nome-row">
+            <div class="etapa-num">${e.ordem||'—'}</div>
+            <div>
+              <div class="etapa-nome-texto">${esc(e.nome)}</div>
+              ${e.responsavel?`<div class="etapa-resp">👤 ${esc(e.responsavel)}</div>`:''}
+            </div>
+            <span style="margin-left:auto;font-size:.73rem;color:var(--texto-leve);">${(e.materiais||[]).length} material(is)</span>
+          </div>
+          ${(e.materiais||[]).map(m => matCardHtml(m, e.id, !m.pedidoCompra)).join('')}
+        </div>`;
+      }).join('')}
     </div>`;
   });
 
-  if (!totalMats) {
-    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">Nenhum material cadastrado nas etapas${filtObraId?' desta obra':''}. Acesse o Cronograma de cada obra para adicionar materiais às etapas.</div>`;
-    return;
-  }
-  cont.innerHTML = html;
+  document.getElementById('conteudo').innerHTML = totalMats ? html : `<div class="empty-state">
+    <div class="icon">📦</div>
+    <div class="titulo">Nenhum material cadastrado</div>
+    <div class="desc">Acesse o Cronograma de cada obra para adicionar materiais às etapas.</div>
+  </div>`;
 }
 
-// ── TAB PEDIDOS: materiais com compra solicitada ──
+// ── TAB PEDIDOS ──
 function renderPedidos() {
-  const filtObraId = document.getElementById('filtro-obra').value;
-  const cont = document.getElementById('conteudo');
-
+  const filt = document.getElementById('filtro-obra').value;
   const rows = [];
-  etapas.filter(e => !filtObraId || e.obraId === filtObraId).forEach(e => {
+  etapas.filter(e => !filt || e.obraId === filt).forEach(e => {
     const obra = obras.find(o => o.id === e.obraId);
-    (e.materiais||[]).filter(m => m.pedidoCompra).forEach(m => {
-      rows.push({ e, obra, m });
-    });
+    (e.materiais||[]).filter(m => m.pedidoCompra).forEach(m => rows.push({ e, obra, m }));
   });
 
   if (!rows.length) {
-    cont.innerHTML = `<div style="text-align:center;padding:48px;color:var(--texto-leve);">
-      Nenhuma compra solicitada${filtObraId?' nesta obra':''}.<br>
-      <span style="font-size:.82rem;">Acesse o Cronograma → Materiais de uma etapa e clique em 🛒 Solicitar Compra.</span>
+    document.getElementById('conteudo').innerHTML = `<div class="empty-state">
+      <div class="icon">🛒</div>
+      <div class="titulo">Nenhuma compra solicitada</div>
+      <div class="desc">Acesse o Cronograma → 📦 Materiais de uma etapa e clique em <strong>🛒 Solicitar compra</strong>.</div>
     </div>`;
     return;
   }
 
   rows.sort((a,b) => {
-    const sa = matStatusCalc(a.m), sb = matStatusCalc(b.m);
-    const order = {pendente:0,comprado:1,parcial:2,min_ok:3,entregue:4};
-    return (order[sa]??9) - (order[sb]??9);
+    const ord = {pendente:0,parcial:1,comprado:2,min_ok:3,entregue:4};
+    return (ord[matStatusCalc(a.m)]??9) - (ord[matStatusCalc(b.m)]??9);
   });
 
-  cont.innerHTML = `<div class="card"><div class="card-body" style="padding:0;">
-    <div style="overflow-x:auto;">
-      <table class="tabela" style="width:100%;font-size:.78rem;">
-        <thead><tr>
-          <th>Obra</th><th>Etapa</th><th>Material</th><th>Un.</th><th>Classificação</th>
-          <th style="text-align:center;">Prev.</th><th style="text-align:center;">Min Ini.</th>
-          <th style="text-align:center;">Comprado</th><th style="text-align:center;">Entregue</th>
-          <th>Fornecedor</th><th style="text-align:center;">Valor Prev.</th>
-          <th>Status</th><th class="no-print">Ações</th>
-        </tr></thead>
-        <tbody>${rows.map(({e,obra,m}) => {
-          const st = matStatusCalc(m);
-          return `<tr>
-            <td style="font-size:.72rem;">${esc(obra?obra.nome:e.obraId)}</td>
-            <td style="font-size:.72rem;">${esc(e.nome)}</td>
-            <td><strong>${esc(m.nome)}</strong>${m.obs?`<div style="font-size:.68rem;color:var(--texto-leve);">${esc(m.obs)}</div>`:''}</td>
-            <td>${esc(m.unidade||'—')}</td>
-            <td><span style="font-size:.68rem;background:var(--fundo2);padding:2px 6px;border-radius:4px;white-space:nowrap;">${ClassLbl[m.classificacao]||m.classificacao}</span></td>
-            <td style="text-align:center;">${m.qtdPrevista||0}</td>
-            <td style="text-align:center;">${m.qtdMinIniciar||'—'}</td>
-            <td style="text-align:center;">${m.qtdComprada||0}</td>
-            <td style="text-align:center;"><strong>${m.qtdEntregue||0}</strong></td>
-            <td style="font-size:.72rem;">${esc(m.fornecedor||'—')}</td>
-            <td style="text-align:center;">${m.valorPrevisto?formatarMoeda(m.valorPrevisto):'—'}</td>
-            <td><span class="badge ${MatSClass[st]||'cinza'}">${MatSLbl[st]||st}</span></td>
-            <td class="no-print"><div style="display:flex;gap:3px;">
-              <button class="btn btn-primary btn-sm" onclick='abrirEntrega("${e.id}","${m.id}")' style="font-size:.7rem;padding:2px 7px;">📥 Registrar</button>
-            </div></td>
-          </tr>`;
-        }).join('')}</tbody>
-      </table>
-    </div>
-  </div></div>`;
+  // Agrupar por obra
+  const porObra = {};
+  rows.forEach(r => {
+    const k = r.e.obraId;
+    if (!porObra[k]) porObra[k] = [];
+    porObra[k].push(r);
+  });
+
+  let html = '';
+  Object.entries(porObra).forEach(([obraId, items]) => {
+    const obra = obras.find(o => o.id === obraId);
+    html += `<div class="obra-card">
+      <div class="obra-header">
+        <div>
+          <div class="obra-header-titulo">🏗️ ${esc(obra?obra.nome:obraId)}</div>
+          ${obra?.cliente?`<div class="obra-header-sub">${esc(obra.cliente)}</div>`:''}
+        </div>
+        <div class="obra-header-badge">${items.length} pedido(s)</div>
+      </div>
+      <div style="padding:12px 18px;">
+        ${items.map(({e, m}) => {
+          const st  = matStatusCalc(m);
+          const min = m.qtdMinIniciar || m.qtdPrevista || 0;
+          const ent = m.qtdEntregue || 0;
+          const pct = min > 0 ? Math.min(100, Math.round(ent / min * 100)) : 0;
+          return `<div class="mat-card">
+            <div class="mat-card-info">
+              <div class="mat-card-nome">${esc(m.nome)}<span class="mat-card-class">${ClassLbl[m.classificacao]||m.classificacao}</span></div>
+              <div class="mat-card-sub">Etapa: <strong>${esc(e.nome)}</strong>${m.fornecedor?` · Fornec.: ${esc(m.fornecedor)}`:''}</div>
+            </div>
+            ${min > 0 ? `<div class="prog-wrap no-print">
+              <div class="prog-label">${ent} / ${min} ${esc(m.unidade||'')} entregues</div>
+              <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${progColor(pct)};"></div></div>
+            </div>` : ''}
+            <span class="st-${st}">${MatSLbl[st]||st}</span>
+            <div class="btns-acao">
+              <button class="btn-pill btn-pill-green no-print" onclick='abrirEntrega("${e.id}","${m.id}")'>📥 Registrar entrega</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('conteudo').innerHTML = html;
 }
 
-// ── REGISTRAR ENTREGA ──
+// ── MODAL ENTREGA ──
 function abrirEntrega(etapaId, matId) {
   const e = etapas.find(x => x.id === etapaId); if (!e) return;
   const m = (e.materiais||[]).find(x => x.id === matId); if (!m) return;
   entEtapaId = etapaId; entMatId = matId;
-
   document.getElementById('ent-info').innerHTML =
-    `<strong>${esc(m.nome)}</strong> — Etapa: ${esc(e.nome)}<br>
+    `<strong>${esc(m.nome)}</strong><br>
+     Etapa: ${esc(e.nome)}<br>
      Previsto: <strong>${m.qtdPrevista||0} ${esc(m.unidade||'')}</strong>
-     · Mín para iniciar: <strong>${m.qtdMinIniciar||'—'} ${esc(m.unidade||'')}</strong>
+     · Mín iniciar: <strong>${m.qtdMinIniciar||'—'} ${esc(m.unidade||'')}</strong>
      · Entregue atual: <strong>${m.qtdEntregue||0} ${esc(m.unidade||'')}</strong>`;
-
   document.getElementById('ent-qtd').value     = m.qtdEntregue||0;
   document.getElementById('ent-comp').value    = m.qtdComprada||0;
   document.getElementById('ent-forn').value    = m.fornecedor||'';
@@ -432,13 +453,11 @@ function abrirEntrega(etapaId, matId) {
 async function confirmarEntrega() {
   const e = etapas.find(x => x.id === entEtapaId); if (!e) return;
   const m = (e.materiais||[]).find(x => x.id === entMatId); if (!m) return;
-
   m.qtdEntregue  = parseFloat(document.getElementById('ent-qtd').value)||0;
   m.qtdComprada  = parseFloat(document.getElementById('ent-comp').value)||0;
   m.fornecedor   = document.getElementById('ent-forn').value.trim();
   m.valorComprado= parseFloat(document.getElementById('ent-valcomp').value)||0;
   m.obs          = document.getElementById('ent-obs').value.trim();
-
   fecharEntrega();
   await syncEtapas(`Entrega: ${m.nome} — ${e.nome}`);
   render(); atualizarStats();
@@ -447,30 +466,27 @@ async function confirmarEntrega() {
 
 function fecharEntrega() { document.getElementById('modal-entrega').classList.remove('aberto'); }
 
-// ── SOLICITAR COMPRA (inline) ──
 async function solicitarCompra(etapaId, matId) {
   const e = etapas.find(x => x.id === etapaId); if (!e) return;
   const m = (e.materiais||[]).find(x => x.id === matId); if (!m) return;
   m.pedidoCompra    = true;
   m.solicitacaoData = hoje();
-  await syncEtapas(`Solicitação de compra: ${m.nome}`);
+  await syncEtapas(`Solicitação: ${m.nome}`);
   render(); atualizarStats();
   toast(`Compra solicitada: ${m.nome}`, 'sucesso');
 }
 
-// ── SYNC (sempre busca SHA fresco) ──
 async function syncEtapas(msg) {
   salvarLocal(LS_ET, etapas);
-  if (!configurado()) { setSyncStatus('cinza','Offline'); return; }
+  if (!configurado()) return;
   setSyncStatus('amarelo','Sincronizando...');
   try {
     const cur = await ghGet(PATH_ET);
-    const sha = cur ? cur.sha : null;
-    await salvarDados(PATH_ET, etapas, sha, msg || 'Compras: atualizar materiais');
+    await salvarDados(PATH_ET, etapas, cur?.sha||null, msg);
     setSyncStatus('verde','Sincronizado');
   } catch(err) {
     setSyncStatus('vermelho','Erro sync');
-    toast('Erro ao sincronizar: '+err.message, 'aviso');
+    toast('Erro: '+err.message,'aviso');
   }
 }
 
