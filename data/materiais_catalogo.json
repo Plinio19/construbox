@@ -14,5 +14,21 @@
     "prazoEntrega": 0,
     "obs": "",
     "criadoEm": "2026-07-21"
+  },
+  {
+    "id": "mruzeyfrbvyjs",
+    "nome": "PARAFUSOS PARA ESTRUTURA",
+    "codigo": "MAT-0002",
+    "spec": "",
+    "ncm": "",
+    "unidade": "un",
+    "categoria": "Ferragem e Aço",
+    "marca": "",
+    "fornecedorRef": "",
+    "valorRef": 0,
+    "estoqueMin": 0,
+    "prazoEntrega": 0,
+    "obs": "",
+    "criadoEm": "2026-07-21"
   }
 ]
