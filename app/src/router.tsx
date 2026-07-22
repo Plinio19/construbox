@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createHashRouter } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import Dashboard from './pages/Dashboard';
 import ObrasPage from './pages/obras/ObrasPage';
@@ -9,17 +9,20 @@ import ClientesPage from './pages/cadastros/ClientesPage';
 import PrestadoresPage from './pages/cadastros/PrestadoresPage';
 import FuncionariosPage from './pages/cadastros/FuncionariosPage';
 import FinanceiroPage from './pages/financeiro/FinanceiroPage';
+import ExtratoPage from './pages/financeiro/ExtratoPage';
+import RelatoriosPage from './pages/relatorios/RelatoriosPage';
+import ComprasPage from './pages/compras/ComprasPage';
+import EquipePage from './pages/equipe/EquipePage';
 import Configuracoes from './pages/configuracoes/Configuracoes';
-import EmBreve from './pages/EmBreve';
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <AppLayout />,
     children: [
       { index: true,                        element: <Dashboard /> },
       { path: 'obras',                      element: <ObrasPage /> },
-      { path: 'obras/:id',                  element: <EmBreve titulo="Detalhes da Obra" /> },
+      { path: 'obras/:id',                  element: <ObrasPage /> },
       { path: 'obras/:id/cronograma',       element: <CronogramaPage /> },
       { path: 'modelos',                    element: <ModelosPage /> },
       { path: 'cadastros/clientes',         element: <ClientesPage /> },
@@ -28,10 +31,10 @@ export const router = createBrowserRouter([
       { path: 'cadastros/materiais',        element: <MateriaisPage /> },
       { path: 'financeiro/receber',         element: <FinanceiroPage tipo="receita" /> },
       { path: 'financeiro/pagar',           element: <FinanceiroPage tipo="despesa" /> },
-      { path: 'financeiro/extrato',         element: <EmBreve titulo="Extrato" /> },
-      { path: 'compras',                    element: <EmBreve titulo="Compras" /> },
-      { path: 'equipe',                     element: <EmBreve titulo="Equipe" /> },
-      { path: 'relatorios',                 element: <EmBreve titulo="Relatórios" /> },
+      { path: 'financeiro/extrato',         element: <ExtratoPage /> },
+      { path: 'compras',                    element: <ComprasPage /> },
+      { path: 'equipe',                     element: <EquipePage /> },
+      { path: 'relatorios',                 element: <RelatoriosPage /> },
       { path: 'configuracoes',              element: <Configuracoes /> },
     ],
   },
