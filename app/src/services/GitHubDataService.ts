@@ -1,12 +1,36 @@
 import type { IDataService } from './IDataService';
 import type { DataResult, GitHubConfig } from '../types';
 
-const LS_CONFIG = 'cbx_config';
+// Mesma chave e defaults do sistema HTML legado
+const LS_CONFIG = 'construbox_config_v1';
+const DEFAULTS: Partial<GitHubConfig> = {
+  owner:  'Plinio19',
+  repo:   'construbox',
+  branch: 'main',
+};
+
+// Mapeamento path → chave localStorage (compatível com o sistema legado)
+const CACHE_MAP: Record<string, string> = {
+  'data/obras.json':             'cbx_obras',
+  'data/lancamentos.json':       'cbx_lanc',
+  'data/etapas.json':            'cbx_etapas',
+  'data/modelos.json':           'cbx_modelos',
+  'data/clientes.json':          'cbx_clientes',
+  'data/prestadores.json':       'cbx_prestadores',
+  'data/funcionarios.json':      'cbx_funcionarios',
+  'data/materiais_catalogo.json':'cbx_materiais_cat',
+  'data/socios.json':            'cbx_socios',
+};
+
+function cacheKey(path: string): string {
+  return CACHE_MAP[path] ?? `cbx_${path.replace(/[^a-z0-9]/gi, '_')}`;
+}
 
 function getConfig(): GitHubConfig | null {
   try {
-    const raw = localStorage.getItem(LS_CONFIG);
-    return raw ? JSON.parse(raw) : null;
+    const stored = JSON.parse(localStorage.getItem(LS_CONFIG) || '{}');
+    const cfg = { ...DEFAULTS, ...stored } as GitHubConfig;
+    return cfg.token ? cfg : null;
   } catch {
     return null;
   }
@@ -32,21 +56,22 @@ export class GitHubDataService implements IDataService {
 
   async getCollection<T>(path: string): Promise<DataResult<T>> {
     const cfg = getConfig();
-    if (!cfg) throw new Error('GitHub não configurado.');
+    const key = cacheKey(path);
 
-    // Tenta cache local primeiro
-    const cacheKey = `cbx_${path.replace(/[^a-z0-9]/gi, '_')}`;
-    const cached = localStorage.getItem(cacheKey);
+    // Sem config: tenta cache local (compartilhado com sistema legado)
+    if (!cfg) {
+      const cached = localStorage.getItem(key);
+      if (cached) return { lista: JSON.parse(cached), sha: null };
+      throw new Error('GitHub não configurado. Acesse Configurações.');
+    }
 
     const res = await fetch(apiBase(cfg, path), { headers: headers(cfg) });
 
-    if (res.status === 404) {
-      // Arquivo ainda não existe no repo
-      return { lista: [], sha: null };
-    }
+    if (res.status === 404) return { lista: [], sha: null };
 
     if (!res.ok) {
-      // Fallback para cache local se GitHub indisponível
+      // Fallback para cache local
+      const cached = localStorage.getItem(key);
       if (cached) return { lista: JSON.parse(cached), sha: null };
       throw new Error(`GitHub ${res.status}: ${res.statusText}`);
     }
@@ -55,9 +80,7 @@ export class GitHubDataService implements IDataService {
     const sha: string = json.sha;
     const lista: T[] = JSON.parse(atob(json.content.replace(/\n/g, '')));
 
-    // Atualiza cache
-    localStorage.setItem(cacheKey, JSON.stringify(lista));
-
+    localStorage.setItem(key, JSON.stringify(lista));
     return { lista, sha };
   }
 
@@ -74,13 +97,8 @@ export class GitHubDataService implements IDataService {
     let freshSha = sha;
     try {
       const check = await fetch(apiBase(cfg, path), { headers: headers(cfg) });
-      if (check.ok) {
-        const j = await check.json();
-        freshSha = j.sha;
-      }
-    } catch {
-      // usa o sha que temos
-    }
+      if (check.ok) freshSha = (await check.json()).sha;
+    } catch { /* usa sha atual */ }
 
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
     const body: Record<string, unknown> = { message, content, branch: cfg.branch };
@@ -97,16 +115,10 @@ export class GitHubDataService implements IDataService {
       throw new Error((err as { message?: string }).message || `GitHub ${res.status}`);
     }
 
-    const result = await res.json();
-    const newSha: string = result.content.sha;
-
-    // Atualiza cache
-    const cacheKey = `cbx_${path.replace(/[^a-z0-9]/gi, '_')}`;
-    localStorage.setItem(cacheKey, JSON.stringify(data));
-
+    const newSha: string = (await res.json()).content.sha;
+    localStorage.setItem(cacheKey(path), JSON.stringify(data));
     return newSha;
   }
 }
 
-/** Instância singleton — use em toda a aplicação via este export. */
 export const dataService: IDataService = new GitHubDataService();

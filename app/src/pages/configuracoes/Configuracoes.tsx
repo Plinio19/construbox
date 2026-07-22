@@ -4,7 +4,8 @@ import { SaveOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import type { GitHubConfig } from '../../types';
 
 const { Title, Text } = Typography;
-const LS = 'cbx_config';
+const LS = 'construbox_config_v1';
+const DEFAULTS = { owner: 'Plinio19', repo: 'construbox', branch: 'main' };
 
 export default function Configuracoes() {
   const [form]  = Form.useForm();
@@ -12,8 +13,8 @@ export default function Configuracoes() {
 
   useEffect(() => {
     try {
-      const cfg: GitHubConfig = JSON.parse(localStorage.getItem(LS) || '{}');
-      form.setFieldsValue(cfg);
+      const stored = JSON.parse(localStorage.getItem(LS) || '{}');
+      form.setFieldsValue({ ...DEFAULTS, ...stored });
     } catch {}
   }, []);
 
