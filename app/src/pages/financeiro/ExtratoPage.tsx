@@ -38,7 +38,7 @@ export default function ExtratoPage() {
       const matchPeriodo = !periodo || (l.vencimento >= periodo[0].format('YYYY-MM-DD') && l.vencimento <= periodo[1].format('YYYY-MM-DD'));
       return matchBusca && matchTipo && matchPeriodo;
     })
-    .sort((a, b) => a.vencimento.localeCompare(b.vencimento));
+    .sort((a, b) => (a.vencimento || '').localeCompare(b.vencimento || ''));
 
   // Saldo corrente acumulado
   let saldoAcum = 0;

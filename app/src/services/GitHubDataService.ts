@@ -78,7 +78,9 @@ export class GitHubDataService implements IDataService {
 
     const json = await res.json();
     const sha: string = json.sha;
-    const lista: T[] = JSON.parse(atob(json.content.replace(/\n/g, '')));
+    // decodeURIComponent(escape(...)) desfaz o btoa(unescape(encodeURIComponent(...))) do sistema legado
+    const raw = atob(json.content.replace(/\n/g, ''));
+    const lista: T[] = JSON.parse(decodeURIComponent(escape(raw)));
 
     localStorage.setItem(key, JSON.stringify(lista));
     return { lista, sha };

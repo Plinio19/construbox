@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import {
   Table, Row, Col, Typography, Input, Card, Tag, Button,
-  Space, Statistic, Popconfirm, message, Tooltip,
+  Space, Statistic, Popconfirm, message, Tabs, Tooltip, Badge,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { SearchOutlined, CheckOutlined } from '@ant-design/icons';
+import { SearchOutlined, CheckOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useEtapasStore } from '../../stores/useEtapasStore';
 import { useObrasStore } from '../../stores/useObrasStore';
 import { useCatalogoStore } from '../../stores/useCatalogoStore';
@@ -23,25 +23,40 @@ interface MatPendente extends MaterialEtapa {
   qtdFaltante: number;
 }
 
+interface MatConsolidado {
+  nomeResolvido: string;
+  unidadeResolvida: string;
+  catalogoId?: string;
+  qtdTotal: number;
+  valorTotal: number;
+  obras: string[];
+  itens: MatPendente[];
+  urgente: boolean;
+}
+
 export default function ComprasPage() {
   const { etapas, fetch: fetchEtapas, upsert: upsertEtapa } = useEtapasStore();
   const { obras, fetch: fetchObras } = useObrasStore();
   const { fetch: fetchCatalogo, resolve } = useCatalogoStore();
   const [busca, setBusca] = useState('');
+  const [tab, setTab] = useState('necessidade');
 
   useEffect(() => { fetchEtapas(); fetchObras(); fetchCatalogo(); }, []);
 
-  // Agregar todos os materiais pendentes de compra de todas as obras
+  /* ── Materiais pendentes (todas as obras ativas) ── */
+  const obrasAtivas = obras.filter(o => o.status === 'andamento' || o.status === 'aprovado');
+
   const pendentes: MatPendente[] = etapas.flatMap(etapa => {
-    const obra = obras.find(o => o.id === etapa.obraId);
+    const obra = obrasAtivas.find(o => o.id === etapa.obraId);
+    if (!obra) return [];
     return (etapa.materiais || [])
-      .filter(m => (m.qtdComprada || 0) < (m.qtdPrevista || 0) && m.qtdPrevista > 0)
+      .filter(m => (m.qtdComprada || 0) < (m.qtdPrevista || 0) && (m.qtdPrevista || 0) > 0)
       .map(m => {
         const info = resolve(m.catalogoId, m.nome, m.unidade);
         return {
           ...m,
           obraId: etapa.obraId,
-          obraNome: obra?.nome || 'Obra desconhecida',
+          obraNome: obra.nome,
           etapaId: etapa.id,
           etapaNome: etapa.nome,
           nomeResolvido: info.nome,
@@ -51,7 +66,39 @@ export default function ComprasPage() {
       });
   });
 
-  const filtrado = pendentes.filter(m =>
+  /* ── Consolidado por material ── */
+  const consolidado: MatConsolidado[] = (() => {
+    const map = new Map<string, MatConsolidado>();
+    pendentes.forEach(m => {
+      const key = m.nomeResolvido.toLowerCase().trim();
+      if (!map.has(key)) {
+        map.set(key, {
+          nomeResolvido: m.nomeResolvido,
+          unidadeResolvida: m.unidadeResolvida,
+          catalogoId: m.catalogoId,
+          qtdTotal: 0,
+          valorTotal: 0,
+          obras: [],
+          itens: [],
+          urgente: false,
+        });
+      }
+      const c = map.get(key)!;
+      c.qtdTotal += m.qtdFaltante;
+      c.valorTotal += m.valorPrevisto || 0;
+      if (!c.obras.includes(m.obraNome)) c.obras.push(m.obraNome);
+      c.itens.push(m);
+      if (m.classificacao === 'obrigatorio_iniciar') c.urgente = true;
+    });
+    return [...map.values()].sort((a, b) => {
+      if (a.urgente && !b.urgente) return -1;
+      if (!a.urgente && b.urgente) return 1;
+      return a.nomeResolvido.localeCompare(b.nomeResolvido);
+    });
+  })();
+
+  /* ── Filtro ── */
+  const filtradoPend = pendentes.filter(m =>
     !busca ||
     m.nomeResolvido.toLowerCase().includes(busca.toLowerCase()) ||
     m.obraNome.toLowerCase().includes(busca.toLowerCase()) ||
@@ -59,17 +106,24 @@ export default function ComprasPage() {
     (m.fornecedor || '').toLowerCase().includes(busca.toLowerCase())
   );
 
-  const totalPrevisto = filtrado.reduce((s, m) => s + (m.valorPrevisto || 0), 0);
-  const totalItens = filtrado.length;
-  const obrasAfetadas = new Set(filtrado.map(m => m.obraId)).size;
+  const filtradoCons = consolidado.filter(m =>
+    !busca || m.nomeResolvido.toLowerCase().includes(busca.toLowerCase())
+  );
 
+  /* ── Stats ── */
+  const totalItens    = pendentes.length;
+  const totalValor    = pendentes.reduce((s, m) => s + (m.valorPrevisto || 0), 0);
+  const obrasAfetadas = new Set(pendentes.map(m => m.obraId)).size;
+  const urgentes      = pendentes.filter(m => m.classificacao === 'obrigatorio_iniciar').length;
+
+  /* ── Ações ── */
   async function marcarPedido(mat: MatPendente, pedido: boolean) {
     const etapa = etapas.find(e => e.id === mat.etapaId);
     if (!etapa) return;
     const mats = etapa.materiais.map(m => m.id === mat.id ? { ...m, pedidoCompra: pedido } : m);
     try {
       await upsertEtapa({ ...etapa, materiais: mats });
-      message.success(pedido ? 'Marcado como pedido feito!' : 'Desmarcado.');
+      message.success(pedido ? 'Pedido registrado!' : 'Desmarcado.');
     } catch { message.error('Erro ao atualizar.'); }
   }
 
@@ -85,48 +139,82 @@ export default function ComprasPage() {
     } catch { message.error('Erro ao atualizar.'); }
   }
 
-  const columns: ColumnsType<MatPendente> = [
+  function imprimirNecessidade() {
+    const linhas = filtradoCons.map(m =>
+      `<tr style="border-bottom:1px solid #eee">
+        <td style="padding:6px 8px">${m.urgente ? '🔴 ' : ''}${m.nomeResolvido}</td>
+        <td style="padding:6px 8px;text-align:center">${m.unidadeResolvida}</td>
+        <td style="padding:6px 8px;text-align:center;font-weight:700">${m.qtdTotal}</td>
+        <td style="padding:6px 8px;text-align:right">${m.valorTotal ? formatarMoeda(m.valorTotal) : '—'}</td>
+        <td style="padding:6px 8px;font-size:11px;color:#666">${m.obras.join(', ')}</td>
+        <td style="padding:6px 8px;width:100px;border:1px solid #ccc"></td>
+      </tr>`
+    ).join('');
+
+    const w = window.open('', '_blank')!;
+    w.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8"/><title>Necessidade de Compra</title>
+      <style>*{box-sizing:border-box}body{font-family:Arial,sans-serif;padding:20px}
+      h2{margin-bottom:4px}p{margin-bottom:12px;color:#666}
+      table{width:100%;border-collapse:collapse}
+      th{background:#1e429f;color:#fff;padding:8px;text-align:left;font-size:12px}
+      @media print{@page{margin:15mm}}</style>
+      </head><body>
+      <h2>📋 Necessidade de Compra</h2>
+      <p>${new Date().toLocaleDateString('pt-BR')} · ${filtradoCons.length} itens · ${obrasAfetadas} obras</p>
+      <table>
+        <thead><tr>
+          <th>Material</th><th>Un</th><th>Qtd</th><th>Valor Prev.</th><th>Obras</th><th>Fornecedor / Obs.</th>
+        </tr></thead>
+        <tbody>${linhas}</tbody>
+      </table>
+      </body></html>`);
+    w.document.close();
+    setTimeout(() => w.print(), 300);
+  }
+
+  /* ── Colunas — por item ── */
+  const colsItem: ColumnsType<MatPendente> = [
     { title: 'Material', dataIndex: 'nomeResolvido',
       sorter: (a, b) => a.nomeResolvido.localeCompare(b.nomeResolvido),
       render: (nome: string, r) => (
         <div>
-          <Text strong>{nome}</Text>
-          {r.fornecedor && <div><Text type="secondary" style={{ fontSize: 12 }}>Fornecedor: {r.fornecedor}</Text></div>}
-          {r.pedidoCompra && <Tag color="gold" style={{ fontSize: 10 }}>Pedido feito</Tag>}
+          <Space>
+            <Text strong>{nome}</Text>
+            {r.classificacao === 'obrigatorio_iniciar' && <Tag color="red" style={{ fontSize: 10 }}>URGENTE</Tag>}
+            {r.pedidoCompra && <Tag color="gold" style={{ fontSize: 10 }}>Pedido feito</Tag>}
+          </Space>
+          {r.fornecedor && <div><Text type="secondary" style={{ fontSize: 12 }}>{r.fornecedor}</Text></div>}
         </div>
       ),
     },
-    { title: 'Un', dataIndex: 'unidadeResolvida', width: 60, render: (u: string) => <Tag>{u}</Tag> },
-    { title: 'Qtd. Prev.', dataIndex: 'qtdPrevista', width: 90, align: 'center' as const },
-    { title: 'Comprado', dataIndex: 'qtdComprada', width: 90, align: 'center' as const,
-      render: (v: number) => <Text type={v > 0 ? 'success' : 'secondary'}>{v}</Text> },
-    { title: 'Faltante', dataIndex: 'qtdFaltante', width: 90, align: 'center' as const,
+    { title: 'Un', dataIndex: 'unidadeResolvida', width: 55, render: (u: string) => <Tag>{u}</Tag> },
+    { title: 'Previsto', dataIndex: 'qtdPrevista', width: 80, align: 'center' as const },
+    { title: 'Comprado', dataIndex: 'qtdComprada', width: 80, align: 'center' as const,
+      render: (v: number) => <Text type={v > 0 ? 'success' : 'secondary'}>{v || 0}</Text> },
+    { title: 'Falta', dataIndex: 'qtdFaltante', width: 70, align: 'center' as const,
       render: (v: number) => <Text strong style={{ color: '#ff4d4f' }}>{v}</Text> },
     { title: 'Obra / Etapa', key: 'ref',
       render: (_, r) => (
         <div>
-          <Text>{r.obraNome}</Text>
-          <div><Text type="secondary" style={{ fontSize: 12 }}>{r.etapaNome}</Text></div>
+          <Text style={{ fontSize: 13 }}>{r.obraNome}</Text>
+          <div><Text type="secondary" style={{ fontSize: 11 }}>{r.etapaNome}</Text></div>
         </div>
       ),
     },
-    { title: 'V. Prev.', dataIndex: 'valorPrevisto', width: 120,
+    { title: 'V. Prev.', dataIndex: 'valorPrevisto', width: 110,
       render: (v: number) => v ? formatarMoeda(v) : <Text type="secondary">—</Text> },
-    { title: 'Ações', key: 'acoes', width: 110,
+    { title: 'Ações', key: 'acoes', width: 100,
       render: (_, r) => (
         <Space size={4}>
           <Tooltip title={r.pedidoCompra ? 'Desmarcar pedido' : 'Marcar pedido feito'}>
-            <Button
-              size="small"
-              type={r.pedidoCompra ? 'primary' : 'default'}
-              ghost={r.pedidoCompra}
-              onClick={() => marcarPedido(r, !r.pedidoCompra)}
-            >
+            <Button size="small" type={r.pedidoCompra ? 'primary' : 'default'} ghost={r.pedidoCompra}
+              onClick={() => marcarPedido(r, !r.pedidoCompra)}>
               Pedido
             </Button>
           </Tooltip>
-          <Popconfirm title="Marcar como totalmente comprado?" onConfirm={() => marcarComprado(r)}>
-            <Tooltip title="Marcar como comprado">
+          <Popconfirm title="Marcar como comprado?" onConfirm={() => marcarComprado(r)}>
+            <Tooltip title="Marcar como totalmente comprado">
               <Button size="small" type="primary" icon={<CheckOutlined />} />
             </Tooltip>
           </Popconfirm>
@@ -135,44 +223,136 @@ export default function ComprasPage() {
     },
   ];
 
+  /* ── Colunas — consolidado ── */
+  const colsCons: ColumnsType<MatConsolidado> = [
+    { title: 'Material', dataIndex: 'nomeResolvido',
+      render: (n: string, r) => (
+        <div>
+          <Space>
+            <Text strong>{n}</Text>
+            {r.urgente && <Tag color="red" style={{ fontSize: 10 }}>URGENTE</Tag>}
+          </Space>
+          <div><Text type="secondary" style={{ fontSize: 11 }}>{r.obras.join(' · ')}</Text></div>
+        </div>
+      ),
+    },
+    { title: 'Un', dataIndex: 'unidadeResolvida', width: 55, render: (u: string) => <Tag>{u}</Tag> },
+    { title: 'Qtd Total', dataIndex: 'qtdTotal', width: 90, align: 'center' as const,
+      render: (v: number) => <Text strong style={{ color: '#1677ff', fontSize: 15 }}>{v}</Text> },
+    { title: 'Obras', key: 'obras', width: 60, align: 'center' as const,
+      render: (_, r) => <Badge count={r.obras.length} color="#1677ff" /> },
+    { title: 'Valor Prev.', dataIndex: 'valorTotal', width: 130,
+      render: (v: number) => v ? formatarMoeda(v) : <Text type="secondary">—</Text> },
+  ];
+
   return (
     <div>
-      <Title level={4} style={{ marginBottom: 20 }}>Lista de Compras</Title>
+      <Title level={4} style={{ marginBottom: 20 }}>Necessidade de Compra</Title>
 
       <Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
-        <Col xs={12} sm={8}>
+        <Col xs={12} sm={6}>
           <Card size="small">
             <Statistic title="Itens p/ comprar" value={totalItens}
               valueStyle={{ color: totalItens > 0 ? '#faad14' : undefined, fontSize: 22 }} />
           </Card>
         </Col>
-        <Col xs={12} sm={8}>
+        <Col xs={12} sm={6}>
+          <Card size="small">
+            <Statistic title="Urgentes" value={urgentes}
+              valueStyle={{ color: urgentes > 0 ? '#ff4d4f' : undefined, fontSize: 22 }} />
+          </Card>
+        </Col>
+        <Col xs={12} sm={6}>
           <Card size="small">
             <Statistic title="Obras afetadas" value={obrasAfetadas} valueStyle={{ fontSize: 22 }} />
           </Card>
         </Col>
-        <Col xs={24} sm={8}>
+        <Col xs={12} sm={6}>
           <Card size="small">
-            <Statistic title="Valor previsto total" value={formatarMoeda(totalPrevisto)} valueStyle={{ fontSize: 18 }} />
+            <Statistic title="Valor previsto total" value={formatarMoeda(totalValor)} valueStyle={{ fontSize: 16 }} />
           </Card>
         </Col>
       </Row>
 
       <Row gutter={12} style={{ marginBottom: 16 }}>
         <Col xs={24} sm={14}>
-          <Input prefix={<SearchOutlined />} placeholder="Buscar por material, obra, etapa ou fornecedor..."
+          <Input prefix={<SearchOutlined />} placeholder="Buscar material, obra, etapa ou fornecedor..."
             value={busca} onChange={e => setBusca(e.target.value)} allowClear />
+        </Col>
+        <Col xs={24} sm={10} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button icon={<PrinterOutlined />} onClick={imprimirNecessidade}>
+            Imprimir lista consolidada
+          </Button>
         </Col>
       </Row>
 
-      <Table
-        dataSource={filtrado}
-        columns={columns}
-        rowKey={r => `${r.etapaId}-${r.id}`}
-        size="middle"
-        pagination={{ pageSize: 30, showTotal: t => `${t} item(ns)` }}
-        locale={{ emptyText: 'Nenhum material pendente de compra.' }}
-        rowClassName={r => r.classificacao === 'obrigatorio_iniciar' ? 'row-urgente' : ''}
+      <Tabs
+        activeKey={tab}
+        onChange={setTab}
+        items={[
+          {
+            key: 'necessidade',
+            label: `📋 Consolidado por Material (${filtradoCons.length})`,
+            children: (
+              <Table
+                dataSource={filtradoCons}
+                columns={colsCons}
+                rowKey="nomeResolvido"
+                size="middle"
+                pagination={{ pageSize: 30, showTotal: t => `${t} material(is)` }}
+                locale={{ emptyText: 'Nenhum material pendente de compra.' }}
+                rowClassName={r => r.urgente ? 'row-urgente' : ''}
+                expandable={{
+                  expandedRowRender: r => (
+                    <Table
+                      dataSource={r.itens}
+                      columns={[
+                        { title: 'Obra', dataIndex: 'obraNome', render: (n: string, m) => (
+                          <div><Text>{n}</Text><div><Text type="secondary" style={{ fontSize: 11 }}>{m.etapaNome}</Text></div></div>
+                        )},
+                        { title: 'Previsto', dataIndex: 'qtdPrevista', width: 80, align: 'center' as const },
+                        { title: 'Comprado', dataIndex: 'qtdComprada', width: 80, align: 'center' as const },
+                        { title: 'Falta', dataIndex: 'qtdFaltante', width: 70, align: 'center' as const,
+                          render: (v: number) => <Text strong style={{ color: '#ff4d4f' }}>{v}</Text> },
+                        { title: 'Ações', key: 'a', width: 100,
+                          render: (_, m) => (
+                            <Space size={4}>
+                              <Button size="small" type={m.pedidoCompra ? 'primary' : 'default'}
+                                ghost={m.pedidoCompra} onClick={() => marcarPedido(m, !m.pedidoCompra)}>
+                                Pedido
+                              </Button>
+                              <Popconfirm title="Marcar como comprado?" onConfirm={() => marcarComprado(m)}>
+                                <Button size="small" type="primary" icon={<CheckOutlined />} />
+                              </Popconfirm>
+                            </Space>
+                          ),
+                        },
+                      ]}
+                      rowKey={m => `${m.etapaId}-${m.id}`}
+                      size="small"
+                      pagination={false}
+                    />
+                  ),
+                }}
+              />
+            ),
+          },
+          {
+            key: 'porobra',
+            label: `📦 Por Obra/Etapa (${filtradoPend.length})`,
+            children: (
+              <Table
+                dataSource={filtradoPend}
+                columns={colsItem}
+                rowKey={r => `${r.etapaId}-${r.id}`}
+                size="middle"
+                pagination={{ pageSize: 30, showTotal: t => `${t} item(ns)` }}
+                locale={{ emptyText: 'Nenhum material pendente.' }}
+                rowClassName={r => r.classificacao === 'obrigatorio_iniciar' ? 'row-urgente' : ''}
+              />
+            ),
+          },
+        ]}
       />
     </div>
   );
