@@ -85,36 +85,50 @@ function sugerirCategoria(t: OFXTransacao): CatOFX {
   return 'outros';
 }
 
-/* Busca lançamento correspondente:
-   1º por ofxId (React novo)
-   2º por data+valor+tipo (sistema antigo não salva ofxId) */
-function findLancByTransacao(t: OFXTransacao, lancamentos: Lancamento[]): Lancamento | undefined {
+/* Extrai a data mais relevante de um lançamento, suportando campos do sistema
+   antigo (data, dataPagamento, dataVencimento) e do React (vencimento, pagamento) */
+function dataDoLancamento(l: Lancamento): string {
+  const la = l as unknown as Record<string, string>;
+  return l.pagamento || la['dataPagamento'] || la['data'] || l.vencimento || la['dataVencimento'] || '';
+}
+
+/* Busca lançamento correspondente.
+   Retorna { lanc, fuzzy: false } para match exato (ofxId) ou { lanc, fuzzy: true }
+   para match aproximado por data+valor+tipo (fallback para sistema antigo). */
+function findLancByTransacao(
+  t: OFXTransacao,
+  lancamentos: Lancamento[],
+): { lanc: Lancamento; fuzzy: boolean } | null {
   const byId = lancamentos.find(l => l.ofxId === t.id);
-  if (byId) return byId;
-  return lancamentos.find(l => {
-    if (!l.vencimento && !l.pagamento) return false;
-    const dataLanc = new Date(l.pagamento || l.vencimento).getTime();
-    const dataTxn  = new Date(t.data).getTime();
-    const diffDias = Math.abs(dataLanc - dataTxn) / 86400000;
+  if (byId) return { lanc: byId, fuzzy: false };
+
+  const fuzzy = lancamentos.find(l => {
+    const dataStr = dataDoLancamento(l);
+    if (!dataStr) return false;
+    const diffDias = Math.abs(new Date(dataStr).getTime() - new Date(t.data).getTime()) / 86400000;
     const sameValor = Math.abs(l.valor - t.valor) < 0.01;
     const sameTipo  = t.tipo === 'credito' ? l.tipo === 'receita' : l.tipo === 'despesa';
     return diffDias <= 3 && sameValor && sameTipo;
   });
+  return fuzzy ? { lanc: fuzzy, fuzzy: true } : null;
+}
+
+function estadoDeMatch(lanc: Lancamento, fuzzy: boolean): EstadoClass {
+  return {
+    // match exato → lancado; match fuzzy → ignorado (já existe no sistema antigo)
+    status: fuzzy ? 'ignorado' : 'lancado',
+    cat: lanc.tipo === 'receita' ? 'recebimento' : lanc.categoria === 'mao-de-obra' ? 'mao-de-obra' : 'outros',
+    obra: lanc.obraId || '',
+    descricao: lanc.descricao,
+    clienteId: lanc.clienteId || '',
+    socioId: lanc.socioId || '',
+    prestadorId: lanc.prestadorId || '',
+  };
 }
 
 function estadoInicial(t: OFXTransacao, lancamentos: Lancamento[]): EstadoClass {
-  const lanc = findLancByTransacao(t, lancamentos);
-  if (lanc) {
-    return {
-      status: 'lancado',
-      cat: lanc.tipo === 'receita' ? 'recebimento' : lanc.categoria === 'mao-de-obra' ? 'mao-de-obra' : 'outros',
-      obra: lanc.obraId || '',
-      descricao: lanc.descricao,
-      clienteId: lanc.clienteId || '',
-      socioId: lanc.socioId || '',
-      prestadorId: lanc.prestadorId || '',
-    };
-  }
+  const resultado = findLancByTransacao(t, lancamentos);
+  if (resultado) return estadoDeMatch(resultado.lanc, resultado.fuzzy);
   const catSug = sugerirCategoria(t);
   return { status: 'pendente', cat: catSug, obra: '', descricao: '', clienteId: '', socioId: '', prestadorId: '' };
 }
@@ -144,7 +158,7 @@ export default function OFXPage() {
     } catch { setTransacoes([]); }
   }, []);
 
-  // Reconstrói estado: estado salvo tem prioridade, mas sempre verifica lançamento real
+  // Reconstrói estado: verifica lançamento real antes do estado salvo
   useEffect(() => {
     if (!transacoes.length) return;
     const salvo: Record<string, EstadoClass> = (() => {
@@ -152,25 +166,14 @@ export default function OFXPage() {
     })();
     const novo: Record<string, EstadoClass> = {};
     transacoes.forEach(t => {
-      // Busca lançamento por ofxId OU por data+valor+tipo (fallback p/ sistema antigo)
-      const lancExistente = findLancByTransacao(t, lancamentos);
-      if (lancExistente) {
-        // Já existe lançamento real → sempre marca como lancado
-        novo[t.id] = {
-          status: 'lancado',
-          cat: lancExistente.tipo === 'receita' ? 'recebimento'
-             : lancExistente.categoria === 'mao-de-obra' ? 'mao-de-obra' : 'outros',
-          obra: lancExistente.obraId || '',
-          descricao: lancExistente.descricao,
-          clienteId: lancExistente.clienteId || '',
-          socioId: lancExistente.socioId || '',
-          prestadorId: lancExistente.prestadorId || '',
-        };
+      const resultado = findLancByTransacao(t, lancamentos);
+      if (resultado) {
+        // Lançamento real encontrado (exato ou fuzzy) → determina status pelo tipo de match
+        novo[t.id] = estadoDeMatch(resultado.lanc, resultado.fuzzy);
       } else if (salvo[t.id]) {
-        // Sem lançamento, mas tem estado salvo → usa o estado salvo
+        // Sem lançamento mas tem estado salvo → usa o salvo
         novo[t.id] = salvo[t.id];
       } else {
-        // Novo — sugere categoria automaticamente
         novo[t.id] = estadoInicial(t, lancamentos);
       }
     });
