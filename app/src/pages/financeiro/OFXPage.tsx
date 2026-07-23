@@ -85,8 +85,25 @@ function sugerirCategoria(t: OFXTransacao): CatOFX {
   return 'outros';
 }
 
+/* Busca lançamento correspondente:
+   1º por ofxId (React novo)
+   2º por data+valor+tipo (sistema antigo não salva ofxId) */
+function findLancByTransacao(t: OFXTransacao, lancamentos: Lancamento[]): Lancamento | undefined {
+  const byId = lancamentos.find(l => l.ofxId === t.id);
+  if (byId) return byId;
+  return lancamentos.find(l => {
+    if (!l.vencimento && !l.pagamento) return false;
+    const dataLanc = new Date(l.pagamento || l.vencimento).getTime();
+    const dataTxn  = new Date(t.data).getTime();
+    const diffDias = Math.abs(dataLanc - dataTxn) / 86400000;
+    const sameValor = Math.abs(l.valor - t.valor) < 0.01;
+    const sameTipo  = t.tipo === 'credito' ? l.tipo === 'receita' : l.tipo === 'despesa';
+    return diffDias <= 3 && sameValor && sameTipo;
+  });
+}
+
 function estadoInicial(t: OFXTransacao, lancamentos: Lancamento[]): EstadoClass {
-  const lanc = lancamentos.find(l => l.ofxId === t.id);
+  const lanc = findLancByTransacao(t, lancamentos);
   if (lanc) {
     return {
       status: 'lancado',
@@ -127,7 +144,7 @@ export default function OFXPage() {
     } catch { setTransacoes([]); }
   }, []);
 
-  // Reconstrói estado combinando localStorage + lancamentos (com ofxId)
+  // Reconstrói estado: estado salvo tem prioridade, mas sempre verifica lançamento real
   useEffect(() => {
     if (!transacoes.length) return;
     const salvo: Record<string, EstadoClass> = (() => {
@@ -135,15 +152,25 @@ export default function OFXPage() {
     })();
     const novo: Record<string, EstadoClass> = {};
     transacoes.forEach(t => {
-      if (salvo[t.id]) {
-        // verifica se o lancamento ainda existe
-        const lancExists = lancamentos.some(l => l.ofxId === t.id);
-        if (salvo[t.id].status === 'lancado' && !lancExists) {
-          novo[t.id] = { ...salvo[t.id], status: 'pendente' };
-        } else {
-          novo[t.id] = salvo[t.id];
-        }
+      // Busca lançamento por ofxId OU por data+valor+tipo (fallback p/ sistema antigo)
+      const lancExistente = findLancByTransacao(t, lancamentos);
+      if (lancExistente) {
+        // Já existe lançamento real → sempre marca como lancado
+        novo[t.id] = {
+          status: 'lancado',
+          cat: lancExistente.tipo === 'receita' ? 'recebimento'
+             : lancExistente.categoria === 'mao-de-obra' ? 'mao-de-obra' : 'outros',
+          obra: lancExistente.obraId || '',
+          descricao: lancExistente.descricao,
+          clienteId: lancExistente.clienteId || '',
+          socioId: lancExistente.socioId || '',
+          prestadorId: lancExistente.prestadorId || '',
+        };
+      } else if (salvo[t.id]) {
+        // Sem lançamento, mas tem estado salvo → usa o estado salvo
+        novo[t.id] = salvo[t.id];
       } else {
+        // Novo — sugere categoria automaticamente
         novo[t.id] = estadoInicial(t, lancamentos);
       }
     });
@@ -255,6 +282,19 @@ export default function OFXPage() {
     setTransacoes([]);
     setEstados({});
     message.success('Extrato limpo.');
+  }
+
+  function ignorarTodosPendentes() {
+    const prox = { ...estados };
+    let count = 0;
+    transacoes.forEach(t => {
+      if ((prox[t.id]?.status || 'pendente') === 'pendente') {
+        prox[t.id] = { ...prox[t.id] ?? estadoInicial(t, lancamentos), status: 'ignorado' };
+        count++;
+      }
+    });
+    salvarEstados(prox);
+    message.success(`${count} transação(ões) marcada(s) como ignorada.`);
   }
 
   /* ── Filtro e stats ── */
@@ -379,9 +419,20 @@ export default function OFXPage() {
               </Space>
             </Col>
             <Col>
-              <Popconfirm title="Limpar todo o extrato importado?" onConfirm={limparTudo}>
-                <Button size="small" danger>Limpar extrato</Button>
-              </Popconfirm>
+              <Space>
+                {pendentes > 0 && (
+                  <Popconfirm
+                    title={`Marcar ${pendentes} transação(ões) pendente(s) como Ignorar?`}
+                    description="Use para transações já lançadas no sistema antigo."
+                    onConfirm={ignorarTodosPendentes}
+                  >
+                    <Button size="small">Ignorar todos os pendentes</Button>
+                  </Popconfirm>
+                )}
+                <Popconfirm title="Limpar todo o extrato importado?" onConfirm={limparTudo}>
+                  <Button size="small" danger>Limpar extrato</Button>
+                </Popconfirm>
+              </Space>
             </Col>
           </Row>
 
@@ -444,7 +495,7 @@ export default function OFXPage() {
                           <Col xs={12} sm={6} md={4}>
                             <Select placeholder="Obra" value={est.obra || undefined} size="small"
                               style={{ width: '100%' }} allowClear onChange={v => upd(t.id, { obra: v || '' })}
-                              options={obras.filter(o => o.status === 'andamento' || o.status === 'aprovado')
+                              options={obras.filter(o => o.status !== 'cancelada')
                                 .map(o => ({ value: o.id, label: o.nome }))} />
                           </Col>
                         )}
