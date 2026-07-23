@@ -27,8 +27,8 @@ export default function Configuracoes() {
   const [form] = Form.useForm();
   const [saved, setSaved] = useState(false);
 
-  const { obras, fetch: fetchObras }         = useObrasStore();
-  const { lancamentos, fetch: fetchLanc, save: saveLanc } = useLancamentosStore();
+  const { fetch: fetchObras }             = useObrasStore();
+  const { fetch: fetchLanc, save: saveLanc } = useLancamentosStore();
 
   const [analise, setAnalise]   = useState<AnaliseObra[] | null>(null);
   const [analisando, setAnalisando] = useState(false);
@@ -55,16 +55,20 @@ export default function Configuracoes() {
       await fetchLanc();
     } catch {}
 
+    // Lê valores FRESCOS do store após o fetch (evita stale closure)
+    const freshObras = useObrasStore.getState().obras;
+    const freshLancs = useLancamentosStore.getState().lancamentos;
+
     const resultado: AnaliseObra[] = [];
 
-    for (const obra of obras.filter(o => o.status !== 'cancelada')) {
+    for (const obra of freshObras.filter(o => o.status !== 'cancelada')) {
       const obraAny = obra as unknown as Record<string, unknown>;
       let rec = 0;
       let des = 0;
 
       // Parcelas sem lançamento correspondente (verifica por ID)
       for (const p of obra.parcelas || []) {
-        if (!lancamentos.some(l => l.id === p.id)) rec++;
+        if (!freshLancs.some(l => l.id === p.id)) rec++;
       }
 
       // funcionariosObra do sistema antigo
@@ -72,8 +76,7 @@ export default function Configuracoes() {
       const funcsOld = (obraAny['funcionariosObra'] as FuncOld[] | undefined) || [];
       for (const f of funcsOld) {
         if ((f.valor || 0) <= 0) continue;
-        // Verifica se já existe despesa para essa obra com esse valor e nome
-        const existe = lancamentos.some(l =>
+        const existe = freshLancs.some(l =>
           l.obraId === obra.id &&
           l.tipo === 'despesa' &&
           Math.abs(l.valor - (f.valor || 0)) < 0.01 &&
@@ -84,7 +87,7 @@ export default function Configuracoes() {
 
       // obra.despesas (novo campo) sem lançamento correspondente
       for (const d of obra.despesas || []) {
-        if (!lancamentos.some(l => l.id === d.id)) des++;
+        if (!freshLancs.some(l => l.id === d.id)) des++;
       }
 
       if (rec > 0 || des > 0) {
@@ -107,14 +110,18 @@ export default function Configuracoes() {
       await fetchObras();
       await fetchLanc();
 
+      // Lê valores FRESCOS do store após o fetch (evita stale closure)
+      const freshObras = useObrasStore.getState().obras;
+      const freshLancs = useLancamentosStore.getState().lancamentos;
+
       const novos: Lancamento[] = [];
 
-      for (const obra of obras.filter(o => o.status !== 'cancelada')) {
+      for (const obra of freshObras.filter(o => o.status !== 'cancelada')) {
         const obraAny = obra as unknown as Record<string, unknown>;
 
         // 1. Parcelas → Contas a Receber
         for (const p of obra.parcelas || []) {
-          if (lancamentos.some(l => l.id === p.id)) continue;
+          if (freshLancs.some(l => l.id === p.id)) continue;
           novos.push({
             id: p.id,
             tipo: 'receita',
@@ -136,7 +143,7 @@ export default function Configuracoes() {
         const funcsOld = (obraAny['funcionariosObra'] as FuncOld[] | undefined) || [];
         for (const f of funcsOld) {
           if ((f.valor || 0) <= 0) continue;
-          const existe = lancamentos.some(l =>
+          const existe = freshLancs.some(l =>
             l.obraId === obra.id &&
             l.tipo === 'despesa' &&
             Math.abs(l.valor - (f.valor || 0)) < 0.01 &&
@@ -161,7 +168,7 @@ export default function Configuracoes() {
 
         // 3. obra.despesas (novo campo) → Contas a Pagar
         for (const d of obra.despesas || []) {
-          if (lancamentos.some(l => l.id === d.id)) continue;
+          if (freshLancs.some(l => l.id === d.id)) continue;
           novos.push({
             id: d.id,
             tipo: 'despesa',
@@ -186,7 +193,7 @@ export default function Configuracoes() {
       }
 
       await saveLanc(
-        [...lancamentos, ...novos],
+        [...freshLancs, ...novos],
         `Migração: ${novos.length} lançamentos gerados das obras`,
       );
 
