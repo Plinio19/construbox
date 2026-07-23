@@ -227,12 +227,20 @@ export interface Lancamento {
   status: StatusLancamento;
   obraId?: string;
   obraNome?: string;
+  clienteId?: string;
+  clienteNome?: string;
   prestadorId?: string;
   prestadorNome?: string;
   funcionarioId?: string;
   funcionarioNome?: string;
+  socioId?: string;
+  socioNome?: string;
   categoria?: string;
   observacoes?: string;
+  // OFX / conciliação bancária
+  ofxId?: string;
+  conciliado?: boolean;
+  obs?: string;
   criadoEm: string;
 }
 

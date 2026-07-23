@@ -37,6 +37,7 @@ const menuItems = [
       { key: '/financeiro/receber',  label: 'Contas a Receber' },
       { key: '/financeiro/pagar',    label: 'Contas a Pagar' },
       { key: '/financeiro/extrato',  label: 'Extrato' },
+      { key: '/financeiro/ofx',     label: 'OFX / Banco' },
     ],
   },
   { key: '/compras',     icon: <ShoppingCartOutlined />, label: 'Compras' },

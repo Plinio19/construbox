@@ -10,6 +10,7 @@ import PrestadoresPage from './pages/cadastros/PrestadoresPage';
 import FuncionariosPage from './pages/cadastros/FuncionariosPage';
 import FinanceiroPage from './pages/financeiro/FinanceiroPage';
 import ExtratoPage from './pages/financeiro/ExtratoPage';
+import OFXPage from './pages/financeiro/OFXPage';
 import RelatoriosPage from './pages/relatorios/RelatoriosPage';
 import ComprasPage from './pages/compras/ComprasPage';
 import EquipePage from './pages/equipe/EquipePage';
@@ -32,6 +33,7 @@ export const router = createHashRouter([
       { path: 'financeiro/receber',         element: <FinanceiroPage tipo="receita" /> },
       { path: 'financeiro/pagar',           element: <FinanceiroPage tipo="despesa" /> },
       { path: 'financeiro/extrato',         element: <ExtratoPage /> },
+      { path: 'financeiro/ofx',            element: <OFXPage /> },
       { path: 'compras',                    element: <ComprasPage /> },
       { path: 'equipe',                     element: <EquipePage /> },
       { path: 'relatorios',                 element: <RelatoriosPage /> },
