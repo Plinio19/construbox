@@ -132,6 +132,20 @@ export interface Parcela {
   pago?: boolean;
 }
 
+export type CategoriaDespesa =
+  | 'mao-de-obra' | 'material' | 'ferramenta' | 'combustivel'
+  | 'comissao' | 'hospedagem' | 'imposto' | 'reembolso' | 'outros';
+
+export interface DespesaObra {
+  id: string;
+  descricao: string;
+  valor: number;
+  vencimento: string;
+  categoria: CategoriaDespesa;
+  prestadorId?: string;
+  prestadorNome?: string;
+}
+
 export interface Obra {
   id: string;
   nome: string;
@@ -149,6 +163,7 @@ export interface Obra {
   observacoes?: string;
   funcionarios?: ObraFuncionario[];
   parcelas?: Parcela[];
+  despesas?: DespesaObra[];
   prestadorId?: string;
   prestadorNome?: string;
   criadoEm: string;

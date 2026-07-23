@@ -73,7 +73,7 @@ function parseOFX(content: string): OFXTransacao[] {
 
 /* ── Sugestão automática de categoria ── */
 function sugerirCategoria(t: OFXTransacao): CatOFX {
-  const m = t.memo.toUpperCase();
+  const m = (t.memo || '').toUpperCase();
   if (t.tipo === 'credito') {
     if (m.includes('HOTEL IN BOX') || m.includes('HOTEL INBOX') || m.includes('CONSTRUBOX')) return 'recebimento';
     if (m.includes('RDB') || m.includes('RENDIMENTO')) return 'ignorar';
@@ -207,7 +207,7 @@ export default function OFXPage() {
         recebimento: 'adiantamento', 'mao-de-obra': 'mao-de-obra',
         distribuicao: 'distribuicao', reembolso: 'reembolso', outros: 'outros',
       };
-      const descFinal = est.descricao || t.memo.replace(/Transferência (recebida|enviada) pelo Pix - /i, '').slice(0, 80);
+      const descFinal = est.descricao || (t.memo || '').replace(/Transferência (recebida|enviada) pelo Pix - /i, '').slice(0, 80);
       const lanc: Lancamento = {
         id: uid(),
         tipo,

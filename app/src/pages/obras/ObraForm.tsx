@@ -5,11 +5,12 @@ import {
 } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import type { Obra, ObraFuncionario, Parcela, StatusObra } from '../../types';
+import type { Obra, ObraFuncionario, Parcela, DespesaObra, StatusObra, CategoriaDespesa } from '../../types';
 import { useObrasStore } from '../../stores/useObrasStore';
 import { useClientesStore } from '../../stores/useClientesStore';
 import { useModelosStore } from '../../stores/useModelosStore';
 import { useFuncionariosStore } from '../../stores/useFuncionariosStore';
+import { usePrestadoresStore } from '../../stores/usePrestadoresStore';
 import { useEtapasStore } from '../../stores/useEtapasStore';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
 import { OBRA_STATUS_OPTIONS } from '../../components/common/StatusTag';
@@ -24,6 +25,18 @@ interface Props {
 }
 
 const STATUS_OPTS = OBRA_STATUS_OPTIONS;
+
+const CAT_DESPESA_OPTS: { value: CategoriaDespesa; label: string }[] = [
+  { value: 'mao-de-obra',  label: 'Mão de Obra' },
+  { value: 'material',     label: 'Material' },
+  { value: 'ferramenta',   label: 'Ferramenta' },
+  { value: 'combustivel',  label: 'Combustível' },
+  { value: 'comissao',     label: 'Comissão' },
+  { value: 'hospedagem',   label: 'Hospedagem' },
+  { value: 'imposto',      label: 'Imposto / Taxa' },
+  { value: 'reembolso',    label: 'Reembolso' },
+  { value: 'outros',       label: 'Outros' },
+];
 
 function gerarParcelasPreset(tipo: string, valorTotal: number, dataInicio: string): Parcela[] {
   const base = dayjs(dataInicio || hoje());
@@ -56,11 +69,13 @@ export default function ObraForm({ obra, open, onClose }: Props) {
   const [saving, setSaving] = useState(false);
   const [parcelas, setParcelas] = useState<Parcela[]>([]);
   const [funcs, setFuncs] = useState<ObraFuncionario[]>([]);
+  const [despesas, setDespesas] = useState<DespesaObra[]>([]);
 
   const { upsert: upsertObra } = useObrasStore();
   const { clientes, fetch: fetchClientes } = useClientesStore();
   const { modelos, fetch: fetchModelos } = useModelosStore();
   const { funcionarios, fetch: fetchFuncs } = useFuncionariosStore();
+  const { prestadores, fetch: fetchPrest } = usePrestadoresStore();
   const { etapas, fetch: fetchEtapas, save: saveEtapas } = useEtapasStore();
   const { lancamentos, fetch: fetchLanc, save: saveLanc } = useLancamentosStore();
 
@@ -69,6 +84,7 @@ export default function ObraForm({ obra, open, onClose }: Props) {
       fetchClientes();
       fetchModelos();
       fetchFuncs();
+      fetchPrest();
       fetchEtapas();
       fetchLanc();
     }
@@ -84,11 +100,13 @@ export default function ObraForm({ obra, open, onClose }: Props) {
       });
       setParcelas(obra.parcelas || []);
       setFuncs(obra.funcionarios || []);
+      setDespesas(obra.despesas || []);
     } else {
       form.resetFields();
       form.setFieldValue('status', 'orcamento');
       setParcelas([]);
       setFuncs([]);
+      setDespesas([]);
     }
   }, [obra, open]);
 
@@ -117,6 +135,7 @@ export default function ObraForm({ obra, open, onClose }: Props) {
         observacoes:    values.observacoes as string | undefined,
         funcionarios:   funcs,
         parcelas,
+        despesas,
         criadoEm:       obra?.criadoEm || hoje(),
       };
 
@@ -164,21 +183,50 @@ export default function ObraForm({ obra, open, onClose }: Props) {
         }
       }
 
-      // Gerar lançamentos das parcelas
-      if (parcelas.length > 0) {
-        const outrosLanc = lancamentos.filter(l => l.obraId !== id || l.tipo !== 'receita');
-        const novosLanc = parcelas.map(p => ({
-          id: p.id,
-          tipo: 'receita' as const,
-          descricao: `${novaObra.nome} — ${p.descricao}`,
-          valor: p.valor,
-          vencimento: p.vencimento,
+      // Sincroniza lancamentos: parcelas (receitas) + despesas
+      const lancSemObraForm = lancamentos.filter(l =>
+        // Mantém tudo que NÃO é gerado por este formulário desta obra
+        !(l.obraId === id && !l.conciliado && !l.ofxId),
+      );
+
+      const novosLancReceita = parcelas.map(p => ({
+        id: p.id,
+        tipo: 'receita' as const,
+        descricao: `${novaObra.nome} — ${p.descricao}`,
+        valor: p.valor,
+        vencimento: p.vencimento,
+        status: 'pendente' as const,
+        categoria: 'parcela' as string,
+        obraId: id,
+        obraNome: novaObra.nome,
+        clienteId: novaObra.clienteId,
+        clienteNome: novaObra.clienteNome,
+        criadoEm: hoje(),
+      }));
+
+      const novosLancDespesa = despesas.map(d => {
+        const prest = prestadores.find(p => p.id === d.prestadorId);
+        return {
+          id: d.id,
+          tipo: 'despesa' as const,
+          descricao: d.descricao || `Despesa — ${novaObra.nome}`,
+          valor: d.valor,
+          vencimento: d.vencimento,
           status: 'pendente' as const,
+          categoria: d.categoria,
           obraId: id,
           obraNome: novaObra.nome,
+          prestadorId: d.prestadorId || undefined,
+          prestadorNome: prest?.nome || d.prestadorNome || undefined,
           criadoEm: hoje(),
-        }));
-        await saveLanc([...outrosLanc, ...novosLanc], `Parcelas de ${novaObra.nome}`);
+        };
+      });
+
+      if (novosLancReceita.length > 0 || novosLancDespesa.length > 0) {
+        await saveLanc(
+          [...lancSemObraForm, ...novosLancReceita, ...novosLancDespesa],
+          `Lançamentos de ${novaObra.nome}`,
+        );
       }
 
       message.success(`Obra ${isNew ? 'criada' : 'atualizada'} com sucesso!`);
@@ -208,6 +256,39 @@ export default function ObraForm({ obra, open, onClose }: Props) {
 
   const totalParcelas = parcelas.reduce((s, p) => s + (p.valor || 0), 0);
   const valorContrato = Form.useWatch('valorContrato', form) || 0;
+
+  // ── Despesas ──────────────────────────────────────────────────────────────
+  function addDespesa() {
+    setDespesas(prev => [...prev, {
+      id: uid(), descricao: '', valor: 0, vencimento: hoje(), categoria: 'mao-de-obra',
+    }]);
+  }
+
+  function updateDespesa(id: string, field: keyof DespesaObra, value: unknown) {
+    setDespesas(prev => prev.map(d => d.id === id ? { ...d, [field]: value } : d));
+  }
+
+  function gerarMOdeFuncionarios() {
+    const data = form.getFieldValue('dataInicio');
+    const venc = data ? data.format('YYYY-MM-DD') : hoje();
+    const novasDespesas: DespesaObra[] = funcs
+      .filter(f => (f.salario || 0) > 0)
+      .map(f => ({
+        id: uid(),
+        descricao: `MO: ${f.nome}${f.funcao ? ` (${f.funcao})` : ''}`,
+        valor: f.salario || 0,
+        vencimento: venc,
+        categoria: 'mao-de-obra' as CategoriaDespesa,
+      }));
+    if (!novasDespesas.length) {
+      message.warning('Nenhum funcionário com salário cadastrado na aba Equipe.');
+      return;
+    }
+    setDespesas(prev => [...prev, ...novasDespesas]);
+    message.success(`${novasDespesas.length} lançamento(s) de MO adicionado(s).`);
+  }
+
+  const totalDespesas = despesas.reduce((s, d) => s + (d.valor || 0), 0);
 
   // ── Funcionários ──────────────────────────────────────────────────────────
   function addFunc(funcId: string) {
@@ -259,12 +340,48 @@ export default function ObraForm({ obra, open, onClose }: Props) {
     )},
   ];
 
+  const colsDespesas = [
+    { title: 'Descrição', dataIndex: 'descricao', render: (_: string, r: DespesaObra) => (
+      <Input size="small" value={r.descricao} placeholder="Ex: Mão de obra — fundação"
+        onChange={e => updateDespesa(r.id, 'descricao', e.target.value)} />
+    )},
+    { title: 'Categoria', dataIndex: 'categoria', width: 150, render: (_: string, r: DespesaObra) => (
+      <Select size="small" style={{ width: '100%' }} value={r.categoria}
+        onChange={v => updateDespesa(r.id, 'categoria', v)}
+        options={CAT_DESPESA_OPTS} />
+    )},
+    { title: 'Prestador', dataIndex: 'prestadorId', width: 160, render: (_: string, r: DespesaObra) => (
+      <Select size="small" style={{ width: '100%' }} value={r.prestadorId || undefined}
+        allowClear placeholder="Opcional"
+        onChange={v => {
+          const p = prestadores.find(x => x.id === v);
+          updateDespesa(r.id, 'prestadorId', v || '');
+          if (p) updateDespesa(r.id, 'prestadorNome', p.nome);
+        }}
+        options={prestadores.map(p => ({ value: p.id, label: p.nome }))} />
+    )},
+    { title: 'Valor', dataIndex: 'valor', width: 130, render: (_: number, r: DespesaObra) => (
+      <InputNumber size="small" style={{ width: '100%' }} prefix="R$" value={r.valor}
+        onChange={v => updateDespesa(r.id, 'valor', v || 0)} />
+    )},
+    { title: 'Vencimento', dataIndex: 'vencimento', width: 145, render: (_: string, r: DespesaObra) => (
+      <DatePicker size="small" style={{ width: '100%' }} format="DD/MM/YYYY"
+        value={r.vencimento ? dayjs(r.vencimento) : null}
+        onChange={d => updateDespesa(r.id, 'vencimento', d ? d.format('YYYY-MM-DD') : hoje())} />
+    )},
+    { title: '', width: 40, render: (_: unknown, r: DespesaObra) => (
+      <Popconfirm title="Remover?" onConfirm={() => setDespesas(prev => prev.filter(d => d.id !== r.id))}>
+        <Button type="text" danger size="small" icon={<DeleteOutlined />} />
+      </Popconfirm>
+    )},
+  ];
+
   return (
     <Drawer
       title={obra ? `Editar: ${obra.nome}` : 'Nova Obra'}
       open={open}
       onClose={onClose}
-      width={720}
+      width={820}
       footer={
         <Space style={{ float: 'right' }}>
           <Button onClick={onClose}>Cancelar</Button>
@@ -358,7 +475,7 @@ export default function ObraForm({ obra, open, onClose }: Props) {
           },
           {
             key: 'parcelas',
-            label: `Parcelas ${parcelas.length > 0 ? `(${parcelas.length})` : ''}`,
+            label: `Parcelas / A Receber ${parcelas.length > 0 ? `(${parcelas.length})` : ''}`,
             children: (
               <div>
                 <Space wrap style={{ marginBottom: 12 }}>
@@ -383,8 +500,8 @@ export default function ObraForm({ obra, open, onClose }: Props) {
                       </Col>
                       <Col>
                         <Space>
-                          <Text type="secondary">Total parcelas:</Text>
-                          <Text strong style={{ color: totalParcelas !== valorContrato && valorContrato > 0 ? '#ff4d4f' : undefined }}>
+                          <Text type="secondary">Total a receber:</Text>
+                          <Text strong style={{ color: totalParcelas !== valorContrato && valorContrato > 0 ? '#ff4d4f' : '#52c41a' }}>
                             {formatarMoeda(totalParcelas)}
                           </Text>
                           {valorContrato > 0 && totalParcelas !== valorContrato && (
@@ -397,6 +514,47 @@ export default function ObraForm({ obra, open, onClose }: Props) {
                     </Row>
                   )}
                 />
+              </div>
+            ),
+          },
+          {
+            key: 'despesas',
+            label: `Despesas / A Pagar ${despesas.length > 0 ? `(${despesas.length})` : ''}`,
+            children: (
+              <div>
+                <Space wrap style={{ marginBottom: 12 }}>
+                  <Button size="small" icon={<PlusOutlined />} onClick={addDespesa}>
+                    Adicionar despesa
+                  </Button>
+                  {funcs.length > 0 && (
+                    <Button size="small" onClick={gerarMOdeFuncionarios}>
+                      Gerar MO da Equipe
+                    </Button>
+                  )}
+                </Space>
+
+                <Table
+                  dataSource={despesas}
+                  columns={colsDespesas}
+                  rowKey="id"
+                  size="small"
+                  pagination={false}
+                  scroll={{ x: 700 }}
+                  footer={() => (
+                    <Row justify="end">
+                      <Space>
+                        <Text type="secondary">Total a pagar:</Text>
+                        <Text strong style={{ color: '#ff4d4f' }}>{formatarMoeda(totalDespesas)}</Text>
+                      </Space>
+                    </Row>
+                  )}
+                />
+
+                {despesas.length === 0 && (
+                  <div style={{ textAlign: 'center', padding: '24px 0', color: '#8c8c8c' }}>
+                    Nenhuma despesa cadastrada. Clique em "Adicionar despesa" ou "Gerar MO da Equipe".
+                  </div>
+                )}
               </div>
             ),
           },
@@ -426,6 +584,11 @@ export default function ObraForm({ obra, open, onClose }: Props) {
                   size="small"
                   pagination={false}
                 />
+                {funcs.length > 0 && (
+                  <div style={{ marginTop: 12, color: '#8c8c8c', fontSize: 12 }}>
+                    💡 Use "Gerar MO da Equipe" na aba <b>Despesas</b> para criar lançamentos de Contas a Pagar para cada funcionário.
+                  </div>
+                )}
               </div>
             ),
           },
