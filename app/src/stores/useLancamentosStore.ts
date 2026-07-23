@@ -4,6 +4,27 @@ import { dataService } from '../services/GitHubDataService';
 
 const PATH = 'data/lancamentos.json';
 
+/* Normaliza lançamentos do sistema HTML legado para o schema React.
+   O sistema antigo usa: data, dataVencimento, dataPagamento, tipo 'reembolso'/'ignorar'.
+   O React usa:          vencimento, pagamento, tipo 'receita'|'despesa'. */
+function normalizar(l: Record<string, unknown>): Lancamento {
+  const tipo = l['tipo'] as string;
+  const base = l as unknown as Lancamento;
+  return {
+    ...base,
+    vencimento: (l['vencimento'] as string)
+      || (l['dataVencimento'] as string)
+      || (l['data'] as string)
+      || '',
+    pagamento:  (l['pagamento'] as string)
+      || (l['dataPagamento'] as string)
+      || undefined,
+    tipo: (tipo === 'receita' || tipo === 'despesa')
+      ? tipo as 'receita' | 'despesa'
+      : 'despesa',
+  };
+}
+
 interface LancamentosState {
   lancamentos: Lancamento[];
   sha: string | null;
@@ -28,8 +49,9 @@ export const useLancamentosStore = create<LancamentosState>((set, get) => ({
   fetch: async () => {
     set({ loading: true, error: null });
     try {
-      const { lista, sha } = await dataService.getCollection<Lancamento>(PATH);
-      set({ lancamentos: lista, sha, loading: false });
+      const { lista, sha } = await dataService.getCollection<Record<string, unknown>>(PATH);
+      const lancamentos = lista.map(normalizar);
+      set({ lancamentos, sha, loading: false });
     } catch (e) {
       set({ error: String(e), loading: false });
     }

@@ -80,22 +80,76 @@ export default function Dashboard() {
 
   const resultados: ObraResultado[] = obrasAtivas.map(obra => {
     const lancs = lancamentos.filter(l => l.obraId === obra.id);
+    // Acessa campos legados do sistema antigo que podem existir no objeto obra
+    const obraLeg = obra as unknown as Record<string, unknown>;
 
-    const recebido   = lancs.filter(l => l.tipo === 'receita' && l.status === 'pago').reduce((s, l) => s + l.valor, 0);
-    const aReceber   = lancs.filter(l => l.tipo === 'receita' && l.status !== 'pago' && l.status !== 'cancelado').reduce((s, l) => s + l.valor, 0);
+    // ── Receitas ──
+    const receitaLancs = lancs.filter(l => l.tipo === 'receita');
+    const recebido = receitaLancs
+      .filter(l => l.status === 'pago')
+      .reduce((s, l) => s + l.valor, 0);
 
-    // Mão de obra = despesas vinculadas a funcionário/prestador ou com categoria mão de obra
+    let aReceber: number;
+    if (receitaLancs.length > 0) {
+      // Lançamentos existem → usa eles
+      aReceber = receitaLancs
+        .filter(l => l.status !== 'pago' && l.status !== 'cancelado')
+        .reduce((s, l) => s + l.valor, 0);
+    } else {
+      // Fallback: usa parcelas do objeto obra (sistema antigo e obras novas sem lançamentos)
+      const parcelas = (obra.parcelas || []);
+      aReceber = parcelas
+        .filter(p => !p.pago)
+        .reduce((s, p) => s + (p.valor || 0), 0);
+      // Se nem parcelas existem mas há contrato e nada foi recebido, mostra contrato como a receber
+      if (!aReceber && !recebido && (obra.valorContrato || 0) > 0) {
+        aReceber = obra.valorContrato || 0;
+      }
+    }
+
+    // ── Mão de obra ──
     const isMaoObra = (l: typeof lancs[0]) =>
-      l.funcionarioId || l.prestadorId ||
+      !!(l.funcionarioId || l.prestadorId ||
       (l.categoria || '').toLowerCase().includes('mão') ||
       (l.categoria || '').toLowerCase().includes('mao') ||
       (l.descricao || '').toLowerCase().includes('mão de obra') ||
       (l.descricao || '').toLowerCase().includes('salário') ||
-      (l.descricao || '').toLowerCase().includes('prestador');
+      (l.descricao || '').toLowerCase().includes('prestador'));
 
-    const maoObraPaga    = lancs.filter(l => l.tipo === 'despesa' && l.status === 'pago' && isMaoObra(l)).reduce((s, l) => s + l.valor, 0);
-    const maoObraAhPagar = lancs.filter(l => l.tipo === 'despesa' && l.status !== 'pago' && l.status !== 'cancelado' && isMaoObra(l)).reduce((s, l) => s + l.valor, 0);
-    const outrasDespesas = lancs.filter(l => l.tipo === 'despesa' && l.status === 'pago' && !isMaoObra(l)).reduce((s, l) => s + l.valor, 0);
+    const despesaLancs = lancs.filter(l => l.tipo === 'despesa');
+    const moLancs = despesaLancs.filter(isMaoObra);
+
+    const maoObraPaga = moLancs
+      .filter(l => l.status === 'pago')
+      .reduce((s, l) => s + l.valor, 0);
+
+    let maoObraAhPagar: number;
+    if (moLancs.length > 0) {
+      maoObraAhPagar = moLancs
+        .filter(l => l.status !== 'pago' && l.status !== 'cancelado')
+        .reduce((s, l) => s + l.valor, 0);
+    } else {
+      // Fallback 1: funcionariosObra (campo do sistema antigo) com valor total
+      type FuncOld = { valor?: number };
+      const funcsOld = (obraLeg['funcionariosObra'] as FuncOld[] | undefined) || [];
+      maoObraAhPagar = funcsOld.reduce((s, f) => s + (f.valor || 0), 0);
+
+      // Fallback 2: valorMaoDeObra (campo orçado do sistema antigo)
+      if (!maoObraAhPagar) {
+        maoObraAhPagar = (obraLeg['valorMaoDeObra'] as number | undefined) || 0;
+      }
+
+      // Fallback 3: despesas da nova aba Despesas com categoria mao-de-obra
+      if (!maoObraAhPagar) {
+        maoObraAhPagar = (obra.despesas || [])
+          .filter(d => d.categoria === 'mao-de-obra')
+          .reduce((s, d) => s + d.valor, 0);
+      }
+    }
+
+    const outrasDespesas = despesaLancs
+      .filter(l => l.status === 'pago' && !isMaoObra(l))
+      .reduce((s, l) => s + l.valor, 0);
 
     const totalDespesas = maoObraPaga + maoObraAhPagar + outrasDespesas;
     const lucro = recebido - (maoObraPaga + outrasDespesas);
