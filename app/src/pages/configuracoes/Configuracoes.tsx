@@ -8,6 +8,7 @@ import {
   DeleteOutlined, WarningOutlined,
 } from '@ant-design/icons';
 import type { GitHubConfig, Lancamento } from '../../types';
+import { dataService } from '../../services/GitHubDataService';
 import { useObrasStore } from '../../stores/useObrasStore';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
 import { uid, hoje } from '../../utils';
@@ -309,45 +310,31 @@ export default function Configuracoes() {
 
   async function zerarDados() {
     setZerando(true);
-    const cfg = JSON.parse(localStorage.getItem(LS_CONFIG) || '{}');
-    const owner  = cfg.owner  || DEFAULTS.owner;
-    const repo   = cfg.repo   || DEFAULTS.repo;
-    const branch = cfg.branch || DEFAULTS.branch;
-    const base   = `https://api.github.com/repos/${owner}/${repo}/contents`;
-    const hdrs: HeadersInit = {
-      Authorization: `token ${cfg.token}`,
-      Accept: 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-    };
+    try {
+      const colecoes: Array<[string, string]> = [
+        ['data/obras.json',        'cbx_obras'],
+        ['data/lancamentos.json',  'cbx_lanc'],
+        ['data/clientes.json',     'cbx_clientes'],
+        ['data/prestadores.json',  'cbx_prestadores'],
+        ['data/funcionarios.json', 'cbx_funcionarios'],
+        ['data/etapas.json',       'cbx_etapas'],
+        ['data/socios.json',       'cbx_socios'],
+      ];
 
-    const arquivos = [
-      'data/obras.json', 'data/lancamentos.json', 'data/clientes.json',
-      'data/prestadores.json', 'data/funcionarios.json', 'data/etapas.json', 'data/socios.json',
-    ];
-    const lsKeys = ['cbx_obras','cbx_lanc','cbx_clientes','cbx_prestadores','cbx_funcionarios','cbx_etapas','cbx_socios','cbx_extrato','cbx_extrato_estado_v2'];
+      for (const [path, lsKey] of colecoes) {
+        await dataService.saveCollection(path, [], null, `Zerar ${path}`);
+        localStorage.setItem(lsKey, '[]');
+      }
 
-    let erros = 0;
-    for (const path of arquivos) {
-      try {
-        const res = await fetch(`${base}/${path}?ref=${branch}`, { headers: hdrs });
-        if (res.status === 404) continue;
-        const { sha } = await res.json() as { sha: string };
-        const content = btoa(unescape(encodeURIComponent('[]')));
-        const put = await fetch(`${base}/${path}`, {
-          method: 'PUT', headers: hdrs,
-          body: JSON.stringify({ message: `Zerar ${path}`, content, branch, sha }),
-        });
-        if (!put.ok) erros++;
-      } catch { erros++; }
+      localStorage.setItem('cbx_extrato', '[]');
+      localStorage.setItem('cbx_extrato_estado_v2', '{}');
+
+      message.success('✅ ERP zerado! Recarregando...');
+      setTimeout(() => window.location.reload(), 1500);
+    } catch (e) {
+      message.error('Erro ao zerar: ' + String(e));
+      setZerando(false);
     }
-
-    lsKeys.forEach(k => localStorage.setItem(k, '[]'));
-
-    if (erros > 0) message.error(`Concluído com ${erros} erro(s). Verifique o token.`);
-    else message.success('✅ ERP zerado! Recarregando...');
-
-    setTimeout(() => window.location.reload(), 1500);
-    setZerando(false);
   }
 
   return (
