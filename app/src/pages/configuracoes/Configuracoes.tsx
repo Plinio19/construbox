@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
   Card, Form, Input, Button, Alert, Typography, Space, Divider,
-  Table, Tag, message, Statistic, Row, Col,
+  Table, Tag, message, Statistic, Row, Col, Popconfirm,
 } from 'antd';
 import {
   SaveOutlined, CheckCircleOutlined, SyncOutlined, ThunderboltOutlined,
+  DeleteOutlined, WarningOutlined,
 } from '@ant-design/icons';
 import type { GitHubConfig, Lancamento } from '../../types';
 import { useObrasStore } from '../../stores/useObrasStore';
@@ -57,6 +58,7 @@ export default function Configuracoes() {
   const [lsLancsCount, setLsLancsCount] = useState<number | null>(null);
   const [ghObrasCount, setGhObrasCount] = useState<number | null>(null);
   const [ghLancsCount, setGhLancsCount] = useState<number | null>(null);
+  const [zerando, setZerando] = useState(false);
 
   useEffect(() => {
     try {
@@ -305,6 +307,49 @@ export default function Configuracoes() {
   const totalAtualizar = (plano || []).filter(p => p.tipo === 'atualizar').length;
   const obrasComAcao = (diagObras || []).filter(r => r.criar > 0 || r.atualizar > 0);
 
+  async function zerarDados() {
+    setZerando(true);
+    const cfg = JSON.parse(localStorage.getItem(LS_CONFIG) || '{}');
+    const owner  = cfg.owner  || DEFAULTS.owner;
+    const repo   = cfg.repo   || DEFAULTS.repo;
+    const branch = cfg.branch || DEFAULTS.branch;
+    const base   = `https://api.github.com/repos/${owner}/${repo}/contents`;
+    const hdrs: HeadersInit = {
+      Authorization: `token ${cfg.token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    };
+
+    const arquivos = [
+      'data/obras.json', 'data/lancamentos.json', 'data/clientes.json',
+      'data/prestadores.json', 'data/funcionarios.json', 'data/etapas.json', 'data/socios.json',
+    ];
+    const lsKeys = ['cbx_obras','cbx_lanc','cbx_clientes','cbx_prestadores','cbx_funcionarios','cbx_etapas','cbx_socios','cbx_extrato','cbx_extrato_estado_v2'];
+
+    let erros = 0;
+    for (const path of arquivos) {
+      try {
+        const res = await fetch(`${base}/${path}?ref=${branch}`, { headers: hdrs });
+        if (res.status === 404) continue;
+        const { sha } = await res.json() as { sha: string };
+        const content = btoa(unescape(encodeURIComponent('[]')));
+        const put = await fetch(`${base}/${path}`, {
+          method: 'PUT', headers: hdrs,
+          body: JSON.stringify({ message: `Zerar ${path}`, content, branch, sha }),
+        });
+        if (!put.ok) erros++;
+      } catch { erros++; }
+    }
+
+    lsKeys.forEach(k => localStorage.setItem(k, '[]'));
+
+    if (erros > 0) message.error(`Concluído com ${erros} erro(s). Verifique o token.`);
+    else message.success('✅ ERP zerado! Recarregando...');
+
+    setTimeout(() => window.location.reload(), 1500);
+    setZerando(false);
+  }
+
   return (
     <div style={{ maxWidth: 820 }}>
       <Title level={4}>Configurações</Title>
@@ -434,6 +479,31 @@ export default function Configuracoes() {
             />
           </>
         )}
+      </Card>
+
+      {/* ── Zerar Dados ── */}
+      <Card
+        title={<span style={{ color: '#ff4d4f' }}><WarningOutlined /> Zona de Perigo</span>}
+        style={{ borderColor: '#ffccc7' }}
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Text type="secondary">
+            Apaga <strong>obras, lançamentos, clientes, prestadores, funcionários, etapas e sócios</strong> do
+            GitHub e do localStorage. <strong>Modelos são preservados.</strong> Ação irreversível.
+          </Text>
+          <Popconfirm
+            title="Zerar todos os dados do ERP?"
+            description="Isso apaga obras, lançamentos e cadastros. Modelos são mantidos. Sem volta."
+            onConfirm={zerarDados}
+            okText="Sim, zerar tudo"
+            cancelText="Cancelar"
+            okButtonProps={{ danger: true }}
+          >
+            <Button danger icon={<DeleteOutlined />} loading={zerando} size="large">
+              Zerar ERP (manter modelos)
+            </Button>
+          </Popconfirm>
+        </Space>
       </Card>
     </div>
   );
