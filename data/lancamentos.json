@@ -21,15 +21,19 @@
     "id": "mrz64h6yi9aok",
     "tipo": "receita",
     "descricao": "Nova Mutum — Meio (40%)",
-    "valor": 34000,
+    "valor": 24500,
     "vencimento": "2026-06-06",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mrz65iweisq2k",
     "obraNome": "Nova Mutum",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-24"
+    "criadoEm": "2026-07-24",
+    "pagamento": "2026-05-01",
+    "ofxId": "69f5143a-75aa-426a-9287-30841e086384",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "mrz64h6ynrvp2",
