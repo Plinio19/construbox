@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Card, Row, Col, Statistic, Tag, Button, Select, Input, Typography,
-  message, Tooltip, Popconfirm, Badge, Space, Alert, Modal,
+  message, Tooltip, Popconfirm, Badge, Space, Alert,
 } from 'antd';
 import {
   UploadOutlined, CheckOutlined, StopOutlined, UndoOutlined, InboxOutlined,
-  LinkOutlined, WarningOutlined,
+  LinkOutlined, WarningOutlined, CheckCircleOutlined,
 } from '@ant-design/icons';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
 import { useObrasStore } from '../../stores/useObrasStore';
@@ -31,7 +31,7 @@ interface EstadoClass {
   status: 'pendente' | 'lancado' | 'ignorado';
   cat: CatOFX;
   obra: string;
-  lancamentoId: string;  // ID do lançamento existente a dar baixa ('' = criar novo)
+  lancamentoIds: string[];  // parcelas selecionadas para dar baixa ([] = criar novo)
   descricao: string;
   clienteId: string;
   socioId: string;
@@ -109,7 +109,7 @@ function estadoDeMatch(lanc: Lancamento, fuzzy: boolean): EstadoClass {
     status: fuzzy ? 'ignorado' : 'lancado',
     cat: lanc.tipo === 'receita' ? 'recebimento' : lanc.categoria === 'mao-de-obra' ? 'mao-de-obra' : 'outros',
     obra: lanc.obraId || '',
-    lancamentoId: lanc.id,
+    lancamentoIds: [lanc.id],
     descricao: lanc.descricao,
     clienteId: lanc.clienteId || '',
     socioId: lanc.socioId || '',
@@ -117,17 +117,26 @@ function estadoDeMatch(lanc: Lancamento, fuzzy: boolean): EstadoClass {
   };
 }
 
+function migrarEstado(s: Record<string, unknown>): EstadoClass {
+  // Migra formato antigo (lancamentoId: string) para novo (lancamentoIds: string[])
+  const e = s as unknown as EstadoClass & { lancamentoId?: string };
+  if (!Array.isArray(e.lancamentoIds)) {
+    e.lancamentoIds = e.lancamentoId ? [e.lancamentoId] : [];
+  }
+  return e;
+}
+
 function estadoInicial(t: OFXTransacao, lancamentos: Lancamento[]): EstadoClass {
   const resultado = findLancByTransacao(t, lancamentos);
   if (resultado) return estadoDeMatch(resultado.lanc, resultado.fuzzy);
   return {
     status: 'pendente', cat: sugerirCategoria(t),
-    obra: '', lancamentoId: '', descricao: '', clienteId: '', socioId: '', prestadorId: '',
+    obra: '', lancamentoIds: [], descricao: '', clienteId: '', socioId: '', prestadorId: '',
   };
 }
 
 export default function OFXPage() {
-  const { lancamentos, upsert: upsertLanc, remove: removeLanc } = useLancamentosStore();
+  const { lancamentos, upsert: upsertLanc, remove: removeLanc, fetch: fetchLancs } = useLancamentosStore();
   const { obras, fetch: fetchObras }       = useObrasStore();
   const { clientes, fetch: fetchClientes } = useClientesStore();
   const { prestadores, fetch: fetchPrest } = usePrestadoresStore();
@@ -138,10 +147,9 @@ export default function OFXPage() {
   const [drag, setDrag]             = useState(false);
   const [filtro, setFiltro]         = useState<'todos' | 'pendente' | 'lancado' | 'ignorado'>('todos');
   const [salvando, setSalvando]     = useState<string | null>(null);
-  const [modalParcial, setModalParcial] = useState<{ t: OFXTransacao; lanc: Lancamento } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { fetchObras(); fetchClientes(); fetchPrest(); fetchSocios(); }, []);
+  useEffect(() => { fetchObras(); fetchClientes(); fetchPrest(); fetchSocios(); fetchLancs(); }, []);
 
   useEffect(() => {
     try {
@@ -152,7 +160,7 @@ export default function OFXPage() {
 
   useEffect(() => {
     if (!transacoes.length) return;
-    const salvo: Record<string, EstadoClass> = (() => {
+    const salvo: Record<string, Record<string, unknown>> = (() => {
       try { return JSON.parse(localStorage.getItem(LS_ESTADO) || '{}'); } catch { return {}; }
     })();
     const novo: Record<string, EstadoClass> = {};
@@ -161,7 +169,7 @@ export default function OFXPage() {
       if (resultado) {
         novo[t.id] = estadoDeMatch(resultado.lanc, resultado.fuzzy);
       } else if (salvo[t.id]) {
-        novo[t.id] = salvo[t.id];
+        novo[t.id] = migrarEstado(salvo[t.id]);
       } else {
         novo[t.id] = estadoInicial(t, lancamentos);
       }
@@ -201,35 +209,97 @@ export default function OFXPage() {
     salvarEstados(prox);
   }
 
-  /* ── Dar baixa / Lançar ─────────────────────────────────────────────────── */
-  async function lancar(t: OFXTransacao, forcarNovo = false) {
+  /* ── Lançamentos pendentes da obra ──────────────────────────────────────── */
+  function lancamentosPendentesObra(obraId: string, tipo: 'receita' | 'despesa') {
+    return lancamentos.filter(l =>
+      l.obraId === obraId &&
+      l.tipo === tipo &&
+      (l.status === 'pendente' || l.status === 'parcial' || l.status === 'vencido'),
+    );
+  }
+
+  /* ── Lançar / Dar baixa ─────────────────────────────────────────────────── */
+  async function lancar(t: OFXTransacao) {
     const est = estados[t.id];
     if (!est || !est.cat || est.cat === 'ignorar') return;
     setSalvando(t.id);
     try {
-      // Se tem lançamento vinculado e não é "criar novo" → dar baixa no existente
-      if (est.lancamentoId && !forcarNovo) {
-        const lancExistente = lancamentos.find(l => l.id === est.lancamentoId);
-        if (lancExistente) {
-          const diffValor = Math.abs(lancExistente.valor - t.valor);
-          // Valor diverge mais de R$0,01 → perguntar antes
-          if (diffValor > 0.01) {
-            setModalParcial({ t, lanc: lancExistente });
-            setSalvando(null);
-            return;
+      const ids = est.lancamentoIds || [];
+
+      if (ids.length > 0) {
+        // Distribui o valor do banco pelas parcelas selecionadas, em ordem de vencimento
+        const selecionadas = lancamentos
+          .filter(l => ids.includes(l.id))
+          .sort((a, b) => a.vencimento.localeCompare(b.vencimento));
+
+        let valorRestante = t.valor;
+
+        for (const lanc of selecionadas) {
+          if (valorRestante <= 0) break;
+
+          if (valorRestante >= lanc.valor - 0.01) {
+            // Baixa completa nesta parcela
+            await upsertLanc({
+              ...lanc,
+              status: 'pago',
+              pagamento: t.data,
+              ofxId: t.id,
+              conciliado: true,
+              obs: t.memo,
+            });
+            valorRestante -= lanc.valor;
+          } else {
+            // Baixa parcial nesta parcela — gera saldo residual
+            const saldo = lanc.valor - valorRestante;
+            await upsertLanc({
+              ...lanc,
+              status: 'pago',
+              pagamento: t.data,
+              valor: valorRestante,
+              ofxId: t.id,
+              conciliado: true,
+              obs: t.memo,
+            });
+            await upsertLanc({
+              id: uid(), tipo: lanc.tipo,
+              descricao: `${lanc.descricao} — saldo restante`,
+              valor: saldo, vencimento: lanc.vencimento, status: 'pendente',
+              obraId: lanc.obraId, obraNome: lanc.obraNome,
+              clienteId: lanc.clienteId, clienteNome: lanc.clienteNome,
+              prestadorId: lanc.prestadorId, prestadorNome: lanc.prestadorNome,
+              categoria: lanc.categoria, criadoEm: hoje(),
+            });
+            valorRestante = 0;
           }
-          // Baixa exata
-          await darBaixaLancamento(lancExistente, t, t.valor);
-          upd(t.id, { status: 'lancado' });
-          message.success('Baixa dada! Parcela marcada como paga.');
-          setSalvando(null);
-          return;
         }
+
+        // Se sobrou valor após pagar todas as parcelas → adiantamento
+        if (valorRestante > 0.01) {
+          const ref = selecionadas[0];
+          await upsertLanc({
+            id: uid(), tipo: ref.tipo,
+            descricao: `Adiantamento — ${ref.obraNome || 'sem obra'}`,
+            valor: valorRestante, vencimento: t.data, pagamento: t.data, status: 'pago',
+            obraId: ref.obraId, obraNome: ref.obraNome,
+            clienteId: ref.clienteId, clienteNome: ref.clienteNome,
+            categoria: 'adiantamento', ofxId: t.id, conciliado: true,
+            obs: `Excedente do pagamento de ${formatarMoeda(t.valor)}`, criadoEm: hoje(),
+          });
+          message.success(`Baixa dada! Excedente de ${formatarMoeda(valorRestante)} lançado como adiantamento.`);
+        } else {
+          message.success(selecionadas.length > 1
+            ? `Baixa dada em ${selecionadas.length} parcelas!`
+            : 'Baixa dada na parcela!'
+          );
+        }
+        upd(t.id, { status: 'lancado' });
+        setSalvando(null);
+        return;
       }
 
-      // Criar lançamento novo (sem vínculo com parcela ou forcarNovo)
+      // Criar lançamento novo (sem vínculo com parcela)
       const tipo: Lancamento['tipo'] = est.cat === 'recebimento' ? 'receita' : 'despesa';
-      const obra   = obras.find(o => o.id === est.obra);
+      const obra    = obras.find(o => o.id === est.obra);
       const cliente = clientes.find(c => c.id === est.clienteId);
       const prest   = prestadores.find(p => p.id === est.prestadorId);
       const socio   = socios.find(s => s.id === est.socioId);
@@ -254,85 +324,15 @@ export default function OFXPage() {
     setSalvando(null);
   }
 
-  async function darBaixaLancamento(lanc: Lancamento, t: OFXTransacao, valorPago: number) {
-    await upsertLanc({
-      ...lanc,
-      status: 'pago',
-      pagamento: t.data,
-      valor: valorPago,  // usa valor real pago (pode ser parcial)
-      ofxId: t.id,
-      conciliado: true,
-      obs: t.memo,
-    });
-  }
-
-  // Confirmação de baixa parcial: paga o valor do banco, deixa saldo na parcela original
-  async function confirmarBaixaParcial(t: OFXTransacao, lanc: Lancamento) {
-    setSalvando(t.id);
-    try {
-      const saldo = lanc.valor - t.valor;
-      // Atualiza lancamento original: paga valor do banco
-      await upsertLanc({
-        ...lanc, status: 'pago', pagamento: t.data,
-        valor: t.valor, ofxId: t.id, conciliado: true, obs: t.memo,
-      });
-      // Cria lançamento residual com o saldo
-      if (saldo > 0.01) {
-        await upsertLanc({
-          id: uid(), tipo: lanc.tipo,
-          descricao: `${lanc.descricao} — saldo restante`,
-          valor: saldo, vencimento: lanc.vencimento, status: 'pendente',
-          obraId: lanc.obraId, obraNome: lanc.obraNome,
-          clienteId: lanc.clienteId, clienteNome: lanc.clienteNome,
-          prestadorId: lanc.prestadorId, prestadorNome: lanc.prestadorNome,
-          categoria: lanc.categoria, criadoEm: hoje(),
-        });
-        message.success(`Baixa parcial de ${formatarMoeda(t.valor)}. Saldo de ${formatarMoeda(saldo)} mantido como pendente.`);
-      } else {
-        message.success('Baixa dada com sucesso!');
-      }
-      upd(t.id, { status: 'lancado' });
-    } catch { message.error('Erro ao dar baixa parcial.'); }
-    setSalvando(null);
-    setModalParcial(null);
-  }
-
-  // Baixa excedente: valor do banco é maior que a parcela → paga a parcela e cria adiantamento
-  async function confirmarBaixaExcedente(t: OFXTransacao, lanc: Lancamento) {
-    setSalvando(t.id);
-    try {
-      const excedente = t.valor - lanc.valor;
-      await upsertLanc({
-        ...lanc, status: 'pago', pagamento: t.data, ofxId: t.id, conciliado: true, obs: t.memo,
-      });
-      if (excedente > 0.01) {
-        await upsertLanc({
-          id: uid(), tipo: lanc.tipo,
-          descricao: `Adiantamento/excedente — ${lanc.obraNome || 'sem obra'}`,
-          valor: excedente, vencimento: t.data, pagamento: t.data, status: 'pago',
-          obraId: lanc.obraId, obraNome: lanc.obraNome,
-          clienteId: lanc.clienteId, clienteNome: lanc.clienteNome,
-          categoria: 'adiantamento', ofxId: t.id, conciliado: true,
-          obs: `Excedente do pagamento de ${formatarMoeda(lanc.valor)}`, criadoEm: hoje(),
-        });
-        message.success(`Parcela paga. Excedente de ${formatarMoeda(excedente)} lançado como adiantamento.`);
-      } else {
-        message.success('Baixa dada!');
-      }
-      upd(t.id, { status: 'lancado' });
-    } catch { message.error('Erro.'); }
-    setSalvando(null);
-    setModalParcial(null);
-  }
-
   async function ignorar(t: OFXTransacao) { upd(t.id, { status: 'ignorado' }); }
 
   async function desfazer(t: OFXTransacao) {
-    const lanc = lancamentos.find(l => l.ofxId === t.id);
-    if (lanc) {
+    // Remove todos os lançamentos com este ofxId (pode ser mais de um após multi-baixa)
+    const lancs = lancamentos.filter(l => l.ofxId === t.id);
+    for (const lanc of lancs) {
       try { await removeLanc(lanc.id); } catch { message.error('Erro ao remover lançamento.'); return; }
     }
-    upd(t.id, { status: 'pendente', lancamentoId: '' });
+    upd(t.id, { status: 'pendente', lancamentoIds: [] });
   }
 
   function limparTudo() {
@@ -356,28 +356,7 @@ export default function OFXPage() {
     message.success(`${count} transação(ões) ignorada(s).`);
   }
 
-  /* ── Helpers de seleção ───────────────────────────────────────────────────── */
-
-  // Lançamentos pendentes da obra para vincular (parcelas a receber ou a pagar)
-  function lancamentosPendentesObra(obraId: string, tipo: 'receita' | 'despesa') {
-    return lancamentos.filter(l =>
-      l.obraId === obraId &&
-      l.tipo === tipo &&
-      (l.status === 'pendente' || l.status === 'parcial'),
-    );
-  }
-
-  const total     = transacoes.length;
-  const lancados  = transacoes.filter(t => estados[t.id]?.status === 'lancado').length;
-  const ignorados = transacoes.filter(t => estados[t.id]?.status === 'ignorado').length;
-  const pendentes = total - lancados - ignorados;
-
-  const visíveis = transacoes.filter(t => {
-    const st = estados[t.id]?.status || 'pendente';
-    if (filtro === 'todos') return true;
-    return st === filtro;
-  });
-
+  /* ── Helpers ─────────────────────────────────────────────────────────────── */
   function renderTerceiroSelect(t: OFXTransacao) {
     const est = estados[t.id];
     if (!est) return null;
@@ -406,6 +385,41 @@ export default function OFXPage() {
     if (t.tipo === 'credito') return { borderLeft: '3px solid #1677ff' };
     return { borderLeft: '3px solid #ff4d4f' };
   }
+
+  // Resumo de distribuição para o multi-select de parcelas
+  function resumoDistribuicao(t: OFXTransacao, ids: string[]) {
+    if (!ids.length) return null;
+    const selecionadas = lancamentos.filter(l => ids.includes(l.id));
+    const totalSel = selecionadas.reduce((s, l) => s + l.valor, 0);
+    const diff = t.valor - totalSel;
+    if (Math.abs(diff) < 0.01) return (
+      <div style={{ fontSize: 10, color: '#52c41a', marginTop: 2 }}>
+        <CheckCircleOutlined /> Valor exato — baixa completa em {ids.length} parcela(s)
+      </div>
+    );
+    if (diff > 0) return (
+      <div style={{ fontSize: 10, color: '#fa8c16', marginTop: 2 }}>
+        <WarningOutlined /> Banco: {formatarMoeda(t.valor)} · Parcelas: {formatarMoeda(totalSel)} · Excedente {formatarMoeda(diff)} → adiantamento
+      </div>
+    );
+    // diff < 0: banco < total parcelas → baixa parcial na última
+    return (
+      <div style={{ fontSize: 10, color: '#fa8c16', marginTop: 2 }}>
+        <WarningOutlined /> Banco: {formatarMoeda(t.valor)} · Parcelas: {formatarMoeda(totalSel)} · Última parcela receberá baixa parcial
+      </div>
+    );
+  }
+
+  const total     = transacoes.length;
+  const lancados  = transacoes.filter(t => estados[t.id]?.status === 'lancado').length;
+  const ignorados = transacoes.filter(t => estados[t.id]?.status === 'ignorado').length;
+  const pendentes = total - lancados - ignorados;
+
+  const visíveis = transacoes.filter(t => {
+    const st = estados[t.id]?.status || 'pendente';
+    if (filtro === 'todos') return true;
+    return st === filtro;
+  });
 
   return (
     <div>
@@ -487,23 +501,20 @@ export default function OFXPage() {
           {/* Transações */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {visíveis.map(t => {
-              const est = estados[t.id] || { status: 'pendente', cat: '', obra: '', lancamentoId: '', descricao: '', clienteId: '', socioId: '', prestadorId: '' };
+              const est = estados[t.id] || {
+                status: 'pendente', cat: '', obra: '', lancamentoIds: [],
+                descricao: '', clienteId: '', socioId: '', prestadorId: '',
+              };
               const lancado  = est.status === 'lancado';
               const ignorado = est.status === 'ignorado';
+              const ids = est.lancamentoIds || [];
 
-              // Parcelas pendentes da obra selecionada
               const tipoEsp: 'receita' | 'despesa' = est.cat === 'recebimento' ? 'receita' : 'despesa';
               const pendentesObra = est.obra
                 ? lancamentosPendentesObra(est.obra, tipoEsp)
                 : [];
 
-              // Detecta divergência de valor com lançamento vinculado
-              const lancVinculado = est.lancamentoId
-                ? lancamentos.find(l => l.id === est.lancamentoId)
-                : null;
-              const divergeValor = lancVinculado
-                ? Math.abs(lancVinculado.valor - t.valor) > 0.01
-                : false;
+              const temParcelas = ids.length > 0;
 
               return (
                 <Card key={t.id} size="small" style={{ ...corLinha(t), transition: 'all .15s' }}
@@ -539,61 +550,54 @@ export default function OFXPage() {
                     {!lancado && !ignorado ? (
                       <>
                         {/* Categoria */}
-                        <Col xs={12} sm={4}>
+                        <Col xs={12} sm={3}>
                           <Select placeholder="Categoria" value={est.cat || undefined} size="small"
                             style={{ width: '100%' }}
-                            onChange={v => upd(t.id, { cat: v as CatOFX, lancamentoId: '', obra: '' })}
+                            onChange={v => upd(t.id, { cat: v as CatOFX, lancamentoIds: [], obra: '' })}
                             options={CAT_OPTS.map(c => ({ value: c.value, label: c.label }))} />
                         </Col>
 
                         {/* Obra */}
                         {est.cat && est.cat !== 'ignorar' && est.cat !== 'distribuicao' && (
-                          <Col xs={12} sm={4}>
+                          <Col xs={12} sm={3}>
                             <Select placeholder="Obra" value={est.obra || undefined} size="small"
                               style={{ width: '100%' }} allowClear
-                              onChange={v => upd(t.id, { obra: v || '', lancamentoId: '' })}
+                              onChange={v => upd(t.id, { obra: v || '', lancamentoIds: [] })}
                               options={obras.filter(o => o.status !== 'cancelada')
                                 .map(o => ({ value: o.id, label: o.nome }))} />
                           </Col>
                         )}
 
-                        {/* Vincular parcela / lançamento existente */}
+                        {/* Vincular parcela(s) — multi-select */}
                         {est.obra && (est.cat === 'recebimento' || est.cat === 'mao-de-obra' || est.cat === 'outros') && (
-                          <Col xs={24} sm={5}>
+                          <Col xs={24} sm={6}>
                             <Select
+                              mode="multiple"
                               size="small"
                               style={{ width: '100%' }}
-                              placeholder={<><LinkOutlined /> Vincular parcela (opcional)</>}
-                              value={est.lancamentoId || undefined}
-                              allowClear
-                              onChange={v => upd(t.id, { lancamentoId: v || '' })}
-                              optionLabelProp="label"
-                              options={[
-                                ...pendentesObra.map(l => ({
-                                  value: l.id,
-                                  label: `${l.descricao} — ${formatarMoeda(l.valor)}`,
-                                  title: `Venc: ${l.vencimento} | ${formatarMoeda(l.valor)}`,
-                                })),
-                                ...(pendentesObra.length === 0 ? [{ value: '_novo', label: 'Nenhuma parcela pendente', disabled: true, title: '' }] : []),
-                              ]}
+                              placeholder={<><LinkOutlined /> Vincular parcela(s) (opcional)</>}
+                              value={ids}
+                              maxTagCount={2}
+                              onChange={(v) => upd(t.id, { lancamentoIds: v as string[] })}
+                              options={pendentesObra.map(l => ({
+                                value: l.id,
+                                label: `${l.descricao} — ${formatarMoeda(l.valor)}`,
+                              }))}
+                              notFoundContent="Nenhuma parcela pendente"
                             />
-                            {divergeValor && lancVinculado && (
-                              <div style={{ fontSize: 10, color: '#fa8c16', marginTop: 2 }}>
-                                <WarningOutlined /> Parcela: {formatarMoeda(lancVinculado.valor)} · Banco: {formatarMoeda(t.valor)}
-                              </div>
-                            )}
+                            {resumoDistribuicao(t, ids)}
                           </Col>
                         )}
 
-                        {/* Terceiro (cliente / prestador / sócio) */}
-                        {est.cat && est.cat !== 'ignorar' && !est.lancamentoId && (
+                        {/* Terceiro (cliente / prestador / sócio) — só sem parcela vinculada */}
+                        {est.cat && est.cat !== 'ignorar' && !temParcelas && (
                           <Col xs={12} sm={3}>
                             {renderTerceiroSelect(t)}
                           </Col>
                         )}
 
-                        {/* Descrição livre (só se não vinculou parcela) */}
-                        {est.cat && est.cat !== 'ignorar' && !est.lancamentoId && (
+                        {/* Descrição livre — só sem parcela vinculada */}
+                        {est.cat && est.cat !== 'ignorar' && !temParcelas && (
                           <Col xs={24} sm={4}>
                             <Input size="small" placeholder="Descrição (opcional)"
                               value={est.descricao}
@@ -602,7 +606,7 @@ export default function OFXPage() {
                         )}
 
                         {/* Ação */}
-                        <Col xs={24} sm={3} style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                        <Col xs={24} sm={2} style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                           {est.cat === 'ignorar' ? (
                             <Button size="small" icon={<StopOutlined />} onClick={() => ignorar(t)}>
                               Ignorar
@@ -610,12 +614,12 @@ export default function OFXPage() {
                           ) : est.cat ? (
                             <Button
                               size="small" type="primary"
-                              icon={est.lancamentoId ? <CheckOutlined /> : <CheckOutlined />}
+                              icon={<CheckOutlined />}
                               loading={salvando === t.id}
                               onClick={() => lancar(t)}
-                              style={est.lancamentoId ? { background: '#52c41a', borderColor: '#52c41a' } : {}}
+                              style={temParcelas ? { background: '#52c41a', borderColor: '#52c41a' } : {}}
                             >
-                              {est.lancamentoId ? 'Dar baixa' : 'Lançar'}
+                              {temParcelas ? 'Dar baixa' : 'Lançar'}
                             </Button>
                           ) : (
                             <Button size="small" disabled>Lançar</Button>
@@ -629,7 +633,7 @@ export default function OFXPage() {
                             <Space>
                               <Badge status="success" />
                               <Text style={{ color: '#52c41a', fontSize: 12 }}>
-                                {est.lancamentoId ? 'Baixa dada' : 'Lançado'}
+                                {temParcelas ? `Baixa dada (${ids.length} parcela(s))` : 'Lançado'}
                                 {est.obra && obras.find(o => o.id === est.obra)
                                   ? ` — ${obras.find(o => o.id === est.obra)!.nome}` : ''}
                               </Text>
@@ -663,52 +667,6 @@ export default function OFXPage() {
           </div>
         </>
       )}
-
-      {/* Modal baixa parcial / excedente */}
-      {modalParcial && (() => {
-        const { t, lanc } = modalParcial;
-        const parcela = formatarMoeda(lanc.valor);
-        const banco   = formatarMoeda(t.valor);
-        const isParcial = t.valor < lanc.valor;
-        return (
-          <Modal
-            open
-            title={<><WarningOutlined style={{ color: '#fa8c16' }} /> Valor divergente</>}
-            onCancel={() => setModalParcial(null)}
-            footer={null}
-            width={480}
-          >
-            <div style={{ padding: '12px 0' }}>
-              <p>
-                A <strong>parcela</strong> é de <strong>{parcela}</strong>, mas o banco registrou <strong>{banco}</strong>.
-              </p>
-              {isParcial ? (
-                <>
-                  <p>O pagamento foi <strong>parcial</strong>. O saldo de <strong>{formatarMoeda(lanc.valor - t.valor)}</strong> ficará como pendente.</p>
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <Button type="primary" block loading={salvando === t.id}
-                      onClick={() => confirmarBaixaParcial(t, lanc)}>
-                      Dar baixa parcial ({banco}) e manter saldo pendente
-                    </Button>
-                    <Button block onClick={() => setModalParcial(null)}>Cancelar</Button>
-                  </Space>
-                </>
-              ) : (
-                <>
-                  <p>O pagamento foi <strong>maior</strong> que a parcela. O excedente de <strong>{formatarMoeda(t.valor - lanc.valor)}</strong> será lançado como adiantamento.</p>
-                  <Space direction="vertical" style={{ width: '100%' }}>
-                    <Button type="primary" block loading={salvando === t.id}
-                      onClick={() => confirmarBaixaExcedente(t, lanc)}>
-                      Dar baixa na parcela + lançar adiantamento
-                    </Button>
-                    <Button block onClick={() => setModalParcial(null)}>Cancelar</Button>
-                  </Space>
-                </>
-              )}
-            </div>
-          </Modal>
-        );
-      })()}
     </div>
   );
 }
