@@ -27,6 +27,7 @@ const menuItems = [
   { key: '/cadastros',   icon: <AppstoreOutlined />,     label: 'Cadastros',
     children: [
       { key: '/cadastros/clientes',    label: 'Clientes' },
+      { key: '/cadastros/vendedores',  label: 'Vendedores' },
       { key: '/cadastros/prestadores', label: 'Prestadores' },
       { key: '/cadastros/funcionarios',label: 'Funcionários' },
       { key: '/cadastros/materiais',   label: 'Materiais' },

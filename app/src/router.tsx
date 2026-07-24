@@ -6,6 +6,7 @@ import CronogramaPage from './pages/obras/CronogramaPage';
 import ModelosPage from './pages/modelos/ModelosPage';
 import MateriaisPage from './pages/cadastros/MateriaisPage';
 import ClientesPage from './pages/cadastros/ClientesPage';
+import VendedoresPage from './pages/cadastros/VendedoresPage';
 import PrestadoresPage from './pages/cadastros/PrestadoresPage';
 import FuncionariosPage from './pages/cadastros/FuncionariosPage';
 import FinanceiroPage from './pages/financeiro/FinanceiroPage';
@@ -27,6 +28,7 @@ export const router = createHashRouter([
       { path: 'obras/:id/cronograma',       element: <CronogramaPage /> },
       { path: 'modelos',                    element: <ModelosPage /> },
       { path: 'cadastros/clientes',         element: <ClientesPage /> },
+      { path: 'cadastros/vendedores',       element: <VendedoresPage /> },
       { path: 'cadastros/prestadores',      element: <PrestadoresPage /> },
       { path: 'cadastros/funcionarios',     element: <FuncionariosPage /> },
       { path: 'cadastros/materiais',        element: <MateriaisPage /> },

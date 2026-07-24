@@ -2,12 +2,35 @@
 
 export interface Cliente {
   id: string;
+  tipo: 'pf' | 'pj';
+  nome: string;
+  nomeFantasia?: string;
+  cpfCnpj?: string;
+  ie?: string;
+  telefone?: string;
+  celular?: string;
+  email?: string;
+  cep?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+  endereco?: string;
+  vendedorId?: string;
+  vendedorNome?: string;
+  observacoes?: string;
+  criadoEm: string;
+}
+
+export interface Vendedor {
+  id: string;
   nome: string;
   cpfCnpj?: string;
   telefone?: string;
   email?: string;
-  endereco?: string;
-  tipo: 'pf' | 'pj';
+  comissaoPercentual?: number;
   criadoEm: string;
 }
 
@@ -166,6 +189,8 @@ export interface Obra {
   despesas?: DespesaObra[];
   prestadorId?: string;
   prestadorNome?: string;
+  vendedorId?: string;
+  vendedorNome?: string;
   criadoEm: string;
 }
 

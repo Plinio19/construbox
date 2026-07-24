@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 import {
   Drawer, Form, Input, Select, DatePicker, InputNumber, Tabs,
-  Button, Space, Divider, Table, Popconfirm, message, Row, Col, Typography,
+  Button, Space, Divider, Table, Popconfirm, message, Row, Col, Typography, Modal,
 } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import type { Obra, ObraFuncionario, Parcela, DespesaObra, StatusObra, CategoriaDespesa } from '../../types';
+import type { Obra, ObraFuncionario, Parcela, DespesaObra, StatusObra, CategoriaDespesa, Cliente } from '../../types';
 import { useObrasStore } from '../../stores/useObrasStore';
 import { useClientesStore } from '../../stores/useClientesStore';
+import { useVendedoresStore } from '../../stores/useVendedoresStore';
 import { useModelosStore } from '../../stores/useModelosStore';
 import { useFuncionariosStore } from '../../stores/useFuncionariosStore';
 import { usePrestadoresStore } from '../../stores/usePrestadoresStore';
 import { useEtapasStore } from '../../stores/useEtapasStore';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
+import { ClienteFormFields } from '../cadastros/ClientesPage';
 import { OBRA_STATUS_OPTIONS } from '../../components/common/StatusTag';
 import { uid, hoje, formatarMoeda } from '../../utils';
 
@@ -70,9 +72,13 @@ export default function ObraForm({ obra, open, onClose }: Props) {
   const [parcelas, setParcelas] = useState<Parcela[]>([]);
   const [funcs, setFuncs] = useState<ObraFuncionario[]>([]);
   const [despesas, setDespesas] = useState<DespesaObra[]>([]);
+  const [modalCliente, setModalCliente] = useState(false);
+  const [savingCliente, setSavingCliente] = useState(false);
+  const [formCliente] = Form.useForm();
 
   const { upsert: upsertObra } = useObrasStore();
-  const { clientes, fetch: fetchClientes } = useClientesStore();
+  const { clientes, fetch: fetchClientes, upsert: upsertCliente } = useClientesStore();
+  const { vendedores, fetch: fetchVend } = useVendedoresStore();
   const { modelos, fetch: fetchModelos } = useModelosStore();
   const { funcionarios, fetch: fetchFuncs } = useFuncionariosStore();
   const { prestadores, fetch: fetchPrest } = usePrestadoresStore();
@@ -82,6 +88,7 @@ export default function ObraForm({ obra, open, onClose }: Props) {
   useEffect(() => {
     if (open) {
       fetchClientes();
+      fetchVend();
       fetchModelos();
       fetchFuncs();
       fetchPrest();
@@ -290,6 +297,29 @@ export default function ObraForm({ obra, open, onClose }: Props) {
 
   const totalDespesas = despesas.reduce((s, d) => s + (d.valor || 0), 0);
 
+  // ── Novo cliente inline ───────────────────────────────────────────────────
+  async function salvarClienteInline() {
+    let v: Partial<Cliente>;
+    try { v = await formCliente.validateFields(); }
+    catch { return; }
+    setSavingCliente(true);
+    try {
+      const vend = vendedores.find(x => x.id === v.vendedorId);
+      const novoCliente: Cliente = {
+        ...(v as Cliente),
+        id: uid(),
+        criadoEm: hoje(),
+        vendedorNome: vend?.nome,
+      };
+      await upsertCliente(novoCliente);
+      form.setFieldValue('clienteId', novoCliente.id);
+      message.success('Cliente cadastrado e selecionado!');
+      setModalCliente(false);
+      formCliente.resetFields();
+    } catch (e) { message.error(String(e)); }
+    finally { setSavingCliente(false); }
+  }
+
   // ── Funcionários ──────────────────────────────────────────────────────────
   function addFunc(funcId: string) {
     if (!funcId) return;
@@ -420,11 +450,23 @@ export default function ObraForm({ obra, open, onClose }: Props) {
                         optionFilterProp="label"
                         options={clientes.map(c => ({ value: c.id, label: c.nome }))}
                         allowClear
+                        dropdownRender={menu => (
+                          <>
+                            {menu}
+                            <Divider style={{ margin: '6px 0' }} />
+                            <Button
+                              type="link" icon={<UserAddOutlined />} block
+                              onClick={() => { formCliente.resetFields(); formCliente.setFieldValue('tipo', 'pj'); setModalCliente(true); }}
+                            >
+                              Cadastrar novo cliente
+                            </Button>
+                          </>
+                        )}
                       />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item name="endereco" label="Endereço">
+                    <Form.Item name="endereco" label="Endereço da obra">
                       <Input placeholder="Rua, número, bairro" />
                     </Form.Item>
                   </Col>
@@ -594,6 +636,27 @@ export default function ObraForm({ obra, open, onClose }: Props) {
           },
         ]}
       />
+
+      {/* Modal cadastro rápido de cliente */}
+      <Modal
+        title="Cadastrar novo cliente"
+        open={modalCliente}
+        onCancel={() => setModalCliente(false)}
+        width={600}
+        footer={
+          <Space>
+            <Button onClick={() => setModalCliente(false)}>Cancelar</Button>
+            <Button type="primary" loading={savingCliente} onClick={salvarClienteInline}>
+              Cadastrar e selecionar
+            </Button>
+          </Space>
+        }
+        destroyOnClose
+      >
+        <Form form={formCliente} layout="vertical" style={{ marginTop: 8 }}>
+          <ClienteFormFields form={formCliente} vendedores={vendedores} />
+        </Form>
+      </Modal>
     </Drawer>
   );
 }
