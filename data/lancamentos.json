@@ -44,13 +44,15 @@
   {
     "id": "mrz65f40e5vya",
     "tipo": "despesa",
-    "descricao": "Despesa — Nova Mutum",
-    "valor": 0,
+    "descricao": "Mão de Obra Completa",
+    "valor": 65000,
     "vencimento": "2026-07-24",
     "status": "pendente",
     "categoria": "mao-de-obra",
     "obraId": "mrz65iweisq2k",
     "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
     "criadoEm": "2026-07-24"
   }
 ]
