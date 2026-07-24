@@ -33,10 +33,12 @@
     "despesas": [
       {
         "id": "mrz65f40e5vya",
-        "descricao": "",
-        "valor": 0,
+        "descricao": "Mão de Obra Completa",
+        "valor": 65000,
         "vencimento": "2026-07-24",
-        "categoria": "mao-de-obra"
+        "categoria": "mao-de-obra",
+        "prestadorId": "mrz65acqew4i3",
+        "prestadorNome": "EQUIPE EDINILSON"
       }
     ],
     "criadoEm": "2026-07-24"
