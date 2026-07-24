@@ -62,5 +62,19 @@
     "prestadorId": "mrz65acqew4i3",
     "prestadorNome": "EQUIPE EDINILSON",
     "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "mrza1ghukvmcf",
+    "tipo": "receita",
+    "descricao": "Nova Mutum — Meio (40%) — saldo restante",
+    "valor": 9500,
+    "vencimento": "2026-06-06",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "parcela",
+    "criadoEm": "2026-07-24"
   }
 ]
