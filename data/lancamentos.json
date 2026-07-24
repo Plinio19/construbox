@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "id": "mrz64h6ymspma",
+    "tipo": "receita",
+    "descricao": "Nova Mutum — Início (30%)",
+    "valor": 25500,
+    "vencimento": "2026-05-22",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "mrz64h6yi9aok",
+    "tipo": "receita",
+    "descricao": "Nova Mutum — Meio (40%)",
+    "valor": 34000,
+    "vencimento": "2026-06-06",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "mrz64h6ynrvp2",
+    "tipo": "receita",
+    "descricao": "Nova Mutum — Final (30%)",
+    "valor": 25500,
+    "vencimento": "2026-06-21",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "mrz65f40e5vya",
+    "tipo": "despesa",
+    "descricao": "Despesa — Nova Mutum",
+    "valor": 0,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "criadoEm": "2026-07-24"
+  }
+]
