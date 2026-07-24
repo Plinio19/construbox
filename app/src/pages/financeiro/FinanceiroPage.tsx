@@ -15,6 +15,7 @@ const { Title, Text } = Typography;
 const STATUS_COLOR: Record<StatusLancamento, string> = {
   pendente:  'gold',
   pago:      'green',
+  parcial:   'cyan',
   vencido:   'red',
   cancelado: 'default',
 };
@@ -22,6 +23,7 @@ const STATUS_COLOR: Record<StatusLancamento, string> = {
 const STATUS_LABEL: Record<StatusLancamento, string> = {
   pendente:  'Pendente',
   pago:      'Pago',
+  parcial:   'Parcial',
   vencido:   'Vencido',
   cancelado: 'Cancelado',
 };

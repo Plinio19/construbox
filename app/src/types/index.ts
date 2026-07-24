@@ -255,7 +255,7 @@ export interface Etapa {
 // ─── Financeiro ──────────────────────────────────────────────────────────────
 
 export type TipoLancamento = 'receita' | 'despesa';
-export type StatusLancamento = 'pendente' | 'pago' | 'vencido' | 'cancelado';
+export type StatusLancamento = 'pendente' | 'pago' | 'parcial' | 'vencido' | 'cancelado';
 
 export interface Lancamento {
   id: string;
