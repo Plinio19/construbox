@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "mrz62fjbnfipo",
+    "criadoEm": "2026-07-24",
+    "tipo": "pj",
+    "cpfCnpj": "51.7981.8500/0162",
+    "nome": "HOTEL IN BOX LTDA",
+    "email": "",
+    "telefone": "(41) 20180406",
+    "cep": "85501-071",
+    "logradouro": "BRASIL",
+    "numero": "534",
+    "complemento": "SALA 601 EDIF JOAO GAVA",
+    "bairro": "CENTRO",
+    "cidade": "PATO BRANCO",
+    "estado": "PR",
+    "nomeFantasia": "HOTEL IN BOX LTDA"
+  }
+]
