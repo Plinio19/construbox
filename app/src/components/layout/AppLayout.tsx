@@ -30,6 +30,7 @@ const menuItems = [
       { key: '/cadastros/vendedores',  label: 'Vendedores' },
       { key: '/cadastros/prestadores', label: 'Prestadores' },
       { key: '/cadastros/funcionarios',label: 'Funcionários' },
+      { key: '/cadastros/socios',      label: 'Sócios' },
       { key: '/cadastros/materiais',   label: 'Materiais' },
     ],
   },

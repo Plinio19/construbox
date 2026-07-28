@@ -37,6 +37,7 @@ interface Split {
   clienteId: string;
   socioId: string;
   prestadorId: string;
+  lancamentoId?: string;  // vínculo opcional com parcela existente
 }
 
 interface EstadoClass {
@@ -318,25 +319,49 @@ export default function OFXPage() {
       if (splits && splits.length > 0) {
         for (const sp of splits) {
           if (!sp.cat || sp.cat === 'ignorar' || sp.valor <= 0) continue;
-          const tipo: Lancamento['tipo'] = sp.cat === 'recebimento' ? 'receita' : 'despesa';
-          const obra   = obras.find(o => o.id === sp.obra);
-          const cliente = clientes.find(c => c.id === sp.clienteId);
-          const prest  = prestadores.find(p => p.id === sp.prestadorId);
-          const socio  = socios.find(s => s.id === sp.socioId);
-          await upsertLanc({
-            id: uid(), tipo,
-            descricao: sp.descricao || (t.memo || '').slice(0, 80),
-            valor: sp.valor, vencimento: t.data, pagamento: t.data, status: 'pago',
-            obraId: obra?.id, obraNome: obra?.nome,
-            clienteId: cliente?.id, clienteNome: cliente?.nome,
-            prestadorId: prest?.id, prestadorNome: prest?.nome,
-            socioId: socio?.id, socioNome: socio?.nome,
-            categoria: catMap[sp.cat] || 'outros',
-            ofxId: t.id, conciliado: true, obs: t.memo, criadoEm: hoje(),
-          });
+
+          if (sp.lancamentoId) {
+            // Dar baixa em parcela existente (total ou parcial)
+            const lanc = lancamentos.find(l => l.id === sp.lancamentoId);
+            if (lanc) {
+              if (sp.valor >= lanc.valor - 0.01) {
+                await upsertLanc({ ...lanc, status: 'pago', pagamento: t.data, ofxId: t.id, conciliado: true, obs: t.memo });
+              } else {
+                const saldo = lanc.valor - sp.valor;
+                await upsertLanc({ ...lanc, status: 'pago', pagamento: t.data, valor: sp.valor, ofxId: t.id, conciliado: true, obs: t.memo });
+                await upsertLanc({
+                  id: uid(), tipo: lanc.tipo,
+                  descricao: `${lanc.descricao} — saldo restante`,
+                  valor: saldo, vencimento: lanc.vencimento, status: 'pendente',
+                  obraId: lanc.obraId, obraNome: lanc.obraNome,
+                  clienteId: lanc.clienteId, clienteNome: lanc.clienteNome,
+                  prestadorId: lanc.prestadorId, prestadorNome: lanc.prestadorNome,
+                  categoria: lanc.categoria, criadoEm: hoje(),
+                });
+              }
+            }
+          } else {
+            // Criar lançamento novo
+            const tipo: Lancamento['tipo'] = sp.cat === 'recebimento' ? 'receita' : 'despesa';
+            const obra   = obras.find(o => o.id === sp.obra);
+            const cliente = clientes.find(c => c.id === sp.clienteId);
+            const prest  = prestadores.find(p => p.id === sp.prestadorId);
+            const socio  = socios.find(s => s.id === sp.socioId);
+            await upsertLanc({
+              id: uid(), tipo,
+              descricao: sp.descricao || (t.memo || '').slice(0, 80),
+              valor: sp.valor, vencimento: t.data, pagamento: t.data, status: 'pago',
+              obraId: obra?.id, obraNome: obra?.nome,
+              clienteId: cliente?.id, clienteNome: cliente?.nome,
+              prestadorId: prest?.id, prestadorNome: prest?.nome,
+              socioId: socio?.id, socioNome: socio?.nome,
+              categoria: catMap[sp.cat] || 'outros',
+              ofxId: t.id, conciliado: true, obs: t.memo, criadoEm: hoje(),
+            });
+          }
         }
         upd(t.id, { status: 'lancado' });
-        message.success(`${splits.length} lançamento(s) criados a partir da divisão!`);
+        message.success(`${splits.length} parte(s) lançadas!`);
         setSalvando(null);
         return;
       }
@@ -674,29 +699,46 @@ export default function OFXPage() {
                               </div>
                               {est.splits.map((sp, idx) => {
                                 const obrasOpts = obras.filter(o => o.status !== 'cancelada').map(o => ({ value: o.id, label: o.nome }));
+                                const tipoEspSplit: 'receita' | 'despesa' = sp.cat === 'recebimento' ? 'receita' : 'despesa';
+                                const parcelasSplit = sp.obra
+                                  ? lancamentosPendentesObra(sp.obra, tipoEspSplit)
+                                  : [];
                                 return (
                                   <div key={sp.id} style={{ display: 'flex', gap: 5, marginBottom: 5, flexWrap: 'wrap', alignItems: 'center' }}>
                                     <span style={{ fontSize: 10, color: '#8c8c8c', width: 14 }}>{idx + 1}.</span>
                                     <Select size="small" style={{ width: 130 }} placeholder="Categoria"
                                       value={sp.cat || undefined}
-                                      onChange={v => updSplit(t.id, sp.id, { cat: v as CatOFX })}
+                                      onChange={v => updSplit(t.id, sp.id, { cat: v as CatOFX, lancamentoId: undefined })}
                                       options={CAT_OPTS.filter(c => c.value !== 'ignorar')} />
                                     {sp.cat && sp.cat !== 'distribuicao' && (
                                       <Select size="small" style={{ width: 130 }} placeholder="Obra" allowClear
                                         value={sp.obra || undefined}
-                                        onChange={v => updSplit(t.id, sp.id, { obra: v || '' })}
+                                        onChange={v => updSplit(t.id, sp.id, { obra: v || '', lancamentoId: undefined })}
                                         options={obrasOpts} />
+                                    )}
+                                    {/* Vincular parcela — quando obra selecionada e categoria compatível */}
+                                    {sp.obra && (sp.cat === 'recebimento' || sp.cat === 'mao-de-obra' || sp.cat === 'outros') && (
+                                      <Select size="small" style={{ width: 160 }} allowClear
+                                        placeholder={<><LinkOutlined /> Parcela (opcional)</>}
+                                        value={sp.lancamentoId || undefined}
+                                        onChange={v => {
+                                          const lanc = lancamentos.find(l => l.id === v);
+                                          updSplit(t.id, sp.id, { lancamentoId: v || undefined, valor: lanc ? lanc.valor : sp.valor });
+                                        }}
+                                        options={parcelasSplit.map(l => ({ value: l.id, label: `${l.descricao} — ${formatarMoeda(l.valor)}` }))}
+                                        notFoundContent="Nenhuma parcela pendente"
+                                      />
                                     )}
                                     <InputNumber size="small" style={{ width: 110 }} min={0} step={100} precision={2}
                                       prefix="R$" value={sp.valor}
                                       onChange={v => updSplit(t.id, sp.id, { valor: v ?? 0 })} />
-                                    {sp.cat === 'recebimento' && (
+                                    {sp.cat === 'recebimento' && !sp.lancamentoId && (
                                       <Select size="small" style={{ width: 120 }} placeholder="Cliente" allowClear
                                         value={sp.clienteId || undefined}
                                         onChange={v => updSplit(t.id, sp.id, { clienteId: v || '' })}
                                         options={clientes.map(c => ({ value: c.id, label: c.nome }))} />
                                     )}
-                                    {sp.cat === 'mao-de-obra' && (
+                                    {sp.cat === 'mao-de-obra' && !sp.lancamentoId && (
                                       <Select size="small" style={{ width: 120 }} placeholder="Prestador" allowClear
                                         value={sp.prestadorId || undefined}
                                         onChange={v => updSplit(t.id, sp.id, { prestadorId: v || '' })}
@@ -708,9 +750,11 @@ export default function OFXPage() {
                                         onChange={v => updSplit(t.id, sp.id, { socioId: v || '' })}
                                         options={socios.map(s => ({ value: s.id, label: s.nome }))} />
                                     )}
-                                    <Input size="small" style={{ flex: 1, minWidth: 100 }} placeholder="Descrição"
-                                      value={sp.descricao}
-                                      onChange={e => updSplit(t.id, sp.id, { descricao: e.target.value })} />
+                                    {!sp.lancamentoId && (
+                                      <Input size="small" style={{ flex: 1, minWidth: 100 }} placeholder="Descrição"
+                                        value={sp.descricao}
+                                        onChange={e => updSplit(t.id, sp.id, { descricao: e.target.value })} />
+                                    )}
                                     {est.splits!.length > 1 && (
                                       <Button size="small" danger icon={<DeleteOutlined />}
                                         onClick={() => removeSplit(t.id, sp.id)} />
