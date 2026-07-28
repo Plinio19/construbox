@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
-  Card, Row, Col, Statistic, Tag, Button, Select, Input, Typography,
+  Card, Row, Col, Statistic, Tag, Button, Select, Input, InputNumber, Typography,
   message, Tooltip, Popconfirm, Badge, Space, Alert,
 } from 'antd';
 import {
   UploadOutlined, CheckOutlined, StopOutlined, UndoOutlined, InboxOutlined,
-  LinkOutlined, WarningOutlined, CheckCircleOutlined,
+  LinkOutlined, WarningOutlined, CheckCircleOutlined, PlusOutlined,
+  ScissorOutlined, DeleteOutlined,
 } from '@ant-design/icons';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
 import { useObrasStore } from '../../stores/useObrasStore';
@@ -27,15 +28,27 @@ interface OFXTransacao {
 
 type CatOFX = 'recebimento' | 'mao-de-obra' | 'distribuicao' | 'reembolso' | 'outros' | 'ignorar' | '';
 
-interface EstadoClass {
-  status: 'pendente' | 'lancado' | 'ignorado';
+interface Split {
+  id: string;
   cat: CatOFX;
   obra: string;
-  lancamentoIds: string[];  // parcelas selecionadas para dar baixa ([] = criar novo)
+  valor: number;
   descricao: string;
   clienteId: string;
   socioId: string;
   prestadorId: string;
+}
+
+interface EstadoClass {
+  status: 'pendente' | 'lancado' | 'ignorado';
+  cat: CatOFX;
+  obra: string;
+  lancamentoIds: string[];
+  descricao: string;
+  clienteId: string;
+  socioId: string;
+  prestadorId: string;
+  splits?: Split[];
 }
 
 const LS_EXTRATO = 'cbx_extrato';
@@ -160,27 +173,37 @@ export default function OFXPage() {
 
   useEffect(() => {
     if (!transacoes.length) return;
-    const salvo: Record<string, Record<string, unknown>> = (() => {
-      try { return JSON.parse(localStorage.getItem(LS_ESTADO) || '{}'); } catch { return {}; }
-    })();
-    const novo: Record<string, EstadoClass> = {};
-    transacoes.forEach(t => {
-      const resultado = findLancByTransacao(t, lancamentos);
-      if (resultado) {
-        novo[t.id] = estadoDeMatch(resultado.lanc, resultado.fuzzy);
-      } else if (salvo[t.id]) {
-        novo[t.id] = migrarEstado(salvo[t.id]);
-      } else {
-        novo[t.id] = estadoInicial(t, lancamentos);
-      }
+    setEstados(prev => {
+      const salvo: Record<string, Record<string, unknown>> = (() => {
+        try { return JSON.parse(localStorage.getItem(LS_ESTADO) || '{}'); } catch { return {}; }
+      })();
+      const novo: Record<string, EstadoClass> = {};
+      transacoes.forEach(t => {
+        const prevEst = prev[t.id];
+        // Não sobrescrever estados finalizados
+        if (prevEst?.status === 'lancado' || prevEst?.status === 'ignorado') {
+          novo[t.id] = prevEst;
+          return;
+        }
+        const resultado = findLancByTransacao(t, lancamentos);
+        if (resultado) {
+          novo[t.id] = estadoDeMatch(resultado.lanc, resultado.fuzzy);
+        } else if (prevEst?.cat) {
+          // Usuário já começou a classificar — preservar o trabalho em andamento
+          novo[t.id] = prevEst;
+        } else if (salvo[t.id]) {
+          novo[t.id] = migrarEstado(salvo[t.id]);
+        } else {
+          novo[t.id] = estadoInicial(t, lancamentos);
+        }
+      });
+      return novo;
     });
-    setEstados(novo);
   }, [transacoes, lancamentos]);
 
-  const salvarEstados = useCallback((prox: Record<string, EstadoClass>) => {
+  function salvarLS(prox: Record<string, EstadoClass>) {
     localStorage.setItem(LS_ESTADO, JSON.stringify(prox));
-    setEstados(prox);
-  }, []);
+  }
 
   function carregarArquivo(file: File) {
     if (!file.name.toLowerCase().endsWith('.ofx')) {
@@ -205,8 +228,69 @@ export default function OFXPage() {
   }
 
   function upd(id: string, patch: Partial<EstadoClass>) {
-    const prox = { ...estados, [id]: { ...estados[id], ...patch } };
-    salvarEstados(prox);
+    setEstados(prev => {
+      const prox = { ...prev, [id]: { ...prev[id], ...patch } };
+      salvarLS(prox);
+      return prox;
+    });
+  }
+
+  function updSplit(txnId: string, splitId: string, patch: Partial<Split>) {
+    setEstados(prev => {
+      const est = prev[txnId];
+      if (!est?.splits) return prev;
+      const splits = est.splits.map(s => s.id === splitId ? { ...s, ...patch } : s);
+      const prox = { ...prev, [txnId]: { ...est, splits } };
+      salvarLS(prox);
+      return prox;
+    });
+  }
+
+  function addSplit(txnId: string, txnValor: number) {
+    setEstados(prev => {
+      const est = prev[txnId];
+      const usado = (est?.splits || []).reduce((s, sp) => s + sp.valor, 0);
+      const resto = Math.max(0, Math.round((txnValor - usado) * 100) / 100);
+      const novo: Split = { id: uid(), cat: '' as CatOFX, obra: '', valor: resto, descricao: '', clienteId: '', socioId: '', prestadorId: '' };
+      const splits = [...(est?.splits || []), novo];
+      const prox = { ...prev, [txnId]: { ...est, splits } };
+      salvarLS(prox);
+      return prox;
+    });
+  }
+
+  function removeSplit(txnId: string, splitId: string) {
+    setEstados(prev => {
+      const est = prev[txnId];
+      if (!est?.splits) return prev;
+      const splits = est.splits.filter(s => s.id !== splitId);
+      const prox = { ...prev, [txnId]: { ...est, splits: splits.length ? splits : undefined } };
+      salvarLS(prox);
+      return prox;
+    });
+  }
+
+  function iniciarDivisao(t: OFXTransacao) {
+    setEstados(prev => {
+      const est = prev[t.id];
+      const inicial: Split = {
+        id: uid(), cat: est?.cat || '' as CatOFX, obra: est?.obra || '',
+        valor: t.valor, descricao: est?.descricao || '',
+        clienteId: est?.clienteId || '', socioId: est?.socioId || '', prestadorId: est?.prestadorId || '',
+      };
+      const prox = { ...prev, [t.id]: { ...est, splits: [inicial] } };
+      salvarLS(prox);
+      return prox;
+    });
+  }
+
+  function cancelarDivisao(txnId: string) {
+    setEstados(prev => {
+      const est = prev[txnId];
+      const prox = { ...prev, [txnId]: { ...est, splits: undefined } };
+      salvarLS(prox);
+      return prox;
+    });
   }
 
   /* ── Lançamentos pendentes da obra ──────────────────────────────────────── */
@@ -224,6 +308,39 @@ export default function OFXPage() {
     if (!est || !est.cat || est.cat === 'ignorar') return;
     setSalvando(t.id);
     try {
+      const catMap: Record<string, string> = {
+        recebimento: 'adiantamento', 'mao-de-obra': 'mao-de-obra',
+        distribuicao: 'distribuicao', reembolso: 'reembolso', outros: 'outros',
+      };
+
+      // ── Modo Dividir: múltiplos lançamentos de um mesmo pagamento ──────────
+      const splits = est.splits;
+      if (splits && splits.length > 0) {
+        for (const sp of splits) {
+          if (!sp.cat || sp.cat === 'ignorar' || sp.valor <= 0) continue;
+          const tipo: Lancamento['tipo'] = sp.cat === 'recebimento' ? 'receita' : 'despesa';
+          const obra   = obras.find(o => o.id === sp.obra);
+          const cliente = clientes.find(c => c.id === sp.clienteId);
+          const prest  = prestadores.find(p => p.id === sp.prestadorId);
+          const socio  = socios.find(s => s.id === sp.socioId);
+          await upsertLanc({
+            id: uid(), tipo,
+            descricao: sp.descricao || (t.memo || '').slice(0, 80),
+            valor: sp.valor, vencimento: t.data, pagamento: t.data, status: 'pago',
+            obraId: obra?.id, obraNome: obra?.nome,
+            clienteId: cliente?.id, clienteNome: cliente?.nome,
+            prestadorId: prest?.id, prestadorNome: prest?.nome,
+            socioId: socio?.id, socioNome: socio?.nome,
+            categoria: catMap[sp.cat] || 'outros',
+            ofxId: t.id, conciliado: true, obs: t.memo, criadoEm: hoje(),
+          });
+        }
+        upd(t.id, { status: 'lancado' });
+        message.success(`${splits.length} lançamento(s) criados a partir da divisão!`);
+        setSalvando(null);
+        return;
+      }
+
       const ids = est.lancamentoIds || [];
 
       if (ids.length > 0) {
@@ -303,10 +420,6 @@ export default function OFXPage() {
       const cliente = clientes.find(c => c.id === est.clienteId);
       const prest   = prestadores.find(p => p.id === est.prestadorId);
       const socio   = socios.find(s => s.id === est.socioId);
-      const catMap: Record<string, string> = {
-        recebimento: 'adiantamento', 'mao-de-obra': 'mao-de-obra',
-        distribuicao: 'distribuicao', reembolso: 'reembolso', outros: 'outros',
-      };
       const descFinal = est.descricao || (t.memo || '').replace(/Transferência (recebida|enviada) pelo Pix - /i, '').slice(0, 80);
       await upsertLanc({
         id: uid(), tipo, descricao: descFinal,
@@ -344,16 +457,19 @@ export default function OFXPage() {
   }
 
   function ignorarTodosPendentes() {
-    const prox = { ...estados };
     let count = 0;
-    transacoes.forEach(t => {
-      if ((prox[t.id]?.status || 'pendente') === 'pendente') {
-        prox[t.id] = { ...prox[t.id] ?? estadoInicial(t, lancamentos), status: 'ignorado' };
-        count++;
-      }
+    setEstados(prev => {
+      const prox = { ...prev };
+      transacoes.forEach(t => {
+        if ((prox[t.id]?.status || 'pendente') === 'pendente') {
+          prox[t.id] = { ...prox[t.id] ?? estadoInicial(t, lancamentos), status: 'ignorado' };
+          count++;
+        }
+      });
+      salvarLS(prox);
+      return prox;
     });
-    salvarEstados(prox);
-    message.success(`${count} transação(ões) ignorada(s).`);
+    message.success(`Transações ignoradas.`);
   }
 
   /* ── Helpers ─────────────────────────────────────────────────────────────── */
@@ -549,82 +665,180 @@ export default function OFXPage() {
 
                     {!lancado && !ignorado ? (
                       <>
-                        {/* Categoria */}
-                        <Col xs={12} sm={3}>
-                          <Select placeholder="Categoria" value={est.cat || undefined} size="small"
-                            style={{ width: '100%' }}
-                            onChange={v => upd(t.id, { cat: v as CatOFX, lancamentoIds: [], obra: '' })}
-                            options={CAT_OPTS.map(c => ({ value: c.value, label: c.label }))} />
-                        </Col>
-
-                        {/* Obra */}
-                        {est.cat && est.cat !== 'ignorar' && est.cat !== 'distribuicao' && (
-                          <Col xs={12} sm={3}>
-                            <Select placeholder="Obra" value={est.obra || undefined} size="small"
-                              style={{ width: '100%' }} allowClear
-                              onChange={v => upd(t.id, { obra: v || '', lancamentoIds: [] })}
-                              options={obras.filter(o => o.status !== 'cancelada')
-                                .map(o => ({ value: o.id, label: o.nome }))} />
+                        {/* ── Modo Dividir ────────────────────────────────── */}
+                        {est.splits && est.splits.length > 0 ? (
+                          <Col xs={24}>
+                            <div style={{ background: '#fffbe6', border: '1px solid #ffe58f', borderRadius: 6, padding: '8px 10px' }}>
+                              <div style={{ fontSize: 11, fontWeight: 700, color: '#874d00', marginBottom: 6 }}>
+                                <ScissorOutlined /> Dividir pagamento em {est.splits.length} parte(s)
+                              </div>
+                              {est.splits.map((sp, idx) => {
+                                const obrasOpts = obras.filter(o => o.status !== 'cancelada').map(o => ({ value: o.id, label: o.nome }));
+                                return (
+                                  <div key={sp.id} style={{ display: 'flex', gap: 5, marginBottom: 5, flexWrap: 'wrap', alignItems: 'center' }}>
+                                    <span style={{ fontSize: 10, color: '#8c8c8c', width: 14 }}>{idx + 1}.</span>
+                                    <Select size="small" style={{ width: 130 }} placeholder="Categoria"
+                                      value={sp.cat || undefined}
+                                      onChange={v => updSplit(t.id, sp.id, { cat: v as CatOFX })}
+                                      options={CAT_OPTS.filter(c => c.value !== 'ignorar')} />
+                                    {sp.cat && sp.cat !== 'distribuicao' && (
+                                      <Select size="small" style={{ width: 130 }} placeholder="Obra" allowClear
+                                        value={sp.obra || undefined}
+                                        onChange={v => updSplit(t.id, sp.id, { obra: v || '' })}
+                                        options={obrasOpts} />
+                                    )}
+                                    <InputNumber size="small" style={{ width: 110 }} min={0} step={100} precision={2}
+                                      prefix="R$" value={sp.valor}
+                                      onChange={v => updSplit(t.id, sp.id, { valor: v ?? 0 })} />
+                                    {sp.cat === 'recebimento' && (
+                                      <Select size="small" style={{ width: 120 }} placeholder="Cliente" allowClear
+                                        value={sp.clienteId || undefined}
+                                        onChange={v => updSplit(t.id, sp.id, { clienteId: v || '' })}
+                                        options={clientes.map(c => ({ value: c.id, label: c.nome }))} />
+                                    )}
+                                    {sp.cat === 'mao-de-obra' && (
+                                      <Select size="small" style={{ width: 120 }} placeholder="Prestador" allowClear
+                                        value={sp.prestadorId || undefined}
+                                        onChange={v => updSplit(t.id, sp.id, { prestadorId: v || '' })}
+                                        options={prestadores.map(p => ({ value: p.id, label: p.nome }))} />
+                                    )}
+                                    {sp.cat === 'distribuicao' && (
+                                      <Select size="small" style={{ width: 120 }} placeholder="Sócio" allowClear
+                                        value={sp.socioId || undefined}
+                                        onChange={v => updSplit(t.id, sp.id, { socioId: v || '' })}
+                                        options={socios.map(s => ({ value: s.id, label: s.nome }))} />
+                                    )}
+                                    <Input size="small" style={{ flex: 1, minWidth: 100 }} placeholder="Descrição"
+                                      value={sp.descricao}
+                                      onChange={e => updSplit(t.id, sp.id, { descricao: e.target.value })} />
+                                    {est.splits!.length > 1 && (
+                                      <Button size="small" danger icon={<DeleteOutlined />}
+                                        onClick={() => removeSplit(t.id, sp.id)} />
+                                    )}
+                                  </div>
+                                );
+                              })}
+                              {/* Resto */}
+                              {(() => {
+                                const soma = est.splits.reduce((s, sp) => s + sp.valor, 0);
+                                const diff = Math.round((t.valor - soma) * 100) / 100;
+                                const ok = Math.abs(diff) < 0.01;
+                                return (
+                                  <div style={{ fontSize: 10, color: ok ? '#52c41a' : '#fa8c16', marginTop: 2, marginBottom: 6 }}>
+                                    {ok
+                                      ? <><CheckCircleOutlined /> Soma correta — {formatarMoeda(soma)}</>
+                                      : diff > 0
+                                        ? <><WarningOutlined /> Resta {formatarMoeda(diff)} a distribuir</>
+                                        : <><WarningOutlined /> Soma ({formatarMoeda(soma)}) excede o valor OFX ({formatarMoeda(t.valor)})</>
+                                    }
+                                  </div>
+                                );
+                              })()}
+                              <Space size={6}>
+                                <Button size="small" icon={<PlusOutlined />} onClick={() => addSplit(t.id, t.valor)}>
+                                  + Parte
+                                </Button>
+                                <Button size="small" type="primary" icon={<CheckOutlined />}
+                                  loading={salvando === t.id} onClick={() => lancar(t)}
+                                  style={{ background: '#52c41a', borderColor: '#52c41a' }}>
+                                  Lançar {est.splits.length} parte(s)
+                                </Button>
+                                <Button size="small" onClick={() => cancelarDivisao(t.id)}>
+                                  Cancelar divisão
+                                </Button>
+                              </Space>
+                            </div>
                           </Col>
-                        )}
+                        ) : (
+                          <>
+                            {/* Categoria */}
+                            <Col xs={12} sm={3}>
+                              <Select placeholder="Categoria" value={est.cat || undefined} size="small"
+                                style={{ width: '100%' }}
+                                onChange={v => upd(t.id, { cat: v as CatOFX, lancamentoIds: [], obra: '' })}
+                                options={CAT_OPTS.map(c => ({ value: c.value, label: c.label }))} />
+                            </Col>
 
-                        {/* Vincular parcela(s) — multi-select */}
-                        {est.obra && (est.cat === 'recebimento' || est.cat === 'mao-de-obra' || est.cat === 'outros') && (
-                          <Col xs={24} sm={6}>
-                            <Select
-                              mode="multiple"
-                              size="small"
-                              style={{ width: '100%' }}
-                              placeholder={<><LinkOutlined /> Vincular parcela(s) (opcional)</>}
-                              value={ids}
-                              maxTagCount={2}
-                              onChange={(v) => upd(t.id, { lancamentoIds: v as string[] })}
-                              options={pendentesObra.map(l => ({
-                                value: l.id,
-                                label: `${l.descricao} — ${formatarMoeda(l.valor)}`,
-                              }))}
-                              notFoundContent="Nenhuma parcela pendente"
-                            />
-                            {resumoDistribuicao(t, ids)}
-                          </Col>
-                        )}
+                            {/* Obra */}
+                            {est.cat && est.cat !== 'ignorar' && est.cat !== 'distribuicao' && (
+                              <Col xs={12} sm={3}>
+                                <Select placeholder="Obra" value={est.obra || undefined} size="small"
+                                  style={{ width: '100%' }} allowClear
+                                  onChange={v => upd(t.id, { obra: v || '', lancamentoIds: [] })}
+                                  options={obras.filter(o => o.status !== 'cancelada')
+                                    .map(o => ({ value: o.id, label: o.nome }))} />
+                              </Col>
+                            )}
 
-                        {/* Terceiro (cliente / prestador / sócio) — só sem parcela vinculada */}
-                        {est.cat && est.cat !== 'ignorar' && !temParcelas && (
-                          <Col xs={12} sm={3}>
-                            {renderTerceiroSelect(t)}
-                          </Col>
-                        )}
+                            {/* Vincular parcela(s) — multi-select */}
+                            {est.obra && (est.cat === 'recebimento' || est.cat === 'mao-de-obra' || est.cat === 'outros') && (
+                              <Col xs={24} sm={6}>
+                                <Select
+                                  mode="multiple"
+                                  size="small"
+                                  style={{ width: '100%' }}
+                                  placeholder={<><LinkOutlined /> Vincular parcela(s) (opcional)</>}
+                                  value={ids}
+                                  maxTagCount={2}
+                                  onChange={(v) => upd(t.id, { lancamentoIds: v as string[] })}
+                                  options={pendentesObra.map(l => ({
+                                    value: l.id,
+                                    label: `${l.descricao} — ${formatarMoeda(l.valor)}`,
+                                  }))}
+                                  notFoundContent="Nenhuma parcela pendente"
+                                />
+                                {resumoDistribuicao(t, ids)}
+                              </Col>
+                            )}
 
-                        {/* Descrição livre — só sem parcela vinculada */}
-                        {est.cat && est.cat !== 'ignorar' && !temParcelas && (
-                          <Col xs={24} sm={4}>
-                            <Input size="small" placeholder="Descrição (opcional)"
-                              value={est.descricao}
-                              onChange={e => upd(t.id, { descricao: e.target.value })} />
-                          </Col>
-                        )}
+                            {/* Terceiro (cliente / prestador / sócio) — só sem parcela vinculada */}
+                            {est.cat && est.cat !== 'ignorar' && !temParcelas && (
+                              <Col xs={12} sm={3}>
+                                {renderTerceiroSelect(t)}
+                              </Col>
+                            )}
 
-                        {/* Ação */}
-                        <Col xs={24} sm={2} style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                          {est.cat === 'ignorar' ? (
-                            <Button size="small" icon={<StopOutlined />} onClick={() => ignorar(t)}>
-                              Ignorar
-                            </Button>
-                          ) : est.cat ? (
-                            <Button
-                              size="small" type="primary"
-                              icon={<CheckOutlined />}
-                              loading={salvando === t.id}
-                              onClick={() => lancar(t)}
-                              style={temParcelas ? { background: '#52c41a', borderColor: '#52c41a' } : {}}
-                            >
-                              {temParcelas ? 'Dar baixa' : 'Lançar'}
-                            </Button>
-                          ) : (
-                            <Button size="small" disabled>Lançar</Button>
-                          )}
-                        </Col>
+                            {/* Descrição livre — só sem parcela vinculada */}
+                            {est.cat && est.cat !== 'ignorar' && !temParcelas && (
+                              <Col xs={24} sm={4}>
+                                <Input size="small" placeholder="Descrição (opcional)"
+                                  value={est.descricao}
+                                  onChange={e => upd(t.id, { descricao: e.target.value })} />
+                              </Col>
+                            )}
+
+                            {/* Ações */}
+                            <Col xs={24} sm={2} style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
+                              {est.cat === 'ignorar' ? (
+                                <Button size="small" icon={<StopOutlined />} onClick={() => ignorar(t)}>
+                                  Ignorar
+                                </Button>
+                              ) : est.cat ? (
+                                <>
+                                  <Button
+                                    size="small" type="primary"
+                                    icon={<CheckOutlined />}
+                                    loading={salvando === t.id}
+                                    onClick={() => lancar(t)}
+                                    style={temParcelas ? { background: '#52c41a', borderColor: '#52c41a' } : {}}
+                                  >
+                                    {temParcelas ? 'Dar baixa' : 'Lançar'}
+                                  </Button>
+                                  {!temParcelas && (
+                                    <Tooltip title="Dividir este pagamento em múltiplos lançamentos">
+                                      <Button size="small" icon={<ScissorOutlined />}
+                                        onClick={() => iniciarDivisao(t)}>
+                                        Dividir
+                                      </Button>
+                                    </Tooltip>
+                                  )}
+                                </>
+                              ) : (
+                                <Button size="small" disabled>Lançar</Button>
+                              )}
+                            </Col>
+                          </>
+                        )}
                       </>
                     ) : (
                       <>
