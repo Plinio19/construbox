@@ -162,5 +162,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 21196187-8",
     "criadoEm": "2026-07-28"
+  },
+  {
+    "id": "ms4wkszulaiws",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.83",
+    "valor": 100,
+    "vencimento": "2026-05-02",
+    "pagamento": "2026-05-02",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "69f654f8-b668-4861-aa5c-f41473d46838",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.838-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 2092863-5",
+    "criadoEm": "2026-07-28"
   }
 ]
