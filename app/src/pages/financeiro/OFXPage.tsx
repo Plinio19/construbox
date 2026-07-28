@@ -513,7 +513,8 @@ export default function OFXPage() {
     );
     if (est.cat === 'distribuicao') return (
       <Select placeholder="Sócio" value={est.socioId || undefined} size="small" allowClear
-        style={{ width: 150 }} onChange={v => upd(t.id, { socioId: v || '' })}
+        showSearch optionFilterProp="label"
+        style={{ width: 180 }} onChange={v => upd(t.id, { socioId: v || '' })}
         options={socios.map(s => ({ value: s.id, label: s.nome }))} />
     );
     return null;
@@ -656,6 +657,7 @@ export default function OFXPage() {
                 : [];
 
               const temParcelas = ids.length > 0;
+              const lancsFeitos = lancado ? lancamentos.filter(l => l.ofxId === t.id) : [];
 
               return (
                 <Card key={t.id} size="small" style={{ ...corLinha(t), transition: 'all .15s' }}
@@ -745,7 +747,8 @@ export default function OFXPage() {
                                         options={prestadores.map(p => ({ value: p.id, label: p.nome }))} />
                                     )}
                                     {sp.cat === 'distribuicao' && (
-                                      <Select size="small" style={{ width: 120 }} placeholder="Sócio" allowClear
+                                      <Select size="small" style={{ width: 180 }} placeholder="Sócio" allowClear
+                                        showSearch optionFilterProp="label"
                                         value={sp.socioId || undefined}
                                         onChange={v => updSplit(t.id, sp.id, { socioId: v || '' })}
                                         options={socios.map(s => ({ value: s.id, label: s.nome }))} />
@@ -888,14 +891,51 @@ export default function OFXPage() {
                       <>
                         <Col flex="auto">
                           {lancado ? (
-                            <Space>
-                              <Badge status="success" />
-                              <Text style={{ color: '#52c41a', fontSize: 12 }}>
-                                {temParcelas ? `Baixa dada (${ids.length} parcela(s))` : 'Lançado'}
-                                {est.obra && obras.find(o => o.id === est.obra)
-                                  ? ` — ${obras.find(o => o.id === est.obra)!.nome}` : ''}
-                              </Text>
-                            </Space>
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: lancsFeitos.length ? 5 : 0 }}>
+                                <Badge status="success" />
+                                <Text style={{ color: '#52c41a', fontSize: 12, fontWeight: 600 }}>
+                                  {lancsFeitos.length > 0
+                                    ? `${lancsFeitos.length} lançamento(s) criado(s)`
+                                    : 'Lançado'}
+                                </Text>
+                              </div>
+                              {lancsFeitos.map(l => (
+                                <div key={l.id} style={{
+                                  display: 'flex', gap: 5, alignItems: 'center',
+                                  marginBottom: 3, paddingLeft: 16, flexWrap: 'wrap',
+                                }}>
+                                  <Tag
+                                    color={l.tipo === 'receita' ? 'blue' : 'volcano'}
+                                    style={{ fontSize: 9, padding: '0 4px', margin: 0, lineHeight: '16px' }}
+                                  >
+                                    {l.tipo === 'receita' ? 'REC' : 'DESP'}
+                                  </Tag>
+                                  <Text style={{
+                                    fontSize: 11, fontWeight: 700,
+                                    color: l.tipo === 'receita' ? '#1677ff' : '#d4380d',
+                                  }}>
+                                    {formatarMoeda(l.valor)}
+                                  </Text>
+                                  {l.obraNome && (
+                                    <Tag style={{ fontSize: 9, padding: '0 4px', margin: 0, lineHeight: '16px' }}>
+                                      {l.obraNome}
+                                    </Tag>
+                                  )}
+                                  <Text type="secondary" style={{ fontSize: 11 }}>
+                                    {l.descricao}
+                                    {l.prestadorNome ? ` · ${l.prestadorNome}` : ''}
+                                    {l.clienteNome ? ` · ${l.clienteNome}` : ''}
+                                    {l.socioNome ? ` · ${l.socioNome}` : ''}
+                                  </Text>
+                                  {l.status === 'pendente' && (
+                                    <Tag color="orange" style={{ fontSize: 9, padding: '0 4px', margin: 0, lineHeight: '16px' }}>
+                                      saldo pendente
+                                    </Tag>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
                           ) : (
                             <Space>
                               <Badge status="default" />
@@ -903,7 +943,7 @@ export default function OFXPage() {
                             </Space>
                           )}
                         </Col>
-                        <Col>
+                        <Col style={{ flexShrink: 0 }}>
                           <Tooltip title="Desfazer">
                             <Button size="small" icon={<UndoOutlined />} onClick={() => desfazer(t)}>
                               Desfazer
