@@ -80,5 +80,19 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "categoria": "parcela",
     "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "ms4p2co1pwbt9",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Completa — saldo restante",
+    "valor": 64700,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-28"
   }
 ]
