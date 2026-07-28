@@ -130,5 +130,21 @@
     "prestadorNome": "EQUIPE EDINILSON",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-07-28"
+  },
+  {
+    "id": "ms4wkbmiyfhco",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia enviada pelo Pix - MARLI APARECIDA DOS SANTOS - â€¢â€¢â€¢.328.178",
+    "valor": 5000,
+    "vencimento": "2026-05-01",
+    "pagamento": "2026-05-01",
+    "status": "pago",
+    "socioId": "ms4wjecaxu682",
+    "socioNome": "Plinio de Paula Gomes Filho",
+    "categoria": "distribuicao",
+    "ofxId": "69f518a3-e04f-4272-bd00-a317fd14906e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - MARLI APARECIDA DOS SANTOS - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-07-28"
   }
 ]
