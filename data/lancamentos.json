@@ -178,5 +178,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.838-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 2092863-5",
     "criadoEm": "2026-07-28"
+  },
+  {
+    "id": "ms4wm2g748twk",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia enviada pelo Pix - JULIA SILVA VILA NOVA - â€¢â€¢â€¢.122.638-â€¢â",
+    "valor": 1000,
+    "vencimento": "2026-05-02",
+    "pagamento": "2026-05-02",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "69f62c20-2354-4f51-b67c-080a85395918",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - JULIA SILVA VILA NOVA - â€¢â€¢â€¢.122.638-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21748259-7",
+    "criadoEm": "2026-07-28"
   }
 ]
