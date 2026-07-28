@@ -98,5 +98,19 @@
     "ofxId": "69f7c74e-32ec-4588-94b4-6e1cfc547f1e",
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.838-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 2092863-5"
+  },
+  {
+    "id": "ms4p32nfk65re",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Completa — saldo restante — saldo restante",
+    "valor": 45800,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-28"
   }
 ]
