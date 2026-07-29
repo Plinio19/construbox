@@ -360,5 +360,19 @@
     "prestadorNome": "EQUIPE EDINILSON",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms63wznrshpem",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STON",
+    "valor": 398,
+    "vencimento": "2026-05-18",
+    "pagamento": "2026-05-18",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a0b821d-22c4-4563-8b2f-accf10a8fa47",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-07-29"
   }
 ]
