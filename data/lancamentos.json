@@ -435,14 +435,18 @@
     "id": "ms642s1cdkmlh",
     "tipo": "despesa",
     "descricao": "Mão de Obra Completa — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante",
-    "valor": 28324.769999999997,
+    "valor": 1000,
     "vencimento": "2026-07-24",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "mrz65iweisq2k",
     "obraNome": "Nova Mutum",
     "prestadorId": "mrz65acqew4i3",
     "prestadorNome": "EQUIPE EDINILSON",
     "categoria": "mao-de-obra",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-06-18",
+    "ofxId": "6a344dec-c874-4822-931a-493fbdc28aa5",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.838-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 2092863-5"
   }
 ]
