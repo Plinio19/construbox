@@ -539,13 +539,17 @@
     "descricao": "RIO NEGRO — ENTRADA 50%",
     "valor": 22500,
     "vencimento": "2026-07-29",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "ms64miyd6l7ea",
     "obraNome": "RIO NEGRO",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-06-03",
+    "ofxId": "6a202a02-ac91-43ed-9c63-f4f6a8524dc3",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "ms64l3gaoec37",
