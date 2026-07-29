@@ -410,5 +410,21 @@
     "prestadorNome": "EQUIPE EDINILSON",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms642j8hgxrae",
+    "tipo": "despesa",
+    "descricao": "Uber - Ferramentas",
+    "valor": 64.77,
+    "vencimento": "2026-06-08",
+    "pagamento": "2026-06-08",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "6a26d2e7-bebe-445c-a407-48ef1ee265bb",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
+    "criadoEm": "2026-07-29"
   }
 ]
