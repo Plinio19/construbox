@@ -210,5 +210,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
     "criadoEm": "2026-07-28"
+  },
+  {
+    "id": "ms63o8q1bivyt",
+    "tipo": "despesa",
+    "descricao": "Passagem Onibus - Edinilson",
+    "valor": 695.53,
+    "vencimento": "2026-05-03",
+    "pagamento": "2026-05-03",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "69f7705d-df6f-44ad-88af-aad647757dec",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - 18.087.991/0001-57 - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 9402669649-0",
+    "criadoEm": "2026-07-29"
   }
 ]
