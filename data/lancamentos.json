@@ -1104,5 +1104,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66n049cjf0z",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.51",
+    "valor": 360,
+    "vencimento": "2026-05-29",
+    "pagamento": "2026-05-29",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a198e63-50bf-4d49-ad38-e193a30b6639",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
+    "criadoEm": "2026-07-29"
   }
 ]
