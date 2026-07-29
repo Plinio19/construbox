@@ -759,13 +759,17 @@
     "descricao": "Sinop — MEIO DA OBRA 30%",
     "valor": 25500,
     "vencimento": "2026-07-29",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "ms656y0wkhx6y",
     "obraNome": "Sinop",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-06-18",
+    "ofxId": "6a344941-0ce2-43c3-aff3-99f2563d71b0",
+    "conciliado": true,
+    "obs": "Nova Mutum — Final (30%) · TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - CAIXA ECONOMICA FEDERAL (0104) AgÃªncia: 3321 Conta: 1292000000570090955-0"
   },
   {
     "id": "ms655tcuky3f1",
