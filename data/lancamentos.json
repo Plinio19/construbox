@@ -1300,5 +1300,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.838-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 2092863-5",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66ukg4nuo6h",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 1500,
+    "vencimento": "2026-06-25",
+    "pagamento": "2026-06-25",
+    "status": "pago",
+    "socioId": "ms4wjecaxu682",
+    "socioNome": "Plinio de Paula Gomes Filho",
+    "categoria": "distribuicao",
+    "ofxId": "6a3d109e-c5a4-4947-8a8b-ef0cd2084926",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-07-29"
   }
 ]
