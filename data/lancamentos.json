@@ -1164,5 +1164,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66own2t8my9",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001",
+    "valor": 1000,
+    "vencimento": "2026-06-03",
+    "pagamento": "2026-06-03",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6a202d22-6c67-475f-b6ea-e7a874f56d49",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
+    "criadoEm": "2026-07-29"
   }
 ]
