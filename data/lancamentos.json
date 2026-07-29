@@ -1214,5 +1214,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - NOVOCEL VGP LTDA - 57.106.120/0001-95 - CLOUDWALK IP LTDA (0542) AgÃªncia: 1 Conta: 10572649-3",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66quvpk5nfp",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Plinio De Paula Gomes Filho - Â€¢â€¢â€¢.958.51",
+    "valor": 390.98,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a2c45b6-8815-4981-8924-0ab6fb06fe3e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
+    "criadoEm": "2026-07-29"
   }
 ]
