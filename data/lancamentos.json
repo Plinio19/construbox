@@ -258,5 +258,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - UBER DO BRASIL TECNOLOGIA LTDA. - 17.895.646/0001-87 - ADYEN DO BRASIL IP LTDA. AgÃªncia: 1 Conta: 100000056-0",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms63phh53j3vj",
+    "tipo": "despesa",
+    "descricao": "Transportadora - Ferramentas",
+    "valor": 411,
+    "vencimento": "2026-05-11",
+    "pagamento": "2026-05-11",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "6a01d137-fbb7-4426-b642-60843943401e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
+    "criadoEm": "2026-07-29"
   }
 ]
