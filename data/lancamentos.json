@@ -826,5 +826,21 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "categoria": "parcela",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms65c2rarxs5o",
+    "tipo": "despesa",
+    "descricao": "Divida Bernardo",
+    "valor": 1500,
+    "vencimento": "2026-05-20",
+    "pagamento": "2026-05-20",
+    "status": "pago",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "categoria": "outros",
+    "ofxId": "6a0da4c7-7e5c-4a64-b69c-3277b62de454",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - â€¢â€¢â€¢.535.048-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 84265314-7",
+    "criadoEm": "2026-07-29"
   }
 ]
