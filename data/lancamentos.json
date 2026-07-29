@@ -846,5 +846,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - â€¢â€¢â€¢.535.048-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 84265314-7",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms65cdq6ob6i5",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Chave Na Maõa — saldo restante — saldo restante",
+    "valor": 58556.4,
+    "vencimento": "2026-07-29",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "prestadorId": "ms653mqxokvpb",
+    "prestadorNome": "Geovanne Alves",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-29"
   }
 ]
