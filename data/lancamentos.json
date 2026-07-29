@@ -851,14 +851,18 @@
     "id": "ms65cdq6ob6i5",
     "tipo": "despesa",
     "descricao": "Mão de Obra Chave Na Maõa — saldo restante — saldo restante",
-    "valor": 58556.4,
+    "valor": 5000,
     "vencimento": "2026-07-29",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "ms656y0wkhx6y",
     "obraNome": "Sinop",
     "prestadorId": "ms653mqxokvpb",
     "prestadorNome": "Geovanne Alves",
     "categoria": "mao-de-obra",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-05-25",
+    "ofxId": "6a142b9f-73ca-43d7-818c-d80d90c5bd83",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - GEOVANE ALVES MENDES 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
   }
 ]
