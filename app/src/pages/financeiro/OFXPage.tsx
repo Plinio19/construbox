@@ -210,9 +210,8 @@ export default function OFXPage() {
     if (!file.name.toLowerCase().endsWith('.ofx')) {
       message.error('Selecione um arquivo .ofx'); return;
     }
-    const reader = new FileReader();
-    reader.onload = e => {
-      const content = e.target?.result as string;
+
+    function processar(content: string) {
       const novas = parseOFX(content);
       if (!novas.length) { message.warning('Nenhuma transação encontrada no arquivo.'); return; }
       const existentes: OFXTransacao[] = (() => {
@@ -224,8 +223,44 @@ export default function OFXPage() {
       localStorage.setItem(LS_EXTRATO, JSON.stringify(merged));
       setTransacoes(merged);
       message.success(`${novas.length} transação(ões) importada(s). ${merged.length} no total.`);
+    }
+
+    function lerCom(enc: string) {
+      const r = new FileReader();
+      r.onload = e => processar(e.target?.result as string);
+      r.readAsText(file, enc);
+    }
+
+    // Detecta o encoding pelo cabeçalho antes de ler o arquivo completo
+    const sniff = new FileReader();
+    sniff.onload = ev => {
+      const header = ev.target?.result as string;
+      // OFX 2.0 XML
+      if (header.trimStart().startsWith('<?xml')) {
+        const m = /encoding="([^"]+)"/i.exec(header);
+        return lerCom(m ? m[1] : 'UTF-8');
+      }
+      // OFX 1.x SGML — procura campo CHARSET
+      const m = /CHARSET[:\s]*(\S+)/i.exec(header);
+      if (m) {
+        const cs = m[1].toUpperCase();
+        if (cs.includes('UTF') || cs === 'UNICODE') return lerCom('UTF-8');
+        if (cs === '1252') return lerCom('windows-1252');
+        return lerCom('ISO-8859-1');
+      }
+      // Sem declaração: tenta UTF-8; se inválido, cai para ISO-8859-1
+      const r = new FileReader();
+      r.onload = e => {
+        const content = e.target?.result as string;
+        if (content.includes('�')) {
+          lerCom('ISO-8859-1'); // bytes inválidos em UTF-8 → era Latin-1
+        } else {
+          processar(content);
+        }
+      };
+      r.readAsText(file, 'UTF-8');
     };
-    reader.readAsText(file, 'ISO-8859-1');
+    sniff.readAsText(file.slice(0, 500), 'ISO-8859-1');
   }
 
   function upd(id: string, patch: Partial<EstadoClass>) {
@@ -379,6 +414,7 @@ export default function OFXPage() {
         for (const lanc of selecionadas) {
           if (valorRestante <= 0) break;
 
+          const obsLanc = est.descricao ? `${est.descricao} · ${t.memo}` : t.memo;
           if (valorRestante >= lanc.valor - 0.01) {
             // Baixa completa nesta parcela
             await upsertLanc({
@@ -387,7 +423,7 @@ export default function OFXPage() {
               pagamento: t.data,
               ofxId: t.id,
               conciliado: true,
-              obs: t.memo,
+              obs: obsLanc,
             });
             valorRestante -= lanc.valor;
           } else {
@@ -400,7 +436,7 @@ export default function OFXPage() {
               valor: valorRestante,
               ofxId: t.id,
               conciliado: true,
-              obs: t.memo,
+              obs: obsLanc,
             });
             await upsertLanc({
               id: uid(), tipo: lanc.tipo,
@@ -845,10 +881,11 @@ export default function OFXPage() {
                               </Col>
                             )}
 
-                            {/* Descrição livre — só sem parcela vinculada */}
-                            {est.cat && est.cat !== 'ignorar' && !temParcelas && (
+                            {/* Descrição livre — sempre visível */}
+                            {est.cat && est.cat !== 'ignorar' && (
                               <Col xs={24} sm={4}>
-                                <Input size="small" placeholder="Descrição (opcional)"
+                                <Input size="small"
+                                  placeholder={temParcelas ? 'Observação (opcional)' : 'Descrição (opcional)'}
                                   value={est.descricao}
                                   onChange={e => upd(t.id, { descricao: e.target.value })} />
                               </Col>
