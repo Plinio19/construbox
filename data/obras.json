@@ -112,7 +112,17 @@
         "vencimento": "2026-07-29"
       }
     ],
-    "despesas": [],
+    "despesas": [
+      {
+        "id": "ms657szoy0guj",
+        "descricao": "Mão de Obra Chave Na Maõa",
+        "valor": 60000,
+        "vencimento": "2026-07-29",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms653mqxokvpb",
+        "prestadorNome": "Geovanne Alves"
+      }
+    ],
     "criadoEm": "2026-07-29"
   }
 ]
