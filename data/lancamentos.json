@@ -1026,5 +1026,19 @@
     "prestadorNome": "Geovanne Alves",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms65picwecjw0",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAA",
+    "valor": 1978,
+    "vencimento": "2026-06-18",
+    "pagamento": "2026-06-18",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a344971-87a7-44cd-adbd-b16eda8d3694",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-07-29"
   }
 ]
