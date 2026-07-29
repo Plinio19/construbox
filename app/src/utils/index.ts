@@ -16,6 +16,11 @@ export function formatarData(iso?: string | null): string {
   return `${d}/${m}/${y}`;
 }
 
+export function titleCase(s?: string | null): string {
+  if (!s) return '';
+  return s.toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase());
+}
+
 export function esc(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

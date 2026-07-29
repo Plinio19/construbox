@@ -13,7 +13,7 @@ import { useObrasStore } from '../../stores/useObrasStore';
 import { useClientesStore } from '../../stores/useClientesStore';
 import { usePrestadoresStore } from '../../stores/usePrestadoresStore';
 import { useSociosStore } from '../../stores/useSociosStore';
-import { formatarMoeda, uid, hoje } from '../../utils';
+import { formatarMoeda, uid, hoje, titleCase } from '../../utils';
 import type { Lancamento } from '../../types';
 
 const { Title, Text } = Typography;
@@ -384,7 +384,7 @@ export default function OFXPage() {
             const socio  = socios.find(s => s.id === sp.socioId);
             await upsertLanc({
               id: uid(), tipo,
-              descricao: sp.descricao || (t.memo || '').slice(0, 80),
+              descricao: titleCase(sp.descricao || (t.memo || '').slice(0, 80)),
               valor: sp.valor, vencimento: t.data, pagamento: t.data, status: 'pago',
               obraId: obra?.id, obraNome: obra?.nome,
               clienteId: cliente?.id, clienteNome: cliente?.nome,
@@ -481,7 +481,7 @@ export default function OFXPage() {
       const cliente = clientes.find(c => c.id === est.clienteId);
       const prest   = prestadores.find(p => p.id === est.prestadorId);
       const socio   = socios.find(s => s.id === est.socioId);
-      const descFinal = est.descricao || (t.memo || '').replace(/Transferência (recebida|enviada) pelo Pix - /i, '').slice(0, 80);
+      const descFinal = titleCase(est.descricao || (t.memo || '').replace(/Transferência (recebida|enviada) pelo Pix - /i, '').slice(0, 80));
       await upsertLanc({
         id: uid(), tipo, descricao: descFinal,
         valor: t.valor, vencimento: t.data, pagamento: t.data, status: 'pago',
@@ -719,9 +719,9 @@ export default function OFXPage() {
 
                     {/* Memo */}
                     <Col xs={24} sm={5}>
-                      <Tooltip title={t.memo}>
+                      <Tooltip title={titleCase(t.memo)}>
                         <Text type="secondary" style={{ fontSize: 11 }} ellipsis>
-                          {t.memo}
+                          {titleCase(t.memo)}
                         </Text>
                       </Tooltip>
                     </Col>
@@ -960,7 +960,7 @@ export default function OFXPage() {
                                     </Tag>
                                   )}
                                   <Text type="secondary" style={{ fontSize: 11 }}>
-                                    {l.descricao}
+                                    {titleCase(l.descricao)}
                                     {l.prestadorNome ? ` · ${l.prestadorNome}` : ''}
                                     {l.clienteNome ? ` · ${l.clienteNome}` : ''}
                                     {l.socioNome ? ` · ${l.socioNome}` : ''}

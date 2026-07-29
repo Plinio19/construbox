@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import type { Lancamento, StatusLancamento } from '../../types';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
 import { useObrasStore } from '../../stores/useObrasStore';
-import { formatarMoeda, formatarData } from '../../utils';
+import { formatarMoeda, formatarData, titleCase } from '../../utils';
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -96,7 +96,7 @@ export default function ExtratoPage() {
       title: 'Descrição', dataIndex: 'descricao',
       render: (desc: string, r) => (
         <div>
-          <Text>{desc}</Text>
+          <Text>{titleCase(desc)}</Text>
           {filtroObra === 'todas' && r.obraNome && (
             <div><Text type="secondary" style={{ fontSize: 11 }}>{r.obraNome}</Text></div>
           )}

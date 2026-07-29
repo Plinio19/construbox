@@ -7,7 +7,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, CheckOutlined } from '@ant-design/icons';
 import type { Lancamento, TipoLancamento, StatusLancamento } from '../../types';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
-import { formatarMoeda, formatarData, hoje } from '../../utils';
+import { formatarMoeda, formatarData, hoje, titleCase } from '../../utils';
 import LancamentoForm from './LancamentoForm';
 
 const { Title, Text } = Typography;
@@ -72,7 +72,7 @@ export default function FinanceiroPage({ tipo }: Props) {
     { title: 'Descrição', dataIndex: 'descricao',
       render: (desc: string, r) => (
         <div>
-          <Text strong>{desc}</Text>
+          <Text strong>{titleCase(desc)}</Text>
           {r.obraNome && <div><Text type="secondary" style={{ fontSize: 12 }}>{r.obraNome}</Text></div>}
           {r.categoria && <Tag style={{ marginTop: 2, fontSize: 11 }}>{r.categoria}</Tag>}
         </div>
