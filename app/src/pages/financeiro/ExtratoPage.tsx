@@ -39,6 +39,7 @@ export default function ExtratoPage() {
   const [periodo, setPeriodo] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null);
   const [filtroTipo, setFiltroTipo] = useState<'todos' | 'receita' | 'despesa'>('todos');
   const [filtroObra, setFiltroObra] = useState<string>('todas');
+  const [filtroCategoria, setFiltroCategoria] = useState<string>('');
 
   useEffect(() => { fetch(); fetchObras(); }, []);
 
@@ -56,7 +57,8 @@ export default function ExtratoPage() {
         (l.vencimento >= periodo[0].format('YYYY-MM-DD') &&
          l.vencimento <= periodo[1].format('YYYY-MM-DD'));
       const matchObra = filtroObra === 'todas' || l.obraId === filtroObra;
-      return matchBusca && matchTipo && matchPeriodo && matchObra;
+      const matchCat = !filtroCategoria || l.categoria === filtroCategoria;
+      return matchBusca && matchTipo && matchPeriodo && matchObra && matchCat;
     })
     .sort((a, b) => (a.vencimento || '').localeCompare(b.vencimento || ''));
 
@@ -272,20 +274,26 @@ export default function ExtratoPage() {
 
       {/* Filtros adicionais */}
       <Row gutter={[12, 8]} style={{ marginBottom: 16 }} wrap>
-        <Col xs={24} sm={9}>
-          <Input prefix={<SearchOutlined />} placeholder="Buscar descrição, categoria..."
+        <Col xs={24} sm={8}>
+          <Input prefix={<SearchOutlined />} placeholder="Buscar descrição..."
             value={busca} onChange={e => setBusca(e.target.value)} allowClear />
         </Col>
-        <Col xs={24} sm={6}>
+        <Col xs={12} sm={5}>
           <Select style={{ width: '100%' }} value={filtroTipo}
             onChange={v => setFiltroTipo(v as typeof filtroTipo)}
             options={[
-              { value: 'todos', label: 'Receitas e Despesas' },
+              { value: 'todos', label: 'Rec. e Desp.' },
               { value: 'receita', label: 'Só Receitas' },
               { value: 'despesa', label: 'Só Despesas' },
             ]} />
         </Col>
-        <Col xs={24} sm={9}>
+        <Col xs={12} sm={6}>
+          <Select style={{ width: '100%' }} value={filtroCategoria || undefined}
+            placeholder="Todas as categorias" allowClear
+            onChange={v => setFiltroCategoria(v || '')}
+            options={Object.entries(CAT_LABEL).map(([k, v]) => ({ value: k, label: v }))} />
+        </Col>
+        <Col xs={24} sm={5}>
           <RangePicker style={{ width: '100%' }} format="DD/MM/YYYY"
             onChange={v => setPeriodo(v as [dayjs.Dayjs, dayjs.Dayjs] | null)} />
         </Col>

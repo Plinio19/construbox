@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import {
   Row, Col, Card, Statistic, Typography, Table, Progress,
-  Space, Tag, Tabs, Divider, Select,
+  Space, Tag, Tabs, Divider, Select, Button,
 } from 'antd';
 import {
-  ArrowUpOutlined, ArrowDownOutlined, MinusOutlined,
+  ArrowUpOutlined, ArrowDownOutlined, MinusOutlined, PrinterOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { useObrasStore } from '../../stores/useObrasStore';
@@ -12,10 +12,17 @@ import { useEtapasStore } from '../../stores/useEtapasStore';
 import { useLancamentosStore } from '../../stores/useLancamentosStore';
 import { useClientesStore } from '../../stores/useClientesStore';
 import { ObraStatusTag } from '../../components/common/StatusTag';
-import type { Obra } from '../../types';
-import { formatarMoeda, formatarData } from '../../utils';
+import type { Obra, Lancamento, StatusLancamento } from '../../types';
+import { formatarMoeda, formatarData, titleCase } from '../../utils';
 
 const { Title, Text } = Typography;
+
+const STATUS_COLOR: Record<StatusLancamento, string> = {
+  pendente: 'gold', pago: 'green', parcial: 'cyan', vencido: 'red', cancelado: 'default',
+};
+const STATUS_LABEL: Record<StatusLancamento, string> = {
+  pendente: 'Pendente', pago: 'Pago', parcial: 'Parcial', vencido: 'Vencido', cancelado: 'Cancelado',
+};
 
 function progressoObra(obraId: string, etapas: ReturnType<typeof useEtapasStore.getState>['etapas']): number {
   const et = etapas.filter(e => e.obraId === obraId);
@@ -97,6 +104,7 @@ export default function RelatoriosPage() {
   const { clientes, fetch: fetchClientes } = useClientesStore();
 
   const [anoFiltro, setAnoFiltro] = useState<string>('todos');
+  const [anoFiltroReceber, setAnoFiltroReceber] = useState<string>('todos');
 
   useEffect(() => {
     fetchObras(); fetchEtapas(); fetchLanc(); fetchClientes();
@@ -200,6 +208,26 @@ export default function RelatoriosPage() {
     totalObras: obras.filter(o => o.clienteId === c.id).length,
     totalContrato: obras.filter(o => o.clienteId === c.id).reduce((s, o) => s + (o.valorContrato || 0), 0),
   })).filter(c => c.totalObras > 0).sort((a, b) => b.totalContrato - a.totalContrato);
+
+  // ── Receber por Obra ──
+  const lancReceber = anoFiltroReceber === 'todos'
+    ? lancamentos
+    : lancamentos.filter(l => (l.vencimento || l.criadoEm || '').startsWith(anoFiltroReceber));
+
+  interface ObraRec extends Obra { lancRec: Lancamento[]; recebido: number; pendente: number; }
+  const receitasPorObra: ObraRec[] = obras
+    .filter(o => o.status !== 'cancelada')
+    .map(obra => {
+      const lancRec = lancReceber.filter(l => l.tipo === 'receita' && l.obraId === obra.id && l.status !== 'cancelado');
+      const recebido = lancRec.filter(l => l.status === 'pago').reduce((s, l) => s + l.valor, 0);
+      const pendente = lancRec.filter(l => l.status !== 'pago').reduce((s, l) => s + l.valor, 0);
+      return { ...obra, lancRec, recebido, pendente };
+    })
+    .filter(o => o.lancRec.length > 0)
+    .sort((a, b) => b.recebido - a.recebido);
+
+  const totRecebido = receitasPorObra.reduce((s, o) => s + o.recebido, 0);
+  const totPendente = receitasPorObra.reduce((s, o) => s + o.pendente, 0);
 
   return (
     <div>
@@ -419,6 +447,171 @@ export default function RelatoriosPage() {
                     </Row>
                   </Col>
                 </Row>
+              </div>
+            ),
+          },
+
+          // ── TAB 3: RECEBER POR OBRA ──────────────────────────────────────
+          {
+            key: 'receber-obra',
+            label: 'Receber por Obra',
+            children: (
+              <div>
+                <style>{`
+                  @media print {
+                    .ant-layout-sider, .ant-layout-header { display: none !important; }
+                    .ant-layout-content { padding: 8px 16px !important; }
+                    .ant-tabs-nav, .no-print { display: none !important; }
+                    body { background: white !important; }
+                  }
+                `}</style>
+
+                <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
+                  <Col>
+                    <Title level={5} style={{ margin: 0 }}>Contas a Receber por Obra</Title>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      Receitas agrupadas por obra — clique em uma linha para ver as parcelas
+                    </Text>
+                  </Col>
+                  <Col>
+                    <Space className="no-print">
+                      <Text type="secondary">Período:</Text>
+                      <Select value={anoFiltroReceber} onChange={setAnoFiltroReceber} style={{ width: 110 }}
+                        options={[{ value: 'todos', label: 'Todos' }, ...ANOS]} />
+                      <Button icon={<PrinterOutlined />} onClick={() => window.print()}>Imprimir</Button>
+                    </Space>
+                  </Col>
+                </Row>
+
+                <Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
+                  <Col xs={12} sm={8}>
+                    <Card size="small">
+                      <Statistic title="Total Recebido" value={formatarMoeda(totRecebido)}
+                        valueStyle={{ color: '#52c41a', fontSize: 16 }} />
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={8}>
+                    <Card size="small">
+                      <Statistic title="Total Pendente" value={formatarMoeda(totPendente)}
+                        valueStyle={{ color: '#faad14', fontSize: 16 }} />
+                    </Card>
+                  </Col>
+                  <Col xs={24} sm={8}>
+                    <Card size="small">
+                      <Statistic title="Total Geral" value={formatarMoeda(totRecebido + totPendente)}
+                        valueStyle={{ fontSize: 16 }} />
+                    </Card>
+                  </Col>
+                </Row>
+
+                <Table<ObraRec>
+                  dataSource={receitasPorObra}
+                  rowKey="id"
+                  size="middle"
+                  pagination={false}
+                  locale={{ emptyText: 'Nenhuma receita encontrada.' }}
+                  summary={() => (
+                    <Table.Summary.Row>
+                      <Table.Summary.Cell index={0}><Text strong>Total</Text></Table.Summary.Cell>
+                      <Table.Summary.Cell index={1} />
+                      <Table.Summary.Cell index={2} align="right">
+                        <Text strong style={{ color: '#52c41a' }}>{formatarMoeda(totRecebido)}</Text>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={3} align="right">
+                        <Text strong style={{ color: '#faad14' }}>{formatarMoeda(totPendente)}</Text>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={4} align="right">
+                        <Text strong>{formatarMoeda(totRecebido + totPendente)}</Text>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={5} />
+                    </Table.Summary.Row>
+                  )}
+                  columns={[
+                    {
+                      title: 'Obra', dataIndex: 'nome',
+                      render: (n: string, r: ObraRec) => (
+                        <div>
+                          <Text strong>{n}</Text>
+                          {r.clienteNome && (
+                            <div><Text type="secondary" style={{ fontSize: 11 }}>{r.clienteNome}</Text></div>
+                          )}
+                        </div>
+                      ),
+                    },
+                    {
+                      title: 'Status', dataIndex: 'status', width: 120,
+                      render: (s: Obra['status']) => <ObraStatusTag status={s} />,
+                    },
+                    {
+                      title: 'Recebido', key: 'recebido', width: 140, align: 'right' as const,
+                      render: (_: unknown, r: ObraRec) => (
+                        <Text strong style={{ color: '#52c41a' }}>{formatarMoeda(r.recebido)}</Text>
+                      ),
+                    },
+                    {
+                      title: 'Pendente', key: 'pendente', width: 140, align: 'right' as const,
+                      render: (_: unknown, r: ObraRec) => (
+                        <Text strong style={{ color: r.pendente > 0 ? '#faad14' : '#8c8c8c' }}>
+                          {formatarMoeda(r.pendente)}
+                        </Text>
+                      ),
+                    },
+                    {
+                      title: 'Total', key: 'total', width: 140, align: 'right' as const,
+                      render: (_: unknown, r: ObraRec) => (
+                        <Text strong>{formatarMoeda(r.recebido + r.pendente)}</Text>
+                      ),
+                    },
+                    {
+                      title: '% Rec.', key: 'pct', width: 110,
+                      render: (_: unknown, r: ObraRec) => {
+                        const base = r.recebido + r.pendente;
+                        if (!base) return <Text type="secondary">—</Text>;
+                        const pct = Math.round((r.recebido / base) * 100);
+                        return <Progress percent={pct} size="small" />;
+                      },
+                    },
+                  ]}
+                  expandable={{
+                    expandedRowRender: (r: ObraRec) => (
+                      <Table<Lancamento>
+                        dataSource={r.lancRec}
+                        rowKey="id"
+                        size="small"
+                        pagination={false}
+                        style={{ marginLeft: 24 }}
+                        columns={[
+                          {
+                            title: 'Vencimento', dataIndex: 'vencimento', width: 110,
+                            render: (d: string) => formatarData(d),
+                          },
+                          {
+                            title: 'Pago em', dataIndex: 'pagamento', width: 110,
+                            render: (d: string) => d ? formatarData(d) : <Text type="secondary">—</Text>,
+                          },
+                          {
+                            title: 'Descrição', dataIndex: 'descricao',
+                            render: (d: string) => titleCase(d),
+                          },
+                          {
+                            title: 'Status', dataIndex: 'status', width: 110,
+                            render: (s: StatusLancamento) => (
+                              <Tag color={STATUS_COLOR[s]}>{STATUS_LABEL[s]}</Tag>
+                            ),
+                          },
+                          {
+                            title: 'Valor', dataIndex: 'valor', width: 130, align: 'right' as const,
+                            render: (v: number, l: Lancamento) => (
+                              <Text strong style={{ color: l.status === 'pago' ? '#52c41a' : '#faad14' }}>
+                                {formatarMoeda(v)}
+                              </Text>
+                            ),
+                          },
+                        ]}
+                      />
+                    ),
+                  }}
+                />
               </div>
             ),
           },
