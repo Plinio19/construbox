@@ -1196,5 +1196,23 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66qbrqir1vf",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Novocel Vgp Ltda - 57.106.120/0001-95 - Cloudw",
+    "valor": 3000,
+    "vencimento": "2026-05-29",
+    "pagamento": "2026-05-29",
+    "status": "pago",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6a19f791-a807-4db2-8d7b-e129693387e0",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - NOVOCEL VGP LTDA - 57.106.120/0001-95 - CLOUDWALK IP LTDA (0542) AgÃªncia: 1 Conta: 10572649-3",
+    "criadoEm": "2026-07-29"
   }
 ]
