@@ -1088,5 +1088,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66lm83wa919",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001",
+    "valor": 5500,
+    "vencimento": "2026-05-20",
+    "pagamento": "2026-05-20",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6a0da058-3e99-480b-988c-5f7c3277eac3",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
+    "criadoEm": "2026-07-29"
   }
 ]
