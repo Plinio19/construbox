@@ -328,5 +328,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms63wkuplsc8n",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Completa — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante",
+    "valor": 36677.52,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-29"
   }
 ]
