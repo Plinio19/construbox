@@ -42,5 +42,41 @@
       }
     ],
     "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "ms64miyd6l7ea",
+    "nome": "RIO NEGRO",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 45000,
+    "dataInicio": "2026-05-01",
+    "dataPrevisaoFim": "2026-08-10",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "ms64krsiud398",
+        "descricao": "ENTRADA 50%",
+        "valor": 22500,
+        "vencimento": "2026-07-29"
+      },
+      {
+        "id": "ms64l3gaoec37",
+        "descricao": "FINAL 50%",
+        "valor": 22500,
+        "vencimento": "2026-07-29"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "ms64le7uyo6a1",
+        "descricao": "Mão de obra - Chave na Mão",
+        "valor": 32500,
+        "vencimento": "2026-07-29",
+        "categoria": "mao-de-obra"
+      }
+    ],
+    "criadoEm": "2026-07-29"
   }
 ]
