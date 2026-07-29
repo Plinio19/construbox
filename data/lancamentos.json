@@ -480,5 +480,21 @@
     "prestadorNome": "EQUIPE EDINILSON",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms6448efmj6x9",
+    "tipo": "despesa",
+    "descricao": "Pagamento para Descarregar Caminhão",
+    "valor": 3000,
+    "vencimento": "2026-06-30",
+    "pagamento": "2026-06-30",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "6a43e5cd-f0ef-4398-b35a-37188a8b98eb",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2",
+    "criadoEm": "2026-07-29"
   }
 ]
