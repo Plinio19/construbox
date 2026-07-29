@@ -104,10 +104,13 @@ function dataDoLancamento(l: Lancamento): string {
 function findLancByTransacao(
   t: OFXTransacao,
   lancamentos: Lancamento[],
+  claimed: Set<string> = new Set(),
 ): { lanc: Lancamento; fuzzy: boolean } | null {
   const byId = lancamentos.find(l => l.ofxId === t.id);
   if (byId) return { lanc: byId, fuzzy: false };
   const fuzzy = lancamentos.find(l => {
+    if (l.ofxId) return false;        // já conciliado com outro OFX
+    if (claimed.has(l.id)) return false; // já reivindicado por outra transação nesta passagem
     const dataStr = dataDoLancamento(l);
     if (!dataStr) return false;
     const diffDias = Math.abs(new Date(dataStr).getTime() - new Date(t.data).getTime()) / 86400000;
@@ -120,7 +123,8 @@ function findLancByTransacao(
 
 function estadoDeMatch(lanc: Lancamento, fuzzy: boolean): EstadoClass {
   return {
-    status: fuzzy ? 'ignorado' : 'lancado',
+    // fuzzy: pendente (pré-selecionado, aguarda confirmação do usuário) — não 'ignorado'
+    status: fuzzy ? 'pendente' : 'lancado',
     cat: lanc.tipo === 'receita' ? 'recebimento' : lanc.categoria === 'mao-de-obra' ? 'mao-de-obra' : 'outros',
     obra: lanc.obraId || '',
     lancamentoIds: [lanc.id],
@@ -140,8 +144,8 @@ function migrarEstado(s: Record<string, unknown>): EstadoClass {
   return e;
 }
 
-function estadoInicial(t: OFXTransacao, lancamentos: Lancamento[]): EstadoClass {
-  const resultado = findLancByTransacao(t, lancamentos);
+function estadoInicial(t: OFXTransacao, lancamentos: Lancamento[], claimed: Set<string> = new Set()): EstadoClass {
+  const resultado = findLancByTransacao(t, lancamentos, claimed);
   if (resultado) return estadoDeMatch(resultado.lanc, resultado.fuzzy);
   return {
     status: 'pendente', cat: sugerirCategoria(t),
@@ -179,23 +183,30 @@ export default function OFXPage() {
         try { return JSON.parse(localStorage.getItem(LS_ESTADO) || '{}'); } catch { return {}; }
       })();
       const novo: Record<string, EstadoClass> = {};
+      // Rastreia lançamentos já reivindicados para evitar que dois OFX de mesmo valor/data
+      // apontem para o mesmo lançamento (ex: distribuição 2k para dois sócios)
+      const claimed = new Set<string>();
       transacoes.forEach(t => {
         const prevEst = prev[t.id];
         // Não sobrescrever estados finalizados
         if (prevEst?.status === 'lancado' || prevEst?.status === 'ignorado') {
+          // Marcar os lançamentos já usados como claimed
+          (prevEst.lancamentoIds || []).forEach(id => claimed.add(id));
           novo[t.id] = prevEst;
           return;
         }
-        const resultado = findLancByTransacao(t, lancamentos);
+        const resultado = findLancByTransacao(t, lancamentos, claimed);
         if (resultado) {
+          claimed.add(resultado.lanc.id);
           novo[t.id] = estadoDeMatch(resultado.lanc, resultado.fuzzy);
         } else if (prevEst?.cat) {
           // Usuário já começou a classificar — preservar o trabalho em andamento
+          (prevEst.lancamentoIds || []).forEach(id => claimed.add(id));
           novo[t.id] = prevEst;
         } else if (salvo[t.id]) {
           novo[t.id] = migrarEstado(salvo[t.id]);
         } else {
-          novo[t.id] = estadoInicial(t, lancamentos);
+          novo[t.id] = estadoInicial(t, lancamentos, claimed);
         }
       });
       return novo;
