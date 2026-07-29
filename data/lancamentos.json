@@ -812,5 +812,19 @@
     "prestadorNome": "Geovanne Alves",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms65aimtojo89",
+    "tipo": "receita",
+    "descricao": "Sinop — ENTRADA 30% — saldo restante",
+    "valor": 5500,
+    "vencimento": "2026-07-29",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "parcela",
+    "criadoEm": "2026-07-29"
   }
 ]
