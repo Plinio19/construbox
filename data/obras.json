@@ -80,5 +80,39 @@
       }
     ],
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms656y0wkhx6y",
+    "nome": "Sinop",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 85000,
+    "dataInicio": "2026-04-24",
+    "dataPrevisaoFim": "2026-08-07",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "ms654mfh5z9ep",
+        "descricao": "ENTRADA 30%",
+        "valor": 25500,
+        "vencimento": "2026-07-29"
+      },
+      {
+        "id": "ms654viktzfnp",
+        "descricao": "MEIO DA OBRA 30%",
+        "valor": 25500,
+        "vencimento": "2026-07-29"
+      },
+      {
+        "id": "ms655tcuky3f1",
+        "descricao": "FINAL DA OBRA 40%",
+        "valor": 34000,
+        "vencimento": "2026-07-29"
+      }
+    ],
+    "despesas": [],
+    "criadoEm": "2026-07-29"
   }
 ]
