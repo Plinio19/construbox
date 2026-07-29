@@ -659,14 +659,18 @@
     "id": "ms64s3jvsw97w",
     "tipo": "despesa",
     "descricao": "Mão de obra - Chave na Mão — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante",
-    "valor": 16500,
+    "valor": 4000,
     "vencimento": "2026-07-29",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "ms64miyd6l7ea",
     "obraNome": "RIO NEGRO",
     "prestadorId": "ms64m37bjfze4",
     "prestadorNome": "MARCOS XAVIER",
     "categoria": "mao-de-obra",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-07-20",
+    "ofxId": "6a5e6af2-eb53-4601-9b72-cff2b5e31a26",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
   }
 ]
