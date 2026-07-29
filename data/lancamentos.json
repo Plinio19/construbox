@@ -1072,5 +1072,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66kxp374nkf",
+    "tipo": "despesa",
+    "descricao": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178",
+    "valor": 5500,
+    "vencimento": "2026-05-20",
+    "pagamento": "2026-05-20",
+    "status": "pago",
+    "socioId": "ms4wjecaxu682",
+    "socioNome": "Plinio de Paula Gomes Filho",
+    "categoria": "distribuicao",
+    "ofxId": "6a0da02e-c42a-4185-b82a-a8885b2fd4e0",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-07-29"
   }
 ]
