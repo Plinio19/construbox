@@ -739,15 +739,19 @@
     "id": "ms654mfh5z9ep",
     "tipo": "receita",
     "descricao": "Sinop — ENTRADA 30%",
-    "valor": 25500,
+    "valor": 20000,
     "vencimento": "2026-07-29",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "ms656y0wkhx6y",
     "obraNome": "Sinop",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-05-21",
+    "ofxId": "6a0f8ff4-59aa-4720-97fe-dae54488bc92",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "ms654viktzfnp",
