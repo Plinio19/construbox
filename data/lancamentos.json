@@ -636,5 +636,19 @@
     "ofxId": "6a3d1240-18e1-4123-986d-3353f03703cf",
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
+  },
+  {
+    "id": "ms64rpg3jgluc",
+    "tipo": "despesa",
+    "descricao": "Mão de obra - Chave na Mão — saldo restante — saldo restante — saldo restante — saldo restante",
+    "valor": 19000,
+    "vencimento": "2026-07-29",
+    "status": "pendente",
+    "obraId": "ms64miyd6l7ea",
+    "obraNome": "RIO NEGRO",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-29"
   }
 ]
