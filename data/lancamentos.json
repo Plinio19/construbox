@@ -1284,5 +1284,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66udo0dzgf1",
+    "tipo": "despesa",
+    "descricao": "Pagamento Para Descarregar Caminhão",
+    "valor": 70,
+    "vencimento": "2026-06-26",
+    "pagamento": "2026-06-26",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "6a3ed0b5-bbc2-4a9f-9741-44917dee9cfc",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Edilson Domingos dos Santos - â€¢â€¢â€¢.093.838-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 2092863-5",
+    "criadoEm": "2026-07-29"
   }
 ]
