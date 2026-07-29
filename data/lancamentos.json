@@ -301,15 +301,19 @@
     "id": "ms63qr60u886j",
     "tipo": "despesa",
     "descricao": "Mão de Obra Completa — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante",
-    "valor": 37674,
+    "valor": 996.48,
     "vencimento": "2026-07-24",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "mrz65iweisq2k",
     "obraNome": "Nova Mutum",
     "prestadorId": "mrz65acqew4i3",
     "prestadorNome": "EQUIPE EDINILSON",
     "categoria": "mao-de-obra",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-05-14",
+    "ofxId": "6a061818-4064-4bd4-8d28-064d29b05e5d",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4"
   },
   {
     "id": "ms63u3c35ae0t",
