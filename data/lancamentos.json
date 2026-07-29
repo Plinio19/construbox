@@ -882,5 +882,19 @@
     "ofxId": "6a198fcb-f2d7-40bc-b6dc-dcfa74565367",
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - GEOVANE ALVES MENDES 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+  },
+  {
+    "id": "ms65cujc4oy4r",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Chave Na Maõa — saldo restante — saldo restante — saldo restante — saldo restante",
+    "valor": 47556.4,
+    "vencimento": "2026-07-29",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "prestadorId": "ms653mqxokvpb",
+    "prestadorNome": "Geovanne Alves",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-29"
   }
 ]
