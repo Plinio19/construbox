@@ -74,7 +74,9 @@
         "descricao": "Mão de obra - Chave na Mão",
         "valor": 32500,
         "vencimento": "2026-07-29",
-        "categoria": "mao-de-obra"
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms64m37bjfze4",
+        "prestadorNome": "MARCOS XAVIER"
       }
     ],
     "criadoEm": "2026-07-29"
