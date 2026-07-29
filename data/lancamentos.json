@@ -242,5 +242,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - M A XAVIER EMPREENDEDOR LTDA - 39.297.937/0001-06 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 31921789-2",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms63pau3h4ed8",
+    "tipo": "despesa",
+    "descricao": "Uber - Transporte Ferramentas",
+    "valor": 58.95,
+    "vencimento": "2026-05-07",
+    "pagamento": "2026-05-07",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "69fd366d-d9c3-4e46-9221-dbf9af1de706",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - UBER DO BRASIL TECNOLOGIA LTDA. - 17.895.646/0001-87 - ADYEN DO BRASIL IP LTDA. AgÃªncia: 1 Conta: 100000056-0",
+    "criadoEm": "2026-07-29"
   }
 ]
