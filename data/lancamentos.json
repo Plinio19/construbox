@@ -760,5 +760,21 @@
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms657eg71xi4h",
+    "tipo": "despesa",
+    "descricao": "CREDITOS DE I.A",
+    "valor": 15,
+    "vencimento": "2026-05-12",
+    "pagamento": "2026-05-12",
+    "status": "pago",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "categoria": "outros",
+    "ofxId": "6a035ddd-3e12-4ce0-92e9-ed0bcf1b1940",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - ANTONIO CARLOS CAVALCANTI DOS SANTOS - â€¢â€¢â€¢.579.938-â€¢â€¢ - PAGSEGURO INTERNET IP S.A. (0290) AgÃªncia: 1 Conta: 49489703-6",
+    "criadoEm": "2026-07-29"
   }
 ]
