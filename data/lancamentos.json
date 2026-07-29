@@ -702,5 +702,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - M A Xavier Empreendedor Ltda - 39.297.937/0001-06 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 31921789-2",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms64w4q07utw4",
+    "tipo": "despesa",
+    "descricao": "Comissão - Miqueias",
+    "valor": 1200,
+    "vencimento": "2026-06-19",
+    "pagamento": "2026-06-19",
+    "status": "pago",
+    "obraId": "ms64miyd6l7ea",
+    "obraNome": "RIO NEGRO",
+    "categoria": "outros",
+    "ofxId": "6a3524d1-2c31-4441-a4cb-56fec987fda3",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - M A Xavier Empreendedor Ltda - 39.297.937/0001-06 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 31921789-2",
+    "criadoEm": "2026-07-29"
   }
 ]
