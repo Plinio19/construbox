@@ -430,5 +430,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms642s1cdkmlh",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Completa — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante",
+    "valor": 28324.769999999997,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-29"
   }
 ]
