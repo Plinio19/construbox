@@ -1148,5 +1148,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "ms66oplidn9w0",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Plinio De Paula Gomes Filho - Â€¢â€¢â€¢.958.51",
+    "valor": 1000,
+    "vencimento": "2026-06-03",
+    "pagamento": "2026-06-03",
+    "status": "pago",
+    "socioId": "ms4wjecaxu682",
+    "socioNome": "Plinio de Paula Gomes Filho",
+    "categoria": "distribuicao",
+    "ofxId": "6a202d08-1d0e-4b6e-bbda-cf73c96c546d",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
+    "criadoEm": "2026-07-29"
   }
 ]
