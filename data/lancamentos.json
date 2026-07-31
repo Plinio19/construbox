@@ -1748,24 +1748,6 @@
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
-    "id": "ms8xm3rynm36o",
-    "tipo": "despesa",
-    "descricao": "Mão de Obra Chave na Mão",
-    "valor": 520,
-    "vencimento": "2026-07-31",
-    "status": "pago",
-    "categoria": "mao-de-obra",
-    "obraId": "ms8xmlwxz8ohq",
-    "obraNome": "Itu",
-    "prestadorId": "ms8xkyqyrz6ug",
-    "prestadorNome": "Vitor Nonato",
-    "criadoEm": "2026-07-31",
-    "pagamento": "2026-06-12",
-    "ofxId": "6a2c6404-03af-4c1b-a6e5-25ebff9c55c3",
-    "conciliado": true,
-    "obs": "Compra De Equipamento · TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7"
-  },
-  {
     "id": "ms904t5pfrkrl",
     "tipo": "receita",
     "descricao": "Itu — Valor Total da Obra — saldo restante",
