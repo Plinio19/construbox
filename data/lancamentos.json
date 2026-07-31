@@ -1900,5 +1900,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93kdormnarm",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 1150,
+    "vencimento": "2026-07-13",
+    "pagamento": "2026-07-13",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a550bb2-6a93-4f07-91fb-f41c9a7968ff",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-07-31"
   }
 ]
