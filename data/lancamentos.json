@@ -1844,5 +1844,19 @@
     "ofxId": "6a5e5fbc-8877-4689-88f6-8db2d103c389",
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+  },
+  {
+    "id": "ms93j2kwt4vfl",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Lais Cristina Mendes Dos Santos - Â€¢â€¢â€¢.80",
+    "valor": 200,
+    "vencimento": "2026-06-19",
+    "pagamento": "2026-06-19",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a359a62-29ce-4782-b171-a1c27e09327e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Lais Cristina Mendes Dos Santos - â€¢â€¢â€¢.804.018-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 19221544-2",
+    "criadoEm": "2026-07-31"
   }
 ]
