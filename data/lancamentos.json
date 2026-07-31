@@ -1730,5 +1730,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - RAIZEN SOLUCOES DE PAGAMENTOS S A - 11.431.887/0001-99 - BCO BRADESCO S.A. (0237) AgÃªncia: 2002 Conta: 1065-0",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z9veimof76",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 16,
+    "vencimento": "2026-06-19",
+    "pagamento": "2026-06-19",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a357f5c-16b5-477d-887b-cd9a81fc3f56",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA - 26.511.689/0001-02 - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 278 Conta: 31301-0",
+    "criadoEm": "2026-07-31"
   }
 ]
