@@ -1598,5 +1598,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - ANDRE LUIZ SILVA DOS SANTOS - â€¢â€¢â€¢.535.761-â€¢â€¢ - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 1364 Conta: 64963-0",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z3hlik46f4",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Plinio De Paula Gomes Filho - Â€¢â€¢â€¢.958.51",
+    "valor": 452,
+    "vencimento": "2026-06-09",
+    "pagamento": "2026-06-09",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a27dc98-196d-4bcb-abd7-76223c9f4edd",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
+    "criadoEm": "2026-07-31"
   }
 ]
