@@ -1984,5 +1984,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93lllluwxxq",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Vitor Siqueira Nonato - Â€¢â€¢â€¢.593.918-â€¢â",
+    "valor": 126.32,
+    "vencimento": "2026-07-21",
+    "pagamento": "2026-07-21",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a5f6f62-e300-47f7-8323-4ba3202c41a4",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
+    "criadoEm": "2026-07-31"
   }
 ]
