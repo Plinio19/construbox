@@ -1676,5 +1676,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - JFC NETO LANCHONETE LTDA - 35.833.041/0001-43 - CAIXA ECONOMICA FEDERAL (0104) AgÃªncia: 4499 Conta: 1292000000577854781-8",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z73iipevs0",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 115,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2d8145-d4d2-41b1-8fa4-b0fd608ef932",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - JFC NETO LANCHONETE LTDA - 35.833.041/0001-43 - CAIXA ECONOMICA FEDERAL (0104) AgÃªncia: 4499 Conta: 1292000000577854781-8",
+    "criadoEm": "2026-07-31"
   }
 ]
