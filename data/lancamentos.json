@@ -1516,5 +1516,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Matheus Alex Sandro Carvalho de Souza - â€¢â€¢â€¢.203.568-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 8879050804-5",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8yca9iby6ah",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 9.99,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2ce516-aa13-4695-962e-56cf1801a38f",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - CONVENIENCIA 9 DE JULHO - 41.236.430/0002-75 - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 278 Conta: 91723-2",
+    "criadoEm": "2026-07-31"
   }
 ]
