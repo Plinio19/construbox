@@ -1484,5 +1484,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - 43.863.728 EMERSON CARLOS DA SILVA LIMA - 43.863.728/0001-50 - PAGSEGURO INTERNET IP S.A. (0290) AgÃªncia: 1 Conta: 75866534-3",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8ybxmsnux7r",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 47,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2cd178-8a3a-4d76-88fe-da6d90b6d0ab",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - 43.863.728 EMERSON CARLOS DA SILVA LIMA - 43.863.728/0001-50 - PAGSEGURO INTERNET IP S.A. (0290) AgÃªncia: 1 Conta: 75866534-3",
+    "criadoEm": "2026-07-31"
   }
 ]
