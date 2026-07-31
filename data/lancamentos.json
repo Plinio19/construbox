@@ -1643,15 +1643,19 @@
     "id": "ms8z6fr9hamp4",
     "tipo": "despesa",
     "descricao": "Mão de Obra Chave na Mão — saldo restante",
-    "valor": 19225,
+    "valor": 1725,
     "vencimento": "2026-07-31",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "ms8xmlwxz8ohq",
     "obraNome": "Itu",
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "categoria": "mao-de-obra",
-    "criadoEm": "2026-07-31"
+    "criadoEm": "2026-07-31",
+    "pagamento": "2026-06-16",
+    "ofxId": "6a31ad14-6bee-4526-b84d-6bd8f781e772",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5"
   },
   {
     "id": "ms8z6gzchlkir",
