@@ -1404,5 +1404,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Julia Silva Vila Nova - â€¢â€¢â€¢.122.638-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 31139098-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8y9hgbj8sb4",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 107,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2c0da8-1872-4623-8fe2-f0d52bcca3d6",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PANIFICADORA DELICIAS DA VOVO - 07.436.556/0001-74 - CCLA CENTRO BRASILEIRA LTDA. AgÃªncia: 5004 Conta: 1159933-2",
+    "criadoEm": "2026-07-31"
   }
 ]
