@@ -1774,5 +1774,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8zart86mq9g",
+    "tipo": "despesa",
+    "descricao": "Pagamento De Divida",
+    "valor": 1500,
+    "vencimento": "2026-07-09",
+    "pagamento": "2026-07-09",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a4f95ab-3f74-445f-85c9-734da512783d",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - â€¢â€¢â€¢.535.048-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 84265314-7",
+    "criadoEm": "2026-07-31"
   }
 ]
