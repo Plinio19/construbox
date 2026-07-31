@@ -1746,5 +1746,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA - 26.511.689/0001-02 - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 278 Conta: 31301-0",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8zad0udcvi0",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 1407.07,
+    "vencimento": "2026-07-06",
+    "pagamento": "2026-07-06",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a4c01e8-fe24-4f59-9ca5-781e12f6c90d",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-07-31"
   }
 ]
