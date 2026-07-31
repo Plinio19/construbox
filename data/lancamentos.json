@@ -1582,5 +1582,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z13lxunxoz",
+    "tipo": "despesa",
+    "descricao": "Gasto Não Identificado",
+    "valor": 1500,
+    "vencimento": "2026-06-11",
+    "pagamento": "2026-06-11",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2aed16-a7f4-4317-a4fc-159d11025b50",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - ANDRE LUIZ SILVA DOS SANTOS - â€¢â€¢â€¢.535.761-â€¢â€¢ - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 1364 Conta: 64963-0",
+    "criadoEm": "2026-07-31"
   }
 ]
