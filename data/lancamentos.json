@@ -1794,5 +1794,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Bernardo Aguilera Bastos Porta Martini - â€¢â€¢â€¢.535.048-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 84265314-7",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8zb62qfv9xj",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Chave na Mão — saldo restante — saldo restante — saldo restante",
+    "valor": 16500,
+    "vencimento": "2026-07-31",
+    "status": "pendente",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-07-31"
   }
 ]
