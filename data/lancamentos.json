@@ -1776,5 +1776,19 @@
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms904t5pfrkrl",
+    "tipo": "receita",
+    "descricao": "Itu — Valor Total da Obra — saldo restante",
+    "valor": 36500,
+    "vencimento": "2026-07-31",
+    "status": "pendente",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "parcela",
+    "criadoEm": "2026-07-31"
   }
 ]
