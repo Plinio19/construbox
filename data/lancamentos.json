@@ -1886,5 +1886,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93k01yvd3fb",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Vitor Siqueira Nonato - Â€¢â€¢â€¢.593.918-â€¢â",
+    "valor": 271.99,
+    "vencimento": "2026-06-25",
+    "pagamento": "2026-06-25",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a3d0f4b-669f-4cb9-9218-6523c80e8576",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
+    "criadoEm": "2026-07-31"
   }
 ]
