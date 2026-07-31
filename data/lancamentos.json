@@ -1942,5 +1942,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93l2o06lsbu",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001",
+    "valor": 520,
+    "vencimento": "2026-07-20",
+    "pagamento": "2026-07-20",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a5e619e-ca51-40ae-b3c1-82aa8a547da9",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
+    "criadoEm": "2026-07-31"
   }
 ]
