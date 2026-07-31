@@ -1760,5 +1760,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8zafx80qrsk",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Jonatan Conceicao Da Silva - Â€¢â€¢â€¢.049.378",
+    "valor": 1417.07,
+    "vencimento": "2026-07-04",
+    "pagamento": "2026-07-04",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a498594-381e-4356-9ea8-10808046269c",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4",
+    "criadoEm": "2026-07-31"
   }
 ]
