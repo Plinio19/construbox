@@ -1388,5 +1388,21 @@
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8y9asu25sfh",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 150,
+    "vencimento": "2026-06-11",
+    "pagamento": "2026-06-11",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2a9fa8-4983-427b-a989-44198ca0e050",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Julia Silva Vila Nova - â€¢â€¢â€¢.122.638-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 31139098-4",
+    "criadoEm": "2026-07-31"
   }
 ]
