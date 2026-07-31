@@ -1662,5 +1662,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z6ncqugymv",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Jfc Neto Lanchonete Ltda - 35.833.041/0001-43 ",
+    "valor": 2500,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a2d80d6-34af-49a7-87a4-0026d69b733e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - JFC NETO LANCHONETE LTDA - 35.833.041/0001-43 - CAIXA ECONOMICA FEDERAL (0104) AgÃªncia: 4499 Conta: 1292000000577854781-8",
+    "criadoEm": "2026-07-31"
   }
 ]
