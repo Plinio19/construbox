@@ -1746,20 +1746,6 @@
     "criadoEm": "2026-07-31"
   },
   {
-    "id": "ms8xlxiuxhuto",
-    "tipo": "receita",
-    "descricao": "Itu — Início (30%)",
-    "valor": 12750,
-    "vencimento": "2026-06-12",
-    "status": "pendente",
-    "categoria": "parcela",
-    "obraId": "ms8xmlwxz8ohq",
-    "obraNome": "Itu",
-    "clienteId": "mrz62fjbnfipo",
-    "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-31"
-  },
-  {
     "id": "ms8xm3rynm36o",
     "tipo": "despesa",
     "descricao": "Mão de Obra Chave na Mão",
