@@ -1858,5 +1858,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Lais Cristina Mendes Dos Santos - â€¢â€¢â€¢.804.018-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 19221544-2",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93jj0af5ats",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 1124.6,
+    "vencimento": "2026-06-19",
+    "pagamento": "2026-06-19",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a35a251-0852-4882-bef1-e0b35ad15567",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-07-31"
   }
 ]
