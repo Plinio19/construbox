@@ -1532,5 +1532,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - CONVENIENCIA 9 DE JULHO - 41.236.430/0002-75 - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 278 Conta: 91723-2",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8yckvh0fyj3",
+    "tipo": "despesa",
+    "descricao": "Compra De Camera De Segurança",
+    "valor": 100,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2d615c-dee3-43f5-9ee5-7cb0dba32406",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - DIPCOM - 27.623.502/0001-25 - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 24129303-1",
+    "criadoEm": "2026-07-31"
   }
 ]
