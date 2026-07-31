@@ -1612,5 +1612,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES FILHO - â€¢â€¢â€¢.958.518-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21849652-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z3prgbot2n",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 1890.98,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a2c431d-2d22-4f7a-8030-69850a9982d4",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-07-31"
   }
 ]
