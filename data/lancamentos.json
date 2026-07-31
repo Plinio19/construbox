@@ -1379,13 +1379,17 @@
     "descricao": "Itu — Final (30%)",
     "valor": 12750,
     "vencimento": "2026-07-12",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "ms8xmlwxz8ohq",
     "obraNome": "Itu",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-31"
+    "criadoEm": "2026-07-31",
+    "pagamento": "2026-07-20",
+    "ofxId": "6a5e5fbc-8877-4689-88f6-8db2d103c389",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "ms8xm3rynm36o",
