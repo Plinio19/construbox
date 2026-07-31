@@ -1388,22 +1388,6 @@
     "criadoEm": "2026-07-31"
   },
   {
-    "id": "ms8yanfk6acmc",
-    "tipo": "despesa",
-    "descricao": "Compra De Equipamento",
-    "valor": 520,
-    "vencimento": "2026-06-12",
-    "pagamento": "2026-06-12",
-    "status": "pago",
-    "obraId": "ms8xmlwxz8ohq",
-    "obraNome": "Itu",
-    "categoria": "outros",
-    "ofxId": "6a2c6404-03af-4c1b-a6e5-25ebff9c55c3",
-    "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
-    "criadoEm": "2026-07-31"
-  },
-  {
     "id": "ms8yb0iboikdq",
     "tipo": "despesa",
     "descricao": "Hospedagem Itu",
