@@ -1568,5 +1568,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Julia Silva Vila Nova - â€¢â€¢â€¢.122.638-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 31139098-4",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8z0pek55y2l",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 2195.6,
+    "vencimento": "2026-06-09",
+    "pagamento": "2026-06-09",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a27d810-0460-4c4c-b21c-35622fc096aa",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-07-31"
   }
 ]
