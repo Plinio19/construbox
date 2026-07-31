@@ -138,22 +138,10 @@
     "funcionarios": [],
     "parcelas": [
       {
-        "id": "ms8xlxiuxhuto",
-        "descricao": "Início (30%)",
-        "valor": 12750,
-        "vencimento": "2026-06-12"
-      },
-      {
-        "id": "ms8xlxiukimsr",
-        "descricao": "Meio (40%)",
-        "valor": 17000,
-        "vencimento": "2026-06-27"
-      },
-      {
-        "id": "ms8xlxiusr7pq",
-        "descricao": "Final (30%)",
-        "valor": 12750,
-        "vencimento": "2026-07-12"
+        "id": "ms900b6euq8p9",
+        "descricao": "Valor Total da Obra",
+        "valor": 42500,
+        "vencimento": "2026-07-31"
       }
     ],
     "despesas": [
