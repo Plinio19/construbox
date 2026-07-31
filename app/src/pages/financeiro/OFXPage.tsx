@@ -50,6 +50,7 @@ interface EstadoClass {
   socioId: string;
   prestadorId: string;
   splits?: Split[];
+  saldoRestanteIds?: string[]; // IDs de parcelas de saldo criadas na baixa parcial
 }
 
 const LS_EXTRATO = 'cbx_extrato';
@@ -421,6 +422,8 @@ export default function OFXPage() {
           .sort((a, b) => a.vencimento.localeCompare(b.vencimento));
 
         let valorRestante = t.valor;
+        const saldoRestanteIds: string[] = [];
+        let totalSaldoCriado = 0;
 
         for (const lanc of selecionadas) {
           if (valorRestante <= 0) break;
@@ -449,15 +452,21 @@ export default function OFXPage() {
               conciliado: true,
               obs: obsLanc,
             });
+            const saldoId = uid();
             await upsertLanc({
-              id: uid(), tipo: lanc.tipo,
-              descricao: `${lanc.descricao} — saldo restante`,
-              valor: saldo, vencimento: lanc.vencimento, status: 'pendente',
-              obraId: lanc.obraId, obraNome: lanc.obraNome,
-              clienteId: lanc.clienteId, clienteNome: lanc.clienteNome,
-              prestadorId: lanc.prestadorId, prestadorNome: lanc.prestadorNome,
-              categoria: lanc.categoria, criadoEm: hoje(),
+              ...lanc,                              // herda TODOS os campos (socioId, socioNome, etc.)
+              id: saldoId,
+              descricao: titleCase(`${lanc.descricao} — saldo restante`),
+              valor: saldo,
+              status: 'pendente',
+              pagamento: undefined,
+              ofxId: undefined,
+              conciliado: false,
+              obs: undefined,
+              criadoEm: hoje(),
             });
+            saldoRestanteIds.push(saldoId);
+            totalSaldoCriado += saldo;
             valorRestante = 0;
           }
         }
@@ -475,13 +484,18 @@ export default function OFXPage() {
             obs: `Excedente do pagamento de ${formatarMoeda(t.valor)}`, criadoEm: hoje(),
           });
           message.success(`Baixa dada! Excedente de ${formatarMoeda(valorRestante)} lançado como adiantamento.`);
+        } else if (totalSaldoCriado > 0) {
+          message.warning(
+            `Baixa parcial! Saldo restante de ${formatarMoeda(totalSaldoCriado)} criado como nova parcela pendente em Contas a Receber.`,
+            6,
+          );
         } else {
           message.success(selecionadas.length > 1
             ? `Baixa dada em ${selecionadas.length} parcelas!`
             : 'Baixa dada na parcela!'
           );
         }
-        upd(t.id, { status: 'lancado' });
+        upd(t.id, { status: 'lancado', saldoRestanteIds });
         setSalvando(null);
         return;
       }
@@ -705,6 +719,10 @@ export default function OFXPage() {
 
               const temParcelas = ids.length > 0;
               const lancsFeitos = lancado ? lancamentos.filter(l => l.ofxId === t.id) : [];
+              const saldoIds = est.saldoRestanteIds || [];
+              const saldosRestantes = lancado && saldoIds.length > 0
+                ? lancamentos.filter(l => saldoIds.includes(l.id))
+                : [];
 
               return (
                 <Card key={t.id} size="small" style={{ ...corLinha(t), transition: 'all .15s' }}
@@ -948,7 +966,7 @@ export default function OFXPage() {
                                     : 'Lançado'}
                                 </Text>
                               </div>
-                              {lancsFeitos.map(l => (
+                              {[...lancsFeitos, ...saldosRestantes].map(l => (
                                 <div key={l.id} style={{
                                   display: 'flex', gap: 5, alignItems: 'center',
                                   marginBottom: 3, paddingLeft: 16, flexWrap: 'wrap',
