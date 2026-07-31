@@ -1436,5 +1436,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8yb0iboikdq",
+    "tipo": "despesa",
+    "descricao": "Hospedagem Itu",
+    "valor": 162,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2c943d-d564-48bc-90f6-74ca76c4e7da",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - BOOKING.COM BRASIL SERVICOS DE RESERVA DE HOTEIS LTDA. - 10.625.931/0001-39 - ADYEN DO BRASIL IP LTDA. AgÃªncia: 1 Conta: 100000141-0",
+    "criadoEm": "2026-07-31"
   }
 ]
