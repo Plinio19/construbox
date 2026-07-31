@@ -1928,5 +1928,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93kv19c33ai",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001",
+    "valor": 150,
+    "vencimento": "2026-07-21",
+    "pagamento": "2026-07-21",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a5f6ec3-9fc4-461c-85ab-89226068bf0c",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
+    "criadoEm": "2026-07-31"
   }
 ]
