@@ -1548,5 +1548,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - DIPCOM - 27.623.502/0001-25 - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 24129303-1",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms8yeydy9tioy",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Julia Silva Vila Nova - Â€¢â€¢â€¢.122.638-â€¢â",
+    "valor": 150,
+    "vencimento": "2026-06-11",
+    "pagamento": "2026-06-11",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6a2a9fa8-4983-427b-a989-44198ca0e050",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Julia Silva Vila Nova - â€¢â€¢â€¢.122.638-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 31139098-4",
+    "criadoEm": "2026-07-31"
   }
 ]
