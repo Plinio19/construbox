@@ -1914,5 +1914,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "ms93krfpcsael",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Vitor Siqueira Nonato - Â€¢â€¢â€¢.593.918-â€¢â",
+    "valor": 271.99,
+    "vencimento": "2026-07-21",
+    "pagamento": "2026-07-21",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a5f6f7c-5a3e-4080-8f41-961c66d7a890",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
+    "criadoEm": "2026-07-31"
   }
 ]
