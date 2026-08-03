@@ -1997,5 +1997,19 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "categoria": "parcela",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdeub75ebe53",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 692.6,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a2d784a-8eac-4dd2-addb-34d0ea1cc5ae",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-08-03"
   }
 ]
