@@ -1698,5 +1698,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA - 26.511.689/0001-02 - COOP SICREDI FRONTEIR PR/SC/SP AgÃªncia: 738 Conta: 53370-6",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdeqn9mv3ixv",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante",
+    "valor": 24480,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
