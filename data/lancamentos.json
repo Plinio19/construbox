@@ -2176,5 +2176,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdfvq4xr6l9p",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Maõa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 25056.4,
+    "vencimento": "2026-07-29",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "prestadorId": "ms653mqxokvpb",
+    "prestadorNome": "Geovanne Alves",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
