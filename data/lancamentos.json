@@ -1928,5 +1928,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA - 26.511.689/0001-02 - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 278 Conta: 31301-0",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdesvb2hzabw",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 21755,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
