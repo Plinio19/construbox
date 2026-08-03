@@ -124,5 +124,27 @@
       }
     ],
     "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "msdeofmyzr99o",
+    "nome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 42500,
+    "dataInicio": "2026-06-01",
+    "dataPrevisaoFim": "2026-08-08",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "msdeo64vlfw7d",
+        "descricao": "Total da Obra",
+        "valor": 42500,
+        "vencimento": "2026-08-03"
+      }
+    ],
+    "despesas": [],
+    "criadoEm": "2026-08-03"
   }
 ]
