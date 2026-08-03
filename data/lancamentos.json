@@ -1618,5 +1618,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "msdeo64vlfw7d",
+    "tipo": "receita",
+    "descricao": "Itu — Total da Obra",
+    "valor": 42500,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-08-03"
   }
 ]
