@@ -2140,5 +2140,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - CLIMATIZE SOLUCOES - 28.083.634/0001-74 - BANCO INTER (0077) AgÃªncia: 1 Conta: 29784899-2",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdfv2xnjvt2e",
+    "tipo": "despesa",
+    "descricao": "Ar Condicionado",
+    "valor": 2800,
+    "vencimento": "2026-07-31",
+    "pagamento": "2026-07-31",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "6a6ccc8c-0213-42db-8b74-82d1d4666831",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - 41.114.186 WENDEL DE OLIVEIRA GONCALVES - 41.114.186/0001-97 - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 77919111-8",
+    "criadoEm": "2026-08-03"
   }
 ]
