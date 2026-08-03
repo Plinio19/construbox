@@ -1825,5 +1825,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - DIPCOM - 27.623.502/0001-25 - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 24129303-1",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msderucvg7djz",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 115,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2d8145-d4d2-41b1-8fa4-b0fd608ef932",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - JFC NETO LANCHONETE LTDA - 35.833.041/0001-43 - CAIXA ECONOMICA FEDERAL (0104) AgÃªncia: 4499 Conta: 1292000000577854781-8",
+    "criadoEm": "2026-08-03"
   }
 ]
