@@ -144,7 +144,17 @@
         "vencimento": "2026-08-03"
       }
     ],
-    "despesas": [],
+    "despesas": [
+      {
+        "id": "msdeoktagg36u",
+        "descricao": "Mão de Obra Chave na Mão",
+        "valor": 25000,
+        "vencimento": "2026-08-03",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms8xkyqyrz6ug",
+        "prestadorNome": "Vitor Nonato"
+      }
+    ],
     "criadoEm": "2026-08-03"
   }
 ]
