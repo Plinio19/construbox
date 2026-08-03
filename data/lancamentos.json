@@ -2057,5 +2057,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf0d64a7s1q",
+    "tipo": "despesa",
+    "descricao": "Faxina",
+    "valor": 150,
+    "vencimento": "2026-06-16",
+    "pagamento": "2026-06-16",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a319596-f310-4a3b-8a81-ba5408f76450",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "criadoEm": "2026-08-03"
   }
 ]
