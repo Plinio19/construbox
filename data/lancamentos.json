@@ -557,13 +557,17 @@
     "descricao": "RIO NEGRO — FINAL 50%",
     "valor": 22500,
     "vencimento": "2026-07-29",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "ms64miyd6l7ea",
     "obraNome": "RIO NEGRO",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-07-29"
+    "criadoEm": "2026-07-29",
+    "pagamento": "2026-07-31",
+    "ofxId": "6a6c8f92-9d71-4090-98ee-2a81b40970dc",
+    "conciliado": true,
+    "obs": "RIO NEGRO — FINAL 50% · TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "ms64le7uyo6a1",
