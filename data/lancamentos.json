@@ -2003,31 +2003,15 @@
     "criadoEm": "2026-08-03"
   },
   {
-    "id": "msdevq13reczh",
+    "id": "msdexbzd2fllc",
     "tipo": "receita",
-    "descricao": "Itu — Total Da Obra — Saldo Restante — saldo restante — saldo restante",
-    "valor": 21250,
-    "vencimento": "2026-08-03",
+    "descricao": "Itu - Parcela Final",
+    "valor": 17000,
+    "vencimento": "2026-08-08",
     "status": "pendente",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
-    "clienteId": "mrz62fjbnfipo",
-    "clienteNome": "HOTEL IN BOX LTDA",
-    "categoria": "parcela",
-    "criadoEm": "2026-08-03"
-  },
-  {
-    "id": "msdevu0rzs8zb",
-    "tipo": "despesa",
-    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
-    "valor": 2500,
-    "vencimento": "2026-06-16",
-    "pagamento": "2026-06-16",
-    "status": "pago",
-    "categoria": "reembolso",
-    "ofxId": "6a31ac44-efc8-48ee-8d41-289333125332",
-    "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "categoria": "Contrato",
     "criadoEm": "2026-08-03"
   }
 ]
