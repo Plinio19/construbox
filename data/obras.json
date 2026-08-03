@@ -163,7 +163,7 @@
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "qtdBoxes": 1,
-    "status": "andamento",
+    "status": "concluida",
     "valorContrato": 25000,
     "dataInicio": "2025-08-01",
     "dataPrevisaoFim": "2026-08-03",
@@ -187,6 +187,7 @@
         "prestadorNome": "MARCOS XAVIER"
       }
     ],
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "dataFim": "2026-08-03"
   }
 ]
