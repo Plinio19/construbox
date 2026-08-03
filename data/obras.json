@@ -156,5 +156,37 @@
       }
     ],
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf85444o4z2",
+    "nome": "Montes Claros",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 25000,
+    "dataInicio": "2025-08-01",
+    "dataPrevisaoFim": "2026-08-03",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "msdf7cjf21ps7",
+        "descricao": "Recebiemnto Montes Claros",
+        "valor": 25000,
+        "vencimento": "2026-08-03"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "msdf7pyjp8w2l",
+        "descricao": "Mão de oBra Chave Na Mão",
+        "valor": 6500,
+        "vencimento": "2026-08-03",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms64m37bjfze4",
+        "prestadorNome": "MARCOS XAVIER"
+      }
+    ],
+    "criadoEm": "2026-08-03"
   }
 ]
