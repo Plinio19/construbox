@@ -2016,5 +2016,19 @@
     "prestadorNome": "Vitor Nonato",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf5o7mynttw",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Jonatan Conceicao Da Silva - Â€¢â€¢â€¢.049.378",
+    "valor": 281.72,
+    "vencimento": "2026-06-13",
+    "pagamento": "2026-06-13",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a2d7c41-f408-4a89-82d3-a813f568bc35",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4",
+    "criadoEm": "2026-08-03"
   }
 ]
