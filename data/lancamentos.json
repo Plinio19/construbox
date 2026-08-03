@@ -1844,5 +1844,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - JFC NETO LANCHONETE LTDA - 35.833.041/0001-43 - CAIXA ECONOMICA FEDERAL (0104) AgÃªncia: 4499 Conta: 1292000000577854781-8",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdes8c1m10ik",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante",
+    "valor": 22755,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
