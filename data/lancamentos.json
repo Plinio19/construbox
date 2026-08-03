@@ -2156,5 +2156,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - 41.114.186 WENDEL DE OLIVEIRA GONCALVES - 41.114.186/0001-97 - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 77919111-8",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdfvf8sscqtc",
+    "tipo": "despesa",
+    "descricao": "Pagamento Sertanopolis",
+    "valor": 3000,
+    "vencimento": "2026-07-31",
+    "pagamento": "2026-07-31",
+    "status": "pago",
+    "obraId": "msdf85444o4z2",
+    "obraNome": "Montes Claros",
+    "categoria": "outros",
+    "ofxId": "6a6d1f62-13c6-4062-8183-667734d30816",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xavier 29387860850 - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6",
+    "criadoEm": "2026-08-03"
   }
 ]
