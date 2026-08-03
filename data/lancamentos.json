@@ -2035,15 +2035,19 @@
     "id": "msdf7cjf21ps7",
     "tipo": "receita",
     "descricao": "Montes Claros — Recebiemnto Montes Claros",
-    "valor": 25000,
+    "valor": 15000,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "msdf85444o4z2",
     "obraNome": "Montes Claros",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "pagamento": "2026-05-20",
+    "ofxId": "6a0d9c6a-0dcf-4d30-a4b7-7bd5c0a63b9d",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "msdf7pyjp8w2l",
