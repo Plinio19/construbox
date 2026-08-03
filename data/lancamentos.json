@@ -1729,5 +1729,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - BOOKING.COM BRASIL SERVICOS DE RESERVA DE HOTEIS LTDA. - 10.625.931/0001-39 - ADYEN DO BRASIL IP LTDA. AgÃªncia: 1 Conta: 100000141-0",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdeqzea2emt5",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 27,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2cb422-22fe-4698-bc67-17f36fdedbac",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Josefa Batista De Oliveira Ribeiro - â€¢â€¢â€¢.580.605-â€¢â€¢ - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 94464340-2",
+    "criadoEm": "2026-08-03"
   }
 ]
