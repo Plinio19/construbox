@@ -10,9 +10,10 @@ interface CatalogoState {
   catalogo: MaterialCatalogo[];
   sha: string | null;
   loading: boolean;
+  loaded: boolean;
   error: string | null;
 
-  fetch: () => Promise<void>;
+  fetch: (force?: boolean) => Promise<void>;
   save: (catalogo: MaterialCatalogo[], msg?: string) => Promise<void>;
   upsert: (material: MaterialCatalogo) => Promise<void>;
   remove: (id: string) => Promise<void>;
@@ -28,13 +29,15 @@ export const useCatalogoStore = create<CatalogoState>((set, get) => ({
   catalogo: [],
   sha: null,
   loading: false,
+  loaded: false,
   error: null,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true, error: null });
     try {
       const { lista, sha } = await dataService.getCollection<MaterialCatalogo>(PATH);
-      set({ catalogo: lista, sha, loading: false });
+      set({ catalogo: lista, sha, loading: false, loaded: true });
     } catch (e) {
       set({ error: String(e), loading: false });
     }

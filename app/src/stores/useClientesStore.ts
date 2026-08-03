@@ -8,7 +8,8 @@ interface ClientesState {
   clientes: Cliente[];
   sha: string | null;
   loading: boolean;
-  fetch: () => Promise<void>;
+  loaded: boolean;
+  fetch: (force?: boolean) => Promise<void>;
   save: (clientes: Cliente[], msg?: string) => Promise<void>;
   upsert: (cliente: Cliente) => Promise<void>;
   remove: (id: string) => Promise<void>;
@@ -18,12 +19,14 @@ export const useClientesStore = create<ClientesState>((set, get) => ({
   clientes: [],
   sha: null,
   loading: false,
+  loaded: false,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true });
     try {
       const { lista, sha } = await dataService.getCollection<Cliente>(PATH);
-      set({ clientes: lista, sha, loading: false });
+      set({ clientes: lista, sha, loading: false, loaded: true });
     } catch { set({ loading: false }); }
   },
 

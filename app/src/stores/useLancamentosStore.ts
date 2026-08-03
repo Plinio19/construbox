@@ -29,9 +29,10 @@ interface LancamentosState {
   lancamentos: Lancamento[];
   sha: string | null;
   loading: boolean;
+  loaded: boolean;
   error: string | null;
 
-  fetch: () => Promise<void>;
+  fetch: (force?: boolean) => Promise<void>;
   save: (lancamentos: Lancamento[], msg?: string) => Promise<void>;
   upsert: (lancamento: Lancamento) => Promise<void>;
   remove: (id: string) => Promise<void>;
@@ -44,14 +45,16 @@ export const useLancamentosStore = create<LancamentosState>((set, get) => ({
   lancamentos: [],
   sha: null,
   loading: false,
+  loaded: false,
   error: null,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true, error: null });
     try {
       const { lista, sha } = await dataService.getCollection<Record<string, unknown>>(PATH);
       const lancamentos = lista.map(normalizar);
-      set({ lancamentos, sha, loading: false });
+      set({ lancamentos, sha, loading: false, loaded: true });
     } catch (e) {
       set({ error: String(e), loading: false });
     }

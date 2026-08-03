@@ -8,9 +8,10 @@ interface ObrasState {
   obras: Obra[];
   sha: string | null;
   loading: boolean;
+  loaded: boolean;
   error: string | null;
 
-  fetch: () => Promise<void>;
+  fetch: (force?: boolean) => Promise<void>;
   save: (obras: Obra[], msg?: string) => Promise<void>;
   upsert: (obra: Obra) => Promise<void>;
   remove: (id: string) => Promise<void>;
@@ -20,13 +21,15 @@ export const useObrasStore = create<ObrasState>((set, get) => ({
   obras: [],
   sha: null,
   loading: false,
+  loaded: false,
   error: null,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true, error: null });
     try {
       const { lista, sha } = await dataService.getCollection<Obra>(PATH);
-      set({ obras: lista, sha, loading: false });
+      set({ obras: lista, sha, loading: false, loaded: true });
     } catch (e) {
       set({ error: String(e), loading: false });
     }

@@ -8,7 +8,8 @@ interface PrestadoresState {
   prestadores: Prestador[];
   sha: string | null;
   loading: boolean;
-  fetch: () => Promise<void>;
+  loaded: boolean;
+  fetch: (force?: boolean) => Promise<void>;
   save: (prestadores: Prestador[], msg?: string) => Promise<void>;
   upsert: (p: Prestador) => Promise<void>;
   remove: (id: string) => Promise<void>;
@@ -18,12 +19,14 @@ export const usePrestadoresStore = create<PrestadoresState>((set, get) => ({
   prestadores: [],
   sha: null,
   loading: false,
+  loaded: false,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true });
     try {
       const { lista, sha } = await dataService.getCollection<Prestador>(PATH);
-      set({ prestadores: lista, sha, loading: false });
+      set({ prestadores: lista, sha, loading: false, loaded: true });
     } catch { set({ loading: false }); }
   },
 

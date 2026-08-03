@@ -8,8 +8,9 @@ interface SociosState {
   socios: Socio[];
   sha: string | null;
   loading: boolean;
+  loaded: boolean;
 
-  fetch: () => Promise<void>;
+  fetch: (force?: boolean) => Promise<void>;
   upsert: (socio: Socio) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
@@ -18,12 +19,14 @@ export const useSociosStore = create<SociosState>((set, get) => ({
   socios: [],
   sha: null,
   loading: false,
+  loaded: false,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true });
     try {
       const { lista, sha } = await dataService.getCollection<Socio>(PATH);
-      set({ socios: lista, sha, loading: false });
+      set({ socios: lista, sha, loading: false, loaded: true });
     } catch {
       set({ loading: false });
     }

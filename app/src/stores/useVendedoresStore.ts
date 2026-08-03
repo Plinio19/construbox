@@ -8,7 +8,8 @@ interface VendedoresState {
   vendedores: Vendedor[];
   sha: string | null;
   loading: boolean;
-  fetch: () => Promise<void>;
+  loaded: boolean;
+  fetch: (force?: boolean) => Promise<void>;
   upsert: (v: Vendedor) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
@@ -17,12 +18,14 @@ export const useVendedoresStore = create<VendedoresState>((set, get) => ({
   vendedores: [],
   sha: null,
   loading: false,
+  loaded: false,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true });
     try {
       const { lista, sha } = await dataService.getCollection<Vendedor>(PATH);
-      set({ vendedores: lista, sha, loading: false });
+      set({ vendedores: lista, sha, loading: false, loaded: true });
     } catch { set({ loading: false }); }
   },
 

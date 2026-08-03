@@ -8,7 +8,8 @@ interface FuncionariosState {
   funcionarios: Funcionario[];
   sha: string | null;
   loading: boolean;
-  fetch: () => Promise<void>;
+  loaded: boolean;
+  fetch: (force?: boolean) => Promise<void>;
   save: (funcionarios: Funcionario[], msg?: string) => Promise<void>;
   upsert: (f: Funcionario) => Promise<void>;
   remove: (id: string) => Promise<void>;
@@ -18,12 +19,14 @@ export const useFuncionariosStore = create<FuncionariosState>((set, get) => ({
   funcionarios: [],
   sha: null,
   loading: false,
+  loaded: false,
 
-  fetch: async () => {
+  fetch: async (force = false) => {
+    if (!force && get().loaded) return;
     set({ loading: true });
     try {
       const { lista, sha } = await dataService.getCollection<Funcionario>(PATH);
-      set({ funcionarios: lista, sha, loading: false });
+      set({ funcionarios: lista, sha, loading: false, loaded: true });
     } catch { set({ loading: false }); }
   },
 
