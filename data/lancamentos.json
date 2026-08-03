@@ -2053,15 +2053,19 @@
     "id": "msdf7pyjp8w2l",
     "tipo": "despesa",
     "descricao": "Mão de oBra Chave Na Mão",
-    "valor": 6500,
+    "valor": 2500,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "msdf85444o4z2",
     "obraNome": "Montes Claros",
     "prestadorId": "ms64m37bjfze4",
     "prestadorNome": "MARCOS XAVIER",
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "pagamento": "2026-05-20",
+    "ofxId": "6a0d9824-6fdc-4a72-bdd8-8ecba5bd50ef",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
   },
   {
     "id": "msdf8mz1mwa4o",
