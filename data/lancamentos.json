@@ -2179,5 +2179,19 @@
     "categoria": "mao-de-obra",
     "criadoEm": "2026-08-03",
     "conciliado": false
+  },
+  {
+    "id": "msdfzcjm88ciq",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Completa — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante — saldo restante",
+    "valor": 20224.769999999997,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-08-03"
   }
 ]
