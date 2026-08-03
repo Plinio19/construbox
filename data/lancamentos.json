@@ -1637,15 +1637,19 @@
     "id": "msdeoktagg36u",
     "tipo": "despesa",
     "descricao": "Mão de Obra Chave na Mão",
-    "valor": 25000,
+    "valor": 520,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "pagamento": "2026-06-12",
+    "ofxId": "6a2c6404-03af-4c1b-a6e5-25ebff9c55c3",
+    "conciliado": true,
+    "obs": "Mão de Obra Chave na Mão · TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 49393131-7"
   },
   {
     "id": "msdepyxuptmx3",
