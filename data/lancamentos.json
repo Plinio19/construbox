@@ -2062,5 +2062,20 @@
     "prestadorId": "ms64m37bjfze4",
     "prestadorNome": "MARCOS XAVIER",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf8mz1mwa4o",
+    "tipo": "receita",
+    "descricao": "Montes Claros — Recebiemnto Montes Claros — Saldo Restante",
+    "valor": 10000,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "msdf85444o4z2",
+    "obraNome": "Montes Claros",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
