@@ -2001,5 +2001,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdevq13reczh",
+    "tipo": "receita",
+    "descricao": "Itu — Total Da Obra — Saldo Restante — saldo restante — saldo restante",
+    "valor": 21250,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "parcela",
+    "criadoEm": "2026-08-03"
   }
 ]
