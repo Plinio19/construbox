@@ -2002,5 +2002,19 @@
     "obraNome": "Itu",
     "categoria": "Contrato",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf5mmwi7nir",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — saldo restante",
+    "valor": 10000,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-08-03"
   }
 ]
