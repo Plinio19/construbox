@@ -1662,5 +1662,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - ANDRE LUIZ SILVA DOS SANTOS - â€¢â€¢â€¢.535.761-â€¢â€¢ - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 1364 Conta: 64963-0",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdeq9zung84r",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 107,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2c0da8-1872-4623-8fe2-f0d52bcca3d6",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PANIFICADORA DELICIAS DA VOVO - 07.436.556/0001-74 - CCLA CENTRO BRASILEIRA LTDA. AgÃªncia: 5004 Conta: 1159933-2",
+    "criadoEm": "2026-08-03"
   }
 ]
