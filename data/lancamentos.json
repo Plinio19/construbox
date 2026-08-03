@@ -1713,5 +1713,21 @@
     "prestadorNome": "Vitor Nonato",
     "criadoEm": "2026-08-03",
     "conciliado": false
+  },
+  {
+    "id": "msdequgfq6nxn",
+    "tipo": "despesa",
+    "descricao": "Hospedagem Itu",
+    "valor": 162,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2c943d-d564-48bc-90f6-74ca76c4e7da",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - BOOKING.COM BRASIL SERVICOS DE RESERVA DE HOTEIS LTDA. - 10.625.931/0001-39 - ADYEN DO BRASIL IP LTDA. AgÃªncia: 1 Conta: 100000141-0",
+    "criadoEm": "2026-08-03"
   }
 ]
