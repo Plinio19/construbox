@@ -1623,15 +1623,19 @@
     "id": "msdeo64vlfw7d",
     "tipo": "receita",
     "descricao": "Itu — Total da Obra",
-    "valor": 42500,
+    "valor": 12750,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "pagamento": "2026-07-20",
+    "ofxId": "6a5e5fbc-8877-4689-88f6-8db2d103c389",
+    "conciliado": true,
+    "obs": "Itu — Valor Total Da Obra — Saldo Restante — Saldo Restante — Saldo Restante · TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "msdeoktagg36u",
