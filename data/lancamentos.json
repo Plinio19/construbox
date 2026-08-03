@@ -2105,13 +2105,16 @@
     "descricao": "Mão De Obra Chave Na Mão — Saldo Restante",
     "valor": 4000,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "msdf85444o4z2",
     "obraNome": "Montes Claros",
     "prestadorId": "ms64m37bjfze4",
     "prestadorNome": "MARCOS XAVIER",
     "criadoEm": "2026-08-03",
-    "conciliado": false
+    "pagamento": "2026-07-13",
+    "ofxId": "6a551c41-d45b-4ecb-b9a9-e3014504f903",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4"
   }
 ]
