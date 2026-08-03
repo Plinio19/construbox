@@ -1875,5 +1875,23 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - RAIZEN SOLUCOES DE PAGAMENTOS S A - 11.431.887/0001-99 - BCO BRADESCO S.A. (0237) AgÃªncia: 2002 Conta: 1065-0",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdesfc67ddhj",
+    "tipo": "receita",
+    "descricao": "Itu — Valor Total Da Obra — Saldo Restante — Saldo Restante",
+    "valor": 4250,
+    "vencimento": "2026-06-25",
+    "pagamento": "2026-06-25",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "adiantamento",
+    "ofxId": "6a3d0e80-1cdc-437f-a5f9-dd24997cd516",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-08-03"
   }
 ]
