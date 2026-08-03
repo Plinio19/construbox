@@ -1983,5 +1983,19 @@
     "prestadorNome": "Vitor Nonato",
     "criadoEm": "2026-08-03",
     "conciliado": false
+  },
+  {
+    "id": "msdeu9rqbi0om",
+    "tipo": "receita",
+    "descricao": "Itu — Total Da Obra — Saldo Restante — saldo restante",
+    "valor": 23750,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "parcela",
+    "criadoEm": "2026-08-03"
   }
 ]
