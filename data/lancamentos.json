@@ -2098,5 +2098,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf959k13pwa",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante",
+    "valor": 4000,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdf85444o4z2",
+    "obraNome": "Montes Claros",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
