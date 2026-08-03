@@ -6,7 +6,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import {
   PlusOutlined, SearchOutlined, EditOutlined,
-  DeleteOutlined, EyeOutlined, ToolOutlined,
+  DeleteOutlined, EyeOutlined, ToolOutlined, CheckCircleOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { Obra, StatusObra } from '../../types';
@@ -20,7 +20,7 @@ const { Title, Text } = Typography;
 
 export default function ObrasPage() {
   const navigate = useNavigate();
-  const { obras, loading, fetch: fetchObras, remove } = useObrasStore();
+  const { obras, loading, fetch: fetchObras, remove, upsert } = useObrasStore();
   const { etapas, fetch: fetchEtapas } = useEtapasStore();
 
   const [busca, setBusca]           = useState('');
@@ -41,6 +41,15 @@ export default function ObrasPage() {
   function abrirEditar(obra: Obra) {
     setObraEdit(obra);
     setDrawerOpen(true);
+  }
+
+  async function finalizar(obra: Obra) {
+    try {
+      await upsert({ ...obra, status: 'concluida', dataFim: new Date().toISOString().split('T')[0] });
+      message.success('Obra finalizada!');
+    } catch {
+      message.error('Erro ao finalizar obra.');
+    }
   }
 
   async function excluir(id: string) {
@@ -140,7 +149,7 @@ export default function ObrasPage() {
     {
       title: 'Ações',
       key: 'acoes',
-      width: 130,
+      width: 160,
       render: (_, record) => (
         <Space size={4}>
           <Tooltip title="Cronograma">
@@ -164,6 +173,19 @@ export default function ObrasPage() {
               onClick={() => navigate(`/obras/${record.id}`)}
             />
           </Tooltip>
+          {!['concluida', 'cancelada'].includes(record.status) && (
+            <Popconfirm
+              title="Finalizar obra?"
+              description="O status será alterado para Concluída."
+              onConfirm={() => finalizar(record)}
+              okText="Finalizar"
+              cancelText="Cancelar"
+            >
+              <Tooltip title="Finalizar obra">
+                <Button type="text" icon={<CheckCircleOutlined style={{ color: '#52c41a' }} />} />
+              </Tooltip>
+            </Popconfirm>
+          )}
           <Popconfirm
             title="Excluir obra?"
             description="Esta ação não pode ser desfeita."
