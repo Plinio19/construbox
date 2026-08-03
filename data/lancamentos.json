@@ -1968,5 +1968,17 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - VITOR SIQUEIRA NONATO - â€¢â€¢â€¢.593.918-â€¢â€¢ - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 14528-5",
     "criadoEm": "2026-07-31"
+  },
+  {
+    "id": "kmx0ckm1k7dqmg282qr56b",
+    "tipo": "receita",
+    "descricao": "Itu — Saldo Restante A Receber",
+    "valor": 17000,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "ms8xmlwxz8ohq",
+    "obraNome": "Itu",
+    "criadoEm": "2026-08-03"
   }
 ]
