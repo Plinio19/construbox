@@ -2030,5 +2030,33 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf7cjf21ps7",
+    "tipo": "receita",
+    "descricao": "Montes Claros — Recebiemnto Montes Claros",
+    "valor": 25000,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "msdf85444o4z2",
+    "obraNome": "Montes Claros",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf7pyjp8w2l",
+    "tipo": "despesa",
+    "descricao": "Mão de oBra Chave Na Mão",
+    "valor": 6500,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdf85444o4z2",
+    "obraNome": "Montes Claros",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "criadoEm": "2026-08-03"
   }
 ]
