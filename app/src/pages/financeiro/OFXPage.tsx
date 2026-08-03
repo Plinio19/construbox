@@ -65,6 +65,28 @@ const CAT_OPTS: { value: CatOFX; label: string }[] = [
   { value: 'ignorar',      label: 'Ignorar'        },
 ];
 
+const LS_SALDO = 'cbx_saldo_bancario';
+
+interface SaldoBancario {
+  valor: number;
+  data: string;       // data do extrato (DTASOF)
+  importadoEm: string;
+}
+
+function parseSaldoOFX(content: string): SaldoBancario | null {
+  const getTag = (tag: string) => {
+    const r = new RegExp(`<${tag}[^>]*>([^\n<\r]+)`, 'i').exec(content);
+    return r ? r[1].trim() : '';
+  };
+  const balamt = parseFloat(getTag('BALAMT').replace(',', '.'));
+  const dtasof = getTag('DTASOF').replace(/\[.*\]/, '').trim();
+  if (isNaN(balamt) || !dtasof) return null;
+  const data = dtasof.length >= 8
+    ? `${dtasof.slice(0,4)}-${dtasof.slice(4,6)}-${dtasof.slice(6,8)}`
+    : hoje();
+  return { valor: balamt, data, importadoEm: hoje() };
+}
+
 function parseOFX(content: string): OFXTransacao[] {
   const txns: OFXTransacao[] = [];
   const re = /<STMTTRN[^>]*>([\s\S]*?)<\/STMTTRN>/gi;
@@ -234,7 +256,19 @@ export default function OFXPage() {
       const merged = [...mapa.values()].sort((a, b) => a.data.localeCompare(b.data));
       localStorage.setItem(LS_EXTRATO, JSON.stringify(merged));
       setTransacoes(merged);
-      message.success(`${novas.length} transação(ões) importada(s). ${merged.length} no total.`);
+
+      // Salva o saldo bancário do extrato (mantém o mais recente)
+      const saldo = parseSaldoOFX(content);
+      if (saldo) {
+        const atual: SaldoBancario | null = (() => {
+          try { return JSON.parse(localStorage.getItem(LS_SALDO) || 'null'); } catch { return null; }
+        })();
+        if (!atual || saldo.data >= atual.data) {
+          localStorage.setItem(LS_SALDO, JSON.stringify(saldo));
+        }
+      }
+
+      message.success(`${novas.length} transação(ões) importada(s). ${merged.length} no total.${saldo ? ` Saldo: ${formatarMoeda(saldo.valor)}` : ''}`);
     }
 
     function lerCom(enc: string) {

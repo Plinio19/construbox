@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react';
 import {
   Row, Col, Card, Statistic, Typography, Table, Progress,
-  Tag, Divider, Modal, InputNumber, Button, Form, Popconfirm, message, Space,
+  Tag, Divider, Modal, InputNumber, Button, Form, Popconfirm, message, Space, Tooltip,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
   BuildOutlined, CheckCircleOutlined, DollarOutlined, ClockCircleOutlined,
-  PlusOutlined, DeleteOutlined,
+  PlusOutlined, DeleteOutlined, BankOutlined, EditOutlined,
 } from '@ant-design/icons';
 import { useObrasStore } from '../stores/useObrasStore';
 import { useLancamentosStore } from '../stores/useLancamentosStore';
 import { useEtapasStore } from '../stores/useEtapasStore';
 import { useSociosStore } from '../stores/useSociosStore';
-import { formatarMoeda, uid, hoje } from '../utils';
+import { formatarMoeda, uid, hoje, formatarData } from '../utils';
 import type { Obra } from '../types';
+
+const LS_SALDO  = 'cbx_saldo_bancario';
+const LS_AJUSTE = 'cbx_saldo_ajuste';
+
+interface SaldoBancario { valor: number; data: string; importadoEm: string; }
 
 const { Title, Text } = Typography;
 
@@ -60,6 +65,21 @@ export default function Dashboard() {
   const [novoNome, setNovoNome]       = useState('');
   const [novoPerc, setNovoPerc]       = useState<number>(0);
   const [salvando, setSalvando]       = useState(false);
+
+  // ── Saldo bancário ──
+  const [saldoBancario, setSaldoBancario] = useState<SaldoBancario | null>(null);
+  const [ajuste, setAjuste]               = useState<number>(0);
+  const [editandoAjuste, setEditandoAjuste] = useState(false);
+  const [ajusteTemp, setAjusteTemp]         = useState<number>(0);
+
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem(LS_SALDO);
+      if (s) setSaldoBancario(JSON.parse(s));
+      const a = localStorage.getItem(LS_AJUSTE);
+      if (a) setAjuste(parseFloat(a) || 0);
+    } catch {}
+  }, []);
 
   useEffect(() => {
     fetchObras();
@@ -175,6 +195,13 @@ export default function Dashboard() {
     valor: (lucroTotal * c.percentual) / 100,
   }));
 
+  function salvarAjuste() {
+    localStorage.setItem(LS_AJUSTE, String(ajusteTemp));
+    setAjuste(ajusteTemp);
+    setEditandoAjuste(false);
+    message.success('Ajuste salvo!');
+  }
+
   async function adicionarSocio() {
     if (!novoNome.trim() || !novoPerc) { message.warning('Preencha nome e percentual.'); return; }
     setSalvando(true);
@@ -286,32 +313,107 @@ export default function Dashboard() {
 
       {/* ── KPIs ── */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} xl={6}>
+        <Col xs={24} sm={12} xl={5}>
           <Card size="small">
             <Statistic title="Obras em andamento" value={emAndamento}
               prefix={<BuildOutlined />} valueStyle={{ color: '#1677ff' }} />
           </Card>
         </Col>
-        <Col xs={24} sm={12} xl={6}>
+        <Col xs={24} sm={12} xl={5}>
           <Card size="small">
             <Statistic title="Obras concluídas" value={concluidas}
               prefix={<CheckCircleOutlined />} valueStyle={{ color: '#52c41a' }} />
           </Card>
         </Col>
-        <Col xs={24} sm={12} xl={6}>
+        <Col xs={24} sm={12} xl={5}>
           <Card size="small">
             <Statistic title="Total recebido" value={formatarMoeda(totalRecebido)}
               prefix={<DollarOutlined />} valueStyle={{ color: '#52c41a' }} />
           </Card>
         </Col>
-        <Col xs={24} sm={12} xl={6}>
+        <Col xs={24} sm={12} xl={4}>
           <Card size="small">
             <Statistic title="Lançamentos pendentes" value={pendentes}
               prefix={<ClockCircleOutlined />}
               valueStyle={{ color: pendentes > 0 ? '#faad14' : undefined }} />
           </Card>
         </Col>
+        <Col xs={24} sm={12} xl={5}>
+          <Card
+            size="small"
+            extra={
+              <Tooltip title="Ajustar saldo">
+                <Button
+                  size="small" type="text" icon={<EditOutlined />}
+                  onClick={() => { setAjusteTemp(ajuste); setEditandoAjuste(true); }}
+                />
+              </Tooltip>
+            }
+          >
+            {saldoBancario ? (
+              <>
+                <Statistic
+                  title={<span><BankOutlined /> Saldo bancário</span>}
+                  value={formatarMoeda(saldoBancario.valor + ajuste)}
+                  valueStyle={{ color: (saldoBancario.valor + ajuste) >= 0 ? '#52c41a' : '#ff4d4f', fontSize: 18 }}
+                />
+                <div style={{ marginTop: 4 }}>
+                  <Text type="secondary" style={{ fontSize: 11 }}>
+                    OFX: {formatarData(saldoBancario.data)}
+                    {ajuste !== 0 && (
+                      <span style={{ color: ajuste > 0 ? '#52c41a' : '#ff4d4f' }}>
+                        {' '}· ajuste {ajuste > 0 ? '+' : ''}{formatarMoeda(ajuste)}
+                      </span>
+                    )}
+                  </Text>
+                </div>
+              </>
+            ) : (
+              <Statistic
+                title={<span><BankOutlined /> Saldo bancário</span>}
+                value="Importe um OFX"
+                valueStyle={{ fontSize: 13, color: '#8c8c8c' }}
+              />
+            )}
+          </Card>
+        </Col>
       </Row>
+
+      {/* ── Modal ajuste de saldo ── */}
+      <Modal
+        title="Ajuste de saldo bancário"
+        open={editandoAjuste}
+        onCancel={() => setEditandoAjuste(false)}
+        onOk={salvarAjuste}
+        okText="Salvar"
+        cancelText="Cancelar"
+        width={380}
+      >
+        <Space direction="vertical" style={{ width: '100%', paddingTop: 8 }}>
+          {saldoBancario && (
+            <Text type="secondary">
+              Saldo do OFX ({formatarData(saldoBancario.data)}): <strong>{formatarMoeda(saldoBancario.valor)}</strong>
+            </Text>
+          )}
+          <Text type="secondary" style={{ fontSize: 12 }}>
+            Use o ajuste para corrigir diferenças entre o extrato importado e o saldo real do banco (ex: transações ainda não processadas).
+          </Text>
+          <InputNumber
+            style={{ width: '100%' }}
+            prefix="R$"
+            decimalSeparator=","
+            precision={2}
+            value={ajusteTemp}
+            onChange={v => setAjusteTemp(v || 0)}
+            placeholder="0,00 (positivo ou negativo)"
+          />
+          {saldoBancario && (
+            <Text strong>
+              Saldo final: {formatarMoeda(saldoBancario.valor + ajusteTemp)}
+            </Text>
+          )}
+        </Space>
+      </Modal>
 
       {/* ── Resultado por obra ── */}
       <Card
