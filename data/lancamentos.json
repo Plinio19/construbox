@@ -1955,16 +1955,19 @@
     "id": "msdet3lotxno7",
     "tipo": "receita",
     "descricao": "Itu — Total Da Obra — Saldo Restante",
-    "valor": 29750,
+    "valor": 6000,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-08-03",
-    "conciliado": false
+    "pagamento": "2026-06-13",
+    "ofxId": "6a2d784a-8eac-4dd2-addb-34d0ea1cc5ae",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "msdete1ddex1t",
