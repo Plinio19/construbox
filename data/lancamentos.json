@@ -1859,5 +1859,21 @@
     "prestadorNome": "Vitor Nonato",
     "criadoEm": "2026-08-03",
     "conciliado": false
+  },
+  {
+    "id": "msdesc1z6krxe",
+    "tipo": "despesa",
+    "descricao": "Abastecimento",
+    "valor": 82.4,
+    "vencimento": "2026-06-19",
+    "pagamento": "2026-06-19",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a355fd4-7cac-45f9-93d7-67d53b09cf3a",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - RAIZEN SOLUCOES DE PAGAMENTOS S A - 11.431.887/0001-99 - BCO BRADESCO S.A. (0237) AgÃªncia: 2002 Conta: 1065-0",
+    "criadoEm": "2026-08-03"
   }
 ]
