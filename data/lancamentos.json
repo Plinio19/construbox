@@ -1646,5 +1646,21 @@
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdepyxuptmx3",
+    "tipo": "despesa",
+    "descricao": "Gasto Não Identificado",
+    "valor": 1500,
+    "vencimento": "2026-06-11",
+    "pagamento": "2026-06-11",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2aed16-a7f4-4317-a4fc-159d11025b50",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - ANDRE LUIZ SILVA DOS SANTOS - â€¢â€¢â€¢.535.761-â€¢â€¢ - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 1364 Conta: 64963-0",
+    "criadoEm": "2026-08-03"
   }
 ]
