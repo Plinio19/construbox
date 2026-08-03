@@ -124,37 +124,5 @@
       }
     ],
     "criadoEm": "2026-07-29"
-  },
-  {
-    "id": "ms8xmlwxz8ohq",
-    "nome": "Itu",
-    "clienteId": "mrz62fjbnfipo",
-    "clienteNome": "HOTEL IN BOX LTDA",
-    "qtdBoxes": 1,
-    "status": "andamento",
-    "valorContrato": 42500,
-    "dataInicio": "2026-06-12",
-    "dataPrevisaoFim": "2026-08-12",
-    "funcionarios": [],
-    "parcelas": [
-      {
-        "id": "ms900b6euq8p9",
-        "descricao": "Valor Total da Obra",
-        "valor": 42500,
-        "vencimento": "2026-07-31"
-      }
-    ],
-    "despesas": [
-      {
-        "id": "ms8xm3rynm36o",
-        "descricao": "Mão de Obra Chave na Mão",
-        "valor": 25000,
-        "vencimento": "2026-07-31",
-        "categoria": "mao-de-obra",
-        "prestadorId": "ms8xkyqyrz6ug",
-        "prestadorNome": "Vitor Nonato"
-      }
-    ],
-    "criadoEm": "2026-07-31"
   }
 ]
