@@ -1965,5 +1965,20 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-08-03",
     "conciliado": false
+  },
+  {
+    "id": "msdete1ddex1t",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 15775,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "criadoEm": "2026-08-03",
+    "conciliado": false
   }
 ]
