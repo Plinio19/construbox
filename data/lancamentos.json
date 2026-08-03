@@ -1678,5 +1678,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PANIFICADORA DELICIAS DA VOVO - 07.436.556/0001-74 - CCLA CENTRO BRASILEIRA LTDA. AgÃªncia: 5004 Conta: 1159933-2",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdeqf9b45gyj",
+    "tipo": "despesa",
+    "descricao": "Alimentação Itu",
+    "valor": 69,
+    "vencimento": "2026-06-12",
+    "pagamento": "2026-06-12",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a2c4f46-8faf-4d7b-ab85-d5bcb83484e5",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - BIFE DE TIRA CHURRASCARIA LTDA - 26.511.689/0001-02 - COOP SICREDI FRONTEIR PR/SC/SP AgÃªncia: 738 Conta: 53370-6",
+    "criadoEm": "2026-08-03"
   }
 ]
