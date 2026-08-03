@@ -1632,5 +1632,19 @@
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdeoktagg36u",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Chave na Mão",
+    "valor": 25000,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "criadoEm": "2026-08-03"
   }
 ]
