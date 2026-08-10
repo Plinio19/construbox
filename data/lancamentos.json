@@ -2239,5 +2239,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-08-10"
+  },
+  {
+    "id": "msnh2vg5iszwy",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 14125.769999999997,
+    "vencimento": "2026-07-24",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "prestadorId": "mrz65acqew4i3",
+    "prestadorNome": "EQUIPE EDINILSON",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-08-10",
+    "conciliado": false
   }
 ]
