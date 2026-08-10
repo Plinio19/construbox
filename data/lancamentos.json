@@ -2272,5 +2272,21 @@
     "categoria": "mao-de-obra",
     "criadoEm": "2026-08-10",
     "conciliado": false
+  },
+  {
+    "id": "msnh410hn48ta",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Ar",
+    "valor": 2000,
+    "vencimento": "2026-08-06",
+    "pagamento": "2026-08-06",
+    "status": "pago",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "categoria": "outros",
+    "ofxId": "6a747d52-55b1-4d20-a288-fb684e76f9c9",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Suelton Noronha Silva - â€¢â€¢â€¢.484.123-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 103451314-1",
+    "criadoEm": "2026-08-10"
   }
 ]
