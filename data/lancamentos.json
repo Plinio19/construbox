@@ -2292,5 +2292,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Suelton Noronha Silva - â€¢â€¢â€¢.484.123-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 103451314-1",
     "criadoEm": "2026-08-10"
+  },
+  {
+    "id": "msnh4c9de62ex",
+    "tipo": "receita",
+    "descricao": "Nova Mutum — Final (30%) — Saldo Restante",
+    "valor": 500,
+    "vencimento": "2026-06-21",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-08-10",
+    "conciliado": false
   }
 ]
