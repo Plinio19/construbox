@@ -2221,5 +2221,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-08-10"
+  },
+  {
+    "id": "msngzn56t8wys",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 1081.11,
+    "vencimento": "2026-08-04",
+    "pagamento": "2026-08-04",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a71ed29-ddd0-48f9-89c3-88cfaa9da8f0",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-08-10"
   }
 ]
