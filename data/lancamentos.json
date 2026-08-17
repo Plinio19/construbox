@@ -2307,5 +2307,19 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-08-10",
     "conciliado": false
+  },
+  {
+    "id": "msxpcc5csraec",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 566,
+    "vencimento": "2026-05-12",
+    "pagamento": "2026-05-12",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a035528-9d6f-4b20-8329-07b45c2e91d2",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-08-17"
   }
 ]
