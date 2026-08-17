@@ -2335,5 +2335,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-08-17"
+  },
+  {
+    "id": "msxpcvm7rg5x7",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 1978,
+    "vencimento": "2026-06-18",
+    "pagamento": "2026-06-18",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a344d7e-cd0a-45cd-8acb-c5e580f34253",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-08-17"
   }
 ]
