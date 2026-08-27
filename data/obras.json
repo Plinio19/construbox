@@ -189,5 +189,57 @@
     ],
     "criadoEm": "2026-08-03",
     "dataFim": "2026-08-03"
+  },
+  {
+    "id": "mtbsqkui92pnr",
+    "nome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "modeloId": "mruylr4frpjos",
+    "qtdBoxes": 10,
+    "status": "andamento",
+    "endereco": "BR 101 norte km 213 PARADA IBIRAÇU",
+    "valorContrato": 10000,
+    "dataInicio": "2026-08-27",
+    "dataPrevisaoFim": "2026-10-27",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "mtbsmuhlspfu6",
+        "descricao": "ENTRADA",
+        "valor": 20000,
+        "vencimento": "2026-08-27"
+      },
+      {
+        "id": "mtbsn3a11r1n0",
+        "descricao": "30 DIAS ",
+        "valor": 20000,
+        "vencimento": "2026-08-27"
+      },
+      {
+        "id": "mtbsoesgkzmrj",
+        "descricao": "60 DIAS",
+        "valor": 20000,
+        "vencimento": "2026-08-27"
+      },
+      {
+        "id": "mtbsok7498pmd",
+        "descricao": "ENTREGA DA OBRA",
+        "valor": 40000,
+        "vencimento": "2026-08-27"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "mtbsq467m5wco",
+        "descricao": "Mão de Obra Chave na Mão",
+        "valor": 70000,
+        "vencimento": "2026-08-27",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms64m37bjfze4",
+        "prestadorNome": "MARCOS XAVIER"
+      }
+    ],
+    "criadoEm": "2026-08-27"
   }
 ]
