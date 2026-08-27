@@ -45,6 +45,7 @@ const menuItems = [
   },
   { key: '/compras',     icon: <ShoppingCartOutlined />, label: 'Compras' },
   { key: '/equipe',      icon: <TeamOutlined />,         label: 'Equipe' },
+  { key: '/diario',      icon: <FileTextOutlined />,     label: 'Diário de Obra' },
   { key: '/relatorios',  icon: <BarChartOutlined />,     label: 'Relatórios' },
   { key: '/configuracoes', icon: <SettingOutlined />,    label: 'Configurações' },
 ];
