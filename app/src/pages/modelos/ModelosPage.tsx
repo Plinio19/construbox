@@ -7,7 +7,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import {
   PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined,
-  AppstoreOutlined, ArrowLeftOutlined,
+  AppstoreOutlined, ArrowLeftOutlined, PrinterOutlined,
 } from '@ant-design/icons';
 import type { Modelo, EtapaTemplate, MaterialTemplate, UnidadeMedida, ClassificacaoMaterial } from '../../types';
 import { useModelosStore } from '../../stores/useModelosStore';
@@ -17,6 +17,95 @@ import { uid, hoje, formatarMoeda } from '../../utils';
 const { Title, Text } = Typography;
 
 const UNIDADES: UnidadeMedida[] = ['un','sc','m²','m³','m','kg','t','l','gl','cx','pc','barra'];
+
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="32" fill="none" viewBox="0 0 48 46"><path fill="#863bff" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z"/></svg>`;
+
+function gerarMemorial(modelo: Modelo, catalogoResolve: (catId: string | undefined, nome: string, unidade?: string) => { nome: string; unidade: string; valorRef: number; marca: string; fornecedor: string; temCat: boolean }) {
+  const etapas = modelo.etapas || [];
+  const totalMats = etapas.reduce((s, e) => s + (e.materiais?.length || 0), 0);
+
+  const etapasHtml = etapas.map((et, i) => {
+    const mats = et.materiais || [];
+    const materiaisHtml = mats.length > 0
+      ? `<table class="mat-table">
+<thead><tr><th>Material</th><th>Unid.</th><th>Qtd/un</th></tr></thead>
+<tbody>${mats.map(m => {
+  const info = catalogoResolve(m.catalogoId, m.nome, m.unidade);
+  return `<tr><td>${info.nome}</td><td>${info.unidade}</td><td>${m.qtdPorBox}</td></tr>`;
+}).join('')}</tbody>
+</table>`
+      : '<p class="sem-mat">Nenhum material cadastrado para esta etapa.</p>';
+
+    return `<div class="etapa">
+<div class="etapa-hdr">
+  <span class="etapa-num">${String(i + 1).padStart(2, '0')}</span>
+  <div class="etapa-info">
+    <span class="etapa-nome">${et.nome}</span>
+    <span class="etapa-meta">${et.categoria ? et.categoria.toUpperCase() : ''}${et.peso ? ` &bull; ${et.peso}%` : ''}${et.responsavel ? ` &bull; ${et.responsavel}` : ''}</span>
+  </div>
+</div>
+${et.descricao ? `<p class="etapa-desc">${et.descricao}</p>` : ''}
+${et.memorial ? `<div class="memorial-blk"><div class="memorial-titulo">MEMORIAL TÉCNICO</div><pre class="memorial-txt">${et.memorial}</pre></div>` : ''}
+<div class="mat-section"><div class="mat-titulo">MATERIAIS</div>${materiaisHtml}</div>
+</div>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+<title>Memorial Técnico — ${modelo.nome}</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;font-size:11px;color:#111;padding:24px;max-width:900px;margin:0 auto}
+.cover{display:flex;align-items:center;gap:14px;border-bottom:3px solid #863bff;padding-bottom:16px;margin-bottom:20px}
+.logo-wrap{display:flex;align-items:center;gap:8px}
+.logo-name{font-size:22px;font-weight:900;color:#863bff;letter-spacing:-.5px}
+.cover-info{flex:1}
+.cover-title{font-size:22px;font-weight:900;color:#111;line-height:1.2}
+.cover-sub{font-size:12px;color:#666;margin-top:4px}
+.sumario{background:#f8f8f8;border:1px solid #e0e0e0;border-radius:6px;padding:12px 16px;margin-bottom:20px}
+.sumario-titulo{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;color:#444}
+.sumario-item{font-size:11px;color:#333;padding:2px 0;border-bottom:1px dotted #ddd}
+.sumario-item:last-child{border:none}
+.etapa{border:1px solid #ccc;border-radius:6px;margin-bottom:16px;overflow:hidden;page-break-inside:avoid}
+.etapa-hdr{background:#1a1a2e;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:12px}
+.etapa-num{font-size:20px;font-weight:900;color:#863bff;min-width:32px}
+.etapa-info{flex:1}
+.etapa-nome{font-size:14px;font-weight:800;display:block}
+.etapa-meta{font-size:10px;opacity:.75;letter-spacing:.05em}
+.etapa-desc{font-size:11px;color:#555;padding:8px 14px 0;font-style:italic}
+.memorial-blk{margin:10px 14px;border-left:4px solid #863bff;padding-left:10px}
+.memorial-titulo{font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#863bff;margin-bottom:4px}
+.memorial-txt{font-family:Arial,sans-serif;font-size:11px;line-height:1.6;white-space:pre-wrap;color:#222}
+.mat-section{padding:10px 14px 12px}
+.mat-titulo{font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#444;margin-bottom:6px}
+.mat-table{width:100%;border-collapse:collapse;font-size:11px}
+.mat-table th{background:#f0f0f0;font-weight:700;text-align:left;padding:4px 8px;border:1px solid #ddd}
+.mat-table td{padding:3px 8px;border:1px solid #eee}
+.mat-table tr:nth-child(even) td{background:#fafafa}
+.sem-mat{color:#aaa;font-size:11px;font-style:italic}
+.rodape{text-align:center;color:#aaa;font-size:10px;margin-top:24px;border-top:1px solid #eee;padding-top:10px}
+@media print{body{padding:10px}.etapa{page-break-inside:avoid}}
+</style></head><body>
+<div class="cover">
+  <div class="logo-wrap">${LOGO_SVG}<span class="logo-name">Construbox</span></div>
+  <div class="cover-info">
+    <div class="cover-title">${modelo.nome}</div>
+    <div class="cover-sub">${modelo.tipo ? `Tipo: ${modelo.tipo}` : ''}${modelo.descricao ? ` &bull; ${modelo.descricao}` : ''} &bull; ${etapas.length} etapas &bull; ${totalMats} materiais &bull; Emitido em ${new Date().toLocaleDateString('pt-BR')}</div>
+  </div>
+</div>
+<div class="sumario">
+  <div class="sumario-titulo">Sumário de Etapas</div>
+  ${etapas.map((et, i) => `<div class="sumario-item">${String(i+1).padStart(2,'0')}. ${et.nome}${et.peso ? ` — ${et.peso}%` : ''}</div>`).join('')}
+</div>
+${etapasHtml}
+<div class="rodape">Documento gerado pelo Construbox &bull; ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</div>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) return;
+  w.document.write(html);
+  w.document.close();
+  setTimeout(() => w.print(), 500);
+}
 
 // ── Editor de materiais de uma etapa ────────────────────────────────────────
 function MateriaisEtapa({
@@ -272,11 +361,20 @@ export default function ModelosPage() {
 
     return (
       <div>
-        <Row align="middle" style={{ marginBottom: 20 }}>
-          <Button icon={<ArrowLeftOutlined />} onClick={() => setModoEditor(false)} style={{ marginRight: 12 }}>
-            Voltar
+        <Row align="middle" justify="space-between" style={{ marginBottom: 20 }}>
+          <Space>
+            <Button icon={<ArrowLeftOutlined />} onClick={() => setModoEditor(false)}>
+              Voltar
+            </Button>
+            <Title level={4} style={{ margin: 0 }}>{modeloAtual.nome}</Title>
+          </Space>
+          <Button
+            icon={<PrinterOutlined />}
+            onClick={() => gerarMemorial(modeloAtual, useCatalogoStore.getState().resolve)}
+            disabled={etapas.length === 0}
+          >
+            Imprimir Memorial
           </Button>
-          <Title level={4} style={{ margin: 0 }}>{modeloAtual.nome}</Title>
         </Row>
 
         <Row gutter={[16, 16]}>
