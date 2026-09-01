@@ -2569,5 +2569,20 @@
     "categoria": "mao-de-obra",
     "criadoEm": "2026-09-01",
     "conciliado": false
+  },
+  {
+    "id": "mtiw3geke1hx1",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Maõa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 19756.4,
+    "vencimento": "2026-07-29",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "prestadorId": "ms653mqxokvpb",
+    "prestadorNome": "Geovanne Alves",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-09-01",
+    "conciliado": false
   }
 ]
