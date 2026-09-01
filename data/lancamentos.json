@@ -2459,16 +2459,19 @@
     "id": "mtiw1cp3cmb5c",
     "tipo": "despesa",
     "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 8484,
+    "valor": 1200,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-09-01",
-    "conciliado": false
+    "pagamento": "2026-08-13",
+    "ofxId": "6a7e326a-5cb6-41c5-a553-0799b6a7e7ef",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4"
   },
   {
     "id": "mtiw1jozmn28y",
