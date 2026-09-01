@@ -2363,13 +2363,17 @@
     "descricao": "IBIRAÇU — ENTRADA",
     "valor": 20000,
     "vencimento": "2026-08-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mtbsqkui92pnr",
     "obraNome": "IBIRAÇU",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-08-27"
+    "criadoEm": "2026-08-27",
+    "pagamento": "2026-08-27",
+    "ofxId": "6a908d4a-2cdd-4eb8-8281-791c402d2f7b",
+    "conciliado": true,
+    "obs": "IBIRAÇU — ENTRADA · TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "mtbsn3a11r1n0",
