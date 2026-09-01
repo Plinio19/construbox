@@ -2801,5 +2801,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw6wh3g541m",
+    "tipo": "despesa",
+    "descricao": "Prejuizo Itu",
+    "valor": 50,
+    "vencimento": "2026-08-30",
+    "pagamento": "2026-08-30",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a94a266-05ca-43a7-88e1-ad0a12516905",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "criadoEm": "2026-09-01"
   }
 ]
