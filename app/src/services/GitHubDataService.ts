@@ -35,8 +35,19 @@ function getConfig(): GitHubConfig | null {
   }
 }
 
-function apiBase(cfg: GitHubConfig, path: string): string {
-  return `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}?ref=${cfg.branch}`;
+function apiBase(cfg: GitHubConfig, path: string, bust = false): string {
+  const ts = bust ? `&_t=${Date.now()}` : '';
+  return `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}?ref=${cfg.branch}${ts}`;
+}
+
+async function fetchFreshSha(cfg: GitHubConfig, path: string): Promise<string | null> {
+  try {
+    const res = await fetch(apiBase(cfg, path, true), {
+      headers: { ...headers(cfg), 'Cache-Control': 'no-cache' },
+    });
+    if (res.ok) return (await res.json()).sha as string;
+  } catch { /* ignora */ }
+  return null;
 }
 
 function apiBaseNoRef(cfg: GitHubConfig, path: string): string {
@@ -145,20 +156,14 @@ export class GitHubDataService implements IDataService {
       }),
     });
 
-    let freshSha = sha;
-    try {
-      const check = await fetch(apiBase(cfg, path), { headers: headers(cfg) });
-      if (check.ok) freshSha = (await check.json()).sha;
-    } catch { /* usa sha atual */ }
+    // Sempre busca SHA fresco com cache-busting para evitar SHA desatualizado do CDN
+    const freshSha = (await fetchFreshSha(cfg, path)) ?? sha;
 
     let res = await doPut(freshSha);
 
     if (res.status === 409 || res.status === 422) {
-      try {
-        const retry = await fetch(apiBase(cfg, path), { headers: headers(cfg) });
-        if (retry.ok) freshSha = (await retry.json()).sha;
-      } catch { /* ignora */ }
-      res = await doPut(freshSha);
+      const retrySha = (await fetchFreshSha(cfg, path)) ?? freshSha;
+      res = await doPut(retrySha);
     }
 
     if (!res.ok) {
