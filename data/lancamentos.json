@@ -2643,5 +2643,19 @@
     "categoria": "mao-de-obra",
     "criadoEm": "2026-09-01",
     "conciliado": false
+  },
+  {
+    "id": "mtiw4lggacq0f",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Ston",
+    "valor": 726.32,
+    "vencimento": "2026-07-21",
+    "pagamento": "2026-07-21",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a5f6e85-e5ef-4d43-9dcd-bc9f14643209",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-09-01"
   }
 ]
