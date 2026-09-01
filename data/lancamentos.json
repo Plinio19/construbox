@@ -2431,7 +2431,21 @@
     "categoria": "reembolso",
     "ofxId": "6a726f60-ba79-460b-81e0-594ba09a4fd2",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - HALOGENN QUIMICA CIENTIFICA - 49.506.242/0001-40 - BANCO INTER (0077) AgÃªncia: 1 Conta: 27523997-7",
+    "obs": "Transferência enviada pelo Pix - HALOGENN QUIMICA CIENTIFICA - 49.506.242/0001-40 - BANCO INTER (0077) Agência: 1 Conta: 27523997-7",
+    "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw1162hwhf7",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Halogenn Produtos C - 49.506.242/0001-40 - Ba",
+    "valor": 3780,
+    "vencimento": "2026-08-05",
+    "pagamento": "2026-08-05",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a7344ae-bdd6-4f35-b19a-9430dc63630b",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HALOGENN PRODUTOS C - 49.506.242/0001-40 - BANCO INTER (0077) AgÃªncia: 1 Conta: 27523997-7",
     "criadoEm": "2026-09-01"
   }
 ]
