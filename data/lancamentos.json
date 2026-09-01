@@ -2721,5 +2721,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw603jmjha2",
+    "tipo": "despesa",
+    "descricao": "Prejuizo Itu",
+    "valor": 4000,
+    "vencimento": "2026-08-22",
+    "pagamento": "2026-08-22",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a89ade3-4552-472e-85c6-6c907ae344c2",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - LEO PISOS LTDA - 51.397.193/0001-05 - CORA SCFI (0403) AgÃªncia: 1 Conta: 6263614-2",
+    "criadoEm": "2026-09-01"
   }
 ]
