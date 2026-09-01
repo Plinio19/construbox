@@ -2785,5 +2785,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - NSC ITU LOCACAO DE EQUIPAMENTOS  LTDA - 42.075.845/0001-96 - ITAÃš UNIBANCO S.A. (0341) AgÃªncia: 164 Conta: 98867-7",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw6prrq31am",
+    "tipo": "despesa",
+    "descricao": "Prejuizo Itu",
+    "valor": 100,
+    "vencimento": "2026-08-29",
+    "pagamento": "2026-08-29",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a932cb0-a303-4552-91a0-bf151260d252",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "criadoEm": "2026-09-01"
   }
 ]
