@@ -75,15 +75,19 @@
     "id": "mrza1ghukvmcf",
     "tipo": "receita",
     "descricao": "Nova Mutum - Meio (40%) - saldo restante",
-    "valor": 9500,
+    "valor": 8000,
     "vencimento": "2026-06-06",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "mrz65iweisq2k",
     "obraNome": "Nova Mutum",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "categoria": "parcela",
-    "criadoEm": "2026-07-24"
+    "criadoEm": "2026-07-24",
+    "pagamento": "2026-08-17",
+    "ofxId": "6a83318c-48e1-4d89-b1fb-a069c3225132",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "ms4p2co1pwbt9",
