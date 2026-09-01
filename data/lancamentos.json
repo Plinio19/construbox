@@ -2821,5 +2821,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw76twjixr9",
+    "tipo": "receita",
+    "descricao": "Nova Mutum - Meio (40%) - Saldo Restante — Saldo Restante",
+    "valor": 1500,
+    "vencimento": "2026-06-06",
+    "status": "pendente",
+    "obraId": "mrz65iweisq2k",
+    "obraNome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "categoria": "parcela",
+    "criadoEm": "2026-09-01",
+    "conciliado": false
   }
 ]
