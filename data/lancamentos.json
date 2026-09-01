@@ -2610,5 +2610,20 @@
     "categoria": "mao-de-obra",
     "criadoEm": "2026-09-01",
     "conciliado": false
+  },
+  {
+    "id": "mtiw444gs3rmr",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante",
+    "valor": 56000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "criadoEm": "2026-09-01",
+    "conciliado": false
   }
 ]
