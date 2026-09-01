@@ -2836,5 +2836,21 @@
     "categoria": "parcela",
     "criadoEm": "2026-09-01",
     "conciliado": false
+  },
+  {
+    "id": "mtiwd22k496l6",
+    "tipo": "despesa",
+    "descricao": "Prejuizo Itu",
+    "valor": 250,
+    "vencimento": "2026-08-10",
+    "pagamento": "2026-08-10",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a7a2269-76ef-4024-b040-06c597aa3a08",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Antonio Rodrigo Bispo Dos Santos - â€¢â€¢â€¢.349.478-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 18161030-2",
+    "criadoEm": "2026-09-01"
   }
 ]
