@@ -1,257 +1,246 @@
 [
-    {
-        "id":  "mrz65iweisq2k",
-        "nome":  "Nova Mutum",
-        "clienteId":  "mrz62fjbnfipo",
-        "clienteNome":  "HOTEL IN BOX LTDA",
-        "qtdBoxes":  1,
-        "status":  "andamento",
-        "valorContrato":  85000,
-        "dataInicio":  "2026-05-22",
-        "dataPrevisaoFim":  "2026-08-07",
-        "funcionarios":  [
-
-                         ],
-        "parcelas":  [
-                         {
-                             "id":  "mrz64h6ymspma",
-                             "descricao":  "Início (30%)",
-                             "valor":  25500,
-                             "vencimento":  "2026-05-22"
-                         },
-                         {
-                             "id":  "mrz64h6yi9aok",
-                             "descricao":  "Meio (40%)",
-                             "valor":  34000,
-                             "vencimento":  "2026-06-06"
-                         },
-                         {
-                             "id":  "mrz64h6ynrvp2",
-                             "descricao":  "Final (30%)",
-                             "valor":  25500,
-                             "vencimento":  "2026-06-21"
-                         }
-                     ],
-        "despesas":  [
-                         {
-                             "id":  "mrz65f40e5vya",
-                             "descricao":  "Mão de Obra Completa",
-                             "valor":  65000,
-                             "vencimento":  "2026-07-24",
-                             "categoria":  "mao-de-obra",
-                             "prestadorId":  "mrz65acqew4i3",
-                             "prestadorNome":  "EQUIPE EDINILSON"
-                         }
-                     ],
-        "criadoEm":  "2026-07-24"
-    },
-    {
-        "id":  "ms64miyd6l7ea",
-        "nome":  "RIO NEGRO",
-        "clienteId":  "mrz62fjbnfipo",
-        "clienteNome":  "HOTEL IN BOX LTDA",
-        "qtdBoxes":  1,
-        "status":  "andamento",
-        "valorContrato":  45000,
-        "dataInicio":  "2026-05-01",
-        "dataPrevisaoFim":  "2026-08-10",
-        "funcionarios":  [
-
-                         ],
-        "parcelas":  [
-                         {
-                             "id":  "ms64krsiud398",
-                             "descricao":  "ENTRADA 50%",
-                             "valor":  22500,
-                             "vencimento":  "2026-07-29"
-                         },
-                         {
-                             "id":  "ms64l3gaoec37",
-                             "descricao":  "FINAL 50%",
-                             "valor":  22500,
-                             "vencimento":  "2026-07-29"
-                         }
-                     ],
-        "despesas":  [
-                         {
-                             "id":  "ms64le7uyo6a1",
-                             "descricao":  "Mão de obra - Chave na Mão",
-                             "valor":  32500,
-                             "vencimento":  "2026-07-29",
-                             "categoria":  "mao-de-obra",
-                             "prestadorId":  "ms64m37bjfze4",
-                             "prestadorNome":  "MARCOS XAVIER"
-                         }
-                     ],
-        "criadoEm":  "2026-07-29"
-    },
-    {
-        "id":  "ms656y0wkhx6y",
-        "nome":  "Sinop",
-        "clienteId":  "mrz62fjbnfipo",
-        "clienteNome":  "HOTEL IN BOX LTDA",
-        "qtdBoxes":  1,
-        "status":  "andamento",
-        "valorContrato":  85000,
-        "dataInicio":  "2026-04-24",
-        "dataPrevisaoFim":  "2026-08-07",
-        "funcionarios":  [
-
-                         ],
-        "parcelas":  [
-                         {
-                             "id":  "ms654mfh5z9ep",
-                             "descricao":  "ENTRADA 30%",
-                             "valor":  25500,
-                             "vencimento":  "2026-07-29"
-                         },
-                         {
-                             "id":  "ms654viktzfnp",
-                             "descricao":  "MEIO DA OBRA 30%",
-                             "valor":  25500,
-                             "vencimento":  "2026-07-29"
-                         },
-                         {
-                             "id":  "ms655tcuky3f1",
-                             "descricao":  "FINAL DA OBRA 40%",
-                             "valor":  34000,
-                             "vencimento":  "2026-07-29"
-                         }
-                     ],
-        "despesas":  [
-                         {
-                             "id":  "ms657szoy0guj",
-                             "descricao":  "Mão de Obra Chave Na Maõa",
-                             "valor":  60000,
-                             "vencimento":  "2026-07-29",
-                             "categoria":  "mao-de-obra",
-                             "prestadorId":  "ms653mqxokvpb",
-                             "prestadorNome":  "Geovanne Alves"
-                         }
-                     ],
-        "criadoEm":  "2026-07-29"
-    },
-    {
-        "id":  "msdeofmyzr99o",
-        "nome":  "Itu",
-        "clienteId":  "mrz62fjbnfipo",
-        "clienteNome":  "HOTEL IN BOX LTDA",
-        "qtdBoxes":  1,
-        "status":  "andamento",
-        "valorContrato":  42500,
-        "dataInicio":  "2026-06-01",
-        "dataPrevisaoFim":  "2026-08-08",
-        "funcionarios":  [
-
-                         ],
-        "parcelas":  [
-                         {
-                             "id":  "msdeo64vlfw7d",
-                             "descricao":  "Total da Obra",
-                             "valor":  42500,
-                             "vencimento":  "2026-08-03"
-                         }
-                     ],
-        "despesas":  [
-                         {
-                             "id":  "msdeoktagg36u",
-                             "descricao":  "Mão de Obra Chave na Mão",
-                             "valor":  25000,
-                             "vencimento":  "2026-08-03",
-                             "categoria":  "mao-de-obra",
-                             "prestadorId":  "ms8xkyqyrz6ug",
-                             "prestadorNome":  "Vitor Nonato"
-                         }
-                     ],
-        "criadoEm":  "2026-08-03"
-    },
-    {
-        "id":  "msdf85444o4z2",
-        "nome":  "Montes Claros",
-        "clienteId":  "mrz62fjbnfipo",
-        "clienteNome":  "HOTEL IN BOX LTDA",
-        "qtdBoxes":  1,
-        "status":  "concluida",
-        "valorContrato":  25000,
-        "dataInicio":  "2025-08-01",
-        "dataPrevisaoFim":  "2026-08-03",
-        "funcionarios":  [
-
-                         ],
-        "parcelas":  [
-                         {
-                             "id":  "msdf7cjf21ps7",
-                             "descricao":  "Recebiemnto Montes Claros",
-                             "valor":  25000,
-                             "vencimento":  "2026-08-03"
-                         }
-                     ],
-        "despesas":  [
-                         {
-                             "id":  "msdf7pyjp8w2l",
-                             "descricao":  "Mão de oBra Chave Na Mão",
-                             "valor":  6500,
-                             "vencimento":  "2026-08-03",
-                             "categoria":  "mao-de-obra",
-                             "prestadorId":  "ms64m37bjfze4",
-                             "prestadorNome":  "MARCOS XAVIER"
-                         }
-                     ],
-        "criadoEm":  "2026-08-03",
-        "dataFim":  "2026-08-03"
-    },
-    {
-        "id":  "mtbsqkui92pnr",
-        "nome":  "IBIRAÇU",
-        "clienteId":  "mrz62fjbnfipo",
-        "clienteNome":  "HOTEL IN BOX LTDA",
-        "modeloId":  "mruylr4frpjos",
-        "qtdBoxes":  10,
-        "status":  "andamento",
-        "endereco":  "BR 101 norte km 213 PARADA IBIRAÇU",
-        "valorContrato":  10000,
-        "dataInicio":  "2026-08-27",
-        "dataPrevisaoFim":  "2026-10-27",
-        "funcionarios":  [
-
-                         ],
-        "parcelas":  [
-                         {
-                             "id":  "mtbsmuhlspfu6",
-                             "descricao":  "ENTRADA",
-                             "valor":  20000,
-                             "vencimento":  "2026-08-27"
-                         },
-                         {
-                             "id":  "mtbsn3a11r1n0",
-                             "descricao":  "30 DIAS ",
-                             "valor":  20000,
-                             "vencimento":  "2026-08-27"
-                         },
-                         {
-                             "id":  "mtbsoesgkzmrj",
-                             "descricao":  "60 DIAS",
-                             "valor":  20000,
-                             "vencimento":  "2026-08-27"
-                         },
-                         {
-                             "id":  "mtbsok7498pmd",
-                             "descricao":  "ENTREGA DA OBRA",
-                             "valor":  40000,
-                             "vencimento":  "2026-08-27"
-                         }
-                     ],
-        "despesas":  [
-                         {
-                             "id":  "mtbsq467m5wco",
-                             "descricao":  "Mão de Obra Chave na Mão",
-                             "valor":  70000,
-                             "vencimento":  "2026-08-27",
-                             "categoria":  "mao-de-obra",
-                             "prestadorId":  "ms64m37bjfze4",
-                             "prestadorNome":  "MARCOS XAVIER"
-                         }
-                     ],
-        "criadoEm":  "2026-08-27"
-    }
+  {
+    "id": "mrz65iweisq2k",
+    "nome": "Nova Mutum",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 85000,
+    "dataInicio": "2026-05-22",
+    "dataPrevisaoFim": "2026-08-07",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "mrz64h6ymspma",
+        "descricao": "Início (30%)",
+        "valor": 25500,
+        "vencimento": "2026-05-22"
+      },
+      {
+        "id": "mrz64h6yi9aok",
+        "descricao": "Meio (40%)",
+        "valor": 34000,
+        "vencimento": "2026-06-06"
+      },
+      {
+        "id": "mrz64h6ynrvp2",
+        "descricao": "Final (30%)",
+        "valor": 25500,
+        "vencimento": "2026-06-21"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "mrz65f40e5vya",
+        "descricao": "Mão de Obra Completa",
+        "valor": 65000,
+        "vencimento": "2026-07-24",
+        "categoria": "mao-de-obra",
+        "prestadorId": "mrz65acqew4i3",
+        "prestadorNome": "EQUIPE EDINILSON"
+      }
+    ],
+    "criadoEm": "2026-07-24"
+  },
+  {
+    "id": "ms64miyd6l7ea",
+    "nome": "RIO NEGRO",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "concluida",
+    "valorContrato": 45000,
+    "dataInicio": "2026-05-01",
+    "dataPrevisaoFim": "2026-08-10",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "ms64krsiud398",
+        "descricao": "ENTRADA 50%",
+        "valor": 22500,
+        "vencimento": "2026-07-29"
+      },
+      {
+        "id": "ms64l3gaoec37",
+        "descricao": "FINAL 50%",
+        "valor": 22500,
+        "vencimento": "2026-07-29"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "ms64le7uyo6a1",
+        "descricao": "Mão de obra - Chave na Mão",
+        "valor": 32500,
+        "vencimento": "2026-07-29",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms64m37bjfze4",
+        "prestadorNome": "MARCOS XAVIER"
+      }
+    ],
+    "criadoEm": "2026-07-29",
+    "dataFim": "2026-09-01"
+  },
+  {
+    "id": "ms656y0wkhx6y",
+    "nome": "Sinop",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 85000,
+    "dataInicio": "2026-04-24",
+    "dataPrevisaoFim": "2026-08-07",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "ms654mfh5z9ep",
+        "descricao": "ENTRADA 30%",
+        "valor": 25500,
+        "vencimento": "2026-07-29"
+      },
+      {
+        "id": "ms654viktzfnp",
+        "descricao": "MEIO DA OBRA 30%",
+        "valor": 25500,
+        "vencimento": "2026-07-29"
+      },
+      {
+        "id": "ms655tcuky3f1",
+        "descricao": "FINAL DA OBRA 40%",
+        "valor": 34000,
+        "vencimento": "2026-07-29"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "ms657szoy0guj",
+        "descricao": "Mão de Obra Chave Na Maõa",
+        "valor": 60000,
+        "vencimento": "2026-07-29",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms653mqxokvpb",
+        "prestadorNome": "Geovanne Alves"
+      }
+    ],
+    "criadoEm": "2026-07-29"
+  },
+  {
+    "id": "msdeofmyzr99o",
+    "nome": "Itu",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "andamento",
+    "valorContrato": 42500,
+    "dataInicio": "2026-06-01",
+    "dataPrevisaoFim": "2026-08-08",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "msdeo64vlfw7d",
+        "descricao": "Total da Obra",
+        "valor": 42500,
+        "vencimento": "2026-08-03"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "msdeoktagg36u",
+        "descricao": "Mão de Obra Chave na Mão",
+        "valor": 25000,
+        "vencimento": "2026-08-03",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms8xkyqyrz6ug",
+        "prestadorNome": "Vitor Nonato"
+      }
+    ],
+    "criadoEm": "2026-08-03"
+  },
+  {
+    "id": "msdf85444o4z2",
+    "nome": "Montes Claros",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "qtdBoxes": 1,
+    "status": "concluida",
+    "valorContrato": 25000,
+    "dataInicio": "2025-08-01",
+    "dataPrevisaoFim": "2026-08-03",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "msdf7cjf21ps7",
+        "descricao": "Recebiemnto Montes Claros",
+        "valor": 25000,
+        "vencimento": "2026-08-03"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "msdf7pyjp8w2l",
+        "descricao": "Mão de oBra Chave Na Mão",
+        "valor": 6500,
+        "vencimento": "2026-08-03",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms64m37bjfze4",
+        "prestadorNome": "MARCOS XAVIER"
+      }
+    ],
+    "criadoEm": "2026-08-03",
+    "dataFim": "2026-08-03"
+  },
+  {
+    "id": "mtbsqkui92pnr",
+    "nome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "modeloId": "mruylr4frpjos",
+    "qtdBoxes": 10,
+    "status": "andamento",
+    "endereco": "BR 101 norte km 213 PARADA IBIRAÇU",
+    "valorContrato": 10000,
+    "dataInicio": "2026-08-27",
+    "dataPrevisaoFim": "2026-10-27",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "mtbsmuhlspfu6",
+        "descricao": "ENTRADA",
+        "valor": 20000,
+        "vencimento": "2026-08-27"
+      },
+      {
+        "id": "mtbsn3a11r1n0",
+        "descricao": "30 DIAS ",
+        "valor": 20000,
+        "vencimento": "2026-08-27"
+      },
+      {
+        "id": "mtbsoesgkzmrj",
+        "descricao": "60 DIAS",
+        "valor": 20000,
+        "vencimento": "2026-08-27"
+      },
+      {
+        "id": "mtbsok7498pmd",
+        "descricao": "ENTREGA DA OBRA",
+        "valor": 40000,
+        "vencimento": "2026-08-27"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "mtbsq467m5wco",
+        "descricao": "Mão de Obra Chave na Mão",
+        "valor": 70000,
+        "vencimento": "2026-08-27",
+        "categoria": "mao-de-obra",
+        "prestadorId": "ms64m37bjfze4",
+        "prestadorNome": "MARCOS XAVIER"
+      }
+    ],
+    "criadoEm": "2026-08-27"
+  }
 ]
