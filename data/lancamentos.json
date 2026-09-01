@@ -2657,5 +2657,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw4nq024aol",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Asaa",
+    "valor": 500,
+    "vencimento": "2026-07-27",
+    "pagamento": "2026-07-27",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6a67d46a-cb3a-43c3-bd75-b31866e65f98",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "criadoEm": "2026-09-01"
   }
 ]
