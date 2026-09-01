@@ -2737,5 +2737,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - LEO PISOS LTDA - 51.397.193/0001-05 - CORA SCFI (0403) AgÃªncia: 1 Conta: 6263614-2",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw6973d5xpf",
+    "tipo": "despesa",
+    "descricao": "Prejuizo Itu",
+    "valor": 1000,
+    "vencimento": "2026-08-22",
+    "pagamento": "2026-08-22",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a89ae0d-fb2e-46c4-81a9-605e3201ea2b",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "criadoEm": "2026-09-01"
   }
 ]
