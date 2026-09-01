@@ -2451,5 +2451,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HALOGENN PRODUTOS C - 49.506.242/0001-40 - BANCO INTER (0077) AgÃªncia: 1 Conta: 27523997-7",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiw1cp3cmb5c",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 8484,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-09-01",
+    "conciliado": false
   }
 ]
