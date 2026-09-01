@@ -2852,5 +2852,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Antonio Rodrigo Bispo Dos Santos - â€¢â€¢â€¢.349.478-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 18161030-2",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "mtiwdmdg8f46w",
+    "tipo": "despesa",
+    "descricao": "Prejuizo Itu - Gasolina Marcos",
+    "valor": 40.6,
+    "vencimento": "2026-08-21",
+    "pagamento": "2026-08-21",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6a88dc75-02d6-49a7-b0e4-0ea86e01eaca",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6",
+    "criadoEm": "2026-09-01"
   }
 ]
