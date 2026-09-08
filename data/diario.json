@@ -131,6 +131,8 @@
     "responsavel": "Plinio de Paula",
     "avancos": "Na segunda-feira, as condições climáticas permaneceram desfavoráveis, novamente com ocorrência de chuva, impedindo a retomada segura e adequada das atividades.",
     "problemas": "O principal fator de impacto no período foi a chuva, que interrompeu temporariamente o avanço dos serviços.\n\nA paralisação ocorreu exclusivamente em função das condições climáticas, uma vez que as atividades atuais envolvem montagem e posicionamento das estruturas e dependem de condições adequadas para execução.",
-    "proximoDia": "Assim que as condições climáticas permitirem, a equipe retomará os serviços de esquadrejamento, contraventamento, posicionamento e montagem das estruturas, dando continuidade ao planejamento da obra."
+    "proximoDia": "Assim que as condições climáticas permitirem, a equipe retomará os serviços de esquadrejamento, contraventamento, posicionamento e montagem das estruturas, dando continuidade ao planejamento da obra.",
+    "improdutivo": true,
+    "motivoImprodutivo": "Chuva"
   }
 ]
