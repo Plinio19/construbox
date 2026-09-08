@@ -311,6 +311,8 @@ export interface DiarioEntrada {
   responsavel: string;
   clima?: Clima;
   efetivo?: number;
+  improdutivo?: boolean;
+  motivoImprodutivo?: string;
   avancos: string;
   problemas?: string;
   proximoDia?: string;
