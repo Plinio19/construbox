@@ -146,5 +146,17 @@
     "avancos": "Chove e para o dia inteiro, estamos fazendo o possivel, quando para de chover seguimos o cronograma.",
     "problemas": "O principal fator de impacto no período foi a chuva, que interrompeu temporariamente o avanço dos serviços.\n\nA paralisação ocorreu exclusivamente em função das condições climáticas, uma vez que as atividades atuais envolvem montagem e posicionamento das estruturas e dependem de condições adequadas para execução.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mtuen2676gmqn",
+    "criadoEm": "2026-09-09",
+    "data": "2026-09-09",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "O dia de hoje foi novamente improdutivo para o avanço das atividades programadas na obra, não sendo possível obter evolução significativa nos serviços previstos.\n\nDessa forma, as atividades relacionadas à finalização da etapa atual permanecem pendentes e deverão ser retomadas assim que houver condições adequadas para execução.",
+    "problemas": "O dia foi registrado como improdutivo, impactando diretamente o avanço previsto no cronograma da obra.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
