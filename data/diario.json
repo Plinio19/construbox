@@ -158,5 +158,17 @@
     "avancos": "O dia de hoje foi novamente improdutivo para o avanço das atividades programadas na obra, não sendo possível obter evolução significativa nos serviços previstos.\n\nDessa forma, as atividades relacionadas à finalização da etapa atual permanecem pendentes e deverão ser retomadas assim que houver condições adequadas para execução.",
     "problemas": "O dia foi registrado como improdutivo, impactando diretamente o avanço previsto no cronograma da obra.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mtvgobk14hixj",
+    "criadoEm": "2026-09-10",
+    "data": "2026-09-10",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "O dia de hoje foi novamente improdutivo para o avanço das atividades programadas na obra, não sendo possível obter evolução significativa nos serviços previstos.\n\nDessa forma, as atividades relacionadas à finalização da etapa atual permanecem pendentes e deverão ser retomadas assim que houver condições adequadas para execução.",
+    "problemas": "O dia foi registrado como improdutivo, impactando diretamente o avanço previsto no cronograma da obra.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
