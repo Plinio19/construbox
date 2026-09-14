@@ -15,10 +15,11 @@ import { useSociosStore } from '../stores/useSociosStore';
 import { formatarMoeda, uid, hoje, formatarData } from '../utils';
 import type { Obra } from '../types';
 
-const LS_SALDO  = 'cbx_saldo_bancario';
-const LS_AJUSTE = 'cbx_saldo_ajuste';
+const LS_EXTRATO = 'cbx_extrato';
+const LS_AJUSTE  = 'cbx_saldo_ajuste';
 
-interface SaldoBancario { valor: number; data: string; importadoEm: string; }
+interface OFXTx { valor: number; tipo: 'credito' | 'debito'; data: string; }
+interface AjusteSaldo { valor: number; data: string; obs: string; }
 
 const { Title, Text } = Typography;
 
@@ -67,17 +68,24 @@ export default function Dashboard() {
   const [salvando, setSalvando]       = useState(false);
 
   // ── Saldo bancário ──
-  const [saldoBancario, setSaldoBancario] = useState<SaldoBancario | null>(null);
-  const [ajuste, setAjuste]               = useState<number>(0);
-  const [editandoAjuste, setEditandoAjuste] = useState(false);
-  const [ajusteTemp, setAjusteTemp]         = useState<number>(0);
+  const [saldoExtrato, setSaldoExtrato]   = useState<number | null>(null);
+  const [ultimaDataOFX, setUltimaDataOFX] = useState<string>('');
+  const [ajuste, setAjuste]               = useState<AjusteSaldo | null>(null);
+  const [modalAjuste, setModalAjuste]     = useState(false);
+  const [saldoRealTemp, setSaldoRealTemp] = useState<number>(0);
+  const [obsTemp, setObsTemp]             = useState('');
 
   useEffect(() => {
     try {
-      const s = localStorage.getItem(LS_SALDO);
-      if (s) setSaldoBancario(JSON.parse(s));
+      const txs: OFXTx[] = JSON.parse(localStorage.getItem(LS_EXTRATO) || '[]');
+      if (txs.length) {
+        const calc = txs.reduce((s, t) => t.tipo === 'credito' ? s + t.valor : s - t.valor, 0);
+        setSaldoExtrato(calc);
+        const ultima = txs.map(t => t.data).sort().at(-1) || '';
+        setUltimaDataOFX(ultima);
+      }
       const a = localStorage.getItem(LS_AJUSTE);
-      if (a) setAjuste(parseFloat(a) || 0);
+      if (a) setAjuste(JSON.parse(a));
     } catch {}
   }, []);
 
@@ -196,10 +204,13 @@ export default function Dashboard() {
   }));
 
   function salvarAjuste() {
-    localStorage.setItem(LS_AJUSTE, String(ajusteTemp));
-    setAjuste(ajusteTemp);
-    setEditandoAjuste(false);
-    message.success('Ajuste salvo!');
+    if (saldoExtrato === null) return;
+    const diferenca = saldoRealTemp - (saldoExtrato + (ajuste?.valor ?? 0));
+    const novo: AjusteSaldo = { valor: diferenca, data: hoje(), obs: obsTemp || 'Ajuste de saldo' };
+    localStorage.setItem(LS_AJUSTE, JSON.stringify(novo));
+    setAjuste(novo);
+    setModalAjuste(false);
+    message.success(`Ajuste de ${formatarMoeda(diferenca)} salvo!`);
   }
 
   async function adicionarSocio() {
@@ -341,39 +352,42 @@ export default function Dashboard() {
         <Col xs={24} sm={12} xl={5}>
           <Card
             size="small"
-            extra={
-              <Tooltip title="Ajustar saldo">
+            extra={saldoExtrato !== null && (
+              <Tooltip title="Lançar ajuste de saldo">
                 <Button
                   size="small" type="text" icon={<EditOutlined />}
-                  onClick={() => { setAjusteTemp(ajuste); setEditandoAjuste(true); }}
+                  onClick={() => {
+                    setSaldoRealTemp(saldoExtrato + (ajuste?.valor ?? 0));
+                    setObsTemp('');
+                    setModalAjuste(true);
+                  }}
                 />
               </Tooltip>
-            }
+            )}
           >
-            {saldoBancario ? (
+            {saldoExtrato !== null ? (
               <>
                 <Statistic
                   title={<span><BankOutlined /> Saldo bancário</span>}
-                  value={formatarMoeda(saldoBancario.valor + ajuste)}
-                  valueStyle={{ color: (saldoBancario.valor + ajuste) >= 0 ? '#52c41a' : '#ff4d4f', fontSize: 18 }}
+                  value={formatarMoeda(saldoExtrato + (ajuste?.valor ?? 0))}
+                  valueStyle={{ color: (saldoExtrato + (ajuste?.valor ?? 0)) >= 0 ? '#52c41a' : '#ff4d4f', fontSize: 18 }}
                 />
-                <div style={{ marginTop: 4 }}>
-                  <Text type="secondary" style={{ fontSize: 11 }}>
-                    OFX: {formatarData(saldoBancario.data)}
-                    {ajuste !== 0 && (
-                      <span style={{ color: ajuste > 0 ? '#52c41a' : '#ff4d4f' }}>
-                        {' '}· ajuste {ajuste > 0 ? '+' : ''}{formatarMoeda(ajuste)}
-                      </span>
-                    )}
-                  </Text>
-                </div>
+                <Text type="secondary" style={{ fontSize: 11 }}>
+                  Extrato até {formatarData(ultimaDataOFX)}
+                  {ajuste && (
+                    <span style={{ color: ajuste.valor >= 0 ? '#52c41a' : '#ff4d4f' }}>
+                      {' · '}ajuste {ajuste.valor >= 0 ? '+' : ''}{formatarMoeda(ajuste.valor)}
+                    </span>
+                  )}
+                </Text>
               </>
             ) : (
-              <Statistic
-                title={<span><BankOutlined /> Saldo bancário</span>}
-                value="Importe um OFX"
-                valueStyle={{ fontSize: 13, color: '#8c8c8c' }}
-              />
+              <div>
+                <div style={{ fontSize: 12, color: '#8c8c8c' }}>
+                  <BankOutlined /> Saldo bancário
+                </div>
+                <Text type="secondary" style={{ fontSize: 11 }}>Importe o OFX para calcular</Text>
+              </div>
             )}
           </Card>
         </Col>
@@ -381,36 +395,44 @@ export default function Dashboard() {
 
       {/* ── Modal ajuste de saldo ── */}
       <Modal
-        title="Ajuste de saldo bancário"
-        open={editandoAjuste}
-        onCancel={() => setEditandoAjuste(false)}
+        title={<span><BankOutlined /> Ajuste de saldo</span>}
+        open={modalAjuste}
+        onCancel={() => setModalAjuste(false)}
         onOk={salvarAjuste}
-        okText="Salvar"
+        okText="Salvar ajuste"
         cancelText="Cancelar"
-        width={380}
+        width={400}
       >
         <Space direction="vertical" style={{ width: '100%', paddingTop: 8 }}>
-          {saldoBancario && (
-            <Text type="secondary">
-              Saldo do OFX ({formatarData(saldoBancario.data)}): <strong>{formatarMoeda(saldoBancario.valor)}</strong>
-            </Text>
-          )}
           <Text type="secondary" style={{ fontSize: 12 }}>
-            Use o ajuste para corrigir diferenças entre o extrato importado e o saldo real do banco (ex: transações ainda não processadas).
+            Saldo calculado pelo extrato OFX:
+            <strong> {formatarMoeda(saldoExtrato ?? 0)}</strong>
+            {ajuste && <span> + ajuste anterior: <strong>{formatarMoeda(ajuste.valor)}</strong></span>}
           </Text>
+          <Text>Qual é o saldo real no banco agora?</Text>
           <InputNumber
             style={{ width: '100%' }}
-            prefix="R$"
+            addonBefore="R$"
             decimalSeparator=","
             precision={2}
-            value={ajusteTemp}
-            onChange={v => setAjusteTemp(v || 0)}
-            placeholder="0,00 (positivo ou negativo)"
+            value={saldoRealTemp}
+            onChange={v => setSaldoRealTemp(v ?? 0)}
+            autoFocus
           />
-          {saldoBancario && (
-            <Text strong>
-              Saldo final: {formatarMoeda(saldoBancario.valor + ajusteTemp)}
-            </Text>
+          <Text type="secondary" style={{ fontSize: 12 }}>Observação (opcional):</Text>
+          <input
+            className="ant-input"
+            placeholder="ex: PIX recebido ainda não processado"
+            value={obsTemp}
+            onChange={e => setObsTemp(e.target.value)}
+            style={{ width: '100%', padding: '4px 11px', borderRadius: 6, border: '1px solid #d9d9d9' }}
+          />
+          {saldoExtrato !== null && (
+            <div style={{ background: '#f6ffed', border: '1px solid #b7eb8f', borderRadius: 6, padding: '8px 12px' }}>
+              <Text>Ajuste a lançar: <strong style={{ color: (saldoRealTemp - saldoExtrato - (ajuste?.valor ?? 0)) >= 0 ? '#52c41a' : '#ff4d4f' }}>
+                {formatarMoeda(saldoRealTemp - saldoExtrato - (ajuste?.valor ?? 0))}
+              </strong></Text>
+            </div>
           )}
         </Space>
       </Modal>
