@@ -70,6 +70,17 @@
         ]
       },
       {
+        "id": "mu169aqzwqxvv",
+        "nome": "Placa Piso",
+        "ordem": 4,
+        "categoria": "estrutura",
+        "peso": 0,
+        "responsavel": "",
+        "descricao": "Esta etapa compreende a preparação e execução do piso estrutural do box, incluindo o posicionamento prévio das tubulações e passagens necessárias, execução das furações e instalação das placas de piso.\n\nTodos os serviços deverão ser executados conforme as dimensões, posições e especificações estabelecidas no projeto executivo, garantindo a correta compatibilização entre o piso, a estrutura e as instalações hidráulicas e sanitárias.",
+        "memorial": "Preparação e Posicionamento das Instalações\n\nAntes da instalação das placas de piso, deverão ser conferidos e posicionados todos os pontos e tubulações que necessitem passar pela estrutura do piso ou possuir saída através dele.\n\nDeverão ser observados, conforme previsto no projeto:\n\nPontos e tubulações de água;\nTubulações de esgoto;\nDrenos;\nDemais passagens previstas através do piso;\nPosição das saídas e conexões;\nInterferências com a estrutura metálica.\n\nO posicionamento deverá respeitar rigorosamente as medidas do projeto, considerando a posição definitiva dos equipamentos e instalações do banheiro e do box.\n\nPreparação das Placas de Piso\n\nApós a conferência das instalações, deverão ser realizadas as marcações nas placas de piso conforme os pontos previamente posicionados.\n\nDeverão ser executadas as furações e recortes necessários para passagem das tubulações, evitando cortes excessivos ou fora das posições previstas.\n\nAntes da fixação definitiva, deverá ser realizada uma conferência entre:\n\nPosição das tubulações;\nFurações das placas;\nEstrutura metálica;\nDimensões do projeto;\nPosição definitiva das instalações.\nInstalação do Piso\n\nApós a aprovação das posições e furações, deverão ser instaladas as placas de piso Eternit sobre a estrutura.\n\nAs placas deverão ser posicionadas, alinhadas e fixadas conforme o projeto e as especificações aplicáveis ao sistema construtivo.\n\nDurante a instalação deverá ser garantido que nenhuma tubulação ou passagem seja deslocada, danificada ou obstruída.\n\nControle de Qualidade\n\nAntes da liberação da etapa deverão ser conferidos:\n\nPosicionamento dos pontos de água;\nPosicionamento das tubulações de esgoto;\nPosicionamento dos drenos e demais passagens;\nCorrespondência entre as furações e os pontos previstos;\nPosicionamento e alinhamento das placas;\nFixação das placas à estrutura;\nAusência de interferências entre tubulações e estrutura;\nIntegridade das placas após instalação.\nCritério de Conclusão\n\nA Etapa 02 – Piso somente será considerada concluída após o correto posicionamento das instalações que interferem no piso, execução das respectivas passagens e furações, instalação e fixação das placas e conferência final conforme o projeto executivo.\n\nApós a aprovação da etapa, o box estará liberado para o início dos serviços estruturais e de fechamento previstos na etapa seguinte.",
+        "materiais": []
+      },
+      {
         "id": "mrv17ota2sgvc",
         "nome": "Instalação da Membrana Hidrofugável",
         "categoria": "estrutura",
@@ -88,17 +99,6 @@
           "fornecedor": "",
           "valorUnitario": 0
         }
-      },
-      {
-        "id": "mu169aqzwqxvv",
-        "nome": "Placa Piso",
-        "ordem": 4,
-        "categoria": "estrutura",
-        "peso": 0,
-        "responsavel": "",
-        "descricao": "Esta etapa compreende a preparação e execução do piso estrutural do box, incluindo o posicionamento prévio das tubulações e passagens necessárias, execução das furações e instalação das placas de piso.\n\nTodos os serviços deverão ser executados conforme as dimensões, posições e especificações estabelecidas no projeto executivo, garantindo a correta compatibilização entre o piso, a estrutura e as instalações hidráulicas e sanitárias.",
-        "memorial": "Preparação e Posicionamento das Instalações\n\nAntes da instalação das placas de piso, deverão ser conferidos e posicionados todos os pontos e tubulações que necessitem passar pela estrutura do piso ou possuir saída através dele.\n\nDeverão ser observados, conforme previsto no projeto:\n\nPontos e tubulações de água;\nTubulações de esgoto;\nDrenos;\nDemais passagens previstas através do piso;\nPosição das saídas e conexões;\nInterferências com a estrutura metálica.\n\nO posicionamento deverá respeitar rigorosamente as medidas do projeto, considerando a posição definitiva dos equipamentos e instalações do banheiro e do box.\n\nPreparação das Placas de Piso\n\nApós a conferência das instalações, deverão ser realizadas as marcações nas placas de piso conforme os pontos previamente posicionados.\n\nDeverão ser executadas as furações e recortes necessários para passagem das tubulações, evitando cortes excessivos ou fora das posições previstas.\n\nAntes da fixação definitiva, deverá ser realizada uma conferência entre:\n\nPosição das tubulações;\nFurações das placas;\nEstrutura metálica;\nDimensões do projeto;\nPosição definitiva das instalações.\nInstalação do Piso\n\nApós a aprovação das posições e furações, deverão ser instaladas as placas de piso Eternit sobre a estrutura.\n\nAs placas deverão ser posicionadas, alinhadas e fixadas conforme o projeto e as especificações aplicáveis ao sistema construtivo.\n\nDurante a instalação deverá ser garantido que nenhuma tubulação ou passagem seja deslocada, danificada ou obstruída.\n\nControle de Qualidade\n\nAntes da liberação da etapa deverão ser conferidos:\n\nPosicionamento dos pontos de água;\nPosicionamento das tubulações de esgoto;\nPosicionamento dos drenos e demais passagens;\nCorrespondência entre as furações e os pontos previstos;\nPosicionamento e alinhamento das placas;\nFixação das placas à estrutura;\nAusência de interferências entre tubulações e estrutura;\nIntegridade das placas após instalação.\nCritério de Conclusão\n\nA Etapa 02 – Piso somente será considerada concluída após o correto posicionamento das instalações que interferem no piso, execução das respectivas passagens e furações, instalação e fixação das placas e conferência final conforme o projeto executivo.\n\nApós a aprovação da etapa, o box estará liberado para o início dos serviços estruturais e de fechamento previstos na etapa seguinte.",
-        "materiais": []
       }
     ],
     "criadoEm": "2026-07-21",
