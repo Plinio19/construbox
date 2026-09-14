@@ -299,3 +299,22 @@ export interface DataResult<T> {
   lista: T[];
   sha: string | null;
 }
+
+// ─── Diário de Obra ──────────────────────────────────────────────────────────
+
+export type Clima = 'ensolarado' | 'nublado' | 'chuvoso' | 'parcialmente_nublado';
+
+export interface DiarioEntrada {
+  id: string;
+  obraId: string;
+  data: string;
+  responsavel: string;
+  clima?: Clima;
+  efetivo?: number;
+  improdutivo?: boolean;
+  motivoImprodutivo?: string;
+  avancos: string;
+  problemas?: string;
+  proximoDia?: string;
+  criadoEm: string;
+}

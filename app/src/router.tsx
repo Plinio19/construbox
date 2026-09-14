@@ -17,6 +17,7 @@ import RelatoriosPage from './pages/relatorios/RelatoriosPage';
 import ComprasPage from './pages/compras/ComprasPage';
 import EquipePage from './pages/equipe/EquipePage';
 import Configuracoes from './pages/configuracoes/Configuracoes';
+import DiarioPage from './pages/diario/DiarioPage';
 
 export const router = createHashRouter([
   {
@@ -41,6 +42,7 @@ export const router = createHashRouter([
       { path: 'compras',                    element: <ComprasPage /> },
       { path: 'equipe',                     element: <EquipePage /> },
       { path: 'relatorios',                 element: <RelatoriosPage /> },
+      { path: 'diario',                        element: <DiarioPage /> },
       { path: 'configuracoes',              element: <Configuracoes /> },
     ],
   },

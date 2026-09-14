@@ -553,7 +553,7 @@ export default function OFXPage() {
       });
       upd(t.id, { status: 'lancado' });
       message.success('Lançado com sucesso!');
-    } catch { message.error('Erro ao lançar.'); }
+    } catch (err) { message.error('Erro ao lançar: ' + String(err)); }
     setSalvando(null);
   }
 
