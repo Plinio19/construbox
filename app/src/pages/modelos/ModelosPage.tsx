@@ -209,7 +209,7 @@ function MateriaisEtapa({
 export default function ModelosPage() {
   const { modelos, loading, fetch: fetchModelos, upsert, remove } = useModelosStore();
   const { catalogo, fetch: fetchCatalogo } = useCatalogoStore();
-  const { etapas: etapasObra, fetch: fetchEtapas, save: saveEtapas } = useEtapasStore();
+  const { fetch: fetchEtapas } = useEtapasStore();
 
   const [busca, setBusca] = useState('');
   const [modoEditor, setModoEditor] = useState(false);
@@ -278,17 +278,22 @@ export default function ModelosPage() {
     setModeloAtual(atualizado);
     await upsert(atualizado);
 
-    // Sincroniza ordem nas etapas de obras geradas a partir deste modelo
+    // Sincroniza ordem nas etapas de obras usando o estado vivo do store
+    // (não a closure, que pode estar stale)
+    await fetchEtapas(true);
+    const { etapas: todasEtapas, save: saveEtapas } = useEtapasStore.getState();
     const posicao: Record<string, number> = {};
     etapas.forEach((et, i) => { posicao[et.id] = i + 1; });
-    const afetadas = etapasObra.filter(e => e.geradoDeModelo === modeloAtual.id && e.modeloEtapaId && posicao[e.modeloEtapaId] !== undefined);
+    const afetadas = todasEtapas.filter(
+      e => e.geradoDeModelo === modeloAtual.id && e.modeloEtapaId && posicao[e.modeloEtapaId] !== undefined,
+    );
     if (afetadas.length > 0) {
-      const atualizadas = etapasObra.map(e =>
+      const atualizadas = todasEtapas.map(e =>
         e.geradoDeModelo === modeloAtual.id && e.modeloEtapaId && posicao[e.modeloEtapaId] !== undefined
           ? { ...e, ordem: posicao[e.modeloEtapaId] }
           : e,
       );
-      await saveEtapas(atualizadas, `Sincronizar ordem das etapas do modelo: ${modeloAtual.nome}`);
+      await saveEtapas(atualizadas, `Sincronizar ordem: modelo ${modeloAtual.nome}`);
     }
 
     message.success('Modelo salvo!');
