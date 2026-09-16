@@ -218,5 +218,17 @@
     "avancos": "A equipe deu continuidade aos serviços da Etapa 02 – Piso, avançando na finalização das instalações e iniciando os trabalhos de montagem das estruturas sobre os módulos.\n\nDurante o dia foram realizadas as seguintes atividades:\n\nFinalização da passagem das tubulações pelos pisos, realizando os ajustes e posicionamentos necessários;\nEsquadrejamento das paredes, garantindo o correto alinhamento das estruturas;\nExecução do contraventamento das paredes, proporcionando estabilidade e rigidez à estrutura;\nInício da montagem e posicionamento das paredes, avançando no processo de verticalização dos módulos.\n\nCom o avanço dos serviços de piso, a equipe já iniciou a verticalização das estruturas, dando sequência à montagem dos módulos conforme o planejamento da obra.",
     "problemas": "Sem novas ocorrências relevantes registradas no período",
     "proximoDia": "Dar continuidade à verticalização e montagem das paredes, realizando o posicionamento, alinhamento, esquadrejamento e contraventamento das estruturas conforme os módulos forem sendo liberados."
+  },
+  {
+    "id": "mu40lii4gym5a",
+    "criadoEm": "2026-09-16",
+    "data": "2026-09-15",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Devido às condições climáticas desfavoráveis e à ocorrência de chuva durante o período, não foi possível dar continuidade às atividades programadas para o dia.\n\nOs serviços de montagem e verticalização das estruturas ficaram temporariamente paralisados, uma vez que as condições não eram adequadas para a execução segura e correta dos trabalhos.",
+    "problemas": "Chuva durante o período, impossibilitando o avanço das atividades previstas e impactando o cronograma diário da obra.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
