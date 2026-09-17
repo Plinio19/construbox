@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Row, Col, Card, Typography, Space, Button, Progress,
-  Statistic, Spin, message, Select, Divider,
+  Statistic, Spin, message, Select, Divider, Popconfirm,
 } from 'antd';
 import {
-  ArrowLeftOutlined, PlusOutlined, PrinterOutlined,
+  ArrowLeftOutlined, PlusOutlined, PrinterOutlined, SyncOutlined,
 } from '@ant-design/icons';
 import type { Obra, Etapa, StatusObra } from '../../types';
 import { useObrasStore } from '../../stores/useObrasStore';
 import { useEtapasStore } from '../../stores/useEtapasStore';
+import { useModelosStore } from '../../stores/useModelosStore';
 import { useCatalogoStore } from '../../stores/useCatalogoStore';
 import { ObraStatusTag, OBRA_STATUS_OPTIONS } from '../../components/common/StatusTag';
-import { formatarMoeda, formatarData } from '../../utils';
+import { formatarMoeda, formatarData, uid, hoje } from '../../utils';
 import EtapaCard from './EtapaCard';
 import EtapaForm from './EtapaForm';
 
@@ -121,15 +122,18 @@ export default function CronogramaPage() {
   const navigate = useNavigate();
 
   const { obras, fetch: fetchObras, upsert: upsertObra } = useObrasStore();
-  const { etapas, loading, fetch: fetchEtapas, upsert: upsertEtapa, remove: removeEtapa } = useEtapasStore();
+  const { etapas, loading, fetch: fetchEtapas, upsert: upsertEtapa, remove: removeEtapa, save: saveEtapas } = useEtapasStore();
+  const { modelos, fetch: fetchModelos } = useModelosStore();
   const { fetch: fetchCatalogo, resolve } = useCatalogoStore();
 
   const [etapaForm, setEtapaForm] = useState<{ open: boolean; etapa: Etapa | null }>({ open: false, etapa: null });
+  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     fetchObras();
     fetchEtapas();
     fetchCatalogo();
+    fetchModelos();
   }, []);
 
   const obra = obras.find(o => o.id === id);
@@ -175,6 +179,77 @@ export default function CronogramaPage() {
     await upsertObra({ ...obra, status } as Obra);
   }
 
+  async function sincronizarComModelo() {
+    if (!obra) return;
+    const modeloId = obra.modeloId || etapasObra[0]?.geradoDeModelo;
+    if (!modeloId) { message.warning('Esta obra não está vinculada a um modelo.'); return; }
+    const modelo = modelos.find(m => m.id === modeloId);
+    if (!modelo) { message.warning('Modelo não encontrado.'); return; }
+
+    setSyncing(true);
+    try {
+      const etapasModelo = modelo.etapas || [];
+      const mapaExistentes = new Map(etapasObra.map(e => [e.modeloEtapaId, e]));
+      const outrasEtapas = etapas.filter(e => e.obraId !== id);
+      const manuaisObra = etapasObra.filter(e => !e.modeloEtapaId || e.geradoDeModelo !== modeloId);
+      const obraRef = obra;
+
+      const etapasAtualizadas: Etapa[] = etapasModelo.map((et, idx) => {
+        const posicao = idx + 1;
+        const codigo = String(posicao).padStart(2, '0');
+        const existente = mapaExistentes.get(et.id);
+        if (existente) {
+          return { ...existente, ordem: posicao, codigo };
+        }
+        const mats = Array.isArray(et.materiais) ? et.materiais : [];
+        return {
+          id: uid(),
+          obraId: id!,
+          modeloEtapaId: et.id,
+          geradoDeModelo: modeloId,
+          nome: et.nome,
+          codigo,
+          ordem: posicao,
+          categoria: et.categoria || 'outros',
+          responsavel: et.responsavel || '',
+          descricao: et.descricao || '',
+          observacoes: '',
+          memorial: et.memorial || '',
+          status: 'planejada' as const,
+          peso: et.peso || 0,
+          percentualExecutado: 0,
+          checklist: [],
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          materiais: mats.map((mat: any) => ({
+            id: uid(),
+            nome: mat.nome as string,
+            catalogoId: mat.catalogoId as string | undefined,
+            modeloRef: mat.id as string,
+            unidade: (mat.unidade as string) || 'un',
+            classificacao: (mat.classificacao as string) || 'obrigatorio_iniciar',
+            qtdPrevista: (Number(mat.qtdPorBox) || 1) * (obraRef.qtdBoxes || 1),
+            qtdMinIniciar: (Number(mat.qtdMinPorBox) || 1) * (obraRef.qtdBoxes || 1),
+            qtdComprada: 0, qtdEntregue: 0, qtdReservada: 0, qtdUtilizada: 0,
+            fornecedor: (mat.fornecedor as string) || '',
+            valorPrevisto: 0, valorComprado: 0, pedidoCompra: false,
+          })),
+          criadoEm: hoje(),
+        } as Etapa;
+      });
+
+      await saveEtapas(
+        [...outrasEtapas, ...manuaisObra, ...etapasAtualizadas],
+        `Sincronizar obra ${obraRef.nome} com modelo ${modelo.nome}`,
+      );
+      await fetchEtapas(true);
+      message.success('Cronograma sincronizado com o modelo!');
+    } catch {
+      message.error('Erro ao sincronizar.');
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   return (
     <div>
       {/* ── Header ── */}
@@ -191,6 +266,19 @@ export default function CronogramaPage() {
             <Button icon={<PrinterOutlined />} onClick={() => imprimirCronograma(obra, etapasObra)}>
               Imprimir Cronograma
             </Button>
+            {(obra.modeloId || etapasObra[0]?.geradoDeModelo) && (
+              <Popconfirm
+                title="Sincronizar com o modelo?"
+                description="Etapas novas do modelo serão adicionadas e a ordem será atualizada. Etapas já existentes mantêm seus dados (status, progresso, materiais)."
+                onConfirm={sincronizarComModelo}
+                okText="Sincronizar"
+                cancelText="Cancelar"
+              >
+                <Button icon={<SyncOutlined />} loading={syncing}>
+                  Sincronizar com Modelo
+                </Button>
+              </Popconfirm>
+            )}
             <Button type="primary" icon={<PlusOutlined />}
               onClick={() => setEtapaForm({ open: true, etapa: null })}>
               Nova Etapa
