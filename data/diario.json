@@ -242,5 +242,17 @@
     "avancos": "Atividades Realizadas\n\nO dia permaneceu nublado, porém as condições climáticas permitiram a continuidade normal dos serviços.\n\nCom as etapas de Fabricação dos Painéis (Painelização), Placa Piso e Instalação da Membrana Hidrofugável já concluídas, a equipe avançou nos trabalhos de verticalização e montagem das estruturas em Steel Frame.\n\nDurante o dia, foram executadas as estruturas de mais 02 módulos, dando continuidade à montagem dos módulos sobre as bases já preparadas.\n\nProdução do Dia\n\n02 módulos com as estruturas montadas.",
     "problemas": "O tempo permaneceu nublado, mas não impediu o andamento das atividades.",
     "proximoDia": "Dar continuidade à verticalização e montagem das estruturas dos módulos, avançando no posicionamento, alinhamento, esquadrejamento e contraventamento das paredes conforme o planejamento da obra."
+  },
+  {
+    "id": "mub5bzx8mayle",
+    "criadoEm": "2026-09-21",
+    "data": "2026-09-17",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Devido às condições climáticas desfavoráveis e à ocorrência de chuva durante o período, não foi possível dar continuidade às atividades programadas para o dia.\n\nOs serviços de montagem e verticalização das estruturas ficaram temporariamente paralisados, uma vez que as condições não eram adequadas para a execução segura e correta dos trabalhos.",
+    "problemas": "Chuva durante o período, impossibilitando o avanço das atividades previstas e impactando o cronograma diário da obra.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
