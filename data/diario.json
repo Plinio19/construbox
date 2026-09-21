@@ -254,5 +254,17 @@
     "avancos": "Devido às condições climáticas desfavoráveis e à ocorrência de chuva durante o período, não foi possível dar continuidade às atividades programadas para o dia.\n\nOs serviços de montagem e verticalização das estruturas ficaram temporariamente paralisados, uma vez que as condições não eram adequadas para a execução segura e correta dos trabalhos.",
     "problemas": "Chuva durante o período, impossibilitando o avanço das atividades previstas e impactando o cronograma diário da obra.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mub5d6b64kxv0",
+    "criadoEm": "2026-09-21",
+    "data": "2026-09-18",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Devido às condições climáticas desfavoráveis e à ocorrência de chuva durante o período, não foi possível dar continuidade às atividades programadas para o dia.\n\nOs serviços de montagem e verticalização das estruturas ficaram temporariamente paralisados, uma vez que as condições não eram adequadas para a execução segura e correta dos trabalhos.",
+    "problemas": "Chuva durante o período, impossibilitando o avanço das atividades previstas e impactando o cronograma diário da obra.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
