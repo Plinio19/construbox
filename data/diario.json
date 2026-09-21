@@ -266,5 +266,17 @@
     "avancos": "Devido às condições climáticas desfavoráveis e à ocorrência de chuva durante o período, não foi possível dar continuidade às atividades programadas para o dia.\n\nOs serviços de montagem e verticalização das estruturas ficaram temporariamente paralisados, uma vez que as condições não eram adequadas para a execução segura e correta dos trabalhos.",
     "problemas": "Chuva durante o período, impossibilitando o avanço das atividades previstas e impactando o cronograma diário da obra.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mub5eza0pgexo",
+    "criadoEm": "2026-09-21",
+    "data": "2026-09-19",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "Após os dias anteriores impactados pelas chuvas, a equipe conseguiu retomar os serviços de verticalização das estruturas em Steel Frame.\n\nDurante o dia, foram realizadas as estruturas de 04 unidades, avançando na montagem dos módulos conforme o planejamento da obra.\n\nProdução do Dia\n\n04 unidades verticalizadas.",
+    "problemas": "Sem novas ocorrências relevantes durante o período.",
+    "proximoDia": "Dar continuidade à verticalização e montagem das estruturas dos módulos, buscando manter o ritmo de produção e recuperar o avanço após os dias de paralisação causados pelas condições climáticas."
   }
 ]
