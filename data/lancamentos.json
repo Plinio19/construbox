@@ -3021,5 +3021,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-09-25"
+  },
+  {
+    "id": "muh08jxx9n4db",
+    "tipo": "despesa",
+    "descricao": "Prejuizo",
+    "valor": 3500,
+    "vencimento": "2026-09-03",
+    "pagamento": "2026-09-03",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "mao-de-obra",
+    "ofxId": "6a99d0ea-6d2c-418b-8cdd-2429f0fcd32e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - ANA BEATRIZ GOMES DA SILVA - â€¢â€¢â€¢.781.354-â€¢â€¢ - BCO SANTANDER (BRASIL) S.A. (0033) AgÃªncia: 119 Conta: 1099476-5",
+    "criadoEm": "2026-09-25"
   }
 ]
