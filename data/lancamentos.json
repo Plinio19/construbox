@@ -87,7 +87,7 @@
     "pagamento": "2026-08-17",
     "ofxId": "6a83318c-48e1-4d89-b1fb-a069c3225132",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "ms4p2co1pwbt9",
@@ -2003,13 +2003,17 @@
     "id": "msdexbzd2fllc",
     "tipo": "receita",
     "descricao": "Itu - Parcela Final",
-    "valor": 17000,
+    "valor": 10000,
     "vencimento": "2026-08-08",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "categoria": "Contrato",
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "pagamento": "2026-09-23",
+    "ofxId": "6ab3f352-2f55-4cc6-b5c5-1251d04211b3",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "msdf5mmwi7nir",
@@ -2027,7 +2031,7 @@
     "pagamento": "2026-08-08",
     "ofxId": "6a777333-6ace-405b-b619-87629f9103f5",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4"
+    "obs": "Transferência enviada pelo Pix - Jonatan Conceicao da Silva - ⬢⬢⬢.049.378-⬢⬢ - MERCADO PAGO IP LTDA. (0323) Agência: 1 Conta: 5170469456-4"
   },
   {
     "id": "msdf5o7mynttw",
@@ -2193,7 +2197,7 @@
     "conciliado": true,
     "pagamento": "2026-08-11",
     "ofxId": "6a7b2d00-8e80-4ddf-b92b-f7baba3b0481",
-    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes - â€¢â€¢â€¢.589.402-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 66856158-0"
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes - ⬢⬢⬢.589.402-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 66856158-0"
   },
   {
     "id": "msdfzcjm88ciq",
@@ -2437,7 +2441,7 @@
     "pagamento": "2026-08-27",
     "ofxId": "6a908ed2-bde0-4383-8d48-42991b706ef3",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
+    "obs": "Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) Agência: 1 Conta: 51370697-6"
   },
   {
     "id": "mtiqbhjh35dmz",
@@ -2464,7 +2468,7 @@
     "categoria": "reembolso",
     "ofxId": "6a7344ae-bdd6-4f35-b19a-9430dc63630b",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HALOGENN PRODUTOS C - 49.506.242/0001-40 - BANCO INTER (0077) AgÃªncia: 1 Conta: 27523997-7",
+    "obs": "Transferência recebida pelo Pix - HALOGENN PRODUTOS C - 49.506.242/0001-40 - BANCO INTER (0077) Agência: 1 Conta: 27523997-7",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2483,7 +2487,7 @@
     "pagamento": "2026-08-13",
     "ofxId": "6a7e326a-5cb6-41c5-a553-0799b6a7e7ef",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Jonatan Conceicao da Silva - â€¢â€¢â€¢.049.378-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 5170469456-4"
+    "obs": "Transferência enviada pelo Pix - Jonatan Conceicao da Silva - ⬢⬢⬢.049.378-⬢⬢ - MERCADO PAGO IP LTDA. (0323) Agência: 1 Conta: 5170469456-4"
   },
   {
     "id": "mtiw1jozmn28y",
@@ -2501,7 +2505,7 @@
     "conciliado": true,
     "pagamento": "2026-08-11",
     "ofxId": "6a7b91f7-220b-475a-97c0-be756315d62f",
-    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) Agência: 1 Conta: 42361431-2"
   },
   {
     "id": "mtiw1qir63bhl",
@@ -2519,7 +2523,7 @@
     "conciliado": true,
     "pagamento": "2026-08-11",
     "ofxId": "6a7b922c-41c5-42d5-ad48-58cea10264ad",
-    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) Agência: 1 Conta: 42361431-2"
   },
   {
     "id": "mtiw20ixty3xx",
@@ -2537,7 +2541,7 @@
     "conciliado": true,
     "pagamento": "2026-08-18",
     "ofxId": "6a84b4f8-e382-4623-82fd-134179511db1",
-    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) Agência: 1 Conta: 42361431-2"
   },
   {
     "id": "mtiw27q8s8xge",
@@ -2550,7 +2554,7 @@
     "categoria": "reembolso",
     "ofxId": "6a7c92e9-d279-4293-b8b8-98ea7a9d5975",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2564,7 +2568,7 @@
     "categoria": "reembolso",
     "ofxId": "6a7cae2a-a59d-45d5-89fb-0859eb52b0be",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2598,7 +2602,7 @@
     "conciliado": true,
     "pagamento": "2026-08-19",
     "ofxId": "6a860bde-565f-4e5a-bbd1-3a25f8944d79",
-    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) Agência: 1 Conta: 42361431-2"
   },
   {
     "id": "mtiw3miue1dnu",
@@ -2616,7 +2620,7 @@
     "conciliado": true,
     "pagamento": "2026-08-27",
     "ofxId": "6a90ab83-6a12-443e-bf33-253c39b8e2fb",
-    "obs": "TransferÃªncia enviada pelo Pix - GEOVANE ALVES MENDES 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+    "obs": "Transferência enviada pelo Pix - GEOVANE ALVES MENDES 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) Agência: 1 Conta: 42361431-2"
   },
   {
     "id": "mtiw444gs3rmr",
@@ -2649,7 +2653,7 @@
     "conciliado": true,
     "pagamento": "2026-08-13",
     "ofxId": "6a7ddabd-b2ef-4c36-8d5f-8f2b6934aeb0",
-    "obs": "TransferÃªncia enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 42361431-2"
+    "obs": "Transferência enviada pelo Pix - Geovane Alves Mendes 93658940263 - 14.744.342/0001-20 - BCO C6 S.A. (0336) Agência: 1 Conta: 42361431-2"
   },
   {
     "id": "mtiw4lggacq0f",
@@ -2662,7 +2666,7 @@
     "categoria": "reembolso",
     "ofxId": "6a5f6e85-e5ef-4d43-9dcd-bc9f14643209",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2676,7 +2680,7 @@
     "categoria": "reembolso",
     "ofxId": "6a67d46a-cb3a-43c3-bd75-b31866e65f98",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) Agência: 1 Conta: 4719389-1",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2707,7 +2711,7 @@
     "categoria": "outros",
     "ofxId": "6a80f002-eba6-4d06-bccf-47df540de51e",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2723,7 +2727,7 @@
     "categoria": "outros",
     "ofxId": "6a875ae4-b687-429a-86a3-4722f7808095",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2739,7 +2743,7 @@
     "categoria": "outros",
     "ofxId": "6a89ade3-4552-472e-85c6-6c907ae344c2",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - LEO PISOS LTDA - 51.397.193/0001-05 - CORA SCFI (0403) AgÃªncia: 1 Conta: 6263614-2",
+    "obs": "Transferência enviada pelo Pix - LEO PISOS LTDA - 51.397.193/0001-05 - CORA SCFI (0403) Agência: 1 Conta: 6263614-2",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2755,7 +2759,7 @@
     "categoria": "outros",
     "ofxId": "6a89ae0d-fb2e-46c4-81a9-605e3201ea2b",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2771,7 +2775,7 @@
     "categoria": "outros",
     "ofxId": "6a915c59-69fd-4de7-ab9c-dc82f1305c79",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2803,7 +2807,7 @@
     "categoria": "outros",
     "ofxId": "6a932cb0-a303-4552-91a0-bf151260d252",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2819,13 +2823,13 @@
     "categoria": "outros",
     "ofxId": "6a94a266-05ca-43a7-88e1-ad0a12516905",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6",
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6",
     "criadoEm": "2026-09-01"
   },
   {
     "id": "mtiw76twjixr9",
     "tipo": "receita",
-    "descricao": "Nova Mutum - Meio (40%) - Saldo Restante — Saldo Restante",
+    "descricao": "Nova Mutum - Meio (40%) - Saldo Restante \u0014 Saldo Restante",
     "valor": 1500,
     "vencimento": "2026-06-06",
     "status": "pendente",
@@ -2850,7 +2854,7 @@
     "categoria": "outros",
     "ofxId": "6a7a2269-76ef-4024-b040-06c597aa3a08",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Antonio Rodrigo Bispo Dos Santos - â€¢â€¢â€¢.349.478-â€¢â€¢ - PICPAY (0380) AgÃªncia: 1 Conta: 18161030-2",
+    "obs": "Transferência enviada pelo Pix - Antonio Rodrigo Bispo Dos Santos - ⬢⬢⬢.349.478-⬢⬢ - PICPAY (0380) Agência: 1 Conta: 18161030-2",
     "criadoEm": "2026-09-01"
   },
   {
@@ -2866,7 +2870,7 @@
     "categoria": "outros",
     "ofxId": "6a88dc75-02d6-49a7-b0e4-0ea86e01eaca",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6",
+    "obs": "Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) Agência: 1 Conta: 51370697-6",
     "criadoEm": "2026-09-01"
   }
 ]
