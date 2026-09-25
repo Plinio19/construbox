@@ -2911,15 +2911,18 @@
     "id": "muh07aj5ccmnf",
     "tipo": "despesa",
     "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 4784,
+    "valor": 605,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-09-25",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-08-14",
+    "ofxId": "6a7f6d83-d76b-4d42-86a5-a6347324fc54",
+    "obs": "TransferÃªncia enviada pelo Pix - MARANATA GESSO E DECOR - 58.501.006/0001-22 - COOP SICREDI CAMPOS GERAIS E GRANDE CURITIBA PR/SP AgÃªncia: 730 Conta: 24514-8"
   }
 ]
