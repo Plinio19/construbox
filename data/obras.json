@@ -133,7 +133,7 @@
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "qtdBoxes": 1,
-    "status": "andamento",
+    "status": "concluida",
     "valorContrato": 42500,
     "dataInicio": "2026-06-01",
     "dataPrevisaoFim": "2026-08-08",
@@ -157,7 +157,8 @@
         "prestadorNome": "Vitor Nonato"
       }
     ],
-    "criadoEm": "2026-08-03"
+    "criadoEm": "2026-08-03",
+    "dataFim": "2026-09-25"
   },
   {
     "id": "msdf85444o4z2",
