@@ -2985,14 +2985,17 @@
     "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
     "valor": 479,
     "vencimento": "2026-08-03",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "msdeofmyzr99o",
     "obraNome": "Itu",
     "prestadorId": "ms8xkyqyrz6ug",
     "prestadorNome": "Vitor Nonato",
     "categoria": "mao-de-obra",
     "criadoEm": "2026-09-25",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-09-06",
+    "ofxId": "6a9d973b-98a3-49dc-a59a-66b210fc0ce1",
+    "obs": "TransferÃªncia enviada pelo Pix - Grazyelle Hilda Oliveira Vilela de - â€¢â€¢â€¢.170.518-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 7468316824-1"
   },
   {
     "id": "muh087j1vgubv",
