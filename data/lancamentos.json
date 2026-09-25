@@ -2872,5 +2872,18 @@
     "conciliado": true,
     "obs": "Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) Agência: 1 Conta: 51370697-6",
     "criadoEm": "2026-09-01"
+  },
+  {
+    "id": "muh06tlmydpiw",
+    "tipo": "receita",
+    "descricao": "Itu - Parcela Final — Saldo Restante",
+    "valor": 7000,
+    "vencimento": "2026-08-08",
+    "status": "pendente",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "Contrato",
+    "criadoEm": "2026-09-25",
+    "conciliado": false
   }
 ]
