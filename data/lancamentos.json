@@ -3040,5 +3040,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - ANA BEATRIZ GOMES DA SILVA - â€¢â€¢â€¢.781.354-â€¢â€¢ - BCO SANTANDER (BRASIL) S.A. (0033) AgÃªncia: 119 Conta: 1099476-5",
     "criadoEm": "2026-09-25"
+  },
+  {
+    "id": "muh0912k3rsir",
+    "tipo": "despesa",
+    "descricao": "Prejuizo",
+    "valor": 921,
+    "vencimento": "2026-09-06",
+    "pagamento": "2026-09-06",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "mao-de-obra",
+    "ofxId": "6a9d973b-98a3-49dc-a59a-66b210fc0ce1",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Grazyelle Hilda Oliveira Vilela de - â€¢â€¢â€¢.170.518-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 7468316824-1",
+    "criadoEm": "2026-09-25"
   }
 ]
