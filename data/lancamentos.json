@@ -3088,5 +3088,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
     "criadoEm": "2026-09-25"
+  },
+  {
+    "id": "muh09yj0knjo4",
+    "tipo": "despesa",
+    "descricao": "Prejuizo",
+    "valor": 55,
+    "vencimento": "2026-09-08",
+    "pagamento": "2026-09-08",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "mao-de-obra",
+    "ofxId": "6aa00236-d111-4957-98e0-84f46534fd73",
+    "conciliado": true,
+    "obs": "Pagamento de boleto efetuado - LWSA S A",
+    "criadoEm": "2026-09-25"
   }
 ]
