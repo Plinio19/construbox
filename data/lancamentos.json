@@ -3056,5 +3056,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Grazyelle Hilda Oliveira Vilela de - â€¢â€¢â€¢.170.518-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 7468316824-1",
     "criadoEm": "2026-09-25"
+  },
+  {
+    "id": "muh09fcc98r0k",
+    "tipo": "despesa",
+    "descricao": "Prejuizo",
+    "valor": 8000,
+    "vencimento": "2026-09-23",
+    "pagamento": "2026-09-23",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "mao-de-obra",
+    "ofxId": "6ab3f4db-d7bc-4fb0-8092-be44c42708c0",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-09-25"
   }
 ]
