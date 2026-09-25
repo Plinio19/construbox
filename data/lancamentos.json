@@ -2978,5 +2978,20 @@
     "pagamento": "2026-08-30",
     "ofxId": "6a94a1ed-8638-4fac-ac00-35308867a964",
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4"
+  },
+  {
+    "id": "muh083kp35fds",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 479,
+    "vencimento": "2026-08-03",
+    "status": "pendente",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "prestadorId": "ms8xkyqyrz6ug",
+    "prestadorNome": "Vitor Nonato",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-09-25",
+    "conciliado": false
   }
 ]
