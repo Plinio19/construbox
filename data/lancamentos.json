@@ -3108,5 +3108,20 @@
     "conciliado": true,
     "obs": "Pagamento de boleto efetuado - LWSA S A",
     "criadoEm": "2026-09-25"
+  },
+  {
+    "id": "mulghuabzq0j2",
+    "tipo": "receita",
+    "descricao": "Ibiraçu — 30 Dias  — Saldo Restante",
+    "valor": 10000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-09-28",
+    "conciliado": false
   }
 ]
