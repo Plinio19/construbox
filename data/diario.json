@@ -434,5 +434,17 @@
     "avancos": "A equipe deu continuidade ao plaqueamento externo dos módulos, seguindo a sequência de fechamento das laterais e fundos.\nDurante o dia, foi finalizado o 5º box, completando o plaqueamento das laterais e do fundo. Na sequência, a equipe iniciou os serviços de plaqueamento externo do 6º box.\nProdução do Dia\n- 05 boxes com laterais e fundos concluídos;\n- 6º box iniciado.",
     "problemas": "Sem novas ocorrências relevantes registradas durante o dia.\nSeguimos apenas acompanhando a questão das placas com defeitos identificadas anteriormente, que estão sendo separadas conforme o material é aberto, para evitar utilização de áreas comprometidas.",
     "proximoDia": "Dar continuidade ao plaqueamento externo do 6º box e, após sua conclusão, avançar sequencialmente para os próximos módulos."
+  },
+  {
+    "id": "muvfwoypofokj",
+    "criadoEm": "2026-10-05",
+    "data": "2026-10-03",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Devido às condições climáticas e ocorrência de chuva, não foi possível dar continuidade normal aos serviços externos previstos para o dia.",
+    "problemas": "A principal ocorrência do dia foi a chuva, que impactou diretamente a execução dos serviços e impossibilitou o avanço normal das atividades externas.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
