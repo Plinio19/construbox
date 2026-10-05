@@ -244,5 +244,55 @@
       }
     ],
     "criadoEm": "2026-08-27"
+  },
+  {
+    "id": "muvgdha4idblq",
+    "nome": "Itaobim",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "modeloId": "mruylr4frpjos",
+    "qtdBoxes": 5,
+    "status": "andamento",
+    "endereco": "Amândio Ventura - BR-116, km 117, Itaobim - MG, 39625-000",
+    "valorContrato": 55000,
+    "dataInicio": "2026-10-02",
+    "dataPrevisaoFim": "2026-12-02",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "muvgah1nginwe",
+        "descricao": "Entrada de 20%",
+        "valor": 11000,
+        "vencimento": "2026-10-05"
+      },
+      {
+        "id": "muvgawqruqpry",
+        "descricao": "20 Dias 20%",
+        "valor": 11000,
+        "vencimento": "2026-10-05"
+      },
+      {
+        "id": "muvgbt5eqvl7p",
+        "descricao": "45 dias 20%",
+        "valor": 11000,
+        "vencimento": "2026-10-05"
+      },
+      {
+        "id": "muvgcm4iq2mv4",
+        "descricao": "Final 40%",
+        "valor": 22000,
+        "vencimento": "2026-10-05"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "muvgd1opgc85g",
+        "descricao": "Mão de Obra Completa",
+        "valor": 32500,
+        "vencimento": "2026-10-05",
+        "categoria": "mao-de-obra"
+      }
+    ],
+    "criadoEm": "2026-10-05"
   }
 ]
