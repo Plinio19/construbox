@@ -446,5 +446,17 @@
     "avancos": "Devido às condições climáticas e ocorrência de chuva, não foi possível dar continuidade normal aos serviços externos previstos para o dia.",
     "problemas": "A principal ocorrência do dia foi a chuva, que impactou diretamente a execução dos serviços e impossibilitou o avanço normal das atividades externas.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "muvg1bwxtdtp7",
+    "criadoEm": "2026-10-05",
+    "data": "2026-10-04",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Devido às chuvas durante o período, não foi possível dar continuidade normal aos serviços externos previstos para o dia.",
+    "problemas": "Sem avanço produtivo relevante no plaqueamento externo.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
