@@ -3310,5 +3310,18 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-10-06",
     "conciliado": false
+  },
+  {
+    "id": "muwz5cf4rvt3z",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Completa — Saldo Restante",
+    "valor": 31834,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "criadoEm": "2026-10-06",
+    "conciliado": false
   }
 ]
