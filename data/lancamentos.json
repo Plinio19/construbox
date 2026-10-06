@@ -3453,5 +3453,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - 18.087.991/0001-57 - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 9402669649-0",
     "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muwzvc5c3qd50",
+    "tipo": "despesa",
+    "descricao": "Gastos Com Viagem",
+    "valor": 300,
+    "vencimento": "2026-09-30",
+    "pagamento": "2026-09-30",
+    "status": "pago",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "categoria": "outros",
+    "ofxId": "6abcda3c-51f4-4c3b-8f29-c7df52ae8a55",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2",
+    "criadoEm": "2026-10-06"
   }
 ]
