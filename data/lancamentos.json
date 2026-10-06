@@ -3201,5 +3201,73 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muvgah1nginwe",
+    "tipo": "receita",
+    "descricao": "Itaobim — Entrada de 20%",
+    "valor": 11000,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muvgawqruqpry",
+    "tipo": "receita",
+    "descricao": "Itaobim — 20 Dias 20%",
+    "valor": 11000,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muvgbt5eqvl7p",
+    "tipo": "receita",
+    "descricao": "Itaobim — 45 dias 20%",
+    "valor": 11000,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muvgcm4iq2mv4",
+    "tipo": "receita",
+    "descricao": "Itaobim — Final 40%",
+    "valor": 22000,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muvgd1opgc85g",
+    "tipo": "despesa",
+    "descricao": "Mão de Obra Completa",
+    "valor": 32500,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "criadoEm": "2026-10-06"
   }
 ]
