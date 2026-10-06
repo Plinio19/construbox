@@ -3278,15 +3278,18 @@
     "id": "muwz4q1qfdvc8",
     "tipo": "receita",
     "descricao": "Itaobim — Entrada De 20% — Saldo Restante",
-    "valor": 6000,
+    "valor": 5000,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-10-06",
-    "conciliado": false
+    "pagamento": "2026-10-06",
+    "ofxId": "6ac52b04-d50f-4ca8-a3cd-04b1b31185c8",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   }
 ]
