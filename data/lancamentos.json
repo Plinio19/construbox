@@ -3206,15 +3206,19 @@
     "id": "muvgah1nginwe",
     "tipo": "receita",
     "descricao": "Itaobim — Entrada de 20%",
-    "valor": 11000,
+    "valor": 5000,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-10-06"
+    "criadoEm": "2026-10-06",
+    "pagamento": "2026-10-02",
+    "ofxId": "6ac01ac8-f96e-4f3c-885d-7778199e3aee",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
   },
   {
     "id": "muvgawqruqpry",
