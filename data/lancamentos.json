@@ -3266,13 +3266,17 @@
     "id": "muvgd1opgc85g",
     "tipo": "despesa",
     "descricao": "Mão de Obra Completa",
-    "valor": 32500,
+    "valor": 666,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
-    "criadoEm": "2026-10-06"
+    "criadoEm": "2026-10-06",
+    "pagamento": "2026-10-06",
+    "ofxId": "6ac52bac-0fe4-4d3f-a040-0723ed876448",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2"
   },
   {
     "id": "muwz4q1qfdvc8",
