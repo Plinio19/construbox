@@ -3469,5 +3469,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2",
     "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muwzvnog2cvbp",
+    "tipo": "despesa",
+    "descricao": "Gastos Com Viagem ",
+    "valor": 300,
+    "vencimento": "2026-09-30",
+    "pagamento": "2026-09-30",
+    "status": "pago",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "categoria": "outros",
+    "ofxId": "6abd0191-94cd-4945-a103-e54879299bef",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-10-06"
   }
 ]
