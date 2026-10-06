@@ -2399,7 +2399,7 @@
     "pagamento": "2026-09-28",
     "ofxId": "6aba8cdb-bc82-465f-953f-2b03e70d5f5d",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) Agência: 1 Conta: 4719389-1"
   },
   {
     "id": "mtbsoesgkzmrj",
@@ -2645,7 +2645,7 @@
     "conciliado": true,
     "pagamento": "2026-09-28",
     "ofxId": "6aba90f1-dfc0-4883-b51c-34a11d0b895e",
-    "obs": "TransferÃªncia enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
+    "obs": "Transferência enviada pelo Pix - MARCOS DE ANDRADE XA - 42.515.525/0001-00 - BANCO INTER (0077) Agência: 1 Conta: 51370697-6"
   },
   {
     "id": "mtiw4bu8uceyz",
@@ -3155,7 +3155,7 @@
     "categoria": "distribuicao",
     "ofxId": "6aba92d3-1442-4742-97e1-c3d59238d638",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-09-28"
   },
   {
@@ -3171,7 +3171,21 @@
     "categoria": "distribuicao",
     "ofxId": "6aba930d-402b-4c7a-844e-cb617f959db8",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
+    "obs": "Transferência enviada pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) Agência: 50 Conta: 1444320-4",
     "criadoEm": "2026-09-28"
+  },
+  {
+    "id": "muwz399k7aqx7",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 1800,
+    "vencimento": "2026-09-29",
+    "pagamento": "2026-09-29",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6abc5911-5401-46c7-8b19-9cc0dda1ad81",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-10-06"
   }
 ]
