@@ -3437,5 +3437,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
     "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muwzv4aovkab4",
+    "tipo": "despesa",
+    "descricao": "Passagem De Onibus Da Equipe",
+    "valor": 1155.96,
+    "vencimento": "2026-09-29",
+    "pagamento": "2026-09-29",
+    "status": "pago",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "categoria": "outros",
+    "ofxId": "6abc5184-c54c-448c-b502-850a8387b2c9",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - 18.087.991/0001-57 - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 9402669649-0",
+    "criadoEm": "2026-10-06"
   }
 ]
