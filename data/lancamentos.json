@@ -3374,5 +3374,18 @@
     "ofxId": "6ac020dd-0b07-4331-9823-894ee1436108",
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2"
+  },
+  {
+    "id": "muwz61yihfvjx",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 26668,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "criadoEm": "2026-10-06",
+    "conciliado": false
   }
 ]
