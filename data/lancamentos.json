@@ -3501,5 +3501,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
     "criadoEm": "2026-10-08"
+  },
+  {
+    "id": "muzhqckn2fgmz",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Plinio De Paula Gomes Neto - Â€¢â€¢â€¢.809.648",
+    "valor": 200,
+    "vencimento": "2026-10-07",
+    "pagamento": "2026-10-07",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6ac62421-4315-47c3-9fc8-e5c677808610",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
+    "criadoEm": "2026-10-08"
   }
 ]
