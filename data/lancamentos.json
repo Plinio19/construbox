@@ -3185,7 +3185,7 @@
     "categoria": "reembolso",
     "ofxId": "6abc5911-5401-46c7-8b19-9cc0dda1ad81",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-10-06"
   },
   {
@@ -3199,13 +3199,13 @@
     "categoria": "reembolso",
     "ofxId": "6abc5398-71ee-4c84-90fe-1fc21c724975",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) Agência: 1 Conta: 4719389-1",
     "criadoEm": "2026-10-06"
   },
   {
     "id": "muvgah1nginwe",
     "tipo": "receita",
-    "descricao": "Itaobim — Entrada de 20%",
+    "descricao": "Itaobim \u0014 Entrada de 20%",
     "valor": 5000,
     "vencimento": "2026-10-05",
     "status": "pago",
@@ -3218,12 +3218,12 @@
     "pagamento": "2026-10-02",
     "ofxId": "6ac01ac8-f96e-4f3c-885d-7778199e3aee",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) Agência: 1 Conta: 4719389-1"
   },
   {
     "id": "muvgawqruqpry",
     "tipo": "receita",
-    "descricao": "Itaobim — 20 Dias 20%",
+    "descricao": "Itaobim \u0014 20 Dias 20%",
     "valor": 11000,
     "vencimento": "2026-10-05",
     "status": "pendente",
@@ -3237,7 +3237,7 @@
   {
     "id": "muvgbt5eqvl7p",
     "tipo": "receita",
-    "descricao": "Itaobim — 45 dias 20%",
+    "descricao": "Itaobim \u0014 45 dias 20%",
     "valor": 11000,
     "vencimento": "2026-10-05",
     "status": "pendente",
@@ -3251,7 +3251,7 @@
   {
     "id": "muvgcm4iq2mv4",
     "tipo": "receita",
-    "descricao": "Itaobim — Final 40%",
+    "descricao": "Itaobim \u0014 Final 40%",
     "valor": 22000,
     "vencimento": "2026-10-05",
     "status": "pendente",
@@ -3276,12 +3276,12 @@
     "pagamento": "2026-10-06",
     "ofxId": "6ac52bac-0fe4-4d3f-a040-0723ed876448",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2"
+    "obs": "Transferência enviada pelo Pix - MARCIO ANTUNES - ⬢⬢⬢.698.458-⬢⬢ - BCO DO BRASIL S.A. (0001) Agência: 7021 Conta: 60759-2"
   },
   {
     "id": "muwz4q1qfdvc8",
     "tipo": "receita",
-    "descricao": "Itaobim — Entrada De 20% — Saldo Restante",
+    "descricao": "Itaobim \u0014 Entrada De 20% \u0014 Saldo Restante",
     "valor": 5000,
     "vencimento": "2026-10-05",
     "status": "pago",
@@ -3294,12 +3294,12 @@
     "pagamento": "2026-10-06",
     "ofxId": "6ac52b04-d50f-4ca8-a3cd-04b1b31185c8",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "muwz5275l3rwx",
     "tipo": "receita",
-    "descricao": "Itaobim — Entrada De 20% — Saldo Restante — Saldo Restante",
+    "descricao": "Itaobim \u0014 Entrada De 20% \u0014 Saldo Restante \u0014 Saldo Restante",
     "valor": 1000,
     "vencimento": "2026-10-05",
     "status": "pendente",
@@ -3325,7 +3325,7 @@
     "pagamento": "2026-10-06",
     "ofxId": "6ac52bc9-83ac-487b-8c3a-0a0a74861172",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Kaio Natan Gomes Soares - â€¢â€¢â€¢.595.508-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 13712455-2"
+    "obs": "Transferência enviada pelo Pix - Kaio Natan Gomes Soares - ⬢⬢⬢.595.508-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 13712455-2"
   },
   {
     "id": "muwz5k0swkspv",
@@ -3341,7 +3341,7 @@
     "pagamento": "2026-10-02",
     "ofxId": "6ac0223d-a24a-4e05-a6c9-b313b646a611",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Kaio Natan Gomes Soares - â€¢â€¢â€¢.595.508-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 13712455-2"
+    "obs": "Transferência enviada pelo Pix - Kaio Natan Gomes Soares - ⬢⬢⬢.595.508-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 13712455-2"
   },
   {
     "id": "muwz5pwymye38",
@@ -3357,7 +3357,7 @@
     "pagamento": "2026-10-02",
     "ofxId": "6ac0219c-15e9-4c72-a1fe-64cafd38f9fa",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "muwz5vgyi2egz",
@@ -3373,7 +3373,7 @@
     "pagamento": "2026-10-02",
     "ofxId": "6ac020dd-0b07-4331-9823-894ee1436108",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2"
+    "obs": "Transferência enviada pelo Pix - MARCIO ANTUNES - ⬢⬢⬢.698.458-⬢⬢ - BCO DO BRASIL S.A. (0001) Agência: 7021 Conta: 60759-2"
   },
   {
     "id": "muwz61yihfvjx",
@@ -3389,7 +3389,7 @@
     "pagamento": "2026-10-06",
     "ofxId": "6ac532bb-5481-4b87-81b3-2e64fd2cc3bb",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4"
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4"
   },
   {
     "id": "muwz6gvcl63z7",
@@ -3405,7 +3405,7 @@
     "pagamento": "2026-10-06",
     "ofxId": "6ac53324-4636-480b-a4f3-4982097f0434",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "muwz77eqsby9g",
@@ -3435,7 +3435,7 @@
     "categoria": "adiantamento",
     "ofxId": "6abab2d7-907a-4f0f-846c-8d3c756f6f79",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) AgÃªncia: 1 Conta: 4719389-1",
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - ASAAS IP S.A. (0461) Agência: 1 Conta: 4719389-1",
     "criadoEm": "2026-10-06"
   },
   {
@@ -3451,7 +3451,7 @@
     "categoria": "outros",
     "ofxId": "6abc5184-c54c-448c-b502-850a8387b2c9",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - 18.087.991/0001-57 - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 9402669649-0",
+    "obs": "Transferência enviada pelo Pix - QUERO PASSAGEM VIAGENS E TURISMO LTDA - 18.087.991/0001-57 - MERCADO PAGO IP LTDA. (0323) Agência: 1 Conta: 9402669649-0",
     "criadoEm": "2026-10-06"
   },
   {
@@ -3467,7 +3467,7 @@
     "categoria": "outros",
     "ofxId": "6abcda3c-51f4-4c3b-8f29-c7df52ae8a55",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO DO BRASIL S.A. (0001) AgÃªncia: 7021 Conta: 60759-2",
+    "obs": "Transferência enviada pelo Pix - MARCIO ANTUNES - ⬢⬢⬢.698.458-⬢⬢ - BCO DO BRASIL S.A. (0001) Agência: 7021 Conta: 60759-2",
     "criadoEm": "2026-10-06"
   },
   {
@@ -3483,7 +3483,23 @@
     "categoria": "outros",
     "ofxId": "6abd0191-94cd-4945-a103-e54879299bef",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-10-06"
+  },
+  {
+    "id": "muzhq78f6ceii",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Pdn Holding Patrimonial Ltda - 63.344.687/0001",
+    "valor": 1500,
+    "vencimento": "2026-10-06",
+    "pagamento": "2026-10-06",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6ac539f3-ba12-469e-ad81-1077087edd8d",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PDN HOLDING PATRIMONIAL LTDA - 63.344.687/0001-00 - BANCO BTG PACTUAL S.A. (0208) AgÃªncia: 50 Conta: 1444320-4",
+    "criadoEm": "2026-10-08"
   }
 ]
