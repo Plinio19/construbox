@@ -3538,5 +3538,20 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-10-08",
     "conciliado": false
+  },
+  {
+    "id": "muzhr1dvtb4ox",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 44000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "criadoEm": "2026-10-08",
+    "conciliado": false
   }
 ]
