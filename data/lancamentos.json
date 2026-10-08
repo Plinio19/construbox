@@ -3520,5 +3520,20 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
     "criadoEm": "2026-10-08"
+  },
+  {
+    "id": "muzhqtek8m4ka",
+    "tipo": "receita",
+    "descricao": "Ibiraçu — 30 Dias  — Saldo Restante — Saldo Restante",
+    "valor": 6000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-10-08",
+    "conciliado": false
   }
 ]
