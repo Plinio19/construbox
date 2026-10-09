@@ -254,9 +254,9 @@
     "descricao": "",
     "observacoes": "",
     "memorial": "Memorial Técnico – Etapa 01: Panelização da Estrutura em Steel Frame\n\nEsta etapa compreende a fabricação, montagem, posicionamento, esquadrejamento e contraventamento dos chassis/painéis que compõem a estrutura em Steel Frame de cada box.\n\nA execução deverá seguir rigorosamente o projeto executivo, respeitando todas as dimensões, modulações, vãos, posições de montantes, reforços, testeiras e pontos destinados às passagens das instalações.\n\nComposição de cada Box\n\nCada box deverá possuir:\n\n02 (duas) paredes laterais;\n01 (uma) parede de fundo;\n01 (uma) parede frontal;\n01 (uma) parede interna do banheiro;\nTesteiras, reforços e demais elementos previstos no projeto.\nExecução da Panelização\n\nA fabricação dos chassis deverá ser realizada conforme as medidas estabelecidas no projeto.\n\nDurante esta etapa deverão ser executados:\n\nCorte dos perfis metálicos;\nMontagem das guias e montantes;\nFabricação dos chassis das paredes;\nExecução dos vãos previstos no projeto;\nExecução dos reforços estruturais;\nMontagem das testeiras;\nPosicionamento dos chassis conforme sua localização definitiva no box;\nConferência das medidas;\nEsquadrejamento individual dos chassis;\nInstalação dos contraventamentos;\nNova conferência dimensional após o contraventamento.\n\nO processo poderá ocorrer de forma progressiva, com chassis já concluídos sendo posicionados enquanto os demais continuam em fabricação.\n\nCompatibilização com as Instalações\n\nDurante o posicionamento dos chassis deverão ser observados todos os pontos previstos para passagem das instalações hidráulicas e demais interferências existentes no projeto.\n\nOs pontos de água, esgoto, drenos e demais tubulações deverão ser posicionados de maneira compatível com a estrutura e com as medidas estabelecidas no projeto, evitando interferências posteriores com montantes, guias, reforços e contraventamentos.\n\nA localização desses pontos deverá ser conferida antes da execução do piso.\n\nEsquadrejamento e Contraventamento\n\nCada parede deverá ser colocada no esquadro antes da execução de seu contraventamento.\n\nO contraventamento deverá ser executado em todas as paredes previstas no projeto, garantindo a rigidez e a manutenção da geometria dos chassis.\n\nA conclusão de um determinado chassi não caracteriza a conclusão da etapa. A panelização permanecerá em execução enquanto houver paredes, testeiras, reforços ou contraventamentos pendentes.\n\nPreparação para o Piso\n\nCom os chassis posicionados e os pontos das instalações devidamente conferidos, deverá ser preparada a execução do piso com placa de piso Eternit, conforme especificação do projeto.\n\nAntes ou durante a instalação das placas deverão ser executadas as furações necessárias para passagem das tubulações que atravessam o piso, respeitando rigorosamente a posição dos pontos hidráulicos e sanitários previstos no projeto.\n\nAs furações deverão ser conferidas antes da fixação definitiva das placas, evitando cortes ou alterações posteriores fora das posições previstas.\n\nCritério de Conclusão da Etapa\n\nA Etapa 01 – Panelização somente poderá ser considerada concluída quando:\n\nTodos os chassis previstos estiverem fabricados;\nAs 02 paredes laterais estiverem concluídas;\nA parede de fundo estiver concluída;\nA parede frontal estiver concluída;\nA parede do banheiro estiver concluída;\nAs testeiras e reforços estiverem executados;\nTodos os chassis estiverem nas medidas estabelecidas pelo projeto;\nTodas as paredes estiverem devidamente esquadrejadas;\nTodos os contraventamentos estiverem instalados e conferidos.\n\nImportante: o simples posicionamento ou conclusão de parte dos chassis não caracteriza o encerramento da panelização. A etapa somente será liberada após a conclusão e conferência do conjunto estrutural previsto no projeto.",
-    "status": "em_andamento",
+    "status": "concluida",
     "peso": 0,
-    "percentualExecutado": 0,
+    "percentualExecutado": 100,
     "checklist": [],
     "materiais": [
       {
@@ -296,7 +296,8 @@
       }
     ],
     "criadoEm": "2026-10-05",
-    "dataRealInicio": "2026-10-05"
+    "dataRealInicio": "2026-10-05",
+    "dataRealFim": "2026-10-09"
   },
   {
     "id": "muvgdp8pmnfcn",
