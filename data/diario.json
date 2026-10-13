@@ -614,5 +614,17 @@
     "avancos": "Finalização e conferência das instalações hidráulicas na estrutura do piso, verificando os pontos de alimentação, esgoto e passagens previstas no projeto. Preparação dos painéis para a verticalização.\n\nProdução: Serviços hidráulicos dessa fase concluídos e estrutura preparada para montagem.",
     "problemas": "Sem ocorrências relevantes informadas.",
     "proximoDia": "Execução da Etapa 03"
+  },
+  {
+    "id": "mv6zde7y61dbt",
+    "criadoEm": "2026-10-13",
+    "data": "2026-10-11",
+    "clima": "ensolarado",
+    "obraId": "muvgdha4idblq",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "Execução da Etapa 03 – Verticalização, com levantamento e posicionamento das paredes estruturais sobre os chassis, conferência de esquadro, prumo e alinhamento dos módulos.\nProdução: Montagem estrutural dos módulos em andamento.",
+    "problemas": "Sem ocorrências relevantes informadas.",
+    "proximoDia": "Continuidade e conclusão da verticalização"
   }
 ]
