@@ -590,5 +590,17 @@
     "avancos": "Início do plaqueamento dos pisos dos módulos, com posicionamento, cortes e fixação das placas sobre os chassis, respeitando as passagens hidráulicas previstas.\nProdução: Plaqueamento dos pisos iniciado.",
     "problemas": "Sem ocorrências relevantes informadas.",
     "proximoDia": "Continuidade e finalização do plaqueamento dos pisos"
+  },
+  {
+    "id": "mv6zc8wfvatt9",
+    "criadoEm": "2026-10-13",
+    "data": "2026-10-09",
+    "clima": "ensolarado",
+    "obraId": "muvgdha4idblq",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "Continuidade e finalização do plaqueamento dos pisos, com conferência das fixações, alinhamento das placas e ajustes necessários nas passagens hidráulicas.\nProdução: Etapa de placas de piso concluída.",
+    "problemas": "Sem ocorrências relevantes informadas.",
+    "proximoDia": "Finalização e conferência das instalações hidráulicas"
   }
 ]
