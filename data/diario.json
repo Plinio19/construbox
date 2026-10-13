@@ -566,5 +566,17 @@
     "avancos": "A equipe concluiu a Etapa 01 – Fabricação dos Painéis (Painelização), finalizando a montagem de todas as paredes estruturais necessárias para os 05 módulos.\n\nCom a conclusão dessa etapa, os trabalhos avançaram para a Etapa 02 – Piso, com a preparação das estruturas para receber as placas de fechamento.\n\nDurante o dia, foram realizadas as seguintes atividades:\n\nFinalização de todas as paredes estruturais dos módulos;\n\nPosicionamento da manta sob os chassis, preparando a estrutura para a próxima etapa;\n\nExecução dos encanamentos e passagens hidráulicas necessários para o piso;\n\nPreparação dos chassis para o início do plaqueamento do piso.\n\nProdução do Dia\n\nEtapa 01 – Painelização: 100% concluída;\n\nTodas as paredes dos 05 módulos finalizadas;\n\nManta instalada sob os chassis;\n\nEncanamentos executados;\n\nEtapa 02 – Piso: iniciada.",
     "problemas": "Sem ocorrências relevantes relatadas durante o dia.",
     "proximoDia": "07/10 – Quarta-feira: Iniciar o plaqueamento dos pisos dos módulos, realizando a instalação e fixação das placas sobre os chassis.\n\n09/10 – Sexta-feira: Previsão de início da Etapa 03 – Verticalização, com o levantamento e posicionamento das paredes sobre as estruturas de piso.\n\n11/10 – Domingo: Previsão de concluir a montagem e verticalização das estruturas dos módulos, deixando os boxes estruturalmente montados.\n\nSemana seguinte: Previsão de iniciar o plaqueamento externo, conforme a conclusão e liberação das estruturas.\n\nStatus das Etapas\n\nEtapa 01 – Fabricação dos Painéis (Painelização): CONCLUÍDA – 100%.\n\nEtapa 02 – Piso: EM ANDAMENTO."
+  },
+  {
+    "id": "mv6zax6bobsr2",
+    "criadoEm": "2026-10-13",
+    "data": "2026-10-07",
+    "clima": "ensolarado",
+    "obraId": "muvgdha4idblq",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "Continuidade da Etapa 02 – Piso, com instalação e ajustes da membrana de proteção sob as estruturas, conferência dos chassis e preparação das superfícies para recebimento das placas de piso.\nProdução: Membrana finalizada e estruturas preparadas para o plaqueamento.",
+    "problemas": "Sem ocorrências relevantes informadas.",
+    "proximoDia": "Início do plaqueamento dos pisos dos módulos"
   }
 ]
