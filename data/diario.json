@@ -578,5 +578,17 @@
     "avancos": "Continuidade da Etapa 02 – Piso, com instalação e ajustes da membrana de proteção sob as estruturas, conferência dos chassis e preparação das superfícies para recebimento das placas de piso.\nProdução: Membrana finalizada e estruturas preparadas para o plaqueamento.",
     "problemas": "Sem ocorrências relevantes informadas.",
     "proximoDia": "Início do plaqueamento dos pisos dos módulos"
+  },
+  {
+    "id": "mv6zbip5o4ii3",
+    "criadoEm": "2026-10-13",
+    "data": "2026-10-13",
+    "clima": "ensolarado",
+    "obraId": "muvgdha4idblq",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "Início do plaqueamento dos pisos dos módulos, com posicionamento, cortes e fixação das placas sobre os chassis, respeitando as passagens hidráulicas previstas.\nProdução: Plaqueamento dos pisos iniciado.",
+    "problemas": "Sem ocorrências relevantes informadas.",
+    "proximoDia": "Continuidade e finalização do plaqueamento dos pisos"
   }
 ]
