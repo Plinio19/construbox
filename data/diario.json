@@ -722,5 +722,17 @@
     "avancos": "A equipe avançou na finalização dos serviços de fechamento e acabamento externo, deixando a parte frontal preparada para receber os batentes.\n\nTambém foi realizada a instalação dos rufos, enquanto os serviços relacionados às calhas permaneceram em produção.\n\nProdução do Dia\n\nParte frontal preparada para instalação dos batentes;\n\nRufos instalados;\n\nCalhas em produção.",
     "problemas": "Sem novas ocorrências relevantes relatadas durante o dia.",
     "proximoDia": "Dar sequência à instalação das calhas e iniciar a colocação dos batentes nas frentes já liberadas, avançando na finalização dos acabamentos externos.\n\n"
+  },
+  {
+    "id": "mvcapzoxcrd65",
+    "criadoEm": "2026-10-17",
+    "data": "2026-10-16",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "O dia foi registrado como improdutivo, sem avanço relevante nas atividades previstas para a obra.\n\nProdução do Dia\n\nSem produção registrada.\n\nNão houve avanço nas frentes de instalação das calhas, batentes ou demais acabamentos.",
+    "problemas": "Retomar os serviços pendentes, priorizando a continuidade da instalação das calhas e o início da colocação dos batentes, conforme a liberação das frentes de trabalho.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
