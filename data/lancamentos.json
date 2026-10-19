@@ -3591,13 +3591,16 @@
     "id": "mvf7t7yqkakfz",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 24718,
+    "valor": 350,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "criadoEm": "2026-10-19",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-10-17",
+    "ofxId": "6ad3e543-11cc-46c4-9125-d6d559a7c9f3",
+    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO SANTANDER (BRASIL) S.A. (0033) AgÃªncia: 2960 Conta: 2087014-7"
   }
 ]
