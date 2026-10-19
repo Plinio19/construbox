@@ -3549,5 +3549,21 @@
     "prestadorNome": "MARCOS XAVIER",
     "criadoEm": "2026-10-08",
     "conciliado": false
+  },
+  {
+    "id": "mvf7sgam1evfi",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 1700,
+    "vencimento": "2026-10-08",
+    "pagamento": "2026-10-08",
+    "status": "pago",
+    "socioId": "ms4wjecaxu682",
+    "socioNome": "Plinio de Paula Gomes Filho",
+    "categoria": "distribuicao",
+    "ofxId": "6ac7b3a8-e1e8-46ef-97f3-e425731de919",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-10-19"
   }
 ]
