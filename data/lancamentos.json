@@ -3623,13 +3623,16 @@
     "id": "mvf7tkz4xmlys",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 24018,
+    "valor": 2000,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "criadoEm": "2026-10-19",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-10-14",
+    "ofxId": "6acfd13d-7f93-425e-9495-9c999700cd21",
+    "obs": "Maquina que De Paula Pagou  · TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4"
   }
 ]
