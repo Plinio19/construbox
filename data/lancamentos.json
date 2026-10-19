@@ -3639,13 +3639,16 @@
     "id": "mvf7ub2trsvau",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 22018,
+    "valor": 1500,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "criadoEm": "2026-10-19",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-10-14",
+    "ofxId": "6acfd0d3-7014-4cbd-9d61-843c58f9344c",
+    "obs": "Reembolso que De Paula Pagou a Equipe · TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4"
   }
 ]
