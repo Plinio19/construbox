@@ -3670,5 +3670,20 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-10-19",
     "conciliado": false
+  },
+  {
+    "id": "mvf7wxqj9pmba",
+    "tipo": "receita",
+    "descricao": "Ibiraçu — 30 Dias  — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 1000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-10-19",
+    "conciliado": false
   }
 ]
