@@ -3733,5 +3733,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - JULIA SILVA VILA NOVA - â€¢â€¢â€¢.122.638-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21748259-7",
     "criadoEm": "2026-10-26"
+  },
+  {
+    "id": "mvpaph6fcrw9g",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Plinio De Paula Gomes Neto - Â€¢â€¢â€¢.809.648",
+    "valor": 500,
+    "vencimento": "2026-10-19",
+    "pagamento": "2026-10-19",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6ad6327e-b1f0-4b13-8ab2-11ccc62ada6a",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
+    "criadoEm": "2026-10-26"
   }
 ]
