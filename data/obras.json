@@ -294,5 +294,75 @@
       }
     ],
     "criadoEm": "2026-10-05"
+  },
+  {
+    "id": "mvqoexry612dj",
+    "nome": "Querencia",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "modeloId": "mruylr4frpjos",
+    "qtdBoxes": 10,
+    "status": "andamento",
+    "valorContrato": 110000,
+    "dataInicio": "2026-10-27",
+    "dataPrevisaoFim": "2027-02-27",
+    "funcionarios": [],
+    "parcelas": [
+      {
+        "id": "mvqoaqfjc1iy6",
+        "descricao": "ENTRADA 30%",
+        "valor": 33000,
+        "vencimento": "2026-10-27"
+      },
+      {
+        "id": "mvqob30f1e0dh",
+        "descricao": "30 DIAS 20%",
+        "valor": 22000,
+        "vencimento": "2026-10-27"
+      },
+      {
+        "id": "mvqobcav58sx7",
+        "descricao": "60 DIAS 20% ",
+        "valor": 22000,
+        "vencimento": "2026-10-27"
+      },
+      {
+        "id": "mvqodd65whyf7",
+        "descricao": "ENTREGA DA OBRA",
+        "valor": 33000,
+        "vencimento": "2026-10-27"
+      }
+    ],
+    "despesas": [
+      {
+        "id": "mvqodpdhb8107",
+        "descricao": "ENTRADA 20%",
+        "valor": 13000,
+        "vencimento": "2026-10-27",
+        "categoria": "mao-de-obra"
+      },
+      {
+        "id": "mvqody71c43kx",
+        "descricao": "30 DIAS 20%",
+        "valor": 13000,
+        "vencimento": "2026-10-27",
+        "categoria": "mao-de-obra"
+      },
+      {
+        "id": "mvqoea4d8s9pe",
+        "descricao": "60 DIASS 20%",
+        "valor": 13000,
+        "vencimento": "2026-10-27",
+        "categoria": "mao-de-obra"
+      },
+      {
+        "id": "mvqoekvg480ws",
+        "descricao": "ENTREGA DA OBRA ",
+        "valor": 26000,
+        "vencimento": "2026-10-27",
+        "categoria": "mao-de-obra"
+      }
+    ],
+    "criadoEm": "2026-10-27"
   }
 ]
