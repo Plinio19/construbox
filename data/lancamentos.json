@@ -3308,14 +3308,17 @@
     "descricao": "Itaobim \u0014 Entrada De 20% \u0014 Saldo Restante \u0014 Saldo Restante",
     "valor": 1000,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-10-06",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-10-19",
+    "ofxId": "6ad67dbf-90c5-4cf1-8e38-70fd0f4ffc4e",
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "muwz5cf4rvt3z",
@@ -3672,7 +3675,7 @@
     "conciliado": true,
     "pagamento": "2026-10-21",
     "ofxId": "6ad88fd5-0e58-4af5-acd0-760ab9d610a6",
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "mvf7wxqj9pmba",
@@ -3734,7 +3737,7 @@
     "categoria": "distribuicao",
     "ofxId": "6ad63264-c8de-4772-ad46-96d22c5190a4",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - JULIA SILVA VILA NOVA - â€¢â€¢â€¢.122.638-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 21748259-7",
+    "obs": "Transferência enviada pelo Pix - JULIA SILVA VILA NOVA - ⬢⬢⬢.122.638-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 21748259-7",
     "criadoEm": "2026-10-26"
   },
   {
@@ -3750,7 +3753,7 @@
     "categoria": "distribuicao",
     "ofxId": "6ad6327e-b1f0-4b13-8ab2-11ccc62ada6a",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
+    "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES NETO - ⬢⬢⬢.809.648-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 16864449-5",
     "criadoEm": "2026-10-26"
   },
   {
@@ -3766,7 +3769,7 @@
     "categoria": "distribuicao",
     "ofxId": "6ad68922-7f3a-488f-90de-4003864961aa",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-10-26"
   },
   {
@@ -3783,7 +3786,7 @@
     "conciliado": true,
     "pagamento": "2026-10-23",
     "ofxId": "6adb9a70-5e36-4839-9bab-30980ce9e1cd",
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "mvpaqaio48h4o",
