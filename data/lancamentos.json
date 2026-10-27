@@ -3819,5 +3819,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-10-27"
+  },
+  {
+    "id": "mvqofy9f8ogd4",
+    "tipo": "despesa",
+    "descricao": "Transporte",
+    "valor": 2000,
+    "vencimento": "2026-10-24",
+    "pagamento": "2026-10-24",
+    "status": "pago",
+    "obraId": "mvqoexry612dj",
+    "obraNome": "Querencia",
+    "categoria": "outros",
+    "ofxId": "6adccd98-6735-418a-a036-6753f1809a4b",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-10-27"
   }
 ]
