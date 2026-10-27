@@ -3803,5 +3803,21 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-10-26",
     "conciliado": false
+  },
+  {
+    "id": "mvqofnbrwhylk",
+    "tipo": "despesa",
+    "descricao": "Transporte",
+    "valor": 1000,
+    "vencimento": "2026-10-19",
+    "pagamento": "2026-10-19",
+    "status": "pago",
+    "obraId": "mvqoexry612dj",
+    "obraNome": "Querencia",
+    "categoria": "outros",
+    "ofxId": "6ad67dbf-90c5-4cf1-8e38-70fd0f4ffc4e",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-10-27"
   }
 ]
