@@ -914,5 +914,17 @@
     "avancos": "A equipe concluiu a instalação dos batentes e a colocação da lã de rocha, avançando nas etapas de fechamento e isolamento termoacústico dos módulos.\n\nCom essas atividades finalizadas, os trabalhos passaram a se concentrar na preparação dos acabamentos frontais e no início da pintura externa.\n\nProdução do Dia\n\nInstalação dos batentes concluída;\n\nInstalação da lã de rocha concluída;\n\nPreparação para finalização das frentes dos módulos.",
     "problemas": "Sem novas ocorrências relevantes relatadas durante o dia.",
     "proximoDia": "Finalizar os acabamentos frontais e iniciar os serviços de pintura externa."
+  },
+  {
+    "id": "mvsmxahjek1wy",
+    "criadoEm": "2026-10-28",
+    "data": "2026-10-22",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Atividades Realizadas\n\nDevido às chuvas, não foi possível dar continuidade aos serviços programados.\n\nProdução do Dia\n\nDia improdutivo;\n\nSem avanço físico registrado.",
+    "problemas": "Chuvas durante o período, comprometendo as condições de execução e impossibilitando o avanço dos trabalhos.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
