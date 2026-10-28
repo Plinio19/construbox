@@ -950,5 +950,17 @@
     "avancos": "A equipe permaneceu impossibilitada de executar as atividades programadas devido às chuvas.\n\nProdução do Dia\n\nDia improdutivo;\n\nSem avanço físico registrado.",
     "problemas": "Terceiro dia consecutivo de paralisação por condições climáticas, impactando a continuidade das atividades planejadas.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mvsmz4seel53b",
+    "criadoEm": "2026-10-28",
+    "data": "2026-10-25",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "Com a retomada dos trabalhos, a equipe avançou na finalização dos fechamentos e acabamentos frontais dos módulos.\n\nParalelamente, foi iniciada uma nova frente de execução: o plaqueamento interno das paredes, dando sequência ao fechamento das estruturas após a instalação do isolamento termoacústico.\n\nProdução do Dia\n\nAcabamentos frontais em fase de finalização;\n\nPlaqueamento interno iniciado;\n\nRetomada da produção após três dias de paralisação.",
+    "problemas": "Sem novas ocorrências relevantes relatadas durante o dia.",
+    "proximoDia": "Concluir os acabamentos frontais e avançar no plaqueamento interno dos módulos."
   }
 ]
