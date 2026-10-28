@@ -926,5 +926,17 @@
     "avancos": "Atividades Realizadas\n\nDevido às chuvas, não foi possível dar continuidade aos serviços programados.\n\nProdução do Dia\n\nDia improdutivo;\n\nSem avanço físico registrado.",
     "problemas": "Chuvas durante o período, comprometendo as condições de execução e impossibilitando o avanço dos trabalhos.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mvsmxv11bv33d",
+    "criadoEm": "2026-10-28",
+    "data": "2026-10-23",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "As condições climáticas permaneceram desfavoráveis, impedindo a continuidade dos serviços previstos.\n\nProdução do Dia\n\nDia improdutivo;\n\nSem avanço físico registrado.",
+    "problemas": "Persistência das chuvas, resultando no segundo dia consecutivo sem produção.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
