@@ -4032,5 +4032,18 @@
     "prestadorNome": "MARCOS XAVIER",
     "criadoEm": "2026-11-06",
     "conciliado": false
+  },
+  {
+    "id": "mw4xyvxsldey8",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 18238,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "criadoEm": "2026-11-06",
+    "conciliado": false
   }
 ]
