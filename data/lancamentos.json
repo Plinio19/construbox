@@ -3998,5 +3998,18 @@
     "obraId": "mvqoexry612dj",
     "obraNome": "Querencia",
     "criadoEm": "2026-11-06"
+  },
+  {
+    "id": "mw4xxoe4qqudr",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 19238,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "criadoEm": "2026-11-06",
+    "conciliado": false
   }
 ]
