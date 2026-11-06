@@ -4109,5 +4109,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
     "criadoEm": "2026-11-06"
+  },
+  {
+    "id": "mw4y02to9pp2k",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Plinio De Paula Gomes Neto - Â€¢â€¢â€¢.809.648",
+    "valor": 4000.1,
+    "vencimento": "2026-10-27",
+    "pagamento": "2026-10-27",
+    "status": "pago",
+    "socioId": "ms4wjn7dafd5m",
+    "socioNome": "Plinio de Paula Gomes Neto",
+    "categoria": "distribuicao",
+    "ofxId": "6ae09e88-35d6-4160-aaa0-ff82ff5f3b30",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
+    "criadoEm": "2026-11-06"
   }
 ]
