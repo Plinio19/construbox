@@ -4014,5 +4014,20 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-06",
     "conciliado": false
+  },
+  {
+    "id": "mw4xyio84t5x7",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 35000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "prestadorId": "ms64m37bjfze4",
+    "prestadorNome": "MARCOS XAVIER",
+    "criadoEm": "2026-11-06",
+    "conciliado": false
   }
 ]
