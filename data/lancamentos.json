@@ -4229,5 +4229,18 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - AUTO POSTO MADAGASCAR LTDA - 21.473.920/0001-05 - CIELO IP S.A. (0362) AgÃªncia: 1 Conta: 5723460001-2",
     "criadoEm": "2026-11-06"
+  },
+  {
+    "id": "mw4y3h8dr2bwx",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 18088,
+    "vencimento": "2026-10-05",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "muvgdha4idblq",
+    "obraNome": "Itaobim",
+    "criadoEm": "2026-11-06",
+    "conciliado": false
   }
 ]
