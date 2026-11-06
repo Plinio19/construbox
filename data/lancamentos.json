@@ -4045,5 +4045,21 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-06",
     "conciliado": false
+  },
+  {
+    "id": "mw4xz8qddaxh2",
+    "tipo": "despesa",
+    "descricao": "Abastecimento Itu",
+    "valor": 70,
+    "vencimento": "2026-11-03",
+    "pagamento": "2026-11-03",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6ae9f18e-da77-41fa-a9b1-bcfed254c13e",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - AUTO POSTO MIGUEL PEDROSO - 09.635.844/0001-83 - CC CREDICITRUS AgÃªncia: 3188 Conta: 186273-1",
+    "criadoEm": "2026-11-06"
   }
 ]
