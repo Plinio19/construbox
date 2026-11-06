@@ -3865,7 +3865,7 @@
     "categoria": "distribuicao",
     "ofxId": "6ae09e17-f6ab-4333-b6c7-4e45be0f9b0b",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
+    "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES NETO - ⬢⬢⬢.809.648-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 16864449-5",
     "criadoEm": "2026-11-06"
   },
   {
@@ -3881,27 +3881,31 @@
     "categoria": "distribuicao",
     "ofxId": "6ae09e5b-6315-44a1-a7ae-ec0fa33a274d",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-11-06"
   },
   {
     "id": "mvqoaqfjc1iy6",
     "tipo": "receita",
-    "descricao": "Querencia — ENTRADA 30%",
+    "descricao": "Querencia \u0014 ENTRADA 30%",
     "valor": 33000,
     "vencimento": "2026-10-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mvqoexry612dj",
     "obraNome": "Querencia",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-11-06"
+    "criadoEm": "2026-11-06",
+    "pagamento": "2026-10-27",
+    "ofxId": "6ae099c1-0b6a-4157-987f-3a9fd771f06d",
+    "conciliado": true,
+    "obs": "Querencia \u0014 ENTRADA 30% · TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "mvqob30f1e0dh",
     "tipo": "receita",
-    "descricao": "Querencia — 30 DIAS 20%",
+    "descricao": "Querencia \u0014 30 DIAS 20%",
     "valor": 22000,
     "vencimento": "2026-10-27",
     "status": "pendente",
@@ -3915,7 +3919,7 @@
   {
     "id": "mvqobcav58sx7",
     "tipo": "receita",
-    "descricao": "Querencia — 60 DIAS 20% ",
+    "descricao": "Querencia \u0014 60 DIAS 20% ",
     "valor": 22000,
     "vencimento": "2026-10-27",
     "status": "pendente",
@@ -3929,7 +3933,7 @@
   {
     "id": "mvqodd65whyf7",
     "tipo": "receita",
-    "descricao": "Querencia — ENTREGA DA OBRA",
+    "descricao": "Querencia \u0014 ENTREGA DA OBRA",
     "valor": 33000,
     "vencimento": "2026-10-27",
     "status": "pendente",
