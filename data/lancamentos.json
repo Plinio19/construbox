@@ -4210,5 +4210,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
     "criadoEm": "2026-11-06"
+  },
+  {
+    "id": "mw4y2qwy1qxz3",
+    "tipo": "despesa",
+    "descricao": "Abastecimento Itu ",
+    "valor": 61.86,
+    "vencimento": "2026-10-31",
+    "pagamento": "2026-10-31",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6ae5d086-1b87-4284-94f2-c699201a8269",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - AUTO POSTO MADAGASCAR LTDA - 21.473.920/0001-05 - CIELO IP S.A. (0362) AgÃªncia: 1 Conta: 5723460001-2",
+    "criadoEm": "2026-11-06"
   }
 ]
