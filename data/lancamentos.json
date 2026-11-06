@@ -2405,15 +2405,19 @@
     "id": "mtbsoesgkzmrj",
     "tipo": "receita",
     "descricao": "IBIRAÇU — 60 DIAS",
-    "valor": 20000,
+    "valor": 10000,
     "vencimento": "2026-08-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mtbsqkui92pnr",
     "obraNome": "IBIRAÇU",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-08-27"
+    "criadoEm": "2026-08-27",
+    "pagamento": "2026-10-29",
+    "ofxId": "6ae37f06-0a3a-4b8c-a841-c0effcbbd350",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "mtbsok7498pmd",
