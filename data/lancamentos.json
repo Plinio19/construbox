@@ -4179,5 +4179,20 @@
     "prestadorNome": "MARCOS XAVIER",
     "criadoEm": "2026-11-06",
     "conciliado": false
+  },
+  {
+    "id": "mw4y1p60uay6w",
+    "tipo": "receita",
+    "descricao": "Ibiraçu — 60 Dias — Saldo Restante",
+    "valor": 10000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-11-06",
+    "conciliado": false
   }
 ]
