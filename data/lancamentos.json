@@ -4061,5 +4061,21 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - AUTO POSTO MIGUEL PEDROSO - 09.635.844/0001-83 - CC CREDICITRUS AgÃªncia: 3188 Conta: 186273-1",
     "criadoEm": "2026-11-06"
+  },
+  {
+    "id": "mw4xzhriioof1",
+    "tipo": "despesa",
+    "descricao": "Abastecimento Itu",
+    "valor": 94.57,
+    "vencimento": "2026-10-31",
+    "pagamento": "2026-10-31",
+    "status": "pago",
+    "obraId": "msdeofmyzr99o",
+    "obraNome": "Itu",
+    "categoria": "outros",
+    "ofxId": "6ae5cc3f-9d39-4dae-a7de-0addc56c1717",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - AUTO POSTO JARDIM EUROPA VGP LTDA - 30.313.919/0001-04 - CC CREDICITRUS AgÃªncia: 3188 Conta: 186286-3",
+    "criadoEm": "2026-11-06"
   }
 ]
