@@ -4287,5 +4287,20 @@
     "conciliado": true,
     "obs": "Transferência enviada pelo Pix - Robson Luiz Vieira - ⬢⬢⬢.088.977-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 548082596-9",
     "criadoEm": "2026-11-09"
+  },
+  {
+    "id": "mwawooggf0b5c",
+    "tipo": "receita",
+    "descricao": "Ibiraçu — 60 Dias — Saldo Restante — Saldo Restante",
+    "valor": 5000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "categoria": "parcela",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "clienteId": "mrz62fjbnfipo",
+    "clienteNome": "HOTEL IN BOX LTDA",
+    "criadoEm": "2026-11-10",
+    "conciliado": false
   }
 ]
