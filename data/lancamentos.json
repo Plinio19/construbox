@@ -4172,16 +4172,19 @@
     "id": "mw4y0rgue7or9",
     "tipo": "despesa",
     "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 34500,
+    "valor": 5000,
     "vencimento": "2026-08-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "mtbsqkui92pnr",
     "obraNome": "IBIRAÇU",
     "prestadorId": "ms64m37bjfze4",
     "prestadorNome": "MARCOS XAVIER",
     "criadoEm": "2026-11-06",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-05",
+    "ofxId": "6aec6ac3-f1ff-449f-a159-32e5ecb147e3",
+    "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xa - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
   },
   {
     "id": "mw4y1p60uay6w",
