@@ -807,7 +807,7 @@
     "pagamento": "2026-11-10",
     "ofxId": "6af33d6f-ba7b-4e7e-8ef4-c51f6e3b6039",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "ms657szoy0guj",
@@ -4170,7 +4170,7 @@
     "conciliado": true,
     "pagamento": "2026-11-05",
     "ofxId": "6aec6ac3-f1ff-449f-a159-32e5ecb147e3",
-    "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xa - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
+    "obs": "Transferência enviada pelo Pix - Marcos de Andrade Xa - 42.515.525/0001-00 - BANCO INTER (0077) Agência: 1 Conta: 51370697-6"
   },
   {
     "id": "mw4y1p60uay6w",
@@ -4188,7 +4188,7 @@
     "conciliado": true,
     "pagamento": "2026-11-05",
     "ofxId": "6aec6a2f-150c-49a2-87bc-298d9f0d51a7",
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "mw4y2eobzmn43",
@@ -4236,7 +4236,7 @@
     "conciliado": true,
     "pagamento": "2026-11-05",
     "ofxId": "6aed25cc-0d15-4c89-83aa-12a46da92514",
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "mw98mfqogf4w0",
@@ -4296,22 +4296,19 @@
     "conciliado": true,
     "pagamento": "2026-11-10",
     "ofxId": "6af33d6f-ba7b-4e7e-8ef4-c51f6e3b6039",
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "mwawp3xncs6xn",
     "tipo": "despesa",
     "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 29500,
+    "valor": 30000,
     "vencimento": "2026-08-27",
-    "status": "pendente",
-    "categoria": "mao-de-obra",
+    "status": "vencido",
     "obraId": "mtbsqkui92pnr",
     "obraNome": "IBIRAÇU",
-    "prestadorId": "ms64m37bjfze4",
-    "prestadorNome": "MARCOS XAVIER",
-    "criadoEm": "2026-11-10",
-    "conciliado": false
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-11-10"
   },
   {
     "id": "mwawpcoyofubz",
@@ -4327,7 +4324,7 @@
     "conciliado": true,
     "pagamento": "2026-11-07",
     "ofxId": "6aef81cb-5bee-4b21-a797-f4b293bf5373",
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "mwawpk4pmqy4z",
@@ -4343,7 +4340,7 @@
     "conciliado": true,
     "pagamento": "2026-11-07",
     "ofxId": "6aef81e0-4459-4e73-a54e-734d02f01768",
-    "obs": "TransferÃªncia enviada pelo Pix - Kaio Natan Gomes Soares - â€¢â€¢â€¢.595.508-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 13712455-2"
+    "obs": "Transferência enviada pelo Pix - Kaio Natan Gomes Soares - ⬢⬢⬢.595.508-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 13712455-2"
   },
   {
     "id": "mwawppbflhd71",
@@ -4359,7 +4356,7 @@
     "conciliado": true,
     "pagamento": "2026-11-07",
     "ofxId": "6aef81f6-e435-4eae-b5e2-05cb25933377",
-    "obs": "TransferÃªncia enviada pelo Pix - MARCIO ANTUNES - â€¢â€¢â€¢.698.458-â€¢â€¢ - BCO SANTANDER (BRASIL) S.A. (0033) AgÃªncia: 2960 Conta: 2087014-7"
+    "obs": "Transferência enviada pelo Pix - MARCIO ANTUNES - ⬢⬢⬢.698.458-⬢⬢ - BCO SANTANDER (BRASIL) S.A. (0033) Agência: 2960 Conta: 2087014-7"
   },
   {
     "id": "mwawpw4nni946",
