@@ -4240,14 +4240,17 @@
     "id": "mw4y3h8dr2bwx",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 18088,
+    "valor": 200,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-06",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-05",
+    "ofxId": "6aed25cc-0d15-4c89-83aa-12a46da92514",
+    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
   },
   {
     "id": "mw98mfqogf4w0",
