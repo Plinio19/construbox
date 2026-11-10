@@ -4027,24 +4027,6 @@
     "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
-    "id": "mw4xyio84t5x7",
-    "tipo": "despesa",
-    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 500,
-    "vencimento": "2026-08-27",
-    "status": "pago",
-    "categoria": "mao-de-obra",
-    "obraId": "mtbsqkui92pnr",
-    "obraNome": "IBIRAÇU",
-    "prestadorId": "ms64m37bjfze4",
-    "prestadorNome": "MARCOS XAVIER",
-    "criadoEm": "2026-11-06",
-    "conciliado": true,
-    "pagamento": "2026-10-28",
-    "ofxId": "6ae1ebd3-54fb-4e82-8a9d-0d48b45ff70a",
-    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
-  },
-  {
     "id": "mw4xyvxsldey8",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
