@@ -4187,16 +4187,19 @@
     "id": "mw4y1p60uay6w",
     "tipo": "receita",
     "descricao": "Ibiraçu — 60 Dias — Saldo Restante",
-    "valor": 10000,
+    "valor": 5000,
     "vencimento": "2026-08-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mtbsqkui92pnr",
     "obraNome": "IBIRAÇU",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-11-06",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-05",
+    "ofxId": "6aec6a2f-150c-49a2-87bc-298d9f0d51a7",
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "mw4y2eobzmn43",
@@ -4254,7 +4257,7 @@
     "categoria": "outros",
     "ofxId": "6ae1e639-9c8c-476b-9b23-7148c5d6e5be",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1",
     "criadoEm": "2026-11-09"
   },
   {
@@ -4268,7 +4271,7 @@
     "categoria": "outros",
     "ofxId": "6ae21311-a6d4-4591-a2b8-4a1a90e36d58",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-11-09"
   },
   {
@@ -4282,7 +4285,7 @@
     "categoria": "outros",
     "ofxId": "6ae23ef3-e16c-4d33-8ce1-6dcf4d949b7b",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Robson Luiz Vieira - â€¢â€¢â€¢.088.977-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 548082596-9",
+    "obs": "Transferência enviada pelo Pix - Robson Luiz Vieira - ⬢⬢⬢.088.977-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 548082596-9",
     "criadoEm": "2026-11-09"
   }
 ]
