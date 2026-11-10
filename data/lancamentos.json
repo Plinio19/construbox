@@ -4300,14 +4300,17 @@
     "descricao": "Ibiraçu — 60 Dias — Saldo Restante — Saldo Restante",
     "valor": 5000,
     "vencimento": "2026-08-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mtbsqkui92pnr",
     "obraNome": "IBIRAÇU",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
     "criadoEm": "2026-11-10",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-10",
+    "ofxId": "6af33d6f-ba7b-4e7e-8ef4-c51f6e3b6039",
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "mwawp3xncs6xn",
