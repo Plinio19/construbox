@@ -2295,21 +2295,6 @@
     "criadoEm": "2026-08-10"
   },
   {
-    "id": "msnh4c9de62ex",
-    "tipo": "receita",
-    "descricao": "Nova Mutum - Final (30%) - Saldo Restante",
-    "valor": 500,
-    "vencimento": "2026-06-21",
-    "status": "pendente",
-    "categoria": "parcela",
-    "obraId": "mrz65iweisq2k",
-    "obraNome": "Nova Mutum",
-    "clienteId": "mrz62fjbnfipo",
-    "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-08-10",
-    "conciliado": false
-  },
-  {
     "id": "msxpcc5csraec",
     "tipo": "despesa",
     "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
