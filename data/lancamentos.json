@@ -4444,5 +4444,17 @@
     "obraNome": "Sinop",
     "categoria": "Contrato",
     "criadoEm": "2026-11-16"
+  },
+  {
+    "id": "mwjjnt0vuxkbj",
+    "tipo": "receita",
+    "descricao": "Parcela Ibiraçu ",
+    "valor": 5000,
+    "vencimento": "2026-11-16",
+    "status": "pendente",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "categoria": "Contrato",
+    "criadoEm": "2026-11-16"
   }
 ]
