@@ -4455,5 +4455,18 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
     "criadoEm": "2026-11-16"
+  },
+  {
+    "id": "mwjjhwragcxjq",
+    "tipo": "despesa",
+    "descricao": "30 Dias 20% — Saldo Restante",
+    "valor": 12000,
+    "vencimento": "2026-10-27",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "mvqoexry612dj",
+    "obraNome": "Querencia",
+    "criadoEm": "2026-11-16",
+    "conciliado": false
   }
 ]
