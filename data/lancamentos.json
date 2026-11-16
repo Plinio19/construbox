@@ -4480,5 +4480,18 @@
     "ofxId": "6af5f823-a312-48e8-8942-06b6c6bb5839",
     "conciliado": true,
     "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+  },
+  {
+    "id": "mwjjr77zgk6gx",
+    "tipo": "receita",
+    "descricao": "Parcela Restante Sinop — Saldo Restante — Saldo Restante",
+    "valor": 24000,
+    "vencimento": "2026-11-16",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "categoria": "Contrato",
+    "criadoEm": "2026-11-16",
+    "conciliado": false
   }
 ]
