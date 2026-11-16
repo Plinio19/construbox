@@ -2827,21 +2827,6 @@
     "criadoEm": "2026-09-01"
   },
   {
-    "id": "mtiw76twjixr9",
-    "tipo": "receita",
-    "descricao": "Nova Mutum - Meio (40%) - Saldo Restante \u0014 Saldo Restante",
-    "valor": 1500,
-    "vencimento": "2026-06-06",
-    "status": "pendente",
-    "obraId": "mrz65iweisq2k",
-    "obraNome": "Nova Mutum",
-    "clienteId": "mrz62fjbnfipo",
-    "clienteNome": "HOTEL IN BOX LTDA",
-    "categoria": "parcela",
-    "criadoEm": "2026-09-01",
-    "conciliado": false
-  },
-  {
     "id": "mtiwd22k496l6",
     "tipo": "despesa",
     "descricao": "Prejuizo Itu",
