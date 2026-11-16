@@ -4460,5 +4460,17 @@
     "obraNome": "IBIRAÇU",
     "categoria": "Contrato",
     "criadoEm": "2026-11-16"
+  },
+  {
+    "id": "mwjjqta7mbnyw",
+    "tipo": "receita",
+    "descricao": "PARCELA RESTANTE SINOP — saldo restante",
+    "valor": 32000,
+    "vencimento": "2026-11-16",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "categoria": "Contrato",
+    "criadoEm": "2026-11-16"
   }
 ]
