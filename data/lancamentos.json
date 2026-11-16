@@ -4406,5 +4406,18 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-16",
     "conciliado": false
+  },
+  {
+    "id": "mwjjgw8zfd74o",
+    "tipo": "despesa",
+    "descricao": "Mão De Obra Chave Na Mão — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
+    "valor": 28000,
+    "vencimento": "2026-08-27",
+    "status": "pendente",
+    "obraId": "mtbsqkui92pnr",
+    "obraNome": "IBIRAÇU",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-11-16",
+    "conciliado": false
   }
 ]
