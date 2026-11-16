@@ -4437,13 +4437,17 @@
     "id": "mwjjlrgqddfcf",
     "tipo": "receita",
     "descricao": "PARCELA RESTANTE SINOP",
-    "valor": 34000,
+    "valor": 2000,
     "vencimento": "2026-11-16",
-    "status": "pendente",
+    "status": "pago",
     "obraId": "ms656y0wkhx6y",
     "obraNome": "Sinop",
     "categoria": "Contrato",
-    "criadoEm": "2026-11-16"
+    "criadoEm": "2026-11-16",
+    "pagamento": "2026-11-10",
+    "ofxId": "6af33d6f-ba7b-4e7e-8ef4-c51f6e3b6039",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "mwjjnt0vuxkbj",
