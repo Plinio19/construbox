@@ -4419,5 +4419,21 @@
     "categoria": "mao-de-obra",
     "criadoEm": "2026-11-16",
     "conciliado": false
+  },
+  {
+    "id": "mwjjhbi6m6sla",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Marli Aparecida Dos Santos - Â€¢â€¢â€¢.328.178",
+    "valor": 1500,
+    "vencimento": "2026-11-10",
+    "pagamento": "2026-11-10",
+    "status": "pago",
+    "socioId": "ms4wjecaxu682",
+    "socioNome": "Plinio de Paula Gomes Filho",
+    "categoria": "distribuicao",
+    "ofxId": "6af34851-152e-4766-b426-8c5fee663dd4",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "criadoEm": "2026-11-16"
   }
 ]
