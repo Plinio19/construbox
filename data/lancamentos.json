@@ -4424,14 +4424,17 @@
     "id": "mwjjhwragcxjq",
     "tipo": "despesa",
     "descricao": "30 Dias 20% \u0014 Saldo Restante",
-    "valor": 12000,
+    "valor": 8000,
     "vencimento": "2026-10-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "mvqoexry612dj",
     "obraNome": "Querencia",
     "criadoEm": "2026-11-16",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-12",
+    "ofxId": "6af61723-615e-4f69-a9a3-2d64ef585f2e",
+    "obs": "TransferÃªncia enviada pelo Pix - Ernandes Vieira Pereira - â€¢â€¢â€¢.854.163-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 9423015-3"
   },
   {
     "id": "mwjjlrgqddfcf",
