@@ -4496,5 +4496,18 @@
     "categoria": "Contrato",
     "criadoEm": "2026-11-16",
     "conciliado": false
+  },
+  {
+    "id": "mwjjrw3kys06v",
+    "tipo": "despesa",
+    "descricao": "30 Dias 20% \u0014 Saldo Restante — Saldo Restante",
+    "valor": 4000,
+    "vencimento": "2026-10-27",
+    "status": "pendente",
+    "categoria": "mao-de-obra",
+    "obraId": "mvqoexry612dj",
+    "obraNome": "Querencia",
+    "criadoEm": "2026-11-16",
+    "conciliado": false
   }
 ]
