@@ -4366,14 +4366,17 @@
     "id": "mwjjgk0cjyoey",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 14318,
+    "valor": 200,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-16",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-14",
+    "ofxId": "6af8e135-8f3b-47f7-8f6b-d3c6a170e1ac",
+    "obs": "TransferÃªncia enviada pelo Pix - Kaio Natan Gomes Soares - â€¢â€¢â€¢.595.508-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 13712455-2"
   },
   {
     "id": "mwjjgw8zfd74o",
