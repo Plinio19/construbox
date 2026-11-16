@@ -3970,7 +3970,7 @@
     "pagamento": "2026-11-10",
     "ofxId": "6af3a7fd-ddfc-4b65-a887-be06d513a2bd",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Ernandes Vieira Pereira - â€¢â€¢â€¢.854.163-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 9423015-3"
+    "obs": "Transferência enviada pelo Pix - Ernandes Vieira Pereira - ⬢⬢⬢.854.163-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 9423015-3"
   },
   {
     "id": "mvqoea4d8s9pe",
@@ -4280,7 +4280,7 @@
     "pagamento": "2026-11-10",
     "ofxId": "6af34817-0f71-442f-aff3-cf9781e47a6a",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marcos de Andrade Xa - 42.515.525/0001-00 - BANCO INTER (0077) AgÃªncia: 1 Conta: 51370697-6"
+    "obs": "Transferência enviada pelo Pix - Marcos de Andrade Xa - 42.515.525/0001-00 - BANCO INTER (0077) Agência: 1 Conta: 51370697-6"
   },
   {
     "id": "mwawpcoyofubz",
@@ -4360,7 +4360,7 @@
     "conciliado": true,
     "pagamento": "2026-11-08",
     "ofxId": "6af0e005-103d-4b75-8b7c-e86e70df2e97",
-    "obs": "TransferÃªncia enviada pelo Pix - Ricardo Monteiro Menino - â€¢â€¢â€¢.486.778-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 29224805-6"
+    "obs": "Transferência enviada pelo Pix - Ricardo Monteiro Menino - ⬢⬢⬢.486.778-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 29224805-6"
   },
   {
     "id": "mwjjgk0cjyoey",
@@ -4401,7 +4401,7 @@
     "categoria": "distribuicao",
     "ofxId": "6af34851-152e-4766-b426-8c5fee663dd4",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Marli Aparecida dos Santos - â€¢â€¢â€¢.328.178-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 29152810-4",
+    "obs": "Transferência enviada pelo Pix - Marli Aparecida dos Santos - ⬢⬢⬢.328.178-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 29152810-4",
     "criadoEm": "2026-11-16"
   },
   {
@@ -4417,13 +4417,13 @@
     "categoria": "distribuicao",
     "ofxId": "6af34883-1c81-4262-912d-b57538e77874",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - PLINIO DE PAULA GOMES NETO - â€¢â€¢â€¢.809.648-â€¢â€¢ - BCO C6 S.A. (0336) AgÃªncia: 1 Conta: 16864449-5",
+    "obs": "Transferência enviada pelo Pix - PLINIO DE PAULA GOMES NETO - ⬢⬢⬢.809.648-⬢⬢ - BCO C6 S.A. (0336) Agência: 1 Conta: 16864449-5",
     "criadoEm": "2026-11-16"
   },
   {
     "id": "mwjjhwragcxjq",
     "tipo": "despesa",
-    "descricao": "30 Dias 20% — Saldo Restante",
+    "descricao": "30 Dias 20% \u0014 Saldo Restante",
     "valor": 12000,
     "vencimento": "2026-10-27",
     "status": "pendente",
@@ -4432,5 +4432,17 @@
     "obraNome": "Querencia",
     "criadoEm": "2026-11-16",
     "conciliado": false
+  },
+  {
+    "id": "mwjjlrgqddfcf",
+    "tipo": "receita",
+    "descricao": "PARCELA RESTANTE SINOP",
+    "valor": 34000,
+    "vencimento": "2026-11-16",
+    "status": "pendente",
+    "obraId": "ms656y0wkhx6y",
+    "obraNome": "Sinop",
+    "categoria": "Contrato",
+    "criadoEm": "2026-11-16"
   }
 ]
