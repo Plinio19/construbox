@@ -1322,5 +1322,17 @@
     "avancos": "Avanço na instalação das placas internas dos módulos.\n\nProdução do dia: 06 boxes com plaqueamento interno concluído, conforme atualização acumulada da equipe.",
     "problemas": "Sem novas ocorrências relevantes relatadas.",
     "proximoDia": "Prosseguir com o fechamento dos módulos restantes.\n\n"
+  },
+  {
+    "id": "mwl5jvu6ymuzz",
+    "criadoEm": "2026-11-17",
+    "data": "2026-10-30",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Dia Improdutivo",
+    "problemas": "Chuva",
+    "motivoImprodutivo": "Chuva"
   }
 ]
