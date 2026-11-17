@@ -1466,5 +1466,17 @@
     "avancos": "Dia improdutivo.",
     "problemas": "Chuvas, ventos fortes e excesso de lama dificultaram o acesso e a movimentação entre os módulos, comprometendo os serviços.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mwl5svivtmbpd",
+    "criadoEm": "2026-11-17",
+    "data": "2026-11-11",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Dia improdutivo",
+    "problemas": "Persistência das chuvas fortes durante o dia.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
