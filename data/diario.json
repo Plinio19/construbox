@@ -1370,5 +1370,17 @@
     "avancos": "Dia Improdutivo",
     "problemas": "Chuva intensa durante a tarde, provocando lama e impossibilitando a continuidade dos serviços.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mwl5nl36o8id3",
+    "criadoEm": "2026-11-17",
+    "data": "2026-11-03",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": " equipe trabalhou na aplicação de massa sobre os parafusos, abertura dos pontos de tomadas e tratamento das juntas das placas.\n\nProdução do dia:\n\nAplicação de massa nos parafusos;\n\nAbertura dos pontos de tomadas;\n\nTratamento de juntas em andamento.",
+    "problemas": "Sem novas ocorrências relevantes relatadas.",
+    "proximoDia": "Retomar o tratamento de juntas e a preparação dos pontos elétricos."
   }
 ]
