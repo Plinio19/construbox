@@ -1442,5 +1442,17 @@
     "avancos": "Não foi informada produção específica para o dia.\n\nProdução do dia: Não confirmada.",
     "problemas": "A equipe relatou a ocorrência de uma placa que apresentou rachadura após a instalação.",
     "proximoDia": "Avaliar a placa danificada e definir a correção necessária."
+  },
+  {
+    "id": "mwl5r0zini61j",
+    "criadoEm": "2026-11-17",
+    "data": "2026-11-09",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Dia improdutivo.",
+    "problemas": "Chuvas intensas impossibilitaram a continuidade dos trabalhos.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
