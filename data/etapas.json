@@ -1085,11 +1085,12 @@
     "descricao": "Esta etapa compreende a instalação das caixas elétricas destinadas às tomadas e demais pontos previstos no projeto, bem como a conclusão da passagem da fiação elétrica dos boxes Hotel Inbox.",
     "observacoes": "",
     "memorial": "Esta etapa compreende a instalação das caixas elétricas destinadas às tomadas e demais pontos previstos no projeto, bem como a conclusão da passagem da fiação elétrica dos boxes Hotel Inbox.\n\nOs serviços deverão ser executados após a preparação dos conduítes na fase inicial, respeitando o projeto elétrico e as condições de segurança aplicáveis.\n\n1. Conferência das Instalações Existentes\n\nVerificação dos conduítes anteriormente instalados;\n\nConferência dos trajetos e pontos elétricos;\n\nInspeção de possíveis obstruções;\n\nVerificação das condições de passagem dos cabos;\n\nIdentificação dos circuitos previstos no projeto.\n\n2. Instalação das Caixas Elétricas\n\nMarcação dos pontos de tomadas;\n\nConferência das alturas e posições;\n\nPreparação das aberturas nas placas;\n\nInstalação e fixação das caixas elétricas;\n\nAlinhamento das caixas com o acabamento das paredes;\n\nConexão dos conduítes às caixas;\n\nVerificação da estabilidade e fixação.\n\n3. Passagem da Fiação Elétrica\n\nSeparação dos cabos conforme os circuitos previstos;\n\nPassagem dos condutores pelos conduítes;\n\nIdentificação dos circuitos;\n\nOrganização dos cabos nas caixas;\n\nPreparação das extremidades para conexões futuras;\n\nVerificação da integridade dos condutores;\n\nConferência da continuidade dos circuitos.\n\n4. Inspeção e Controle de Qualidade\n\nCaixas instaladas nas posições previstas;\n\nConduítes conectados corretamente;\n\nCondutores com seções e identificação conforme projeto;\n\nAusência de danos aos cabos;\n\nCircuitos devidamente identificados;\n\nTestes elétricos aplicáveis realizados por profissional habilitado;\n\nRegistro fotográfico das instalações.\n\n5. Critério de Conclusão\n\nA etapa será considerada concluída após a instalação e conferência das caixas elétricas, conclusão da passagem da fiação, identificação dos circuitos e realização dos testes pertinentes.\n\nA instalação dos mecanismos de tomadas, interruptores, luminárias e demais acabamentos elétricos poderá ser executada em etapa posterior, conforme o cronograma da obra.",
-    "status": "planejada",
+    "status": "em_andamento",
     "peso": 0,
     "percentualExecutado": 0,
     "checklist": [],
     "materiais": [],
-    "criadoEm": "2026-11-17"
+    "criadoEm": "2026-11-17",
+    "dataRealInicio": "2026-11-17"
   }
 ]
