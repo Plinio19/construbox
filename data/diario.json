@@ -1358,5 +1358,17 @@
     "avancos": "Dia Improdutivo",
     "problemas": "Chuva",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mwl5mm3ss6ze9",
+    "criadoEm": "2026-11-17",
+    "data": "2026-11-02",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Dia Improdutivo",
+    "problemas": "Chuva intensa durante a tarde, provocando lama e impossibilitando a continuidade dos serviços.",
+    "motivoImprodutivo": "Chuva"
   }
 ]
