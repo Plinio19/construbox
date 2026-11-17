@@ -1346,5 +1346,17 @@
     "avancos": "Dia Improdutivo",
     "problemas": "Chuva",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mwl5lom0nc3sk",
+    "criadoEm": "2026-11-17",
+    "data": "2026-11-01",
+    "clima": "chuvoso",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": true,
+    "avancos": "Dia Improdutivo",
+    "problemas": "Chuva",
+    "motivoImprodutivo": "Chuva"
   }
 ]
