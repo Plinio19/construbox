@@ -1490,5 +1490,17 @@
     "avancos": "Dia improdutivo.",
     "problemas": "Persistência das chuvas intensas, comprometendo o planejamento dos serviços.",
     "motivoImprodutivo": "Chuva"
+  },
+  {
+    "id": "mwl5ugz6g9vfv",
+    "criadoEm": "2026-11-17",
+    "data": "2026-11-13",
+    "clima": "ensolarado",
+    "obraId": "mtbsqkui92pnr",
+    "responsavel": "Plinio de Paula",
+    "improdutivo": false,
+    "avancos": "A equipe concluiu os serviços de juntas de dilatação e iniciou a impermeabilização dos boxes.\n\nProdução do dia:\n\nJuntas de dilatação concluídas;\n\nImpermeabilização iniciada.",
+    "problemas": "Sem novas ocorrências específicas relatadas.",
+    "proximoDia": "Dar continuidade à impermeabilização dos módulos."
   }
 ]
