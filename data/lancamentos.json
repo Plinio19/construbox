@@ -4507,7 +4507,21 @@
     "categoria": "reembolso",
     "ofxId": "6afc7cf7-88e2-4cdc-9234-373da6a8e2b7",
     "conciliado": true,
-    "obs": "TransferÃªncia enviada pelo Pix - Jessica Sara dos Santos Bezerra - â€¢â€¢â€¢.117.176-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 62313359-5",
+    "obs": "Transferência enviada pelo Pix - Jessica Sara dos Santos Bezerra - ⬢⬢⬢.117.176-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 62313359-5",
+    "criadoEm": "2026-11-23"
+  },
+  {
+    "id": "mwtk5fda5s6xj",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Recebida Pelo Pix - Hotel In Box Ltda - 51.798.185/0001-62 - Ston",
+    "valor": 30,
+    "vencimento": "2026-11-17",
+    "pagamento": "2026-11-17",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6afc7f63-d1e6-422f-9d58-23e34cc20dd3",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
     "criadoEm": "2026-11-23"
   }
 ]
