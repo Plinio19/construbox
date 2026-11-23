@@ -4570,14 +4570,17 @@
     "id": "mwtk7llikkyhv",
     "tipo": "despesa",
     "descricao": "Mão De Obra Completa — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante — Saldo Restante",
-    "valor": 14018,
+    "valor": 1000,
     "vencimento": "2026-10-05",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "mao-de-obra",
     "obraId": "muvgdha4idblq",
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-23",
-    "conciliado": false
+    "conciliado": true,
+    "pagamento": "2026-11-20",
+    "ofxId": "6b00c631-d743-45b6-acfd-4bd381fd59b9",
+    "obs": "TransferÃªncia enviada pelo Pix - KAIO NATAN GOMES SOARES - â€¢â€¢â€¢.595.508-â€¢â€¢ - ARQ IP LTDA AgÃªncia: 1 Conta: 178775298560405904-7"
   },
   {
     "id": "mwtk8pgg4qckt",
