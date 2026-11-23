@@ -4346,7 +4346,7 @@
     "conciliado": true,
     "pagamento": "2026-11-14",
     "ofxId": "6af8e135-8f3b-47f7-8f6b-d3c6a170e1ac",
-    "obs": "TransferÃªncia enviada pelo Pix - Kaio Natan Gomes Soares - â€¢â€¢â€¢.595.508-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 13712455-2"
+    "obs": "Transferência enviada pelo Pix - Kaio Natan Gomes Soares - ⬢⬢⬢.595.508-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 13712455-2"
   },
   {
     "id": "mwjjgw8zfd74o",
@@ -4407,7 +4407,7 @@
     "conciliado": true,
     "pagamento": "2026-11-12",
     "ofxId": "6af61723-615e-4f69-a9a3-2d64ef585f2e",
-    "obs": "TransferÃªncia enviada pelo Pix - Ernandes Vieira Pereira - â€¢â€¢â€¢.854.163-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 9423015-3"
+    "obs": "Transferência enviada pelo Pix - Ernandes Vieira Pereira - ⬢⬢⬢.854.163-⬢⬢ - NU PAGAMENTOS - IP (0260) Agência: 1 Conta: 9423015-3"
   },
   {
     "id": "mwjjlrgqddfcf",
@@ -4423,7 +4423,7 @@
     "pagamento": "2026-11-10",
     "ofxId": "6af33d6f-ba7b-4e7e-8ef4-c51f6e3b6039",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "mwjjnt0vuxkbj",
@@ -4439,12 +4439,12 @@
     "pagamento": "2026-11-10",
     "ofxId": "6af33d6f-ba7b-4e7e-8ef4-c51f6e3b6039",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "mwjjqta7mbnyw",
     "tipo": "receita",
-    "descricao": "PARCELA RESTANTE SINOP — saldo restante",
+    "descricao": "PARCELA RESTANTE SINOP \u0014 saldo restante",
     "valor": 8000,
     "vencimento": "2026-11-16",
     "status": "pago",
@@ -4455,12 +4455,12 @@
     "pagamento": "2026-11-12",
     "ofxId": "6af5f823-a312-48e8-8942-06b6c6bb5839",
     "conciliado": true,
-    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
+    "obs": "Transferência recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) Agência: 1 Conta: 61834445-1"
   },
   {
     "id": "mwjjr77zgk6gx",
     "tipo": "receita",
-    "descricao": "Parcela Restante Sinop — Saldo Restante — Saldo Restante",
+    "descricao": "Parcela Restante Sinop \u0014 Saldo Restante \u0014 Saldo Restante",
     "valor": 24000,
     "vencimento": "2026-11-16",
     "status": "pendente",
@@ -4473,7 +4473,7 @@
   {
     "id": "mwjjrw3kys06v",
     "tipo": "despesa",
-    "descricao": "30 Dias 20% \u0014 Saldo Restante — Saldo Restante",
+    "descricao": "30 Dias 20% \u0014 Saldo Restante \u0014 Saldo Restante",
     "valor": 4000,
     "vencimento": "2026-10-27",
     "status": "pendente",
@@ -4495,5 +4495,19 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-16",
     "conciliado": false
+  },
+  {
+    "id": "mwtk4t2ns1tjf",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Jessica Sara Dos Santos Bezerra - Â€¢â€¢â€¢.11",
+    "valor": 30,
+    "vencimento": "2026-11-17",
+    "pagamento": "2026-11-17",
+    "status": "pago",
+    "categoria": "reembolso",
+    "ofxId": "6afc7cf7-88e2-4cdc-9234-373da6a8e2b7",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Jessica Sara dos Santos Bezerra - â€¢â€¢â€¢.117.176-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 62313359-5",
+    "criadoEm": "2026-11-23"
   }
 ]
