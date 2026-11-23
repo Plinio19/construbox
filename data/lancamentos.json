@@ -3872,15 +3872,19 @@
     "id": "mvqob30f1e0dh",
     "tipo": "receita",
     "descricao": "Querencia \u0014 30 DIAS 20%",
-    "valor": 22000,
+    "valor": 5000,
     "vencimento": "2026-10-27",
-    "status": "pendente",
+    "status": "pago",
     "categoria": "parcela",
     "obraId": "mvqoexry612dj",
     "obraNome": "Querencia",
     "clienteId": "mrz62fjbnfipo",
     "clienteNome": "HOTEL IN BOX LTDA",
-    "criadoEm": "2026-11-06"
+    "criadoEm": "2026-11-06",
+    "pagamento": "2026-11-19",
+    "ofxId": "6aff5c9e-6432-41e4-a550-c086934bdbda",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1"
   },
   {
     "id": "mvqobcav58sx7",
