@@ -4541,5 +4541,19 @@
     "clienteNome": "HOTEL IN BOX LTDA",
     "categoria": "parcela",
     "criadoEm": "2026-11-23"
+  },
+  {
+    "id": "mwtk6vt4qwm0g",
+    "tipo": "despesa",
+    "descricao": "Recebimento Linhares",
+    "valor": 5000,
+    "vencimento": "2026-11-19",
+    "pagamento": "2026-11-19",
+    "status": "pago",
+    "categoria": "outros",
+    "ofxId": "6aff5c9e-6432-41e4-a550-c086934bdbda",
+    "conciliado": true,
+    "obs": "TransferÃªncia recebida pelo Pix - HOTEL IN BOX LTDA - 51.798.185/0001-62 - STONE IP S.A. (0197) AgÃªncia: 1 Conta: 61834445-1",
+    "criadoEm": "2026-11-23"
   }
 ]
