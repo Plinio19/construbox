@@ -4578,5 +4578,17 @@
     "obraNome": "Itaobim",
     "criadoEm": "2026-11-23",
     "conciliado": false
+  },
+  {
+    "id": "mwtk8pgg4qckt",
+    "tipo": "despesa",
+    "descricao": "60 DIASS 20% — saldo restante",
+    "valor": 12000,
+    "vencimento": "2026-10-27",
+    "status": "pendente",
+    "obraId": "mvqoexry612dj",
+    "obraNome": "Querencia",
+    "categoria": "mao-de-obra",
+    "criadoEm": "2026-11-23"
   }
 ]
