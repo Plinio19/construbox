@@ -4509,5 +4509,19 @@
     "conciliado": true,
     "obs": "TransferÃªncia enviada pelo Pix - Jessica Sara dos Santos Bezerra - â€¢â€¢â€¢.117.176-â€¢â€¢ - NU PAGAMENTOS - IP (0260) AgÃªncia: 1 Conta: 62313359-5",
     "criadoEm": "2026-11-23"
+  },
+  {
+    "id": "mwtk4v67xb4n6",
+    "tipo": "despesa",
+    "descricao": "Transferãªncia Enviada Pelo Pix - Deusmarques Pinto Fernandes - Â€¢â€¢â€¢.062.42",
+    "valor": 200,
+    "vencimento": "2026-11-18",
+    "pagamento": "2026-11-18",
+    "status": "pago",
+    "categoria": "outros",
+    "ofxId": "6afd88ff-8811-4429-b9c4-4633a1a545b3",
+    "conciliado": true,
+    "obs": "TransferÃªncia enviada pelo Pix - Deusmarques Pinto Fernandes - â€¢â€¢â€¢.062.426-â€¢â€¢ - MERCADO PAGO IP LTDA. (0323) AgÃªncia: 1 Conta: 3539416669-0",
+    "criadoEm": "2026-11-23"
   }
 ]
